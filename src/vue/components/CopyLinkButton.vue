@@ -1,0 +1,51 @@
+<template>
+  <span class="icon copy" v-clipboard:copy="message" v-clipboard:success="onCopy" v-clipboard:error="onError" :class={copied}>
+    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fill-rule="evenodd">
+        <path d="M0 0h18v18H0z"/>
+        <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
+      </g>
+    </svg>
+  </span>
+</template>
+
+<script>
+import { loadAndWait } from '@/src/vue/utils/async';
+export default {
+  name: 'CopyLinkButton',
+  props: ['message'],
+  data() {
+    return {
+      copied: false
+    }
+  },
+  methods: {
+    async onCopy (e) {
+      this.copied = true;
+      const waitMinimum = loadAndWait();
+      const finishLoading = async () => {
+        await waitMinimum();
+        this.copied = false;
+      };
+      setTimeout(finishLoading, 200);
+    },
+    onError: function (e) {
+      alert('Failed to copy texts')
+      this.copied = false;
+    },
+  }
+};
+</script>
+<style lang="scss">
+.icon.copy {
+  margin-left: 5px;
+
+  @media screen and (max-width: 480px) {
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+</style>
+

@@ -1,0 +1,602 @@
+<template>
+  <div class="wrap">
+    <div id="category" class="account">
+      <Header/>
+      <div class="category-inner">
+        <div class="page-wrap">
+          <div class="page-content">
+            <search/>
+            <div class="title">{{ title }}</div>
+            <div class="detail-box account">
+              <div class="address">
+                <div class="item">
+                      <span class="item-inner">
+                        <Identicon :text="realAddress" size="17" class="mini-identicon"/>
+                        {{ realAddress }}
+                      </span>
+                  <copy-link-button :message="realAddress"/>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <div class="error account show" v-if="error">
+                  {{ error }}
+                </div>
+                <table class="account" v-else>
+                  <tbody v-if="accountDetail">
+                  <!--                  <tr class="hidden loading">-->
+                  <!--                    <td colspan="100%">Loading...</td>-->
+                  <!--                  </tr>-->
+                  <!--                  <tr class="hidden not-found">-->
+                  <!--                    <td colspan="100%">No items found</td>-->
+                  <!--                  </tr>-->
+                  <tr>
+                    <th>
+                      <div>Balance</div>
+                    </th>
+                    <td>
+                      <div v-html="$options.filters.formatToken(fullBalance, 'aergo')"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <div>Nonce</div>
+                    </th>
+                    <td>
+                      <div>{{ accountDetail.nonce }}</div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-wrap" v-if="!error">
+              <div class="table-tab">
+                <div class="table-tab-header">
+                  <div class="h-scroll">
+                    <div class="tab-header">
+                      <router-link class="title transactions router-link-exact-active"
+                                   :to="{ query: { ...$route.query, tx: 'transactions' } }" replace
+                                   v-if="!$route.query.tx">
+                        <span class="main">Transactions</span><span class="sub">{{ transactionTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title token-transfers"
+                                   :to="{ query: { ...$route.query, tx: 'transactions' } }" replace v-else>
+                        <span class="main">Transactions</span><span class="sub">{{ transactionTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title token-transfers"
+                                   :to="{ query: { ...$route.query, tx: 'tokenTransfer' } }" replace>
+                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTransferTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title nft-transfers" :to="{ query: { ...$route.query, tx: 'nftTransfer' } }"
+                                   replace>
+                        <span class="main">NFT Transfers</span><span class="sub">{{ nftTransferTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title token-balance" :to="{ query: { ...$route.query, tx: 'tokenBalance' } }"
+                                   replace>
+                        <span class="main">Token Balance</span><span class="sub">{{ tokenBalanceTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title nft-inventory" :to="{ query: { ...$route.query, tx: 'nftInventory' } }"
+                                   replace>
+                        <span class="main">NFT Inventory</span><span class="sub">{{ nftInventoryTotalItems }}</span>
+                      </router-link>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-tab-content" v-if="realAddress">
+                  <account-transaction-table ref="accountTransactionTable" :address="realAddress"
+                                             :active="!$route.query.tx || $route.query.tx === 'transactions'"
+                                             @onUpdateTotalCount="updateTransactionTotalCount"/>
+                  <account-token-transfer-table ref="accountTokenTransferTable" :address="realAddress"
+                                                :filteredTokens="filteredTokens"
+                                                :active="$route.query.tx === 'tokenTransfer'"
+                                                @onUpdateTotalCount="updateTokenTransactionTotalCount"/>
+                  <account-nft-transfer-table ref="accountNftTransferTable" :address="realAddress"
+                                              :filteredNfts="filteredNfts"
+                                              :active="$route.query.tx === 'nftTransfer'"
+                                              @onUpdateTotalCount="updateNftTransferTotalCount"/>
+                  <account-token-balance-table ref="accountTokenBalanceTable" :address="realAddress"
+                                               :active="$route.query.tx === 'tokenBalance'"
+                                               @onUpdateTotalCount="updateTokenBalanceTotalCount"/>
+                  <account-nft-inventory-table ref="accountNftInventoryTable" :address="realAddress"
+                                               :active="$route.query.tx === 'nftInventory'"
+                                               @onUpdateTotalCount="updateNftInventoryTotalCount"/>
+                </div>
+              </div>
+            </div>
+            <div class="detail-box contract" v-if="!error && accountDetail && accountDetail.codehash">
+              <div class="title">Contract Details</div>
+              <div class="tabs-wrap">
+                <contract-abi :abi="contractAbi" :codehash="accountDetail.codehash" :address="realAddress"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer/>
+    </div>
+  </div>
+</template>
+
+<script>
+import {Address} from '@herajs/client';
+import JSBI from 'jsbi';
+import {Amount} from '@herajs/client';
+import Identicon from '@/src/vue/components/Identicon';
+import cfg from '@/src/config';
+import Search from "@/src/vue/components/Search";
+import ContractAbi from '@/src/vue/components/ContractAbi';
+import AccountTransactionTable from '@/src/vue/components/AccountTransactionTable';
+import AccountTokenTransferTable from '@/src/vue/components/AccountTokenTransferTable';
+import AccountNftTransferTable from '@/src/vue/components/AccountNftTransferTable';
+import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTable';
+import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable';
+
+function formatTokenAmount(amount, unit, decimals) {
+  return `${Amount.moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
+}
+
+export default {
+  data() {
+    return {
+      isLoadingDetail: false,
+      error: null,
+      contractAbi: null,
+      transactions: [],
+      accountDetail: null,
+      staking: null,
+      ownerAddress: null,
+      destinationAddress: null,
+      transactionTotalItems: 0,
+      tokenTransferTotalItems: 0,
+      nftTransferTotalItems: 0,
+      tokenBalanceTotalItems: 0,
+      nftInventoryTotalItems: 0,
+      tokens: [],
+      nfts: [],
+    }
+  },
+  created() {
+  },
+  beforeDestroy() {
+  },
+  watch: {
+    '$route'(to, from) {
+      if (to.path !== from.path) {
+        this.load();
+      }
+    },
+    'realAddress'() {
+      this.reloadAllTable(this.realAddress).then(
+          ()=> this.load()
+      ).catch(e=>{
+        console.log(e);
+      })
+    },
+  },
+  mounted() {
+    this.load();
+  },
+  computed: {
+    realAddress() {
+      return this.destinationAddress || this.$route.params.address;
+    },
+    filteredTokens() {
+      return this.tokens;
+    },
+    filteredNfts() {
+      return this.nfts;
+    },
+    fullBalance() {
+      if (!this.staking) {
+        return this.accountDetail.balance;
+      }
+      return new Amount(JSBI.add(this.accountDetail.balance.value, this.staking.amount.value).toString(), 'aer');
+    },
+    title() {
+      if(this.isLoadingDetail) return '...';
+
+      if (this.accountDetail && this.accountDetail.codehash) {
+        return 'Contract Account'
+      }
+
+      return 'Account'
+    }
+  },
+  methods: {
+    query(newQuery) {
+      return {...this.$route.query, ...newQuery};
+    },
+    async load() {
+      this.isLoadingDetail = true;
+      let address;
+      this.error = null;
+      this.ownerAddress = null;
+      this.destinationAddress = null;
+      this.staking = null;
+      this.accountDetail = null;
+      this.contractAbi = null;
+      this.names = [];
+      this.nameHistory = [];
+      this.token = null;
+      this.accountTokens = [];
+      this.tokens = [];
+      this.nfts = [];
+      let isName = false;
+      this.showTokenBalances = false;
+
+      // Check address
+      try {
+        address = new Address(this.$route.params.address);
+        isName = address.isName;
+      } catch (e) {
+        this.error = 'Invalid address';
+        console.error(e);
+        return;
+      }
+
+      // Owner
+      try {
+        if (address.isName && !address.isSystemAddress()) {
+          const nameInfo = await this.$store.dispatch('blockchain/getNameInfo', {name: address.encoded});
+          this.ownerAddress = nameInfo.owner.toString();
+          this.destinationAddress = nameInfo.destination.toString();
+          address = this.destinationAddress;
+        }
+      } catch (e) {
+        this.error = 'Unregistered name';
+        console.error(e);
+        return;
+      }
+
+      this.address = address;
+
+      // State
+      try {
+        this.accountDetail = Object.freeze(await this.$store.dispatch('blockchain/getAccount', {address}));
+      } catch (e) {
+        this.error = 'Account not found';
+        console.error(e);
+        return;
+      }
+      this.isLoadingDetail = false;
+
+      // Staking
+      (async () => {
+        try {
+          const staking = await this.$store.dispatch('blockchain/getStaking', {address});
+          this.staking = Object.freeze(staking);
+        } catch (e) {
+          console.error(e);
+        }
+      })();
+
+      // Assigned tokens, nfts
+      (async () => {
+        try {
+          const response = await this.$fetch.get(`${cfg.API_URL}/existedTxTokenList`,
+              {
+                q: `(from:${address} OR to:${address})`,
+              }
+          );
+          const data = (await response.json());
+          if (data.hits.length > 0) {
+            data.hits.filter(it => it.token.meta.type === 'ARC1').map(item => {
+              this.tokens.push({
+                text: `${item.token.meta.name}(${item.token.meta.symbol})`,
+                value: item.token.hash,
+              })
+            })
+            data.hits.filter(it => it.token.meta.type === 'ARC2').map(item => {
+              this.nfts.push({
+                text: `${item.token.meta.name}(${item.token.meta.symbol})`,
+                value: item.token.hash,
+              })
+            })
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      })();
+
+
+      // // Assigned names
+      // (async () => {
+      //   try {
+      //     if (!address.isName) {
+      //       const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `address:${address}`, size: 10 });
+      //       const data = (await response.json());
+      //       const names = data.hits;
+      //       for (let name of names) {
+      //         const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `name:${name.name}`, size: 1 });
+      //         const data = (await response.json());
+      //         name.currentAddress = data.hits[0].address;
+      //       }
+      //       this.names = names;
+      //     }
+      //   } catch (e) {
+      //     console.error(e);
+      //   }
+      // })();
+
+      // // Name history
+      // if (isName) {
+      //   (async () => {
+      //     try {
+      //       const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `name:${this.$route.params.address}`, size: 10, sort: 'blockno:asc' });
+      //       const data = (await response.json());
+      //       this.nameHistory = data.hits;
+      //       console.log(this.nameHistory);
+      //     } catch (e) {
+      //       console.error(e);
+      //     }
+      //   })();
+      // }
+
+      // // Tokens
+      // (async() => {
+      //   const fetch = await this.$fetch.get(`${cfg.API_URL}/accountTokens`, {
+      //     address
+      //   });
+      //   try {
+      //     const response = await fetch.json();
+      //     if (response.error) {
+      //       console.error(response.error);
+      //     }
+      //     if (response.objects) {
+      //       this.accountTokens = response.objects.map(v => ({...v, balance: null}));
+      //       // Token balances
+      //       if (this.$route.query.tx === 'tokenBalances') {
+      //         this.loadTokenBalances();
+      //       }
+      //     }
+      //   } catch (e) {
+      //     console.error(e);
+      //   }
+      // })();
+
+      const loadTokenMetadata = async () => {
+        try {
+          const response = await (await this.$fetch.get(`${cfg.API_URL}/token`, {q: `_id:${this.$route.params.address}`})).json();
+          if (response.hits.length) {
+            this.token = response.hits[0].meta;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      // Contract and token info
+      try {
+        if (this.accountDetail.codehash) {
+          Promise.all([
+            this.$store.dispatch('blockchain/getABI', {address}).then(abi => {
+              this.contractAbi = abi;
+            }),
+            loadTokenMetadata(),
+          ]).then(async () => {
+            // Get updated supply
+            if (this.contractAbi && this.token) {
+              const supply = await this.$store.dispatch('blockchain/queryContract', {
+                abi: this.contractAbi,
+                name: 'totalSupply',
+                address,
+                args: []
+              });
+              if (supply && supply._bignum) {
+                this.token.supply = supply._bignum;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async reloadAllTable(address) {
+      if (this.$refs.accountTransactionTable) {
+        await this.$refs.accountTransactionTable.reload(address);
+      }
+      if (this.$refs.accountTokenTransferTable) {
+        await this.$refs.accountTokenTransferTable.reload(address);
+      }
+      if (this.$refs.accountNftTransferTable) {
+        await this.$refs.accountNftTransferTable.reload(address);
+      }
+      if (this.$refs.accountTokenBalanceTable) {
+        await this.$refs.accountTokenBalanceTable.reload(address);
+      }
+      if (this.$refs.accountNftInventoryTable) {
+        await this.$refs.accountNftInventoryTable.reload(address);
+      }
+    },
+    updateTransactionTotalCount(count) {
+      this.transactionTotalItems = count
+    },
+    updateTokenTransactionTotalCount(count) {
+      this.tokenTransferTotalItems = count
+    },
+    updateNftTransferTotalCount(count) {
+      this.nftTransferTotalItems = count
+    },
+    updateTokenBalanceTotalCount(count) {
+      this.tokenBalanceTotalItems = count
+    },
+    updateNftInventoryTotalCount(count) {
+      this.nftInventoryTotalItems = count
+    },
+  },
+  components: {
+    Identicon,
+    Search,
+    ContractAbi,
+    AccountTransactionTable,
+    AccountTokenTransferTable,
+    AccountNftTransferTable,
+    AccountTokenBalanceTable,
+    AccountNftInventoryTable
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.category-inner {
+  > .page-wrap {
+    padding-bottom: 30px;
+
+    @media screen and (max-width: 780px) {
+      padding-top: 20px;
+    }
+  }
+}
+
+.page-content > .table-wrap {
+  padding-bottom: 50px;
+}
+
+.detail-box {
+  margin: 15px 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5);
+  background-color: #fff;
+
+  &.account {
+    .table-wrap {
+      display: flex;
+      align-items: start;
+      margin: 0;
+
+      @media screen and (max-width: 900px) {
+        flex-wrap: wrap;
+      }
+
+      @media screen and (max-width: 480px) {
+        padding: 0 20px;
+      }
+    }
+  }
+
+  &.contract {
+    @media screen and (max-width: 480px) {
+      margin: 20px -20px 0;
+    }
+
+    .tabs-wrap {
+      padding: 20px 20px 50px;
+    }
+  }
+
+  > .title {
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a1823;
+    border-bottom: 1px solid #f2f2f2;
+
+    @media screen and (max-width: 480px) {
+      font-size: 18px;
+    }
+  }
+
+  .table-wrap {
+    padding: 10px 20px;
+    box-shadow: none;
+  }
+
+  .address {
+    padding: 20px;
+    border-bottom: 1px solid #f2f2f2;
+
+    .title {
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1823;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+
+      .item-inner {
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #fff;
+        word-break: break-all;
+        background-color: #363344;
+
+        .identicon {
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          flex: 18px 0 0;
+          margin-right: 6px;
+          vertical-align: middle;
+        }
+      }
+
+      //.icon.copy {
+      //  margin-left: 10px;
+      //
+      //  @media screen and (max-width: 480px) {
+      //    svg {
+      //      width: 24px;
+      //      height: 24px;
+      //    }
+      //  }
+      //}
+    }
+
+    .arrow.down {
+      max-width: 435px;
+      margin: 7px 0;
+      font-size: 0;
+      text-align: center;
+
+      @media screen and (max-width: 480px) {
+        width: calc(100% - 35px);
+      }
+
+      img {
+        width: 16px;
+      }
+    }
+  }
+
+  table.account {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+
+    @media screen and (max-width: 480px) {
+      border-spacing: 0 25px;
+    }
+
+    th {
+      width: 126px;
+      height: auto;
+      font-size: 14px;
+      color: #a391aa;
+      border-bottom: none;
+      vertical-align: top;
+
+      @media screen and (max-width: 480px) {
+        width: 110px;
+        font-size: 15px;
+      }
+    }
+
+    td {
+      height: auto;
+      font-size: 14px;
+      border-bottom: none;
+      vertical-align: top;
+      word-break: break-all;
+
+      @media screen and (max-width: 480px) {
+        font-size: 15px;
+      }
+    }
+  }
+}
+</style>
