@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     gotoRegister: function () {
-        window.open('https://docs.google.com/forms/d/e/1FAIpQLSeH4mFrPQBxDecg8jy5_NVuSwfKsfSOhEMd04hruEJH75d7RA/viewform');
+        window.open('https://docs.google.com/forms/d/e/1FAIpQLSdPbRA-rltcr3-O_5Mcr6rzSIEuO6LcPP2qjDLRznUeDIzk0A/viewform');
     },
   },
   components: {
