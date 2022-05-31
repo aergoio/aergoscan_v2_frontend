@@ -11,7 +11,7 @@
             </div>
             <div class="content">
               <p>To enter Token/NFT information, you must fill out the 'Enter Token/NFT Info.' form.</p>
-              <p>For any other enquiries, please contact <a href="mailto:aergoscan@blocko.io">aergoscan@blocko.io</a>.</p>
+              <p>For any other enquiries, please contact <a href="mailto:aergoscan@aergo.io">aergoscan@aergo.io</a>.</p>
               <p>Thank you.</p>
             </div>
             <div class="btn register" v-on:click="gotoRegister">
