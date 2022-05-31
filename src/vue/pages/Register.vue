@@ -14,7 +14,7 @@
               <p>For any other enquiries, please contact <a href="mailto:support@aergo.io">support@aergo.io</a>.</p>
               <p>Thank you.</p>
             </div>
-            <div class="btn register">
+            <div class="btn register" v-on:click="gotoRegister">
               <button>Register</button>
             </div>
           </div>
@@ -40,6 +40,9 @@ export default {
   computed: {
   },
   methods: {
+    gotoRegister: function () {
+        window.open('https://docs.google.com/forms/d/e/1FAIpQLSeH4mFrPQBxDecg8jy5_NVuSwfKsfSOhEMd04hruEJH75d7RA/viewform');
+    },
   },
   components: {
     Search
