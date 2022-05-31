@@ -82,7 +82,7 @@
             <a href="javascript:void(0);" v-on:click="gotoStore" class="item">
                 <span class="text">
                   <span>
-                    AERGO Wallet
+                    AERGO Connect
                     <span class="icon goto"></span>
                   </span>
 <!--                  <span class="sub">(Mobile)</span>-->
@@ -91,7 +91,7 @@
             <a href="https://chrome.google.com/webstore/detail/aergo-connect/iopigoikekfcpcapjlkcdlokheickhpc?hl=ko" class="item" target="_blank">
                 <span class="text">
                   <span>
-                    AERGO Wallet
+                    AERGO Connect
                     <span class="icon goto"></span>
                   </span>
                   <span class="sub">(Chrome Extension)</span>
