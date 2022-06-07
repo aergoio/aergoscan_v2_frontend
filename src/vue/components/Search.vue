@@ -5,7 +5,7 @@
              v-on:keyup.enter.stop="performSearch"
              ref="inputKeyword">
       <div class="btn-remove" v-on:click="deleteKeyword"></div>
-      <div class="btn-search">
+      <div class="btn-search" v-on:click="performSearch">
         <template v-if="css.page === 'main'">
           <span class="text">SEARCH</span>
         </template>
