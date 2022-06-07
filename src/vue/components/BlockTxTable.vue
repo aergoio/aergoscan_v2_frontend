@@ -159,6 +159,9 @@ export default {
       } else if (response.hits.length) {
         this.data = response.hits.map(item => ({...item.meta, hash: item.hash}));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
     },
     reload: async function () {

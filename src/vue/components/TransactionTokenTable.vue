@@ -164,13 +164,16 @@ export default {
           decimals: item.token.meta.decimals,
         }));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
       this.$emit('onUpdateTotalCount', this.totalItems);
     },
-    reload: async function () {
+    reload: async function (token) {
       this.isLoading = true;
       await this.loadTokenTableData({
-        id: this.hash,
+        id: token ? token :  this.hash,
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,

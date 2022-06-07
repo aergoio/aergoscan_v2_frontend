@@ -173,6 +173,9 @@ export default {
           decimals: item.token.meta.decimals,
         }));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
       this.$emit('onUpdateTotalCount', this.totalItems);
     },

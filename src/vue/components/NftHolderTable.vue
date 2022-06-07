@@ -141,6 +141,9 @@ export default {
           percentage: this.totalSupply ==='0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(),
         }));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
       this.$emit('onUpdateTotalCount', this.totalItems);
     },

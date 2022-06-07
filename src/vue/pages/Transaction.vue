@@ -41,7 +41,8 @@
                             <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
                             <router-link class="address"
                                          v-if="txDetail.tx.to && txDetail.tx.to.toString().length"
-                                         :to="`/account/${txDetail.tx.to}/`">{{ $options.filters.formatEllipsisText(txDetail.tx.to.toString(), 28) }}
+                                         :to="`/account/${txDetail.tx.to}/`">
+                              {{ $options.filters.formatEllipsisText(txDetail.tx.to.toString(), 28) }}
                             </router-link>
                             <a href="javascript:;" class="address"
                                v-if="!txDetail.tx.to || !txDetail.tx.to.toString().length">Contract Creation</a>
@@ -77,19 +78,26 @@
                       <th>
                         <div>Fee</div>
                       </th>
-                      <td><div>
-                        <span  class="ml-5 tpm" v-html="$options.filters.formatToken(this.txReceipt.fee)">{{txDetail.tx.limit}}</span>
-                        <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Fee was paid by contract" v-if="txReceipt.feeDelegation">[delegated]</span>
-                      </div></td>
+                      <td>
+                        <div>
+                          <span class="ml-5 tpm"
+                                v-html="$options.filters.formatToken(this.txReceipt.fee)">{{ txDetail.tx.limit }}</span>
+                          <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="Fee was paid by contract" v-if="txReceipt.feeDelegation">[delegated]</span>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <th>
                         <div>Gas used</div>
                       </th>
-                      <td><div>{{ txReceipt ? txReceipt.gasused : '...' }} of
-                        <span  class="ml-5 tpm" v-if="txDetail.tx.limit">{{txDetail.tx.limit}}</span>
-                        <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Limit was set to 0, allowing unlimited gas use" v-if="!txDetail.tx.limit">∞</span>
-                      </div>
+                      <td>
+                        <div>{{ txReceipt ? txReceipt.gasused : '...' }} of
+                          <span class="ml-5 tpm" v-if="txDetail.tx.limit">{{ txDetail.tx.limit }}</span>
+                          <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="Limit was set to 0, allowing unlimited gas use"
+                                v-if="!txDetail.tx.limit">∞</span>
+                        </div>
                       </td>
                     </tr>
                   </template>
@@ -194,10 +202,13 @@
                   </div>
                 </div>
                 <div class="table-tab-content" v-if="txDetail">
-                  <transaction-token-table :hash="txDetail.tx.hash"
+                  <transaction-token-table ref="transactionTokenTable"
+                                           :hash="txDetail.tx.hash"
                                            :active="!$route.query.tx || $route.query.tx === 'token'"
                                            @onUpdateTotalCount="updateTokenTxTotalCount"/>
-                  <transaction-nft-table :hash="txDetail.tx.hash" :active="$route.query.tx === 'nft'"
+                  <transaction-nft-table ref="transactionNftTable"
+                                         :hash="txDetail.tx.hash"
+                                         :active="$route.query.tx === 'nft'"
                                          @onUpdateTotalCount="updateNftTxTotalCount"/>
                 </div>
               </div>
@@ -318,6 +329,13 @@ export default {
     '$route'(to, from) {
       this.load();
     },
+    'realToken'() {
+      this.reloadAllTable(this.realToken).then(
+          ()=> this.load()
+      ).catch(e=>{
+        console.log(e);
+      })
+    },
   },
   mounted() {
     if (this.$route.query.payload) {
@@ -329,6 +347,9 @@ export default {
     this.load();
   },
   computed: {
+    realToken() {
+      return this.$route.params.hash;
+    },
     formattedTitle() {
       if (!this.txDetail.tx.to || !this.txDetail.tx.to.toString().length) return 'Contract Creation';
       try {
@@ -391,6 +412,14 @@ export default {
           this.txMeta = response.hits[0].meta;
         }
       })();
+    },
+    async reloadAllTable(token) {
+      if (this.$refs.transactionTokenTable) {
+        await this.$refs.transactionTokenTable.reload(token);
+      }
+      if (this.$refs.transactionNftTable) {
+        await this.$refs.transactionNftTable.reload(token);
+      }
     },
     updateTokenTxTotalCount(count) {
       this.tokenTxTotalItems = count

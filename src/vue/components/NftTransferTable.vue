@@ -172,6 +172,9 @@ export default {
           symbol: item.token.meta.symbol,
         }));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
       this.$emit('onUpdateTotalCount', this.totalItems);
     },

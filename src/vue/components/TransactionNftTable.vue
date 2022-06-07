@@ -172,13 +172,18 @@ export default {
           symbol: item.token.meta.symbol,
         }));
         this.totalItems = response.total;
+      } else {
+        this.data = [];
+        this.totalItems = 0;
       }
+      console.log("transaction onUpdateTotalCount!!--->" + id)
+      console.log("transaction onUpdateTotalCount!!--->" + this.totalItems)
       this.$emit('onUpdateTotalCount', this.totalItems);
     },
-    reload: async function () {
+    reload: async function (token) {
       this.isLoading = true;
       await this.loadNftTableData({
-        id: this.hash,
+        id: token ? token :  this.hash,
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,
