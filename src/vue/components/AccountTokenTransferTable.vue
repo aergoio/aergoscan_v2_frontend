@@ -63,7 +63,7 @@
         <div>{{ row.name }} ({{row.symbol}})</div>
       </td>
       <td>
-        <div v-html="$options.filters.formatBigNumAmount(row.amount, 6, row.decimals)"></div>
+        <div v-html="$options.filters.formatBigNumAmount(row.amount, false, 6, row.decimals)"></div>
       </td>
     </template>
     <pagination

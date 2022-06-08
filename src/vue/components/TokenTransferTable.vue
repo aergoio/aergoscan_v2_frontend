@@ -52,7 +52,7 @@
         <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
       </td>
       <td>
-        <div v-html="$options.filters.formatBigNumAmount(row.amount, 6, row.decimals)"></div>
+        <div v-html="$options.filters.formatBigNumAmount(row.amount, false, 6, row.decimals)"></div>
       </td>
     </template>
     <pagination

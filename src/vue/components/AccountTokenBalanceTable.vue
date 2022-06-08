@@ -17,7 +17,7 @@
         {{ row.name }}
       </div></td>
       <td><div>{{ row.symbol }}</div></td>
-      <td><div v-html="$options.filters.formatBigNumAmount(row.balance, 6, row.decimals)"></div></td>
+      <td><div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div></td>
       <td>
         <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).fromNow() }}</div>
       </td>

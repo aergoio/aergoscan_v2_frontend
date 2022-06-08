@@ -22,7 +22,7 @@
                       :to-link="`/account/${row.account}/`" :address="row.account.toString()"/>
       </td>
       <td>
-        <div v-html="$options.filters.formatBigNumAmount(row.balance, 6, row.decimals)"></div>
+        <div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div>
       </td>
       <td>
         <div>{{ row.percentage }}%</div>

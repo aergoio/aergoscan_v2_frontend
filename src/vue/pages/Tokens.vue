@@ -60,7 +60,7 @@
                   </div>
                 </td>
                 <td>
-                  <div v-html="$options.filters.formatBigNumAmount(row.supply, 6, row.decimals)"></div>
+                  <div v-html="$options.filters.formatBigNumAmount(row.supply, false, 6, row.decimals)"></div>
                 </td>
                 <td>
                   <div>{{ row.total_transfer }}</div>

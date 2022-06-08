@@ -91,7 +91,7 @@
                         <div>Total Supply</div>
                       </th>
                       <td>
-                        <div v-html="$options.filters.formatBigNumAmount(txMeta.supply, 6, txMeta.decimals)"></div>
+                        <div v-html="$options.filters.formatBigNumAmount(txMeta.supply, true, 6, txMeta.decimals)"></div>
                       </td>
                     </tr>
                     <tr>
