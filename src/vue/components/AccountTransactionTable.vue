@@ -82,7 +82,7 @@
         slot="pagination"
         :css="paginationCss"
         :page="currentPage"
-        :total-items="totalItems"
+        :total-items="limitPageTotalCount"
         :itemsPerPage="itemsPerPage"
         @onUpdate="changePage"
         @updateCurrentPage="updateCurrentPage"
@@ -138,6 +138,7 @@ export default {
       error: '',
       data: [],
       totalItems: 0,
+      limitPageTotalCount: 0,
       isLoading: false,
       currentPage: this.initialPage,
       paginationCss: {
@@ -195,7 +196,7 @@ export default {
       };
     },
     isHidePage() {
-      return this.itemsPerPage >= this.totalItems
+      return this.itemsPerPage >= this.limitPageTotalCount
     }
   },
   mounted() {
@@ -231,9 +232,11 @@ export default {
           percentage: this.totalSupply === '0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(),
         }));
         this.totalItems = response.total;
+        this.limitPageTotalCount = response.limitPageCount;
       } else {
         this.data = [];
         this.totalItems = 0;
+        this.limitPageTotalCount = 0;
       }
       this.$emit('onUpdateTotalCount', this.totalItems);
     },

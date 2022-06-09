@@ -10,7 +10,7 @@ String.prototype.fillPadEnd = function(width, pad){
     return this.length >= width ? this : this + new Array(width-this.length+1).join(pad);//남는 길이만큼 pad로 뒤를 채움
 }
 
-export  function formatBigNumAmount(amount = "0", unLimitDecimalPoint = false, decimalPoint = 6, pointPos = 18) {
+export  function formatBigNumAmount(amount = "0", isLimitedDecimal = false, decimalPoint = 6, pointPos = 18) {
     if(amount === "0") return `<span class="aergo">0.000000</span>`;
 
     let strOrgAmt = amount;
@@ -24,7 +24,7 @@ export  function formatBigNumAmount(amount = "0", unLimitDecimalPoint = false, d
     const bigAmount = new BigNumber(strPoint);
 
     let calcDecimalPoint = decimalPoint;
-    if (unLimitDecimalPoint) {
+    if (isLimitedDecimal) {
         let i = strDecimalValue.length-1;
         while(true) {
             let unit = strDecimalValue[--i];
@@ -37,7 +37,7 @@ export  function formatBigNumAmount(amount = "0", unLimitDecimalPoint = false, d
 
     const decimalBigAmt = bigAmount.dp(calcDecimalPoint, 1);
     let strFixedAmt = decimalBigAmt.toFixed(calcDecimalPoint).toString();
-    if(bigAmount.isInteger() && unLimitDecimalPoint) {
+    if(bigAmount.isInteger() && isLimitedDecimal) {
         // strFixedAmt = decimalBigAmt.toFixed(decimalPoint).toString();
     }
 
