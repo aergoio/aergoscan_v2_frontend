@@ -127,7 +127,7 @@ export default {
       this.error = "";
       const start = (currentPage - 1) * itemsPerPage;
       const response = await (await this.$fetch.get(`${cfg.API_URL}/nftHolder`, {
-        q: `address:${id} AND type:ARC2`,
+        q: `address:${id} AND type:ARC2 AND balance_float:>0`,
         size: itemsPerPage,
         from: start,
         sort: `${sortField}:${sort}`,

@@ -134,7 +134,7 @@ export default {
       this.error = "";
       const start = (currentPage - 1) * itemsPerPage;
       const response = await (await this.$fetch.get(`${cfg.API_URL}/tokenHolder`, {
-        q: `address:${id} AND type:ARC1`,
+        q: `address:${id} AND type:ARC1 AND balance_float:>0`,
         size: itemsPerPage,
         from: start,
         sort: `${sortField}:${sort}`,
