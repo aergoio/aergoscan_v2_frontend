@@ -122,6 +122,9 @@ export default {
       this.predictedType = '';
       if ('' + parseInt(this.query) === this.query) {
         await this.queryBlockDetails(parseInt(this.query))
+      } else if (this.query.includes("aergo.")) {
+        this.predictedType = 'address';
+        this.predictedString = this.query;
       } else if (this.query.length <= 15 && this.query.length >= 3) {
         this.predictedType = 'searchResult';
         this.predictedString = this.query;
