@@ -23,11 +23,11 @@ export default {
       expanded: false,
       NETWORKS: {
         'aergo.io': {
-          url: 'https://mainnet-v2.aergoscan.io',
+          url: 'https://mainnet.aergoscan.io',
           label: 'Mainnet'
         },
         'testnet.aergo.io': {
-          url: 'https://testnet-v2.aergoscan.io',
+          url: 'https://testnet.aergoscan.io',
           label: 'Testnet'
         },
         'alpha.aergo.io': {
