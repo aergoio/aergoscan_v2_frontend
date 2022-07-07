@@ -178,7 +178,9 @@ export default {
   },
   computed: {
     realAddress() {
-      return this.destinationAddress || this.$route.params.address;
+      // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.
+      // return this.destinationAddress || this.$route.params.address;
+      return this.$route.params.address;
     },
     filteredTokens() {
       return this.tokens;
@@ -241,6 +243,9 @@ export default {
           this.ownerAddress = nameInfo.owner.toString();
           this.destinationAddress = nameInfo.destination.toString();
           address = this.destinationAddress;
+          // todo: 추후 해당케이스 시나리오 수정필요.
+          this.isLoadingDetail = false;
+          return;
         }
       } catch (e) {
         this.error = 'Unregistered name';
@@ -249,7 +254,6 @@ export default {
       }
 
       this.address = address;
-
       // State
       try {
         this.accountDetail = Object.freeze(await this.$store.dispatch('blockchain/getAccount', {address}));
