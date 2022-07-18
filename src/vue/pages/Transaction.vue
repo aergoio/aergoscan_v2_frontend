@@ -45,7 +45,7 @@
                               {{ $options.filters.formatEllipsisText(txDetail.tx.to.toString(), 28) }}
                             </router-link>
                             <a href="javascript:;" class="address"
-                               v-if="!txDetail.tx.to || !txDetail.tx.to.toString().length">Contract Creation</a>
+                               v-if="!txDetail.tx.to || !txDetail.tx.to.toString().length">{{txDetail.tx.type === 7 ? 'MULTICALL' : 'Contract Creation'}}</a>
                           </div>
                         </div>
                       </td>
