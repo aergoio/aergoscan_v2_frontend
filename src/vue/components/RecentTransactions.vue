@@ -61,7 +61,7 @@
                 </router-link>
               </div>
               <div v-else>
-                <span class="address">Contract Creation</span>
+                <span class="address">{{tx.type === 7 ? 'MultiCall' : 'Contract Creation'}}</span>
               </div>
             </td>
           </tr>

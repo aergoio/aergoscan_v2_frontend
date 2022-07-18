@@ -62,7 +62,7 @@
               </router-link>
             </template>
             <template v-else>
-              <Identicon size="19"/><span class="address">Contract Creation</span>
+              <Identicon size="19"/><span class="address">{{row.type === 7 ? 'MultiCall' : 'Contract Creation'}}</span>
             </template>
           </template>
         </div>

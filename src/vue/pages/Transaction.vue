@@ -351,7 +351,9 @@ export default {
       return this.$route.params.hash;
     },
     formattedTitle() {
-      if (!this.txDetail.tx.to || !this.txDetail.tx.to.toString().length) return 'Contract Creation';
+      if (!this.txDetail.tx.to || !this.txDetail.tx.to.toString().length) {
+        return this.txDetail.tx.type === 7 ? 'MultiCall' : 'Contract Creation';
+      }
       try {
         let payloadBuffer = Buffer.from(this.txDetail.tx.payload);
         let parsedData = JSON.parse(payloadBuffer.toString());
