@@ -351,16 +351,12 @@ export default {
       return this.$route.params.hash;
     },
     formattedTitle() {
-      if (!this.txDetail.tx.to || !this.txDetail.tx.to.toString().length) {
-        return this.txDetail.tx.type === 7 ? 'MultiCall' : 'Contract Creation';
-      }
-      try {
-        let payloadBuffer = Buffer.from(this.txDetail.tx.payload);
-        let parsedData = JSON.parse(payloadBuffer.toString());
-        return 'Function Call';
-      } catch (e) {
-        return 'Text';
-      }
+      if (this.txDetail.tx.type === 1) return 'Function Call' ;
+      else if (this.txDetail.tx.type === 2) return 'Contract Redeploy' ;
+      else if (this.txDetail.tx.type === 5) return 'Function Call' ;
+      else if (this.txDetail.tx.type === 6) return 'Contract Creation' ;
+      else if (this.txDetail.tx.type === 7) return 'MultiCall' ;
+      else return 'Text' ;
     },
     statusFormatted() {
       const status = this.txReceipt.status.toLowerCase();
