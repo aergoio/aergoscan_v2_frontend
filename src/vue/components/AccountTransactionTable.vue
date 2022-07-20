@@ -174,7 +174,7 @@ export default {
         "all",
         "payload",
         "call",
-        "token",
+        "transfer",
         "governance",
         "system",
         "staking",
