@@ -82,7 +82,7 @@
                                 v-if="row.to && row.to.toString().length"/>
                   <div class="txt-ellipsis" v-if="!row.to || !row.to.toString().length">
                     <Identicon size="19"/>
-                    <span class="address">Contract Creation</span></div>
+                    <span class="address">"NO ADDRESS"</span></div>
                 </td>
                 <td>
                   <div>{{ row.category.toUpperCase() }}</div>
