@@ -61,7 +61,7 @@
                 </router-link>
               </div>
               <div v-else>
-                <span class="address">NO ADDRESS</span>
+                <span class="address">{{tx.category === 'multicall' ? 'MultiCall' : 'Contract Creation'}}</span>
               </div>
             </td>
           </tr>
