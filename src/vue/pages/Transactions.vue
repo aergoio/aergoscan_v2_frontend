@@ -83,7 +83,7 @@
                   <div class="txt-ellipsis" v-if="!row.to || !row.to.toString().length">
                     <div v-if="row.category === 'multicall'"> <Identicon size="19" class="identicon-multi"/> </div>
                     <div v-else> <Identicon size="19" class="identicon-new"/> </div>
-                    <span class="address">{{row.category === 'multicall' ? 'Empty' : 'Contract Creation'}}</span></div>
+                    <span class="address">{{row.category === 'multicall' ? 'N/A' : 'Contract Creation'}}</span></div>
                 </td>
                 <td>
                   <div>{{ row.category.toUpperCase() }}</div>

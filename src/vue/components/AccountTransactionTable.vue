@@ -64,7 +64,7 @@
             <template v-else>
               <div v-if="row.category === 'multicall'"> <Identicon size="19" class="identicon-multi"/> </div>
               <div v-else> <Identicon size="19" class="identicon-new"/> </div>
-              <span class="address">{{row.category === 'multicall' ? 'Empty' : 'Contract Creation'}}</span>
+              <span class="address">{{row.category === 'multicall' ? 'N/A' : 'Contract Creation'}}</span>
             </template>
           </template>
         </div>
