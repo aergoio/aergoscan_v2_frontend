@@ -1,635 +1,1416 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>aergoscan</title>
-  <meta name="viewport" content="width=device-width">
-  <meta charset="UTF-8">
-  <link href="/style/dist/main.css" rel="stylesheet">
-  <link href="/style/dist/header.select-box.css" rel="stylesheet">
-  <link href="/style/dist/search-bar.css" rel="stylesheet">
-  <link href="/style/dist/block-details.css" rel="stylesheet">
-  <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  <head>
+    <title>aergoscan</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8" />
+    <link href="/style/dist/main.css" rel="stylesheet" />
+    <link href="/style/dist/header.select-box.css" rel="stylesheet" />
+    <link href="/style/dist/search-bar.css" rel="stylesheet" />
+    <link href="/style/dist/block-details.css" rel="stylesheet" />
+    <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer','GTM-PQ5SL5P');</script> -->
-</head>
+  </head>
 
-<body>
-  <div id="app">
-    <div class="sidenav">
-      <div class="sidenav-inner">
-        <div class="app-logo">
-          <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
-        </div>
-        <div class="list">
-          <a href="/html/blocks" class="item router-link-exact-active">
-            <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <path opacity=".2" d="M0 0h20v20H0z" />
-                  <path
-                    d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
-                    fill="#FFF" fill-rule="nonzero" class="color" />
-                </g>
-              </svg>
-            </span>
-            <span class="text">Blocks</span>
-          </a>
-          <a href="/html/transactions" class="item">
-            <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <path opacity=".28" d="M0 0h20v20H0z" />
-                  <path
-                    d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
-                    fill="#A89CB3" fill-rule="nonzero" class="color" />
-                </g>
-              </svg>
-            </span>
-            <span class="text">Transactions</span>
-          </a>
-          <a href="/html/tokens" class="item">
-            <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <path opacity=".2" d="M0 0h20v20H0z" />
-                  <path
-                    d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
-                    fill="#A89CB3" fill-rule="nonzero" class="color" />
-                </g>
-              </svg>
-            </span>
-            <span class="text">Tokens</span>
-          </a>
-          <a href="/html/nft" class="item">
-            <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <path opacity=".28" d="M0 0h20v20H0z" />
-                  <path
-                    d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
-                    fill="#A89CB3" fill-rule="nonzero" class="color" />
-                </g>
-              </svg>
-            </span>
-            <span class="text">NFT</span>
-          </a>
-          <a href="javascript:;" class="item more" onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.sidenav').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
-            <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <path opacity=".2" d="M0 0h20v20H0z" />
-                  <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
-                    <circle cx="1.129" cy="1.129" r="1.129" />
-                    <circle cx="6.779" cy="1.129" r="1.129" />
-                    <circle cx="12.429" cy="1.129" r="1.129" />
+  <body>
+    <div id="app">
+      <div class="sidenav">
+        <div class="sidenav-inner">
+          <div class="app-logo">
+            <a href="/html"><img src="/img/aergo-logo@3x.png" /></a>
+          </div>
+          <div class="list">
+            <a href="/html/blocks" class="item router-link-exact-active">
+              <span class="icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path opacity=".2" d="M0 0h20v20H0z" />
+                    <path
+                      d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                      fill="#FFF"
+                      fill-rule="nonzero"
+                      class="color"
+                    />
                   </g>
-                </g>
-              </svg>
-            </span>
-            <span class="text">More</span>
-            <span style="flex: 1 1 0%;"></span>
-            <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
-          </a>
-          <div class="item-sub more">
-            <div class="list">
-              <a href="javascript:;" class="item">
-                <span class="text">
-                  <span>
-                    AERGO Wallet
+                </svg>
+              </span>
+              <span class="text">Blocks</span>
+            </a>
+            <a href="/html/transactions" class="item">
+              <span class="icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path opacity=".28" d="M0 0h20v20H0z" />
+                    <path
+                      d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                      fill="#A89CB3"
+                      fill-rule="nonzero"
+                      class="color"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <span class="text">Transactions</span>
+            </a>
+            <a href="/html/tokens" class="item">
+              <span class="icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path opacity=".2" d="M0 0h20v20H0z" />
+                    <path
+                      d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                      fill="#A89CB3"
+                      fill-rule="nonzero"
+                      class="color"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <span class="text">Tokens</span>
+            </a>
+            <a href="/html/nft" class="item">
+              <span class="icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path opacity=".28" d="M0 0h20v20H0z" />
+                    <path
+                      d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                      fill="#A89CB3"
+                      fill-rule="nonzero"
+                      class="color"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <span class="text">NFT</span>
+            </a>
+            <a
+              href="javascript:;"
+              class="item more"
+              onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.sidenav').getElementsByClassName('item-sub more')[0].classList.toggle('show');"
+            >
+              <span class="icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path opacity=".2" d="M0 0h20v20H0z" />
+                    <g
+                      transform="translate(3.22 8.87)"
+                      fill="#A89CB3"
+                      fill-rule="nonzero"
+                      class="color"
+                    >
+                      <circle cx="1.129" cy="1.129" r="1.129" />
+                      <circle cx="6.779" cy="1.129" r="1.129" />
+                      <circle cx="12.429" cy="1.129" r="1.129" />
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              <span class="text">More</span>
+              <span style="flex: 1 1 0%"></span>
+              <span class="icon arrow"
+                ><img src="/img/ic-arrow-down-white@3x.png"
+              /></span>
+            </a>
+            <div class="item-sub more">
+              <div class="list">
+                <a href="javascript:;" class="item">
+                  <span class="text">
+                    <span>
+                      AERGO Wallet
+                      <span class="icon goto"></span>
+                    </span>
+                    <span class="sub">(Mobile)</span>
+                  </span>
+                </a>
+                <a href="javascript:;" class="item">
+                  <span class="text">
+                    <span>
+                      AERGO Wallet
+                      <span class="icon goto"></span>
+                    </span>
+                    <span class="sub">(Chrome Extension)</span>
+                  </span>
+                </a>
+                <a href="javascript:;" class="item">
+                  <span class="text">
+                    <span>
+                      AERGO IDE
+                      <span class="icon goto"></span>
+                    </span>
+                  </span>
+                </a>
+                <a href="javascript:;" class="item">
+                  <span class="text">
+                    AERGO Docs
                     <span class="icon goto"></span>
                   </span>
-                  <span class="sub">(Mobile)</span>
-                </span>
-              </a>
-              <a href="javascript:;" class="item">
-                <span class="text">
-                  <span>
-                    AERGO Wallet
-                    <span class="icon goto"></span>
-                  </span>
-                  <span class="sub">(Chrome Extension)</span>
-                </span>
-              </a>
-              <a href="javascript:;" class="item">
-                <span class="text">
-                  <span>
-                    AERGO IDE
-                    <span class="icon goto"></span>
-                  </span>
-                </span>
-              </a>
-              <a href="javascript:;" class="item">
-                <span class="text">
-                  AERGO Docs
-                  <span class="icon goto"></span>
-                </span>
-              </a>
-              <a href="/html/more/contract-regi" class="item">
-                <span class="text">Contract Registration</span>
-              </a>
+                </a>
+                <a href="/html/more/contract-regi" class="item">
+                  <span class="text">Contract Registration</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">
+              Copyright © 2022 AERGO.<br />All Rights Reserved.
+            </div>
+            <div class="social">
+              <a href="https://www.aergo.io/" class="icon"
+                ><img src="/img/btn-aergo@3x.png"
+              /></a>
+              <a href="https://twitter.com/aergo_io" class="icon"
+                ><img src="/img/btn-twitter@3x.png"
+              /></a>
+              <a href="https://medium.com/aergo" class="icon"
+                ><img src="/img/btn-medium@3x.png"
+              /></a>
+              <a href="https://t.me/aergoofficial" class="icon"
+                ><img src="/img/btn-telegram@3x.png"
+              /></a>
             </div>
           </div>
         </div>
-        <div class="footer">
-          <div class="copyright">
-            Copyright © 2022 AERGO.<br>All Rights Reserved.
-          </div>
-          <div class="social">
-            <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
-            <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
-            <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
-            <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
-          </div>
-        </div>
       </div>
-    </div>
-    <div class="page-container">
-      <div class="wrap">
-        <div id="category" class="block-details">
-          <div class="header">
-            <div class="header-inner">
-              <div class="app-logo">
-                <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
-              </div>
-              <span style="flex: 1 1 0%;"></span>
-              <div class="select-box">
-                <div class="selected-item" onclick="document.getElementsByClassName('select-box')[0].classList.add('show')">
-                  <span class="status" style="background-color: #ff088f;"></span>MAIN NET</div>
-                <div class="list" onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')">
-                  <div class="item"><span class="status" style="background-color: transparent;"></span>MAIN NET</div>
-                  <div class="item"><span class="status" style="background-color: #ff088f;"></span>TEST NET</div>
-                  <div class="item"><span class="status" style="background-color: transparent;"></span>ALPHA</div>
+      <div class="page-container">
+        <div class="wrap">
+          <div id="category" class="block-details">
+            <div class="header">
+              <div class="header-inner">
+                <div class="app-logo">
+                  <a href="/html"><img src="/img/aergo-logo@3x.png" /></a>
                 </div>
-              </div>
-              <div class="btn-mobile-menu"
-                onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.toggle('show');document.getElementsByClassName('mobile-menu')[0].classList.toggle('show');">
-                <img src="/img/ic-menu@3x.png" class="menu">
-                <img src="/img/ic-exit@3x.png" class="exit">
-              </div>
-              <div class="mobile-menu">
-                <div class="mobile-menu-inner">
-                  <div class="list">
-                    <a href="/html/blocks" class="item router-link-exact-active" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                      <span class="icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path opacity=".2" d="M0 0h20v20H0z" />
-                            <path
-                              d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
-                              fill="#FFF" fill-rule="nonzero" class="color" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="text">Blocks</span>
-                    </a>
-                    <a href="/html/transactions" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                      <span class="icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path opacity=".28" d="M0 0h20v20H0z" />
-                            <path
-                              d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
-                              fill="#A89CB3" fill-rule="nonzero" class="color" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="text">Transactions</span>
-                    </a>
-                    <a href="/html/tokens" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                      <span class="icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path opacity=".2" d="M0 0h20v20H0z" />
-                            <path
-                              d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
-                              fill="#A89CB3" fill-rule="nonzero" class="color" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="text">Tokens</span>
-                    </a>
-                    <a href="/html/nft" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                      <span class="icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path opacity=".28" d="M0 0h20v20H0z" />
-                            <path
-                              d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
-                              fill="#A89CB3" fill-rule="nonzero" class="color" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="text">NFT</span>
-                    </a>
-                    <a href="javascript:;" class="item more"
-                      onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.mobile-menu').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
-                      <span class="icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path opacity=".2" d="M0 0h20v20H0z" />
-                            <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
-                              <circle cx="1.129" cy="1.129" r="1.129" />
-                              <circle cx="6.779" cy="1.129" r="1.129" />
-                              <circle cx="12.429" cy="1.129" r="1.129" />
+                <span style="flex: 1 1 0%"></span>
+                <div class="select-box">
+                  <div
+                    class="selected-item"
+                    onclick="document.getElementsByClassName('select-box')[0].classList.add('show')"
+                  >
+                    <span
+                      class="status"
+                      style="background-color: #ff088f"
+                    ></span
+                    >MAIN NET
+                  </div>
+                  <div
+                    class="list"
+                    onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')"
+                  >
+                    <div class="item">
+                      <span
+                        class="status"
+                        style="background-color: transparent"
+                      ></span
+                      >MAIN NET
+                    </div>
+                    <div class="item">
+                      <span
+                        class="status"
+                        style="background-color: #ff088f"
+                      ></span
+                      >TEST NET
+                    </div>
+                    <div class="item">
+                      <span
+                        class="status"
+                        style="background-color: transparent"
+                      ></span
+                      >ALPHA
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="btn-mobile-menu"
+                  onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.toggle('show');document.getElementsByClassName('mobile-menu')[0].classList.toggle('show');"
+                >
+                  <img src="/img/ic-menu@3x.png" class="menu" />
+                  <img src="/img/ic-exit@3x.png" class="exit" />
+                </div>
+                <div class="mobile-menu">
+                  <div class="mobile-menu-inner">
+                    <div class="list">
+                      <a
+                        href="/html/blocks"
+                        class="item router-link-exact-active"
+                        onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                      >
+                        <span class="icon">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path opacity=".2" d="M0 0h20v20H0z" />
+                              <path
+                                d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                                fill="#FFF"
+                                fill-rule="nonzero"
+                                class="color"
+                              />
                             </g>
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="text">More</span>
-                      <span style="flex: 1 1 0%;"></span>
-                      <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
-                    </a>
-                    <div class="item-sub more">
-                      <div class="list">
-                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                          <span class="text">
-                            AERGO Wallet
-                            <span class="sub">(Mobile)</span>
-                            <span class="icon goto"></span>
-                          </span>
-                        </a>
-                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                          <span class="text">
-                            AERGO Wallet
-                            <span class="sub">(Chrome Extension)</span>
-                            <span class="icon goto"></span>
-                          </span>
-                        </a>
-                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                          <span class="text">
-                            AERGO IDE
-                            <span class="icon goto"></span>
-                          </span>
-                        </a>
-                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                          <span class="text">
-                            AERGO Docs
-                            <span class="icon goto"></span>
-                          </span>
-                        </a>
-                        <a href="/html/more/contract-regi" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
-                          <span class="text">Contract Registration</span>
-                        </a>
+                          </svg>
+                        </span>
+                        <span class="text">Blocks</span>
+                      </a>
+                      <a
+                        href="/html/transactions"
+                        class="item"
+                        onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                      >
+                        <span class="icon">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path opacity=".28" d="M0 0h20v20H0z" />
+                              <path
+                                d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                                fill="#A89CB3"
+                                fill-rule="nonzero"
+                                class="color"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="text">Transactions</span>
+                      </a>
+                      <a
+                        href="/html/tokens"
+                        class="item"
+                        onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                      >
+                        <span class="icon">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path opacity=".2" d="M0 0h20v20H0z" />
+                              <path
+                                d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                                fill="#A89CB3"
+                                fill-rule="nonzero"
+                                class="color"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="text">Tokens</span>
+                      </a>
+                      <a
+                        href="/html/nft"
+                        class="item"
+                        onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                      >
+                        <span class="icon">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path opacity=".28" d="M0 0h20v20H0z" />
+                              <path
+                                d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                                fill="#A89CB3"
+                                fill-rule="nonzero"
+                                class="color"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="text">NFT</span>
+                      </a>
+                      <a
+                        href="javascript:;"
+                        class="item more"
+                        onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.mobile-menu').getElementsByClassName('item-sub more')[0].classList.toggle('show');"
+                      >
+                        <span class="icon">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path opacity=".2" d="M0 0h20v20H0z" />
+                              <g
+                                transform="translate(3.22 8.87)"
+                                fill="#A89CB3"
+                                fill-rule="nonzero"
+                                class="color"
+                              >
+                                <circle cx="1.129" cy="1.129" r="1.129" />
+                                <circle cx="6.779" cy="1.129" r="1.129" />
+                                <circle cx="12.429" cy="1.129" r="1.129" />
+                              </g>
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="text">More</span>
+                        <span style="flex: 1 1 0%"></span>
+                        <span class="icon arrow"
+                          ><img src="/img/ic-arrow-down-white@3x.png"
+                        /></span>
+                      </a>
+                      <div class="item-sub more">
+                        <div class="list">
+                          <a
+                            href="javascript:;"
+                            class="item"
+                            onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                          >
+                            <span class="text">
+                              AERGO Wallet
+                              <span class="sub">(Mobile)</span>
+                              <span class="icon goto"></span>
+                            </span>
+                          </a>
+                          <a
+                            href="javascript:;"
+                            class="item"
+                            onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                          >
+                            <span class="text">
+                              AERGO Wallet
+                              <span class="sub">(Chrome Extension)</span>
+                              <span class="icon goto"></span>
+                            </span>
+                          </a>
+                          <a
+                            href="javascript:;"
+                            class="item"
+                            onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                          >
+                            <span class="text">
+                              AERGO IDE
+                              <span class="icon goto"></span>
+                            </span>
+                          </a>
+                          <a
+                            href="javascript:;"
+                            class="item"
+                            onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                          >
+                            <span class="text">
+                              AERGO Docs
+                              <span class="icon goto"></span>
+                            </span>
+                          </a>
+                          <a
+                            href="/html/more/contract-regi"
+                            class="item"
+                            onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');"
+                          >
+                            <span class="text">Contract Registration</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="category-inner">
-            <div class="page-wrap">
-              <div class="page-content">
-                <form>
-                  <div class="search-bar">
-                    <input type="text" placeholder="Search for Address / Tx ID / Block / Token / NFT / Symbol">
-                    <div class="btn-remove"></div>
-                    <div class="btn-search">
-                      <span class="icon search"></span>
+            <div class="category-inner">
+              <div class="page-wrap">
+                <div class="page-content">
+                  <form>
+                    <div class="search-bar">
+                      <input
+                        type="text"
+                        placeholder="Search for Address / Tx ID / Block / Token / NFT / Symbol"
+                      />
+                      <div class="btn-remove"></div>
+                      <div class="btn-search">
+                        <span class="icon search"></span>
+                      </div>
+                      <div class="search-prediction">
+                        Do you mean <span class="type">account address</span>
+                        <span class="value">xxx</span>?
+                      </div>
                     </div>
-                    <div class="search-prediction">
-                      Do you mean <span class="type">account address</span> <span class="value">xxx</span>?
+                  </form>
+                  <div class="title block-detail">
+                    Block Details
+                    <div class="arrow-box">
+                      <div>
+                        <img src="/img/ic-prev@3x.png" class="arrow" />
+                        <span>Prev</span>
+                      </div>
+                      <div class="block"># 83987059</div>
+                      <div>
+                        <span>Next</span>
+                        <img src="/img/ic-next@3x.png" class="arrow" />
+                      </div>
                     </div>
                   </div>
-                </form>
-                <div class="title">
-                  Block Details
-                  <div class="block"># 83987059</div>
-                </div>
-                <div class="detail-box">
+                  <div class="detail-box">
+                    <div class="table-wrap">
+                      <div class="error">에러메시지 영역입니다.</div>
+                      <table class="block-detail">
+                        <tbody>
+                          <tr class="hidden loading">
+                            <td colspan="100%">Loading...</td>
+                          </tr>
+                          <tr class="hidden not-found">
+                            <td colspan="100%">No items found</td>
+                          </tr>
+                          <tr>
+                            <th><div>Time</div></th>
+                            <td><div>December 15th 2021, 19:15:25</div></td>
+                          </tr>
+                          <tr>
+                            <th><div>Hash</div></th>
+                            <td>
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="hash-block"
+                                  >DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                                <span class="icon copy">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path d="M0 0h18v18H0z" />
+                                      <path
+                                        d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z"
+                                        fill="#A391AA"
+                                        fill-rule="nonzero"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><div>Previous Block</div></th>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="prev-block"
+                                  >DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                                <span class="icon copy">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path d="M0 0h18v18H0z" />
+                                      <path
+                                        d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z"
+                                        fill="#A391AA"
+                                        fill-rule="nonzero"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><div>Total TXs</div></th>
+                            <td><div>48 TXs</div></td>
+                          </tr>
+                          <tr>
+                            <th><div>Block Size</div></th>
+                            <td><div>395 bytes</div></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="table-wrap">
+                      <div class="error detail-2">에러메시지 영역입니다.</div>
+                      <table class="block-detail detail-2">
+                        <tbody>
+                          <tr class="hidden loading">
+                            <td colspan="100%">Loading...</td>
+                          </tr>
+                          <tr class="hidden not-found">
+                            <td colspan="100%">No items found</td>
+                          </tr>
+                          <tr>
+                            <th><div>Block Producer</div></th>
+                            <td>
+                              <div>
+                                <a
+                                  href="/html/account"
+                                  class="hash-block txt-ellipsis"
+                                >
+                                  <span class="identicon"></span
+                                  >DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49iDdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
+                                </a>
+                                <span class="icon copy">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path d="M0 0h18v18H0z" />
+                                      <path
+                                        d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z"
+                                        fill="#A391AA"
+                                        fill-rule="nonzero"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><div>Coinbase Account</div></th>
+                            <td>
+                              <div>
+                                <a href="/html/account" class="prev-block">
+                                  <span class="identicon"></span
+                                  >DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49iDdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
+                                </a>
+                                <span class="icon copy">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path d="M0 0h18v18H0z" />
+                                      <path
+                                        d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z"
+                                        fill="#A391AA"
+                                        fill-rule="nonzero"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><div>Block Reward</div></th>
+                            <td><div>0.16 AERGO</div></td>
+                          </tr>
+                          <tr>
+                            <th><div>Reward Account</div></th>
+                            <td>
+                              <div>
+                                <a href="/html/account" class="prev-block">
+                                  <span class="identicon"></span>
+                                  DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
+                                </a>
+                                <span class="icon copy">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g fill="none" fill-rule="evenodd">
+                                      <path d="M0 0h18v18H0z" />
+                                      <path
+                                        d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z"
+                                        fill="#A391AA"
+                                        fill-rule="nonzero"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                   <div class="table-wrap">
-                    <div class="error">
-                      에러메시지 영역입니다.
+                    <div class="title">
+                      Transactions<span class="sub">2365</span>
                     </div>
-                    <table class="block-detail">
-                      <tbody>
-                        <tr class="hidden loading">
-                          <td colspan="100%">Loading...</td>
-                        </tr>
-                        <tr class="hidden not-found">
-                          <td colspan="100%">No items found</td>
-                        </tr>
-                        <tr>
-                          <th><div>Time</div></th>
-                          <td><div>December 15th 2021, 19:15:25</div></td>
-                        </tr>
-                        <tr>
-                          <th><div>Hash</div></th>
-                          <td>
-                            <div>
-                              <a href="/html/transaction-details" class="hash-block">DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a>
-                              <span class="icon copy">
-                                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                  <g fill="none" fill-rule="evenodd">
-                                    <path d="M0 0h18v18H0z"/>
-                                    <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
-                                  </g>
-                                </svg>
-                              </span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th><div>Previous Block</div></th>
-                          <td>
-                            <div>
-                              <a href="/html/block-details" class="prev-block">DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a>
-                              <span class="icon copy">
-                                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                  <g fill="none" fill-rule="evenodd">
-                                    <path d="M0 0h18v18H0z"/>
-                                    <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
-                                  </g>
-                                </svg>
-                              </span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th><div>Total TXs</div></th>
-                          <td><div>48 TXs</div></td>
-                        </tr>
-                        <tr>
-                          <th><div>Block Size</div></th>
-                          <td><div>395 bytes</div></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="table-wrap">
-                    <div class="error detail-2">
-                      에러메시지 영역입니다.
+                    <div class="error transactions">에러메시지 영역입니다.</div>
+                    <div class="h-scroll">
+                      <table class="transactions-table">
+                        <thead>
+                          <tr>
+                            <th><div>TX HASH</div></th>
+                            <th><div>BLOCK #</div></th>
+                            <th><div>TIME</div></th>
+                            <th><div>FROM</div></th>
+                            <th>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-pink@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </th>
+                            <th><div>TO</div></th>
+                            <th><div>AMOUNT (AERGO)</div></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="hidden loading">
+                            <td colspan="100%">Loading...</td>
+                          </tr>
+                          <tr class="hidden not-found">
+                            <td colspan="100%">No items found</td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897339</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897338</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897337</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897336</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897335</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897334</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897333</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897332</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897331</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <a
+                                  href="/html/transaction-details"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <a href="/html/block-details" class="block"
+                                  >83897330</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="0 secs ago"
+                              >
+                                0 secs ago
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <img
+                                  src="/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                              </div>
+                            </td>
+                            <td class="txt-ellipsis">
+                              <div>
+                                <span class="identicon"></span
+                                ><a
+                                  href="/html/account"
+                                  class="address txt-ellipsis"
+                                  >Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a
+                                >
+                              </div>
+                            </td>
+                            <td>
+                              <div>539.195<span class="aergo">000</span></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                    <table class="block-detail detail-2">
-                    <tbody>
-                      <tr class="hidden loading">
-                        <td colspan="100%">Loading...</td>
-                      </tr>
-                      <tr class="hidden not-found">
-                        <td colspan="100%">No items found</td>
-                      </tr>
-                      <tr>
-                        <th><div>Block Producer</div></th>
-                        <td>
-                          <div>
-                            <a href="/html/account" class="hash-block txt-ellipsis">
-                              <span class="identicon"></span>DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49iDdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
-                            </a>
-                            <span class="icon copy">
-                              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                <g fill="none" fill-rule="evenodd">
-                                  <path d="M0 0h18v18H0z"/>
-                                  <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
-                                </g>
-                              </svg>
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th><div>Coinbase Account</div></th>
-                        <td>
-                          <div>
-                            <a href="/html/account" class="prev-block">
-                              <span class="identicon"></span>DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49iDdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
-                            </a>
-                            <span class="icon copy">
-                              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                <g fill="none" fill-rule="evenodd">
-                                  <path d="M0 0h18v18H0z"/>
-                                  <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
-                                </g>
-                              </svg>
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th><div>Block Reward</div></th>
-                        <td><div>0.16  AERGO</div></td>
-                      </tr>
-                      <tr>
-                        <th><div>Reward Account</div></th>
-                        <td>
-                          <div>
-                            <a href="/html/account" class="prev-block">
-                              <span class="identicon"></span>
-                              DdZ2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
-                            </a>
-                            <span class="icon copy">
-                              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                <g fill="none" fill-rule="evenodd">
-                                  <path d="M0 0h18v18H0z"/>
-                                  <path d="M5.25 4.5V2.25A.75.75 0 0 1 6 1.5h9a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-2.25v2.25c0 .414-.338.75-.755.75h-8.99a.75.75 0 0 1-.755-.75l.002-10.5c0-.414.338-.75.755-.75H5.25zM3.752 6l-.002 9h7.5V6H3.752zM6.75 4.5h6V12h1.5V3h-7.5v1.5zm-1.5 3.75h4.5v1.5h-4.5v-1.5zm0 3h4.5v1.5h-4.5v-1.5z" fill="#A391AA" fill-rule="nonzero"/>
-                                </g>
-                              </svg>
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="table-wrap">
-                  <div class="title">Transactions<span class="sub">2365</span></div>
-                  <div class="error transactions">
-                    에러메시지 영역입니다.
-                  </div>
-                  <div class="h-scroll">
-                    <table class="transactions-table">
-                      <thead>
-                        <tr>
-                          <th><div>TX HASH</div></th>
-                          <th><div>BLOCK #</div></th>
-                          <th><div>TIME</div></th>
-                          <th><div>FROM</div></th>
-                          <th><div><img src="/img/ic-arrow-pink@3x.png" class="arrow"></div></th>
-                          <th><div>TO</div></th>
-                          <th><div>AMOUNT (AERGO)</div></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="hidden loading">
-                          <td colspan="100%">Loading...</td>
-                        </tr>
-                        <tr class="hidden not-found">
-                          <td colspan="100%">No items found</td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897339</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897338</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897337</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897336</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897335</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897334</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897333</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897332</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897331</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                        <tr>
-                          <td class="txt-ellipsis"><div><a href="/html/transaction-details" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><a href="/html/block-details" class="block">83897330</a></div></td>
-                          <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
-                          <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
-                          <td><div>539.195<span class="aergo">000</span></div></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="pagination transactions-table">
-                    <div class="pagination-inner">
-                      <span class="pprev disabled">
-                        <svg width="15" height="12" viewBox="0 0 15 12" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path d="M15 12H0V0h15z" />
-                            <path fill="#DAD8DE" fill-rule="nonzero"
-                              d="M8.59 6.046 10.5 8.11l-.545.59L7.5 6.046l2.455-2.654.545.59z" />
-                            <path fill="#DAD8DE" fill-rule="nonzero"
-                              d="m10.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59zM2.59 6.046 4.5 8.11l-.545.59L1.5 6.046l2.455-2.654.545.59z" />
-                            <path fill="#DAD8DE" fill-rule="nonzero"
-                              d="m4.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59z" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="prev disabled">
-                        <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path d="M12 12H0V0h12z" />
-                            <path fill="#DAD8DE" fill-rule="nonzero"
-                              d="M3.59 6.046 5.5 8.11l-.545.59L2.5 6.046l2.455-2.654.545.59z" />
-                            <path fill="#DAD8DE" fill-rule="nonzero"
-                              d="m5.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59z" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="page">
-                        <span class="cur">1</span>/<span class="tot">1000</span>
-                      </span>
-                      <span class="next">
-                        <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path d="M0 0h12v12H0z" />
-                            <path fill="#5D5960" fill-rule="nonzero"
-                              d="M7.41 5.954 5.5 3.89l.545-.59L8.5 5.954 6.045 8.608l-.545-.59z" />
-                            <path fill="#5D5960" fill-rule="nonzero"
-                              d="M5.276 5.954 3.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59z" />
-                          </g>
-                        </svg>
-                      </span>
-                      <span class="nnext">
-                        <svg width="15" height="12" viewBox="0 0 15 12" xmlns="http://www.w3.org/2000/svg">
-                          <g fill="none" fill-rule="evenodd">
-                            <path d="M0 0h15v12H0z" />
-                            <path fill="#5D5960" fill-rule="nonzero"
-                              d="M6.41 5.954 4.5 3.89l.545-.59L7.5 5.954 5.045 8.608l-.545-.59z" />
-                            <path fill="#5D5960" fill-rule="nonzero"
-                              d="M4.276 5.954 2.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59zM12.41 5.954 10.5 3.89l.545-.59L13.5 5.954l-2.455 2.654-.545-.59z" />
-                            <path fill="#5D5960" fill-rule="nonzero"
-                              d="M10.276 5.954 8.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59z" />
-                          </g>
-                        </svg>
-                      </span>
+                    <div class="pagination transactions-table">
+                      <div class="pagination-inner">
+                        <span class="pprev disabled">
+                          <svg
+                            width="15"
+                            height="12"
+                            viewBox="0 0 15 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path d="M15 12H0V0h15z" />
+                              <path
+                                fill="#DAD8DE"
+                                fill-rule="nonzero"
+                                d="M8.59 6.046 10.5 8.11l-.545.59L7.5 6.046l2.455-2.654.545.59z"
+                              />
+                              <path
+                                fill="#DAD8DE"
+                                fill-rule="nonzero"
+                                d="m10.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59zM2.59 6.046 4.5 8.11l-.545.59L1.5 6.046l2.455-2.654.545.59z"
+                              />
+                              <path
+                                fill="#DAD8DE"
+                                fill-rule="nonzero"
+                                d="m4.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59z"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="prev disabled">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path d="M12 12H0V0h12z" />
+                              <path
+                                fill="#DAD8DE"
+                                fill-rule="nonzero"
+                                d="M3.59 6.046 5.5 8.11l-.545.59L2.5 6.046l2.455-2.654.545.59z"
+                              />
+                              <path
+                                fill="#DAD8DE"
+                                fill-rule="nonzero"
+                                d="m5.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59z"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="page">
+                          <span class="cur">1</span>/<span class="tot"
+                            >1000</span
+                          >
+                        </span>
+                        <span class="next">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path d="M0 0h12v12H0z" />
+                              <path
+                                fill="#5D5960"
+                                fill-rule="nonzero"
+                                d="M7.41 5.954 5.5 3.89l.545-.59L8.5 5.954 6.045 8.608l-.545-.59z"
+                              />
+                              <path
+                                fill="#5D5960"
+                                fill-rule="nonzero"
+                                d="M5.276 5.954 3.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59z"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                        <span class="nnext">
+                          <svg
+                            width="15"
+                            height="12"
+                            viewBox="0 0 15 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="none" fill-rule="evenodd">
+                              <path d="M0 0h15v12H0z" />
+                              <path
+                                fill="#5D5960"
+                                fill-rule="nonzero"
+                                d="M6.41 5.954 4.5 3.89l.545-.59L7.5 5.954 5.045 8.608l-.545-.59z"
+                              />
+                              <path
+                                fill="#5D5960"
+                                fill-rule="nonzero"
+                                d="M4.276 5.954 2.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59zM12.41 5.954 10.5 3.89l.545-.59L13.5 5.954l-2.455 2.654-.545-.59z"
+                              />
+                              <path
+                                fill="#5D5960"
+                                fill-rule="nonzero"
+                                d="M10.276 5.954 8.366 3.89l.546-.59 2.455 2.654-2.455 2.654-.545-.59z"
+                              />
+                            </g>
+                          </svg>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="footer">
-            <div class="social">
-              <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
-              <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
-              <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
-              <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
-            </div>
-            <div class="copyright">
-              Copyright © 2022 AERGO. All Rights Reserved.
+            <div class="footer">
+              <div class="social">
+                <a href="https://www.aergo.io/" class="icon"
+                  ><img src="/img/btn-aergo@3x.png"
+                /></a>
+                <a href="https://twitter.com/aergo_io" class="icon"
+                  ><img src="/img/btn-twitter@3x.png"
+                /></a>
+                <a href="https://medium.com/aergo" class="icon"
+                  ><img src="/img/btn-medium@3x.png"
+                /></a>
+                <a href="https://t.me/aergoofficial" class="icon"
+                  ><img src="/img/btn-telegram@3x.png"
+                /></a>
+              </div>
+              <div class="copyright">
+                Copyright © 2022 AERGO. All Rights Reserved.
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- <script src="https://browser.sentry-cdn.com/6.1.0/bundle.min.js"
+    <!-- <script src="https://browser.sentry-cdn.com/6.1.0/bundle.min.js"
     integrity="sha384-T4wn6EUhrkGRYp9a0X2/uXu6frHKrfbSeO4zRRA4KIgrEaJMMRbpunhBtNahdsxW"
     crossorigin="anonymous"></script> -->
-  <!-- built bundles will be auto-injected -->
-</body>
-
+    <!-- built bundles will be auto-injected -->
+  </body>
 </html>

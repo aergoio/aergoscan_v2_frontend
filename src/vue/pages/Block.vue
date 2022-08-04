@@ -6,8 +6,18 @@
         <div class="page-wrap">
           <div class="page-content">
             <search/>
-            <div class="title">Block Details
-              <div class="block" v-if="blockDetail"># {{ blockDetail.header.blockno }}</div>
+            <div class="title block-detail">Block Details
+              <div class="arrow-box" v-if="blockDetail">
+                <router-link :to="`/block/${blockDetail.header.blockno - 1}/`" v-if="hasPrevious">
+                  <img src="~@assets/img/ic-prev@3x.png" class="arrow" />
+                  <span>Prev</span>
+                </router-link>
+                <div class="block"># {{ blockDetail.header.blockno }}</div>
+                <router-link :to="`/block/${blockDetail.header.blockno + 1}/`">
+                  <span>Next</span>
+                  <img src="~@assets/img/ic-next@3x.png" class="arrow" />
+                </router-link>
+              </div>
             </div>
             <div class="detail-box">
               <div class="table-wrap">
@@ -240,7 +250,11 @@ export default {
       this.load();
     }
   },
-  computed: {},
+  computed: {
+    hasPrevious() {
+      return this.blockDetail.header.blockno > 0;
+    }
+  },
   methods: {
     async load() {
       let blockNoOrHash = this.$route.params.blockNoOrHash;
@@ -275,6 +289,17 @@ export default {
     @media screen and (max-width: 780px) {
       padding-top: 20px;
     }
+  }
+
+  .title {
+    &.block-detail {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .arrow {
+    display: flex;
   }
 }
 
@@ -380,6 +405,37 @@ table.block-detail {
     //    }
     //  }
     //}
+  }
+}
+.arrow-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: normal;
+  color: #5d5960;
+  .block {
+    text-align: center;
+    width: 150px;
+    height: 40px;
+    margin: 0px 10px;
+  }
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    span {
+      margin: 0px 6px;
+    }
+    img {
+      width: 24px;
+      height: 24px;
+    }
   }
 }
 </style>

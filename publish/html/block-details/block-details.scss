@@ -6,6 +6,17 @@
       padding-top: 20px;
     }
   }
+
+  .title {
+    &.block-detail {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .arrow {
+    display: flex;
+  }
 }
 
 .detail-box {
@@ -121,7 +132,9 @@ table.transactions-table {
       box-sizing: content-box;
     }
 
-    &:nth-child(4), &:nth-child(5), &:nth-child(6) {
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
       text-align: center;
 
       > div {
@@ -135,12 +148,44 @@ table.transactions-table {
       width: 20%;
     }
 
-    &:nth-child(4), &:nth-child(5), &:nth-child(6) {
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
       text-align: center;
 
       > div {
         justify-content: center;
       }
+    }
+  }
+}
+
+.arrow-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: normal;
+  color: #5d5960;
+  .block {
+    width: 130px;
+    height: 40px;
+    margin: 0px 10px;
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      margin: 0px 6px;
+    }
+    img {
+      width: 24px;
+      height: 24px;
     }
   }
 }
