@@ -40,7 +40,7 @@ export default {
       if (this.address) {
         return this.address;
       }
-      return 'NO ADDRESS';
+      return 'N/A';
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="identicon" :class="{'identicon-new': !text}">
+  <div class="identicon" :class="{'identicon-new': is_new}">
   </div>
 </template>
 
@@ -48,5 +48,8 @@ export default {
 }
 .identicon-new {
   background: url(~@assets/img/identicon-new.svg);
+}
+.identicon-multi {
+  background: url(~@assets/img/multicall.svg);
 }
 </style>
