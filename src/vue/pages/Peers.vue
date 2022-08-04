@@ -48,10 +48,10 @@
                     </router-link>
 
                     <span class="peers text-box"
-                          v-if="bpsList.indexOf(row.address.peerid) !== -1 && row.acceptedroleLabel !== 'PRODUCER'">Producer</span>
-                    <span class="peers text-box" v-if="raftLeaderID === row.address.peerid">Leader</span>
+                          v-if="bpsList.indexOf(row.address.peerid) !== -1 && row.acceptedroleLabel !== 'PRODUCER'">PRODUCER</span>
+                    <span class="peers text-box" v-if="raftLeaderID === row.address.peerid">LEADER</span>
                     <span class="peers text-box">{{ row.acceptedroleLabel }}</span>
-                    <span class="peers text-box" v-if="row.selfpeer">self</span>
+                    <span class="peers text-box" v-if="row.selfpeer">SELF</span>
                   </div>
                 </td>
 
@@ -85,7 +85,7 @@
                 <div class="title">Server Info</div>
                 <tr v-for="[key, value] in serverInfoItems" :key="key">
                   <th>
-                    <div>{{ key.toUpperCase() }}</div>
+                    <div>{{ key }}</div>
                   </th>
                   <td>
                     <div class="chain-id">
