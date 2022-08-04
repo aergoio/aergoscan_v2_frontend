@@ -1,0 +1,55 @@
+table.transactions-table {
+  th {
+    &:nth-child(4) {
+      width: 25px;
+      min-width: 25px;
+      box-sizing: content-box;
+    }
+
+    &:nth-child(3), &:nth-child(4), &:nth-child(5) {
+      text-align: center;
+
+      > div {
+        justify-content: center;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+
+        > div {
+          justify-content: end;
+        }
+      }
+    }
+  }
+
+  td {
+    &:nth-child(3), &:nth-child(5) {
+      text-align: left;
+
+      > div {
+        justify-content: start;
+      }
+    }
+
+    &:nth-child(4) {
+      text-align: center;
+
+      > div {
+        justify-content: center;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+
+        > div {
+          justify-content: end;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<svg width="15" height="12" viewBox="0 0 15 12" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fill-rule="evenodd">
+        <path d="M15 12H0V0h15z"/>
+        <path fill="#DAD8DE" fill-rule="nonzero" d="M8.59 6.046 10.5 8.11l-.545.59L7.5 6.046l2.455-2.654.545.59z"/>
+        <path fill="#DAD8DE" fill-rule="nonzero" d="m10.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59zM2.59 6.046 4.5 8.11l-.545.59L1.5 6.046l2.455-2.654.545.59z"/>
+        <path fill="#DAD8DE" fill-rule="nonzero" d="m4.724 6.046 1.91 2.064-.546.59-2.455-2.654 2.455-2.654.545.59z"/>
+    </g>
+</svg>

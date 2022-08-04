@@ -1,0 +1,13 @@
+table.tokens-table th:last-child { text-align: right; }
+
+table.tokens-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.tokens-table td:last-child { text-align: right; }
+
+table.tokens-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.tokens-table td > div .aergo:last-child { margin-left: 5px; }
+
+table.tokens-table tbody tr.hidden td { height: 84px; text-align: center !important; }
+
+@media screen and (max-width: 780px) { table.tokens-table tbody tr.hidden td { height: 69px; text-align: left !important; } }

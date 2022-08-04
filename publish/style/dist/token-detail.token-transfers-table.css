@@ -1,0 +1,25 @@
+table.token-transfers-table th:nth-child(5) { width: 25px; min-width: 25px; -webkit-box-sizing: content-box; box-sizing: content-box; }
+
+table.token-transfers-table th:nth-child(4), table.token-transfers-table th:nth-child(5), table.token-transfers-table th:nth-child(6) { text-align: center; }
+
+table.token-transfers-table th:nth-child(4) > div, table.token-transfers-table th:nth-child(5) > div, table.token-transfers-table th:nth-child(6) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.token-transfers-table th:last-child { text-align: right; }
+
+table.token-transfers-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.token-transfers-table td.txt-ellipsis { width: 20%; }
+
+table.token-transfers-table td:nth-child(5) { text-align: center; }
+
+table.token-transfers-table td:nth-child(5) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.token-transfers-table td:nth-child(4), table.token-transfers-table td:nth-child(6) { text-align: left; }
+
+table.token-transfers-table td:nth-child(4) > div, table.token-transfers-table td:nth-child(6) > div { -webkit-box-pack: start; -ms-flex-pack: start; justify-content: start; }
+
+table.token-transfers-table td:last-child { text-align: right; }
+
+table.token-transfers-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.token-transfers-table td .block { font-weight: bold; }

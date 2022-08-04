@@ -11,7 +11,7 @@ import Account from '../pages/Account.vue';
 import Consensus from '../pages/Consensus.vue';
 import Search from '../pages/Search.vue';
 import Register from '../pages/Register.vue';
-// import Peers from '../pages/Peers.vue';
+import Peers from '../pages/Peers.vue';
 
 export default [
     { path: '/', component: MainPage },
@@ -28,5 +28,5 @@ export default [
     { path: '/consensus/', component: Consensus, name: 'consensus' },
     { path: '/register/', component: Register, name: 'register' },
     { path: '/search', component: Search, name: 'search' },
-    // { path: '/peers/', component: Peers, name: 'peers' },
+    { path: '/peers/', component: Peers, name: 'peers' },
 ];

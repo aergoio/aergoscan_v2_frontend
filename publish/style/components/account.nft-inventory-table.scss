@@ -1,0 +1,49 @@
+table.nft-inventory-table {
+  th {
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+  
+        &>div {
+          justify-content: end;
+        }
+      }
+    }
+
+    &:nth-child(3) {
+      text-align: center;
+
+      &>div {
+        justify-content: center;
+      }
+    }
+
+    &:last-child {
+      width: 150px;
+    }
+  }
+
+  td {
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+  
+        &>div {
+          justify-content: end;
+        }
+      }
+    }
+
+    &:nth-child(3) {
+      text-align: center;
+
+      &>div {
+        justify-content: center;
+      }
+    }
+
+    &:last-child {
+      width: 150px;
+    }
+  }
+}

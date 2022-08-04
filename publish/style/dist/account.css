@@ -1,0 +1,65 @@
+.category-inner > .page-wrap { padding-bottom: 30px; }
+
+@media screen and (max-width: 780px) { .category-inner > .page-wrap { padding-top: 20px; } }
+
+.page-content > .table-wrap { padding-bottom: 50px; }
+
+.detail-box { margin: 15px 0; border-radius: 5px; -webkit-box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5); box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5); background-color: #fff; }
+
+.detail-box.account .table-wrap { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: start; -ms-flex-align: start; align-items: start; margin: 0; }
+
+@media screen and (max-width: 900px) { .detail-box.account .table-wrap { -ms-flex-wrap: wrap; flex-wrap: wrap; } }
+
+@media screen and (max-width: 480px) { .detail-box.account .table-wrap { padding: 0 20px; } }
+
+@media screen and (max-width: 480px) { .detail-box.contract { margin: 20px -20px 0; } }
+
+.detail-box.contract .tabs-wrap { padding: 20px 20px 50px; }
+
+.detail-box.contract .tabs-wrap .table-wrap .desc-contract { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-top: 25px; color: #fff; font-size: 14px; font-family: DINPro; }
+
+.detail-box.contract .tabs-wrap .table-wrap .desc-contract .btn-load-more { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; padding: 3px 5px; border-radius: 3px; border: solid 1px #fff; background: transparent; color: #fff; font-size: 13px; line-height: 1.38; margin-left: 7px; }
+
+.detail-box.contract .tabs-wrap .table-wrap .desc-contract .btn-refresh { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-left: 10px; cursor: pointer; }
+
+.detail-box.contract .tabs-wrap .table-wrap .result-events thead tr th:nth-child(3) { min-width: 90px; }
+
+.detail-box.contract .tabs-wrap .table-wrap .result-events tbody tr td a { text-decoration: underline; }
+
+.detail-box > .title { padding: 20px; font-size: 16px; font-weight: bold; color: #1a1823; border-bottom: 1px solid #f2f2f2; }
+
+@media screen and (max-width: 480px) { .detail-box > .title { font-size: 18px; } }
+
+.detail-box .table-wrap { padding: 10px 20px; -webkit-box-shadow: none; box-shadow: none; }
+
+.detail-box .address { padding: 20px; border-bottom: 1px solid #f2f2f2; }
+
+.detail-box .address .title { margin-bottom: 10px; font-size: 14px; font-weight: bold; color: #1a1823; }
+
+.detail-box .address .item { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+
+.detail-box .address .item .item-inner { padding: 15px; border-radius: 5px; font-size: 14px; color: #fff; word-break: break-all; background-color: #363344; }
+
+.detail-box .address .item .item-inner .identicon { display: inline-block; width: 18px; height: 18px; -webkit-box-flex: 18px; -ms-flex: 18px 0 0px; flex: 18px 0 0; margin-right: 6px; vertical-align: middle; }
+
+.detail-box .address .item .icon.copy { margin-left: 10px; }
+
+@media screen and (max-width: 480px) { .detail-box .address .item .icon.copy svg { width: 24px; height: 24px; } }
+
+.detail-box .address .arrow.down { max-width: 435px; margin: 7px 0; font-size: 0; text-align: center; }
+
+@media screen and (max-width: 480px) { .detail-box .address .arrow.down { width: calc(100% - 35px); } }
+
+.detail-box .address .arrow.down img { width: 16px; }
+
+.detail-box table.account { table-layout: fixed; border-collapse: separate; border-spacing: 0 20px; }
+
+@media screen and (max-width: 480px) { .detail-box table.account { border-spacing: 0 25px; } }
+
+.detail-box table.account th { width: 126px; height: auto; font-size: 14px; color: #a391aa; border-bottom: none; vertical-align: top; }
+
+@media screen and (max-width: 480px) { .detail-box table.account th { width: 110px; font-size: 15px; } }
+
+.detail-box table.account td { height: auto; font-size: 14px; border-bottom: none; vertical-align: top; word-break: break-all; }
+
+@media screen and (max-width: 480px) { .detail-box table.account td { font-size: 15px; } }

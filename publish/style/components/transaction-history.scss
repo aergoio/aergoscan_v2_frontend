@@ -1,0 +1,22 @@
+.transaction-history {
+  position: relative;
+  width: calc(37% - 15px);
+
+  @media screen and (max-width: 1200px) {
+    width: 100%;
+  }
+
+  .graph {
+    position: absolute;
+    top: 45px;
+    left: 20px;
+    bottom: 20px;
+    right: 20px;
+
+    @media screen and (max-width: 1200px) {
+      position: inherit;
+      min-height: 120px;
+      margin-top: 10px;
+    }
+  }
+}

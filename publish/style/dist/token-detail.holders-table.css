@@ -1,0 +1,13 @@
+table.holders-table th:first-child { min-width: 100px; }
+
+table.holders-table th:last-child { text-align: right; }
+
+table.holders-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.holders-table td:first-child { font-weight: bold; }
+
+table.holders-table td:last-child { text-align: right; }
+
+table.holders-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.holders-table td .block { font-weight: bold; }

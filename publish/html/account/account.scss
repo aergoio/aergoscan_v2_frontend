@@ -1,0 +1,211 @@
+.category-inner {
+  > .page-wrap {
+    padding-bottom: 30px;
+
+    @media screen and (max-width: 780px) {
+      padding-top: 20px;
+    }
+  }
+}
+
+.page-content > .table-wrap {
+  padding-bottom: 50px;
+}
+
+.detail-box {
+  margin: 15px 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5);
+  background-color: #fff;
+
+  &.account {
+    .table-wrap {
+      display: flex;
+      align-items: start;
+      margin: 0;
+
+      @media screen and (max-width: 900px) {
+        flex-wrap: wrap;
+      }
+
+      @media screen and (max-width: 480px) {
+        padding: 0 20px;
+      }
+    }
+  }
+
+  &.contract {
+    @media screen and (max-width: 480px) {
+      margin: 20px -20px 0;
+    }
+
+    .tabs-wrap {
+      padding: 20px 20px 50px;
+
+      .table-wrap {
+        .desc-contract {
+          display: flex;
+          align-items: center;
+          margin-top: 25px;
+          color: #fff;
+          font-size: 14px;
+          font-family: DINPro;
+
+          .btn-load-more {
+            display: flex;
+            align-items: center;
+            padding: 3px 5px;
+            border-radius: 3px;
+            border: solid 1px #fff;
+            background: transparent;
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.38;
+            margin-left: 7px;
+          }
+
+          .btn-refresh {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+          }
+        }
+
+        .result-events {
+          thead {
+            tr {
+              th {
+                &:nth-child(3) {
+                  min-width: 90px;
+                }
+              }
+            }
+          }
+  
+          tbody {
+            tr {
+              td {
+                a {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > .title {
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a1823;
+    border-bottom: 1px solid #f2f2f2;
+
+    @media screen and (max-width: 480px) {
+      font-size: 18px;
+    }
+  }
+
+  .table-wrap {
+    padding: 10px 20px;
+    box-shadow: none;
+  }
+
+  .address {
+    padding: 20px;
+    border-bottom: 1px solid #f2f2f2;
+
+    .title {
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1823;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+
+      .item-inner {
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #fff;
+        word-break: break-all;
+        background-color: #363344;
+
+        .identicon {
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          flex: 18px 0 0;
+          margin-right: 6px;
+          vertical-align: middle;
+        }
+      }
+
+      .icon.copy {
+        margin-left: 10px;
+
+        @media screen and (max-width: 480px) {
+          svg {
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+    }
+
+    .arrow.down {
+      max-width: 435px;
+      margin: 7px 0;
+      font-size: 0;
+      text-align: center;
+
+      @media screen and (max-width: 480px) {
+        width: calc(100% - 35px);
+      }
+
+      img { width: 16px; }
+    }
+  }
+
+  table.account {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+
+    @media screen and (max-width: 480px) {
+      border-spacing: 0 25px;
+    }
+
+    th {
+      width: 126px;
+      height: auto;
+      font-size: 14px;
+      color: #a391aa;
+      border-bottom: none;
+      vertical-align: top;
+
+      @media screen and (max-width: 480px) {
+        width: 110px;
+        font-size: 15px;
+      }
+    }
+
+    td {
+      height: auto;
+      font-size: 14px;
+      border-bottom: none;
+      vertical-align: top;
+      word-break: break-all;
+
+      @media screen and (max-width: 480px) {
+        font-size: 15px;
+      }
+    }
+  }
+}

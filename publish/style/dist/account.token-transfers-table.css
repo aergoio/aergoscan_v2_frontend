@@ -1,0 +1,23 @@
+table.token-transfers-table th:nth-child(3) img { margin: 0 7px; }
+
+table.token-transfers-table th:nth-child(4) { padding-left: 10px; }
+
+table.token-transfers-table th:nth-child(5) { text-align: center; }
+
+table.token-transfers-table th:nth-child(5) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.token-transfers-table th:last-child { text-align: right; }
+
+table.token-transfers-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.token-transfers-table td:nth-child(4) { padding-left: 10px; }
+
+table.token-transfers-table td:nth-child(5) { text-align: center; }
+
+table.token-transfers-table td:nth-child(5) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.token-transfers-table td:last-child { text-align: right; }
+
+table.token-transfers-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.token-transfers-table td .aergo { margin-right: 5px; }

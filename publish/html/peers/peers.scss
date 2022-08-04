@@ -1,0 +1,131 @@
+.category-inner {
+  > .page-wrap {
+    padding-bottom: 30px;
+
+    @media screen and (max-width: 780px) {
+      padding-top: 20px;
+    }
+  }
+
+  .title {
+    &.block-detail {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+table.peers {
+  border-collapse: separate;
+  border-spacing: 0 20px;
+
+  th {
+    width: 150px;
+    height: auto;
+    font-size: 14px;
+    color: #a391aa;
+    border-bottom: none;
+    vertical-align: top;
+
+    @media screen and (max-width: 780px) {
+      padding-right: 20px;
+    }
+
+    @media screen and (max-width: 480px) {
+      font-size: 15px;
+    }
+
+    > div {
+      align-items: start;
+    }
+  }
+
+  td {
+    height: auto;
+    font-size: 14px;
+    border-bottom: none;
+    vertical-align: top;
+
+    @media screen and (max-width: 480px) {
+      font-size: 15px;
+    }
+
+    > div {
+      align-items: start;
+
+      &.chain-id {
+        word-break: break-all;
+      }
+    }
+
+    .identicon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      flex: 18px 0 0;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+  }
+}
+.peers {
+  &.title {
+    display: flex;
+    gap: 0px 0px !important;
+  }
+}
+
+.peers {
+  &.text-box {
+    height: 16px;
+    margin: 11px 6px 10px 6px;
+    padding: 3px 4px;
+    border-radius: 2px;
+    background-color: #e4e4e4;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 9px;
+    font-weight: 400;
+  }
+}
+
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.table-wrap {
+  padding: 20px 19px 50px 20px;
+  &.second-table {
+    font-weight: 700;
+    margin-top: 15px;
+    padding: 20px 20px 20px 20px;
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.5;
+      padding: 0 20px 23px 20px;
+      margin: 0 -20px 15px;
+      color: #1A1823;
+      border-bottom: 1px solid #F8F8F8 ;
+    }
+  }
+  .peers-table {
+    &.peer-id {
+      width: 40%;
+      font-size: 12px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 2;
+      letter-spacing: normal;
+      color: #3c3b3e;
+    }
+  }
+  .peer-block-time {
+    text-align: end;
+  }
+}

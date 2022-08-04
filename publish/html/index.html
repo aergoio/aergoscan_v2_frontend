@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>aergoscan</title>
+  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <link href="/style/dist/main.css" rel="stylesheet">
+  <link href="/style/dist/header.select-box.css" rel="stylesheet">
+  <link href="/style/dist/search-bar.css" rel="stylesheet">
+  <link href="/style/dist/transaction-history.css" rel="stylesheet">
+  <link href="/style/dist/latest-block-table.css" rel="stylesheet">
+  <link href="/style/dist/latest-transactions-table.css" rel="stylesheet">
+  <link href="/style/dist/index.css" rel="stylesheet">
+  <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PQ5SL5P');</script> -->
+</head>
+
+<body>
+  <div id="app">
+    <div class="sidenav">
+      <div class="sidenav-inner">
+        <div class="app-logo">
+          <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
+        </div>
+        <div class="list">
+          <a href="/html/blocks" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                    fill="#FFF" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Blocks</span>
+          </a>
+          <a href="/html/transactions" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".28" d="M0 0h20v20H0z" />
+                  <path
+                    d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Transactions</span>
+          </a>
+          <a href="/html/tokens" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Tokens</span>
+          </a>
+          <a href="/html/nft" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".28" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">NFT</span>
+          </a>
+          <a href="javascript:;" class="item more" onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.sidenav').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
+                    <circle cx="1.129" cy="1.129" r="1.129" />
+                    <circle cx="6.779" cy="1.129" r="1.129" />
+                    <circle cx="12.429" cy="1.129" r="1.129" />
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="text">More</span>
+            <span style="flex: 1 1 0%;"></span>
+            <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
+          </a>
+          <div class="item-sub more">
+            <div class="list">
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO Wallet
+                    <span class="icon goto"></span>
+                  </span>
+                  <span class="sub">(Mobile)</span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO Wallet
+                    <span class="icon goto"></span>
+                  </span>
+                  <span class="sub">(Chrome Extension)</span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO IDE
+                    <span class="icon goto"></span>
+                  </span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  AERGO Docs
+                  <span class="icon goto"></span>
+                </span>
+              </a>
+              <a href="/html/more/contract-regi" class="item">
+                <span class="text">Contract Registration</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="copyright">
+            Copyright © 2022 AERGO.<br>All Rights Reserved.
+          </div>
+          <div class="social">
+            <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
+            <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
+            <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
+            <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-container">
+      <div class="wrap">
+        <div id="category" class="main">
+          <div class="header main">
+            <div class="header-inner">
+              <div class="app-logo">
+                <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
+              </div>
+              <span style="flex: 1 1 0%;"></span>
+              <div class="select-box main">
+                <div class="selected-item" onclick="document.getElementsByClassName('select-box')[0].classList.add('show')">
+                  MAIN NET</div>
+                <div class="list" onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')">
+                  <div class="item active">MAIN NET</div>
+                  <div class="item">TEST NET</div>
+                  <div class="item">ALPHA</div>
+                </div>
+              </div>
+              <div class="btn-mobile-menu"
+                onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.toggle('show');document.getElementsByClassName('mobile-menu')[0].classList.toggle('show');">
+                <img src="/img/ic-menu@3x.png" class="menu">
+                <img src="/img/ic-exit@3x.png" class="exit">
+              </div>
+              <div class="mobile-menu">
+                <div class="mobile-menu-inner">
+                  <div class="list">
+                    <a href="/html/blocks" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                              fill="#FFF" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Blocks</span>
+                    </a>
+                    <a href="/html/transactions" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".28" d="M0 0h20v20H0z" />
+                            <path
+                              d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Transactions</span>
+                    </a>
+                    <a href="/html/tokens" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Tokens</span>
+                    </a>
+                    <a href="/html/nft" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".28" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">NFT</span>
+                    </a>
+                    <a href="javascript:;" class="item more"
+                      onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.mobile-menu').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
+                              <circle cx="1.129" cy="1.129" r="1.129" />
+                              <circle cx="6.779" cy="1.129" r="1.129" />
+                              <circle cx="12.429" cy="1.129" r="1.129" />
+                            </g>
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">More</span>
+                      <span style="flex: 1 1 0%;"></span>
+                      <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
+                    </a>
+                    <div class="item-sub more">
+                      <div class="list">
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Wallet
+                            <span class="sub">(Mobile)</span>
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Wallet
+                            <span class="sub">(Chrome Extension)</span>
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO IDE
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Docs
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="/html/more/contract-regi" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">Contract Registration</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="category-inner">
+            <div class="page-wrap">
+              <div class="page-content">
+                <form>
+                  <div class="search-bar main">
+                    <input type="text" placeholder="Search for Address / Tx ID / Block / Token / NFT / Symbol">
+                    <div class="btn-remove"></div>
+                    <div class="btn-search">
+                      <span class="text">SEARCH</span>
+                      <span class="icon search"></span>
+                    </div>
+                    <div class="search-prediction">
+                      Do you mean <span class="type">account address</span> <span class="value">xxx</span>?
+                    </div>
+                  </div>
+                </form>
+                <div class="summary">
+                  <div class="latest-block">
+                    <div class="title">Latest Block</div>
+                    <div class="content">
+                      <span class="icon"><img src="/img/ic-latest-block@3x.png"></span>
+                      <span class="text"><a href="javascript:;">#83897339</a></span>
+                    </div>
+                  </div>
+                  <div class="group">
+                    <div class="total-tx">
+                      <div class="title">Total TX</div>
+                      <div class="content">
+                        <span class="text">4875029</span>
+                      </div>
+                    </div>
+                    <div class="tpm tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Transactions in the last minute">
+                      <div class="title">TPM (Now)</div>
+                      <div class="content">
+                        <span class="text">5</span>
+                      </div>
+                    </div>
+                    <a href="/html/block-details" class="tps tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Peak transaction number. Click to go to block">
+                      <div class="title">TPS (Peak)</div>
+                      <div class="content">
+                        <span class="text">8443</span>
+                      </div>
+                    </a>
+                    <a href="/html/bp-list" class="bpn tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Number of block producers. Click to go to list">
+                      <div class="title">BP Number</div>
+                      <div class="content">
+                        <span class="text">13</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="transaction-history">
+                    <div class="title">Transaction History (14 days)</div>
+                    <div class="content">
+                      <div class="graph"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-group">
+                  <div class="table-wrap latest-block-table">
+                    <div class="title">Latest Blocks</div>
+                    <div><button onclick="addLatestBlock();">Add</button> <button onclick="removeLatestBlock();">Remove</button></div>
+                    <div class="error latest-block">
+                      에러메시지 영역입니다.
+                    </div>
+                    <div class="h-scroll-main">
+                      <div class="h-scroll-main-inner">
+                        <table class="latest-block-table lastest-bottom">
+                          <thead>
+                            <tr>
+                              <th>
+                                <div>BLOCK #</div>
+                              </th>
+                              <th>
+                                <div>TIME</div>
+                              </th>
+                              <th>
+                                <div>TXs</div>
+                              </th>
+                              <th>
+                                <div>BLOCK PRODUCER</div>
+                              </th>
+                              <th>
+                                <div>REWARD (AERGO)</div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="hidden loading">
+                              <td colspan="100%">Loading...</td>
+                            </tr>
+                            <tr class="hidden not-found">
+                              <td colspan="100%">No items found</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div><a href="/html/block-details">83897331</a></div>
+                              </td>
+                              <td>
+                                <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago
+                                </div>
+                              </td>
+                              <td>
+                                <div>35</div>
+                              </td>
+                              <td>
+                                <div><span class="identicon"></span><span class="txt-ellipsis">2Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</span></div>
+                              </td>
+                              <td>
+                                <div>0.16</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div><a href="/html/block-details">83897330</a></div>
+                              </td>
+                              <td>
+                                <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago
+                                </div>
+                              </td>
+                              <td>
+                                <div>35</div>
+                              </td>
+                              <td>
+                                <div><span class="identicon"></span><span class="txt-ellipsis">2Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</span></div>
+                              </td>
+                              <td>
+                                <div>0.16</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="btn-wrap">
+                      <button onclick="window.location='/html/blocks';">view all</button>
+                    </div>
+                  </div>
+                  <div class="table-wrap latest-transactions-table">
+                    <div class="title">Latest Transactions</div>
+                    <div><button onclick="addLatestTransaction();">Add</button> <button onclick="removeLatestTransaction();">Remove</button></div>
+                    <div class="error transactions">
+                      에러메시지 영역입니다.
+                    </div>
+                    <div class="h-scroll-main">
+                      <div class="h-scroll-main-inner">
+                        <table class="latest-transactions-table lastest-top">
+                          <thead>
+                            <tr>
+                              <th>
+                                <div>TX HASH</div>
+                              </th>
+                              <th>
+                                <div>TIME</div>
+                              </th>
+                              <th>
+                                <div>FROM</div>
+                              </th>
+                              <th>
+                                <div><img src="/img/ic-arrow-pink@3x.png" class="arrow"></div>
+                              </th>
+                              <th>
+                                <div>TO</div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="hidden loading">
+                              <td colspan="100%">Loading...</td>
+                            </tr>
+                            <tr class="hidden not-found">
+                              <td colspan="100%">No items found</td>
+                            </tr>
+                            <tr>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/transaction-details" class="address txt-ellipsis">2Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                              <td>
+                                <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago
+                                </div>
+                              </td>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-sw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                              <td>
+                                <div><img src="/img/ic-arrow@3x.png" class="arrow"></div>
+                              </td>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-sw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-ne tooltipped-align-left-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/transaction-details" class="address txt-ellipsis">1Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                              <td>
+                                <div class="tooltipped tooltipped-ne tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago
+                                </div>
+                              </td>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-nw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                              <td>
+                                <div><img src="/img/ic-arrow@3x.png" class="arrow"></div>
+                              </td>
+                              <td class="txt-ellipsis">
+                                <div class="tooltipped tooltipped-nw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="btn-wrap">
+                      <button onclick="window.location='/html/transactions';">view all</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer main">
+            <div class="social">
+              <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
+              <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
+              <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
+              <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
+            </div>
+            <div class="copyright">
+              Copyright © 2022 AERGO. All Rights Reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="https://browser.sentry-cdn.com/6.1.0/bundle.min.js"
+    integrity="sha384-T4wn6EUhrkGRYp9a0X2/uXu6frHKrfbSeO4zRRA4KIgrEaJMMRbpunhBtNahdsxW"
+    crossorigin="anonymous"></script> -->
+  <!-- built bundles will be auto-injected -->
+  <script>
+    var latestBlock = 83897331;
+    function addLatestBlock () {
+      var newTrEl = document.createElement("tr");
+      newTrEl.classList.add('expand');
+      newTrEl.innerHTML = '\
+        <td>\
+          <div><a href="/html/block-details">' + (latestBlock+=1) + '</a></div>\
+        </td>\
+        <td>\
+          <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago\
+          </div>\
+        </td>\
+        <td>\
+          <div>35</div>\
+        </td>\
+        <td>\
+          <div><span class="identicon"></span><span class="txt-ellipsis">2Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</span></div>\
+        </td>\
+        <td>\
+          <div>0.16</div>\
+        </td>\
+      ';
+      var tbodyEl = document.getElementsByClassName('latest-block-table')[0].getElementsByTagName('tbody')[0];
+      var curScrollY = tbodyEl.scrollHeight - tbodyEl.scrollTop;
+      tbodyEl.insertBefore(newTrEl, tbodyEl.children[2]);
+
+      if (/MSIE/.test(navigator.userAgent) || /Trident/.test(navigator.userAgent)) {
+        var tbodyElMaxHeight = parseInt(window.getComputedStyle(tbodyEl).maxHeight);
+        if (curScrollY == tbodyElMaxHeight && tbodyEl.scrollHeight > tbodyElMaxHeight) {
+          animateScrollTo(tbodyEl, tbodyEl.scrollTop, tbodyEl.scrollHeight, 1000);
+        }
+      }
+    }
+
+    function removeLatestBlock () {
+      var tbodyEl = document.getElementsByClassName('latest-block-table')[0].getElementsByTagName('tbody')[0];
+      tbodyEl.removeChild(tbodyEl.children[2]);
+    }
+
+    var lastedTransaction = 2;
+    function addLatestTransaction () {
+      var newTrEl = document.createElement("tr");
+      newTrEl.classList.add('expand');
+      newTrEl.innerHTML = '\
+        <td class="txt-ellipsis">\
+          <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/transaction-details" class="address txt-ellipsis">' + (lastedTransaction+=1) + 'Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>\
+        </td>\
+        <td>\
+          <div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago\
+          </div>\
+        </td>\
+        <td class="txt-ellipsis">\
+          <div class="tooltipped tooltipped-sw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>\
+        </td>\
+        <td>\
+          <div><img src="/img/ic-arrow@3x.png" class="arrow"></div>\
+        </td>\
+        <td class="txt-ellipsis">\
+          <div class="tooltipped tooltipped-sw tooltipped-align-right-2" aria-label="Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i"><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div>\
+        </td>\
+      ';
+      var tbodyEl = document.getElementsByClassName('latest-transactions-table')[0].getElementsByTagName('tbody')[0];
+      tbodyEl.insertBefore(newTrEl, tbodyEl.children[2]);
+    }
+
+    function removeLatestTransaction () {
+      var tbodyEl = document.getElementsByClassName('latest-transactions-table')[0].getElementsByTagName('tbody')[0];
+      tbodyEl.removeChild(tbodyEl.children[2]);
+    }
+
+    function animateScrollTo(_scrollEle, _startY, _endY, _duration) {
+      console.log(_startY, _endY);
+
+      _duration = _duration ? _duration : 600;
+      const unitY = (_endY - _startY) / _duration;
+      const startTime = new Date().getTime();
+      const endTime = new Date().getTime() + _duration;
+
+      const scrollTo = function() {
+        let now = new Date().getTime();
+        let passed = now - startTime;
+        if (now <= endTime) {
+          _scrollEle.scrollTop = _startY + (unitY * passed);
+          requestAnimationFrame(scrollTo);
+        }
+        else {
+          console.log('End off.')
+        }
+      };
+      requestAnimationFrame(scrollTo);
+    }
+  </script>
+</body>
+
+</html>

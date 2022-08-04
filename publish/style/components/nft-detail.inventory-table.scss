@@ -1,0 +1,18 @@
+table.inventory-table {
+  td {
+    .block {
+      font-weight: bold;
+    }
+
+    .icon.copy {
+      margin-left: 5px;
+    
+      @media screen and (max-width: 480px) {
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+table.transactions-table {
+  th {
+    &:nth-child(3) {
+      img {
+        margin: 0 7px;
+      }
+    }
+
+    &:nth-child(4) {
+      padding-left: 10px;
+    }
+
+    &:nth-child(5) {
+      text-align: center;
+
+      >div {
+        justify-content: center;
+      }
+    }
+
+    &:last-child {
+      text-align: right;
+
+      >div {
+        justify-content: end;
+      }
+    }
+  }
+
+  td {
+    &:nth-child(4) {
+      padding-left: 10px;
+    }
+
+    &:nth-child(5) {
+      text-align: center;
+
+      >div {
+        justify-content: center;
+      }
+    }
+
+    &:last-child {
+      text-align: right;
+
+      >div {
+        justify-content: end;
+      }
+    }
+  }
+}

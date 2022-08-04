@@ -1,0 +1,17 @@
+.category-inner > .page-wrap { padding-bottom: 30px; }
+
+@media screen and (max-width: 780px) { .category-inner > .page-wrap { padding-top: 20px; } }
+
+.page-content > .title { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+
+@media screen and (max-width: 780px) { .page-content > .title.nft { margin-top: 30px; } }
+
+.page-content > .title .sub { margin-left: 10px; margin-top: 4px; color: #b6b6b6; font-size: 20px; font-weight: bold; }
+
+.page-content > .title .sub-2 { padding: 2px 5px; margin-left: 5px; margin-top: 4px; font-size: 8px; color: #fff; border-radius: 2px; background-color: #2c2938; white-space: nowrap; }
+
+.page-content > .table-wrap { padding-bottom: 25px; }
+
+.page-content > .table-wrap .btn-wrap { margin-top: 25px; text-align: center; }
+
+.page-content > .table-wrap .btn-wrap button { width: 134px; height: 36px; border-radius: 25px; border: none; font-size: 13px; color: #fff; background-color: #363344; }

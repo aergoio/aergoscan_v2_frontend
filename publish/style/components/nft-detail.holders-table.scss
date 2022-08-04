@@ -1,0 +1,33 @@
+table.holders-table {
+  th {
+    &:first-child {
+      min-width: 100px;
+    }
+
+    &:last-child {
+      text-align: right;
+
+      > div {
+        justify-content: end;
+      }
+    }
+  }
+
+  td {
+    &:first-child {
+      font-weight: bold;
+    }
+
+    &:last-child {
+      text-align: right;
+
+      > div {
+        justify-content: end;
+      }
+    }
+
+    .block {
+      font-weight: bold;
+    }
+  }
+}

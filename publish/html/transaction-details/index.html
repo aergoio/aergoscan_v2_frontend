@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>aergoscan</title>
+  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <link href="/style/dist/main.css" rel="stylesheet">
+  <link href="/style/dist/header.select-box.css" rel="stylesheet">
+  <link href="/style/dist/search-bar.css" rel="stylesheet">
+  <link href="/style/dist/tabs.css" rel="stylesheet">
+  <link href="/style/dist/transaction-detail.transactions-table.css" rel="stylesheet">
+  <link href="/style/dist/transaction-details.css" rel="stylesheet">
+  <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PQ5SL5P');</script> -->
+</head>
+
+<body>
+  <div id="app">
+    <div class="sidenav">
+      <div class="sidenav-inner">
+        <div class="app-logo">
+          <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
+        </div>
+        <div class="list">
+          <a href="/html/blocks" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                    fill="#FFF" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Blocks</span>
+          </a>
+          <a href="/html/transactions" class="item router-link-exact-active">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".28" d="M0 0h20v20H0z" />
+                  <path
+                    d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Transactions</span>
+          </a>
+          <a href="/html/tokens" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">Tokens</span>
+          </a>
+          <a href="/html/nft" class="item">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".28" d="M0 0h20v20H0z" />
+                  <path
+                    d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                    fill="#A89CB3" fill-rule="nonzero" class="color" />
+                </g>
+              </svg>
+            </span>
+            <span class="text">NFT</span>
+          </a>
+          <a href="javascript:;" class="item more" onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.sidenav').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd">
+                  <path opacity=".2" d="M0 0h20v20H0z" />
+                  <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
+                    <circle cx="1.129" cy="1.129" r="1.129" />
+                    <circle cx="6.779" cy="1.129" r="1.129" />
+                    <circle cx="12.429" cy="1.129" r="1.129" />
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="text">More</span>
+            <span style="flex: 1 1 0%;"></span>
+            <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
+          </a>
+          <div class="item-sub more">
+            <div class="list">
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO Wallet
+                    <span class="icon goto"></span>
+                  </span>
+                  <span class="sub">(Mobile)</span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO Wallet
+                    <span class="icon goto"></span>
+                  </span>
+                  <span class="sub">(Chrome Extension)</span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  <span>
+                    AERGO IDE
+                    <span class="icon goto"></span>
+                  </span>
+                </span>
+              </a>
+              <a href="javascript:;" class="item">
+                <span class="text">
+                  AERGO Docs
+                  <span class="icon goto"></span>
+                </span>
+              </a>
+              <a href="/html/more/contract-regi" class="item">
+                <span class="text">Contract Registration</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="copyright">
+            Copyright © 2022 AERGO.<br>All Rights Reserved.
+          </div>
+          <div class="social">
+            <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
+            <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
+            <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
+            <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-container">
+      <div class="wrap">
+        <div id="category" class="transaction-details">
+          <div class="header">
+            <div class="header-inner">
+              <div class="app-logo">
+                <a href="/html"><img src="/img/aergo-logo@3x.png"></a>
+              </div>
+              <span style="flex: 1 1 0%;"></span>
+              <div class="select-box">
+                <div class="selected-item" onclick="document.getElementsByClassName('select-box')[0].classList.add('show')">
+                  <span class="status" style="background-color: #ff088f;"></span>MAIN NET</div>
+                <div class="list" onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')">
+                  <div class="item"><span class="status" style="background-color: transparent;"></span>MAIN NET</div>
+                  <div class="item"><span class="status" style="background-color: #ff088f;"></span>TEST NET</div>
+                  <div class="item"><span class="status" style="background-color: transparent;"></span>ALPHA</div>
+                </div>
+              </div>
+              <div class="btn-mobile-menu"
+                onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.toggle('show');document.getElementsByClassName('mobile-menu')[0].classList.toggle('show');">
+                <img src="/img/ic-menu@3x.png" class="menu">
+                <img src="/img/ic-exit@3x.png" class="exit">
+              </div>
+              <div class="mobile-menu">
+                <div class="mobile-menu-inner">
+                  <div class="list">
+                    <a href="/html/blocks" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 1.12 1.604 4.85v10.3L10 18.88l8.396-3.73V4.85L10 1.12zm6.663 4.055L10 8.137 3.338 5.175 10 2.213l6.663 2.962zm-14.059.77L9.5 9.009v8.555L2.604 14.5V5.946zM10.5 17.563V9.008l6.896-3.062V14.5L10.5 17.563z"
+                              fill="#FFF" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Blocks</span>
+                    </a>
+                    <a href="/html/transactions" class="item router-link-exact-active" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".28" d="M0 0h20v20H0z" />
+                            <path
+                              d="m15.525 12.35 1.896 1.896h-3.43c-.416 0-.808-.204-1.07-.559L10.196 10l2.729-3.688a1.334 1.334 0 0 1 1.07-.558h3.43L15.529 7.65l.709.708 3.104-3.104-3.104-3.104-.709.708 1.896 1.896h-3.43c-.737 0-1.42.35-1.874.963L9.575 9.158l-2.55-3.45a2.322 2.322 0 0 0-1.875-.962H1.37v1h3.776c.417 0 .808.204 1.07.558L8.95 10l-2.733 3.696a1.334 1.334 0 0 1-1.071.558H1.37v1h3.775c.737 0 1.42-.35 1.875-.962l2.55-3.45 2.546 3.441a2.322 2.322 0 0 0 1.875.963h3.429l-1.896 1.896.708.708 3.104-3.104-3.104-3.104-.708.708z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Transactions</span>
+                    </a>
+                    <a href="/html/tokens" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 18.396c-4.63 0-8.396-3.767-8.396-8.396 0-4.63 3.767-8.396 8.396-8.396 4.63 0 8.396 3.767 8.396 8.396 0 4.63-3.767 8.396-8.396 8.396zm0-15.792A7.403 7.403 0 0 0 2.604 10 7.403 7.403 0 0 0 10 17.396 7.403 7.403 0 0 0 17.396 10 7.403 7.403 0 0 0 10 2.604z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">Tokens</span>
+                    </a>
+                    <a href="/html/nft" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".28" d="M0 0h20v20H0z" />
+                            <path
+                              d="M10 17.363 1.088 8.046 5.22 2.858h9.562l4.134 5.188L10 17.363zM2.412 7.988 10 15.917l7.587-7.934L14.3 3.858H5.7l-3.288 4.13z"
+                              fill="#A89CB3" fill-rule="nonzero" class="color" />
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">NFT</span>
+                    </a>
+                    <a href="javascript:;" class="item more"
+                      onclick="event.target.closest('.item').classList.toggle('show');event.target.closest('.mobile-menu').getElementsByClassName('item-sub more')[0].classList.toggle('show');">
+                      <span class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          <g fill="none" fill-rule="evenodd">
+                            <path opacity=".2" d="M0 0h20v20H0z" />
+                            <g transform="translate(3.22 8.87)" fill="#A89CB3" fill-rule="nonzero" class="color">
+                              <circle cx="1.129" cy="1.129" r="1.129" />
+                              <circle cx="6.779" cy="1.129" r="1.129" />
+                              <circle cx="12.429" cy="1.129" r="1.129" />
+                            </g>
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text">More</span>
+                      <span style="flex: 1 1 0%;"></span>
+                      <span class="icon arrow"><img src="/img/ic-arrow-down-white@3x.png"></span>
+                    </a>
+                    <div class="item-sub more">
+                      <div class="list">
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Wallet
+                            <span class="sub">(Mobile)</span>
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Wallet
+                            <span class="sub">(Chrome Extension)</span>
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO IDE
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="javascript:;" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">
+                            AERGO Docs
+                            <span class="icon goto"></span>
+                          </span>
+                        </a>
+                        <a href="/html/more/contract-regi" class="item" onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                          <span class="text">Contract Registration</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="category-inner">
+            <div class="page-wrap">
+              <div class="page-content">
+                <form>
+                  <div class="search-bar">
+                    <input type="text" placeholder="Search for Address / Tx ID / Block / Token / NFT / Symbol">
+                    <div class="btn-remove"></div>
+                    <div class="btn-search">
+                      <span class="icon search"></span>
+                    </div>
+                    <div class="search-prediction">
+                      Do you mean <span class="type">account address</span> <span class="value">xxx</span>?
+                    </div>
+                  </div>
+                </form>
+                <div class="title">
+                  Transaction Details
+                  <div class="address">Adrg8JAtBoaky6yQ5zQorGmBS6QWuNcXG3M8kid61Q7C</div>
+                </div>
+                <div class="detail-box transaction">
+                  <div class="table-wrap">
+                    <div class="error transaction-detail">
+                      에러메시지 영역입니다.
+                    </div>
+                    <table class="transaction-detail">
+                      <tbody>
+                        <tr class="hidden loading">
+                          <td colspan="100%">Loading...</td>
+                        </tr>
+                        <tr class="hidden not-found">
+                          <td colspan="100%">No items found</td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>
+                              From
+                              <img src="/img/ic-arrow-black@3x.png" class="arrow">
+                              To
+                            </div>
+                          </th>
+                          <td>
+                            <div>
+                              <div class="from-to">
+                                <a href="javascript:;" class="address txt-ellipsis">AZvcw2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a>
+                                <img src="/img/ic-arrow-black@3x.png" class="arrow">
+                                <a href="javascript:;" class="address txt-ellipsis">AZvcw2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><div>Amount</div></th>
+                          <td><div>0 AERGO</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Token transfers</div></th>
+                          <td><div>2</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>NFT transfers</div></th>
+                          <td><div>1</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Fee</div></th>
+                          <td><div>
+                            <div>
+                              <span>0 AERGO</span>
+                              <span class="tpm tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Fee was paid by contract">[delegated]</span></div></td>
+                            </div>
+                        </tr>
+                        <tr>
+                          <th><div>Gas used</div></th>
+                          <td><div>
+                            <div>
+                              <span>0 of </span>
+                              <span class="tpm tooltipped tooltipped-se tooltipped-align-left-2" aria-label="Limit was set to 0, allowing unlimited gas use">∞</span></div></td>
+                            </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="error transaction-detail">
+                      에러메시지 영역입니다.
+                    </div>
+                    <table class="transaction-detail">
+                      <tbody>
+                        <tr class="hidden loading">
+                          <td colspan="100%">Loading...</td>
+                        </tr>
+                        <tr class="hidden not-found">
+                          <td colspan="100%">No items found</td>
+                        </tr>
+                        <tr>
+                          <th><div>Nonce</div></th>
+                          <td><div>1</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Category</div></th>
+                          <td><div>Call</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Payload</div></th>
+                          <td><div>1110 bytes</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Status</div></th>
+                          <td><div>Confirmed</div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Included in block</div></th>
+                          <td><div><span class="txt-ellipsis"><a href="javascript:;">BSnL2vWMnNBhnZbqLECrhV4WC44wBAR5RsCw9iipqiLNBSnL2vWMnNBhnZbqLECrhV4WC44wBAR5RsCw9iipqiLN</a></span></div></td>
+                        </tr>
+                        <tr>
+                          <th><div>Time</div></th>
+                          <td><div>1 hour ago (Wednesday, December 22nd 2021, 16:28:22)</div></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <div class="imsi" style="margin-bottom: 10px;">
+                    <button onclick="imsi(['transactions-table', 'error transactions'], 'normal')">normal</button>
+                    <button onclick="imsi(['transactions-table'], 'loading')">loading</button>
+                    <button onclick="imsi(['transactions-table'], 'not-found')">not found</button>
+                    <button onclick="imsi(['error transactions'], 'show')">error</button>
+                    <span>(테스트를 위해 임시로 잡은 영역입니다)</span>
+                  </div>
+                  <div class="table-tab">
+                    <div class="table-tab-header">
+                      <div class="h-scroll">
+                        <div class="tab-header">
+                          <a href="javascript:;" class="title token-transfers router-link-exact-active" onclick="tabs(event, 'token-transfers');">
+                            <span class="main">Token Transfers</span><span class="sub">2365</span>
+                          </a>
+                          <a href="javascript:;" class="title nft-transfers" onclick="tabs(event, 'nft-transfers');">
+                            <span class="main">NFT Transfers</span><span class="sub">2365</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-tab-content">
+                      <div class="tab-content token-transfers active">
+                        <div class="error transactions">
+                          에러메시지 영역입니다.
+                        </div>
+                        <div class="h-scroll">
+                          <table class="transactions-table token">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div>BLOCK #</div>
+                                </th>
+                                <th>
+                                  <div>TIME</div>
+                                </th>
+                                <th>
+                                  <div>FROM</div>
+                                </th>
+                                <th>
+                                  <div><img src="/img/ic-arrow-pink@3x.png" class="arrow"></div>
+                                </th>
+                                <th>
+                                  <div>TO</div>
+                                </th>
+                                <th>
+                                  <div>TOKEN</div>
+                                </th>
+                                <th>
+                                  <div>AMOUNT</div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="hidden loading">
+                                <td colspan="100%">Loading...</td>
+                              </tr>
+                              <tr class="hidden not-found">
+                                <td colspan="100%">No items found</td>
+                              </tr>
+                              <tr>
+                                <td><div><a href="/html/block-details" class="block">83897339</a></div></td>
+                                <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Contract Creation</a></div></td>
+                                <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Contract Creation</a></div></td>
+                                <td><div><span class="identicon"></span>KlaySwap LP K… (KSLP)</div></td>
+                                <td><div>1.900178<span class="aergo">KSLP</span></div></td>
+                              </tr>
+                              <tr>
+                                <td><div><a href="/html/block-details" class="block">83897338</a></div></td>
+                                <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
+                                <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
+                                <td><div><span class="identicon"></span>KlaySwap LP K… (KSLP)</div></td>
+                                <td><div>5.493535<span class="aergo">KSLP</span></div></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="tab-content nft-transfers">
+                        <div class="error transactions">
+                          에러메시지 영역입니다.
+                        </div>
+                        <div class="h-scroll">
+                          <table class="transactions-table nft">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div>BLOCK #</div>
+                                </th>
+                                <th>
+                                  <div>TIME</div>
+                                </th>
+                                <th>
+                                  <div>FROM</div>
+                                </th>
+                                <th>
+                                  <div><img src="/img/ic-arrow-pink@3x.png" class="arrow"></div>
+                                </th>
+                                <th>
+                                  <div>TO</div>
+                                </th>
+                                <th>
+                                  <div>NFT</div>
+                                </th>
+                                <th>
+                                  <div>TOKEN ID</div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="hidden loading">
+                                <td colspan="100%">Loading...</td>
+                              </tr>
+                              <tr class="hidden not-found">
+                                <td colspan="100%">No items found</td>
+                              </tr>
+                              <tr>
+                                <td><div><a href="/html/block-details" class="block">83897339</a></div></td>
+                                <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" aria-label="0 secs ago">0 secs ago</div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
+                                <td><div><img src="/img/ic-arrow-black@3x.png" class="arrow"></div></td>
+                                <td class="txt-ellipsis"><div><span class="identicon"></span><a href="/html/account" class="address txt-ellipsis">Amg2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i</a></div></td>
+                                <td><div><span class="identicon"></span>MineralNFT (FSI) </div></td>
+                                <td><div>69896</div></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="detail-box execution">
+                  <div class="title">Execution Details</div>
+                  <div class="address">
+                    <div class="title">Contract</div>
+                    <div class="item">
+                      <span class="item-inner">
+                        <a href="javascript:;">
+                          <span class="identicon"></span>
+                          AZvcw2wtJRR9vbLxqSSULZw68hgY8KzH8ymAe1Z7Qzw49i
+                        </a>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="tabs-wrap">
+                    <div class="tabs">
+                      <div class="tabs-title">Payload</div>
+                      <div class="tabs-header">
+                        <a href="javascript:;" class="item formatted router-link-exact-active" onclick="tabs2(event, 'formatted')">FORMATTED</a>
+                        <a href="javascript:;" class="item json" onclick="tabs2(event, 'json')">JSON</a>
+                        <a href="javascript:;" class="item hex" onclick="tabs2(event, 'hex')">HEX</a>
+                      </div>
+                      <div class="tabs-contents">
+                        <div class="tab-content formatted active">
+                          <div class="title">Function Call</div>
+                          <div class="content">
+                            <h2>DIDREpository_Insert</h2>
+                            <p>"safeTransferFrom"AmQJuk4ugnV4X<a href="javascript:;">RtGHPJs8AiUbLhoMnwzyRpM7s7BZg12d1PJJnA</a>2AmNdZjSZUaoJtsZ75mMGduKtXAjYHTtKv3rFxYpL4m5By55gStG6"a7ac8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\c8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\ay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\"}}"</p>
+                          </div>
+                        </div>
+                        <div class="tab-content json">
+                          <div class="content">
+{
+  "Name": "invoke",
+  "Args": [
+    "safeTransferFrom",
+    "AmQJuk4ugnV4XRtGHPJs8AiUbLhoMnwzyRpM7s7BZg12d1PJJnA2",
+    "AmNdZjSZUaoJtsZ75mMGduKtXAjYHTtKv3rFxYpL4m5By55gStG6",
+    "a7ac8e5b0309b4adeb2116628a3f64a61_154",
+    "{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\"}}"
+  ]
+}
+                          </div>
+                        </div>
+                        <div class="tab-content hex">
+                          <div class="title">Function Call</div>
+                          <div class="content">
+                            <h2>DIDREpository_Insert</h2>
+                            <p>"safeTransferFrom"AmQJuk4ugnV4XRtGHPJs8AiUbLhoMnwzyRpM7s7BZg12d1PJJnA2AmNdZjSZUaoJtsZ75mMGduKtXAjYHTtKv3rFxYpL4m5By55gStG6"a7ac8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\c8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\ay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\"}}"</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tabs">
+                      <div class="tabs-title">Result</div>
+                      <div class="tabs-header">
+                        <a href="javascript:;" class="item formatted" onclick="tabs2(event, 'formatted')">FORMATTED</a>
+                        <a href="javascript:;" class="item json" onclick="tabs2(event, 'json')">JSON</a>
+                        <a href="javascript:;" class="item events router-link-exact-active" onclick="tabs2(event, 'events')">EVENTS (0)</a>
+                        <a href="javascript:;" class="item events" onclick="tabs2(event, 'events success')">EVENTS (0)</a>
+                        <a href="javascript:;" class="item events" onclick="tabs2(event, 'events fail')">EVENTS (0)</a>
+                      </div>
+                      <div class="tabs-contents">
+                        <div class="tab-content formatted">
+                          <div class="title">Function Call</div>
+                          <div class="content">
+                            <h2>DIDREpository_Insert</h2>
+                            <p>"safeTransferFrom"AmQJuk4ugnV4XRtGHPJs8AiUbLhoMnwzyRpM7s7BZg12d1PJJnA2AmNdZjSZUaoJtsZ75mMGduKtXAjYHTtKv3rFxYpL4m5By55gStG6"a7ac8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\c8e5b0309b4adeb2116628a3f64a61_154""{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\ay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\"}}"</p>
+                          </div>
+                        </div>
+                        <div class="tab-content json">
+                          <div class="content">
+{
+  "Name": "invoke",
+  "Args": [
+    "safeTransferFrom",
+    "AmQJuk4ugnV4XRtGHPJs8AiUbLhoMnwzyRpM7s7BZg12d1PJJnA2",
+    "AmNdZjSZUaoJtsZ75mMGduKtXAjYHTtKv3rFxYpL4m5By55gStG6",
+    "a7ac8e5b0309b4adeb2116628a3f64a61_154",
+    "{\"serviceType\":\"bootpay\",\"type\":\"nicepay\",\"productId\":\"8qUzRumAymGqwjAC7937\",\"price\":\"35000\",\"calculatedPrice\":\"35000\",\"detail\":{\"paymentOrderId\":\"aSkxmFc6hqPxdDFP4tne\"}}"
+  ]
+}
+                          </div>
+                        </div>
+                        <div class="tab-content events active">
+                          <div class="table-wrap">
+                            <table class="result-events not-found">
+                              <thead>
+                                <tr>
+                                  <th>Event Name</th>
+                                  <th>Arguments</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr class="hidden loading">
+                                  <td colspan="100%">Loading...</td>
+                                </tr>
+                                <tr class="hidden not-found">
+                                  <td colspan="100%">No events found.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="tab-content events success">
+                          <div class="title"><img src="/img/ic-success.png"> Success</div>
+                          <div class="content">
+                            <div class="empty-result">
+                              (Empty result)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-content events fail">
+                          <div class="title"><img src="/img/ic_fail@1x.png"> Fail</div>
+                          <div class="content">
+                            <div class="empty-result">
+                              (Empty result)
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="social">
+              <a href="https://www.aergo.io/" class="icon"><img src="/img/btn-aergo@3x.png"></a>
+              <a href="https://twitter.com/aergo_io" class="icon"><img src="/img/btn-twitter@3x.png"></a>
+              <a href="https://medium.com/aergo" class="icon"><img src="/img/btn-medium@3x.png"></a>
+              <a href="https://t.me/aergoofficial" class="icon"><img src="/img/btn-telegram@3x.png"></a>
+            </div>
+            <div class="copyright">
+              Copyright © 2022 AERGO. All Rights Reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="https://browser.sentry-cdn.com/6.1.0/bundle.min.js"
+    integrity="sha384-T4wn6EUhrkGRYp9a0X2/uXu6frHKrfbSeO4zRRA4KIgrEaJMMRbpunhBtNahdsxW"
+    crossorigin="anonymous"></script> -->
+  <!-- built bundles will be auto-injected -->
+  <script>
+    function imsi (classNames, status) {
+      classNames.forEach(function (className) {
+        var els = document.getElementsByClassName(className);
+        for (var i=0; i<els.length; i+=1) {
+          els[i].classList.remove('loading', 'not-found', 'show');
+        }
+      });
+      if (status != 'normal') {
+        classNames.forEach(function (className) {
+          var els = document.getElementsByClassName(className);
+          for (var i=0; i<els.length; i+=1) {
+            els[i].classList.add(status);
+          }
+        });
+      }
+    }
+
+    function tabs (event, tab) {
+      var titleEls = event.target.closest('.table-tab').getElementsByClassName('title');
+      for (var i=0; i<titleEls.length; i+=1) {
+        titleEls[i].classList.remove('router-link-exact-active');
+      }
+
+      var contentEls = event.target.closest('.table-tab').getElementsByClassName('tab-content');
+      for (var i=0; i<contentEls.length; i+=1) {
+        contentEls[i].classList.remove('active');
+      }
+
+      event.target.closest('.table-tab').getElementsByClassName('title ' + tab)[0].classList.add('router-link-exact-active');
+      event.target.closest('.table-tab').getElementsByClassName('tab-content ' + tab)[0].classList.add('active');
+    }
+
+    function tabs2 (event, tab) {
+      var titleEls = event.target.closest('.tabs-header').getElementsByClassName('item');
+      for (var i=0; i<titleEls.length; i+=1) {
+        titleEls[i].classList.remove('router-link-exact-active');
+      }
+      event.target.closest('.item').classList.add('router-link-exact-active');
+
+      var contentEls = event.target.closest('.tabs').getElementsByClassName('tab-content');
+      for (var i=0; i<contentEls.length; i+=1) {
+        contentEls[i].classList.remove('active');
+      }
+      event.target.closest('.tabs').getElementsByClassName('tab-content ' + tab)[0].classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

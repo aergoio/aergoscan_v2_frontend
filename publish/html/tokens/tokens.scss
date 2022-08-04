@@ -1,0 +1,101 @@
+.category-inner {
+  > .page-wrap {
+    padding-bottom: 30px;
+
+    @media screen and (max-width: 780px) {
+      padding-top: 20px;
+    }
+  }
+
+  .page-content > .title {
+    display: flex;
+    align-items: center;
+
+    .sub {
+      margin-left: 10px;
+      margin-top: 4px;
+      color: #b6b6b6;
+      font-size: 20px;
+      font-weight: bold;
+
+      @media screen and (max-width: 780px) {
+        margin-left: 0;
+      }
+    }
+
+    .sub-2 {
+      padding: 2px 5px;
+      margin-left: 5px;
+      margin-top: 4px;
+      font-size: 8px;
+      color: #fff;
+      border-radius: 2px;
+      background-color: #2c2938;
+      white-space: nowrap;
+
+      @media screen and (max-width: 780px) {
+        margin-left: 0;
+      }
+    }
+
+    form {
+      width: 100%;
+      max-width: 310px;
+    }
+
+    .search-bar {
+      width: 100%;
+      margin-top: 0;
+      border-radius: 33px;
+      border: solid 1px #ddc5d4;
+      background-color: transparent;
+      z-index: 20;
+
+      @media screen and (max-width: 480px) {
+        height: 32px;
+      }
+    
+      &:hover {
+        box-shadow: none;
+      }
+
+      input {
+        font-size: 14px;
+
+        &::placeholder {
+          color: #ada6b4;
+        }
+      }
+    }
+  }
+}
+
+.page-content > .table-wrap {
+  padding-bottom: 50px;
+}
+
+.table-wrap table td .aergo {
+  margin-left: 5px;
+}
+
+table.tokens-table {
+  th {
+    &:last-child {
+      text-align: right;
+
+      > div {
+        justify-content: end;
+      }
+    }
+  }
+
+  td {
+    &:last-child {
+      text-align: right;
+
+      > div {
+        justify-content: end;
+      }
+    }
+  }
+}

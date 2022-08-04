@@ -1,0 +1,15 @@
+.tabs .tabs-contents .tab-content.json .content { background: transparent; white-space: pre-wrap; word-break: break-all; line-height: 1.5; }
+
+.tabs .tabs-contents .tab-content .content { padding: 20px 20px 30px; }
+
+.tabs .tabs-contents .tab-content .content h2 { margin: 0 0 20px 0; font-size: 14px; font-weight: bold; text-align: center; }
+
+.tabs .tabs-contents .tab-content .content p { margin: 0; font-size: 14px; word-break: break-all; }
+
+.tabs .tabs-contents .tab-content .table-wrap { padding: 5px 20px 25px; margin: 0; background-color: transparent; }
+
+.tabs .tabs-contents .tab-content .table-wrap table.result-events { border-collapse: separate; border-spacing: 0 20px; }
+
+.tabs .tabs-contents .tab-content .table-wrap table.result-events th { height: auto; padding-bottom: 5px; color: #fff; border-bottom: 1px solid #443f51; }
+
+.tabs .tabs-contents .tab-content .table-wrap table.result-events td { height: auto; color: #fff; border-bottom: none; }

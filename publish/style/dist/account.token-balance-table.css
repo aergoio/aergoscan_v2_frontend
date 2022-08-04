@@ -1,0 +1,11 @@
+@media screen and (max-width: 480px) { table.token-balance-table th:last-child { text-align: right; }
+  table.token-balance-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; } }
+
+table.token-balance-table th:last-child { width: 150px; }
+
+@media screen and (max-width: 480px) { table.token-balance-table td:last-child { text-align: right; }
+  table.token-balance-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; } }
+
+table.token-balance-table td:last-child { width: 150px; }
+
+table.token-balance-table td .aergo { margin-left: 5px; }

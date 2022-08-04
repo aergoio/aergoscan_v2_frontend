@@ -1,0 +1,21 @@
+table.transactions-table th:nth-child(3) img { margin: 0 7px; }
+
+table.transactions-table th:nth-child(4) { padding-left: 10px; }
+
+table.transactions-table th:nth-child(5) { text-align: center; }
+
+table.transactions-table th:nth-child(5) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.transactions-table th:last-child { text-align: right; }
+
+table.transactions-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.transactions-table td:nth-child(4) { padding-left: 10px; }
+
+table.transactions-table td:nth-child(5) { text-align: center; }
+
+table.transactions-table td:nth-child(5) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.transactions-table td:last-child { text-align: right; }
+
+table.transactions-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }

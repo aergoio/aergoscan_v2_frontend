@@ -1,0 +1,37 @@
+table.token-balance-table {
+  th {
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+  
+        &>div {
+          justify-content: end;
+        }
+      }
+    }
+
+    &:last-child {
+      width: 150px;
+    }
+  }
+
+  td {
+    @media screen and (max-width: 480px) {
+      &:last-child {
+        text-align: right;
+  
+        &>div {
+          justify-content: end;
+        }
+      }
+    }
+
+    &:last-child {
+      width: 150px;
+    }
+
+    .aergo {
+      margin-left: 5px;
+    }
+  }
+}

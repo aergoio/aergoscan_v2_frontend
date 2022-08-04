@@ -1,0 +1,245 @@
+.category-inner {
+  > .page-wrap {
+    padding-bottom: 30px;
+
+    @media screen and (max-width: 780px) {
+      padding-top: 20px;
+    }
+  }
+}
+
+.page-content > .table-wrap {
+  padding-bottom: 50px;
+}
+
+.detail-box {
+  margin: 15px 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5);
+  background-color: #fff;
+
+  &.transaction {
+    .table-wrap {
+      display: flex;
+      align-items: start;
+      gap: 0 16px;
+      margin: 0;
+
+      @media screen and (max-width: 900px) {
+        flex-wrap: wrap;
+      }
+
+      @media screen and (max-width: 480px) {
+        padding: 0 20px;
+      }
+
+      table td {
+        .address {
+          padding: 5px 10.5px;
+        }
+
+        .tooltipped {
+          border-bottom: 1px dashed #aaa;
+          cursor: help;
+        }
+      }
+    }
+  }
+
+  &.execution {
+    @media screen and (max-width: 480px) {
+      margin: 0 -20px;
+    }
+
+    .address {
+      border-bottom: none;
+    }
+
+    .tabs-wrap {
+      display: flex;
+      align-items: start;
+      padding: 10px 20px 50px;
+
+      @media screen and (max-width: 1200px) {
+        flex-wrap: wrap;
+      }
+
+      .tabs {
+        margin-right: 56px;
+        width: 50%;
+      
+        @media screen and (max-width: 1200px) {
+          margin-right: 0;
+          margin-bottom: 50px;
+          width: 100%;
+      
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      
+        &:last-child {
+          margin-right: 0;
+        }
+      }    
+    }
+  }
+
+  > .title {
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a1823;
+    border-bottom: 1px solid #f2f2f2;
+
+    @media screen and (max-width: 480px) {
+      font-size: 18px;
+    }
+  }
+
+  .table-wrap {
+    padding: 10px 20px;
+    box-shadow: none;
+  }
+
+  .address {
+    padding: 20px;
+    border-bottom: 1px solid #f2f2f2;
+
+    .title {
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1823;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+
+      .item-inner {
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #3c3b3e;
+        word-break: break-all;
+        background-color: #f1f1f2;
+
+        a {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .identicon {
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          flex: 18px 0 0;
+          margin-right: 6px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  table.transaction-detail {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+    line-height: 20px;
+
+    @media screen and (max-width: 900px) {
+      margin-top: -20px;
+
+      &:nth-child(2) {
+        margin-top: -5px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      margin-top: -25px;
+      border-spacing: 0 25px;
+    }
+
+    th {
+      width: 126px;
+      height: auto;
+      font-size: 14px;
+      color: #a391aa;
+      border-bottom: none;
+      vertical-align: top;
+
+      @media screen and (max-width: 480px) {
+        width: 110px;
+        font-size: 15px;
+      }
+
+      img.arrow {
+        margin: 0 5px;
+      }
+    }
+
+    td {
+      height: auto;
+      font-size: 14px;
+      border-bottom: none;
+      vertical-align: top;
+      word-break: break-all;
+
+      @media screen and (max-width: 480px) {
+        font-size: 15px;
+      }
+
+      img.arrow {
+        margin: 0 6px;
+      }
+
+      .from-to {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        @media screen and (max-width: 900px) {
+          display: block;
+          text-align: center;
+        }
+
+        .address {
+          font-size: 11px;
+          line-height: 1.2;
+
+          @media screen and (max-width: 900px) {
+            display: block;
+          }
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+  
+        img.arrow {
+          margin: 0 5px;
+
+          @media screen and (max-width: 900px) {
+            display: block;
+            margin: 6px auto;
+            transform: rotate(90deg);
+          }
+        }
+  
+        .txt-ellipsis {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+
+      a {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

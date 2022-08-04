@@ -1,0 +1,25 @@
+#category > .header .select-box { display: none; }
+
+.category-inner > .page-wrap { padding-bottom: 30px; }
+
+@media screen and (max-width: 780px) { .category-inner > .page-wrap { padding-top: 20px; } }
+
+.category-inner .page-content > .title { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+
+.category-inner .page-content > .content { margin: 47px 0 50px; }
+
+@media screen and (max-width: 480px) { .category-inner .page-content > .content { margin: 60px 0 80px; } }
+
+.category-inner .page-content > .content p { margin: 0; font-size: 14px; line-height: 1.71; color: #3c3b3e; }
+
+.category-inner .page-content > .content p a { color: #ff088f; }
+
+.category-inner .page-content > .content p a:hover { text-decoration: underline; }
+
+@media screen and (max-width: 480px) { .category-inner .page-content .btn.register { text-align: center; } }
+
+.category-inner .page-content .btn.register button { height: 32px; padding: 0 34px 0 33px; border-radius: 33px; border: 1px solid #ff088f; outline: none; font-size: 14px; font-weight: bold; color: #fff; background-color: #ff088f; }
+
+@media screen and (max-width: 480px) { .category-inner .page-content .btn.register button { height: 40px; padding: 0 45px; font-size: 16px; } }
+
+.category-inner .page-content .btn.register button:hover { color: #ff088f; background-color: #fff; }

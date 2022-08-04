@@ -1,0 +1,35 @@
+table.tokens-table {
+  th {
+    &:last-child {
+      text-align: right;
+
+      >div {
+        justify-content: end;
+      }
+    }
+  }
+
+  td {
+    &:last-child {
+      text-align: right;
+
+      > div {
+        justify-content: end;
+      }
+    }
+
+    > div .aergo:last-child {
+      margin-left: 5px;
+    }
+  }
+
+  tbody tr.hidden td {
+    height: 84px;
+    text-align: center !important;
+
+    @media screen and (max-width: 780px) {
+      height: 69px;
+      text-align: left !important;
+    }
+  }
+}

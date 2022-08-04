@@ -1,0 +1,21 @@
+table.nft-transfers-table th:nth-child(5) { width: 25px; min-width: 25px; -webkit-box-sizing: content-box; box-sizing: content-box; }
+
+table.nft-transfers-table th:nth-child(4), table.nft-transfers-table th:nth-child(5), table.nft-transfers-table th:nth-child(6) { text-align: center; }
+
+table.nft-transfers-table th:nth-child(4) > div, table.nft-transfers-table th:nth-child(5) > div, table.nft-transfers-table th:nth-child(6) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.nft-transfers-table th:last-child { text-align: right; }
+
+table.nft-transfers-table th:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.nft-transfers-table td.txt-ellipsis { width: 20%; }
+
+table.nft-transfers-table td:nth-child(4), table.nft-transfers-table td:nth-child(5), table.nft-transfers-table td:nth-child(6) { text-align: center; }
+
+table.nft-transfers-table td:nth-child(4) > div, table.nft-transfers-table td:nth-child(5) > div, table.nft-transfers-table td:nth-child(6) > div { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+table.nft-transfers-table td:last-child { text-align: right; }
+
+table.nft-transfers-table td:last-child > div { -webkit-box-pack: end; -ms-flex-pack: end; justify-content: end; }
+
+table.nft-transfers-table td .block { font-weight: bold; }

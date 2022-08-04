@@ -1,0 +1,87 @@
+.category-inner > .page-wrap { padding-bottom: 30px; }
+
+@media screen and (max-width: 780px) { .category-inner > .page-wrap { padding-top: 20px; } }
+
+.page-content > .table-wrap { padding-bottom: 50px; }
+
+.detail-box { margin: 15px 0; border-radius: 5px; -webkit-box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5); box-shadow: 2px 2px 7px 0 rgba(224, 224, 224, 0.5); background-color: #fff; }
+
+.detail-box.transaction .table-wrap { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: start; -ms-flex-align: start; align-items: start; gap: 0 16px; margin: 0; }
+
+@media screen and (max-width: 900px) { .detail-box.transaction .table-wrap { -ms-flex-wrap: wrap; flex-wrap: wrap; } }
+
+@media screen and (max-width: 480px) { .detail-box.transaction .table-wrap { padding: 0 20px; } }
+
+.detail-box.transaction .table-wrap table td .address { padding: 5px 10.5px; }
+
+.detail-box.transaction .table-wrap table td .tooltipped { border-bottom: 1px dashed #aaa; cursor: help; }
+
+@media screen and (max-width: 480px) { .detail-box.execution { margin: 0 -20px; } }
+
+.detail-box.execution .address { border-bottom: none; }
+
+.detail-box.execution .tabs-wrap { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: start; -ms-flex-align: start; align-items: start; padding: 10px 20px 50px; }
+
+@media screen and (max-width: 1200px) { .detail-box.execution .tabs-wrap { -ms-flex-wrap: wrap; flex-wrap: wrap; } }
+
+.detail-box.execution .tabs-wrap .tabs { margin-right: 56px; width: 50%; }
+
+@media screen and (max-width: 1200px) { .detail-box.execution .tabs-wrap .tabs { margin-right: 0; margin-bottom: 50px; width: 100%; }
+  .detail-box.execution .tabs-wrap .tabs:last-child { margin-bottom: 0; } }
+
+.detail-box.execution .tabs-wrap .tabs:last-child { margin-right: 0; }
+
+.detail-box > .title { padding: 20px; font-size: 16px; font-weight: bold; color: #1a1823; border-bottom: 1px solid #f2f2f2; }
+
+@media screen and (max-width: 480px) { .detail-box > .title { font-size: 18px; } }
+
+.detail-box .table-wrap { padding: 10px 20px; -webkit-box-shadow: none; box-shadow: none; }
+
+.detail-box .address { padding: 20px; border-bottom: 1px solid #f2f2f2; }
+
+.detail-box .address .title { margin-bottom: 10px; font-size: 14px; font-weight: bold; color: #1a1823; }
+
+.detail-box .address .item { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+
+.detail-box .address .item .item-inner { padding: 10px 15px; border-radius: 5px; font-size: 14px; color: #3c3b3e; word-break: break-all; background-color: #f1f1f2; }
+
+.detail-box .address .item .item-inner a:hover { text-decoration: underline; }
+
+.detail-box .address .item .item-inner .identicon { display: inline-block; width: 18px; height: 18px; -webkit-box-flex: 18px; -ms-flex: 18px 0 0px; flex: 18px 0 0; margin-right: 6px; vertical-align: middle; }
+
+.detail-box table.transaction-detail { table-layout: fixed; border-collapse: separate; border-spacing: 0 20px; line-height: 20px; }
+
+@media screen and (max-width: 900px) { .detail-box table.transaction-detail { margin-top: -20px; }
+  .detail-box table.transaction-detail:nth-child(2) { margin-top: -5px; } }
+
+@media screen and (max-width: 480px) { .detail-box table.transaction-detail { margin-top: -25px; border-spacing: 0 25px; } }
+
+.detail-box table.transaction-detail th { width: 126px; height: auto; font-size: 14px; color: #a391aa; border-bottom: none; vertical-align: top; }
+
+@media screen and (max-width: 480px) { .detail-box table.transaction-detail th { width: 110px; font-size: 15px; } }
+
+.detail-box table.transaction-detail th img.arrow { margin: 0 5px; }
+
+.detail-box table.transaction-detail td { height: auto; font-size: 14px; border-bottom: none; vertical-align: top; word-break: break-all; }
+
+@media screen and (max-width: 480px) { .detail-box table.transaction-detail td { font-size: 15px; } }
+
+.detail-box table.transaction-detail td img.arrow { margin: 0 6px; }
+
+.detail-box table.transaction-detail td .from-to { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; width: 100%; }
+
+@media screen and (max-width: 900px) { .detail-box table.transaction-detail td .from-to { display: block; text-align: center; } }
+
+.detail-box table.transaction-detail td .from-to .address { font-size: 11px; line-height: 1.2; }
+
+@media screen and (max-width: 900px) { .detail-box table.transaction-detail td .from-to .address { display: block; } }
+
+.detail-box table.transaction-detail td .from-to .address:hover { text-decoration: none; }
+
+.detail-box table.transaction-detail td .from-to img.arrow { margin: 0 5px; }
+
+@media screen and (max-width: 900px) { .detail-box table.transaction-detail td .from-to img.arrow { display: block; margin: 6px auto; -webkit-transform: rotate(90deg); transform: rotate(90deg); } }
+
+.detail-box table.transaction-detail td .from-to .txt-ellipsis { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+.detail-box table.transaction-detail td a:hover { text-decoration: underline; }
