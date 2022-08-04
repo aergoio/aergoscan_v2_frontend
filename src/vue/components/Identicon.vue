@@ -1,5 +1,5 @@
 <template>
-  <div class="identicon" :class="{'identicon-new': is_new}">
+  <div class="identicon" :class="{'identicon-new': !text}">
   </div>
 </template>
 
