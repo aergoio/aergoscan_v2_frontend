@@ -14,7 +14,7 @@
       <td><div>
         <span class="identicon default" v-if="!row.image"></span>
         <span class="identicon" v-else><img :src="row.image"></span>
-        {{ row.name }}
+        <router-link :to="`/token/${row.symbolHash}/`" class="address txt-ellipsis">{{ row.name }}</router-link>
       </div></td>
       <td><div>{{ row.symbol }}</div></td>
       <td><div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div></td>
@@ -140,6 +140,7 @@ export default {
           name: item.token.meta.name,
           image: item.token.meta.image,
           symbol: item.token.meta.symbol,
+          symbolHash: item.token.hash,
           decimals: item.token.meta.decimals,
         }));
         this.totalItems = response.total;

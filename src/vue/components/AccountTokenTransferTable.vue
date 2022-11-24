@@ -60,7 +60,7 @@
         </div>
       </td>
       <td class="txt-ellipsis">
-        <div>{{ row.name }} ({{row.symbol}})</div>
+        <div><router-link :to="`/token/${row.symbolHash}/`" class="address txt-ellipsis"> {{ row.name }} ({{row.symbol}})</router-link></div>
       </td>
       <td>
         <div v-html="$options.filters.formatBigNumAmount(row.amount, false, 6, row.decimals)"></div>
@@ -189,6 +189,7 @@ export default {
         this.data = response.hits.map(item => ({
           ...item.meta,
           hash: item.hash,
+          symbolHash: item.token.hash,
           name: item.token.meta.name,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,

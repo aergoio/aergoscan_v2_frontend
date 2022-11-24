@@ -11,14 +11,32 @@
       </th>
     </template>
     <template slot="list" slot-scope="{row}">
-      <td><div>
-        <span class="identicon default" v-if="!row.image"></span>
-        <span class="identicon" v-else><img :src="row.image"></span>
-        {{ row.name }}</div></td>
-      <td><div>{{ row.symbol }}</div></td>
-      <td><div></div></td>
-      <td><div><router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${address}`" class="address">{{ row.amount }}</router-link></div></td>
-      <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}</div></td>
+      <td>
+        <div>
+          <span class="identicon default" v-if="!row.image"></span>
+          <span class="identicon" v-else><img :src="row.image"></span>
+          <router-link :to="`/nft/${row.symbolHash}/`" class="address txt-ellipsis">{{ row.name }}</router-link>
+        </div>
+      </td>
+      <td>
+        <div>{{ row.symbol }}</div>
+      </td>
+      <td>
+        <div></div>
+      </td>
+      <td>
+        <div>
+          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${address}`" class="address">
+            {{ row.amount }}
+          </router-link>
+        </div>
+      </td>
+      <td>
+        <div class="tooltipped tooltipped-se tooltipped-align-left-2"
+             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
+        </div>
+      </td>
     </template>
     <pagination
         slot="pagination"
@@ -134,6 +152,7 @@ export default {
           image: item.token.meta.image,
           name: item.token.meta.name,
           symbol: item.token.meta.symbol,
+          symbolHash: item.token.hash,
           decimals: item.token.meta.decimals,
         }));
         this.totalItems = response.total;
@@ -165,8 +184,7 @@ export default {
     },
     moment
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 
@@ -177,7 +195,7 @@ table.nft-inventory-table {
       &:last-child {
         text-align: right;
 
-        &>div {
+        & > div {
           justify-content: end;
         }
       }
@@ -186,7 +204,7 @@ table.nft-inventory-table {
     &:nth-child(3) {
       text-align: center;
 
-      &>div {
+      & > div {
         justify-content: center;
       }
     }
@@ -201,7 +219,7 @@ table.nft-inventory-table {
       &:last-child {
         text-align: right;
 
-        &>div {
+        & > div {
           justify-content: end;
         }
       }
@@ -210,7 +228,7 @@ table.nft-inventory-table {
     &:nth-child(3) {
       text-align: center;
 
-      &>div {
+      & > div {
         justify-content: center;
       }
     }

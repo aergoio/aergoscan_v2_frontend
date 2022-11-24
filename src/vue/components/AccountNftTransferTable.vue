@@ -59,11 +59,16 @@
           </template>
         </div>
       </td>
-      <td><div>
-        <span class="identicon default" v-if="!row.image"></span>
-        <span class="identicon" v-else><img :src="row.image"></span>
-        {{ row.name }}</div></td>
-      <td><div>{{row.token_id}}</div></td>
+      <td>
+        <div>
+          <span class="identicon default" v-if="!row.image"></span>
+          <span class="identicon" v-else><img :src="row.image"></span>
+          <router-link :to="`/nft/${row.symbolHash}/`" class="address txt-ellipsis"> {{ row.name }}</router-link>
+        </div>
+      </td>
+      <td>
+        <div>{{ row.token_id }}</div>
+      </td>
     </template>
     <pagination
         slot="pagination"
@@ -115,7 +120,7 @@ export default {
       default: 'desc'
     },
     filteredNfts: {
-      type:Array,
+      type: Array,
       default: () => {
         return []
       }
@@ -162,7 +167,7 @@ export default {
       ]
     },
     nftHeaders() {
-      return [{text: "ALL", value:'all'}].concat(this.filteredNfts);
+      return [{text: "ALL", value: 'all'}].concat(this.filteredNfts);
     },
     dataTableCss() {
       return {
@@ -195,6 +200,7 @@ export default {
           hash: item.hash,
           image: item.token.meta.image,
           name: item.token.meta.name,
+          symbolHash: item.token.hash,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,
         }));
@@ -259,7 +265,7 @@ table.nft-transfers-table {
     &:nth-child(5) {
       text-align: center;
 
-      >div {
+      > div {
         justify-content: center;
       }
     }
@@ -267,7 +273,7 @@ table.nft-transfers-table {
     &:last-child {
       text-align: right;
 
-      >div {
+      > div {
         justify-content: end;
       }
     }
@@ -281,7 +287,7 @@ table.nft-transfers-table {
     &:nth-child(5) {
       text-align: center;
 
-      >div {
+      > div {
         justify-content: center;
       }
     }
@@ -289,7 +295,7 @@ table.nft-transfers-table {
     &:last-child {
       text-align: right;
 
-      >div {
+      > div {
         justify-content: end;
       }
     }
