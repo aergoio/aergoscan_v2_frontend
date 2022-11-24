@@ -18,7 +18,7 @@
           <div><router-link class="block" :to="`/block/${row.blockno}/`">{{ row.blockno }}</router-link></div>
         </td>
         <td>
-          <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).fromNow() }}
+          <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
         </td>
         <td class="txt-ellipsis">

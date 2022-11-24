@@ -45,6 +45,30 @@
                       <div>{{ accountDetail.nonce }}</div>
                     </td>
                   </tr>
+                  <tr v-if="staking">
+                    <th>
+                      <div>Staked amount</div>
+                    </th>
+                    <td>
+                      <div v-html="$options.filters.formatToken(staking.amount, 'aergo')"></div>
+                    </td>
+                  </tr>
+                  <tr v-if="staking">
+                    <th>
+                      <div>Last action</div>
+                    </th>
+                    <td>
+                      <div v-if="staking.when"><router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">{{staking.when}}</router-link>(since block)</div>
+                    </td>
+                  </tr>
+                  <tr v-if="staking">
+                    <th>
+                      <div>Unstaked amount</div>
+                    </th>
+                    <td>
+                      <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -193,6 +217,9 @@ export default {
         return this.accountDetail.balance;
       }
       return new Amount(JSBI.add(this.accountDetail.balance.value, this.staking.amount.value).toString(), 'aer');
+    },
+    unstakedBalance() {
+      return this.accountDetail.balance;
     },
     title() {
       if(this.isLoadingDetail) return '...';

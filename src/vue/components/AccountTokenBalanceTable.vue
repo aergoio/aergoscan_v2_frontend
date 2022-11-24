@@ -19,7 +19,7 @@
       <td><div>{{ row.symbol }}</div></td>
       <td><div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div></td>
       <td>
-        <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).fromNow() }}</div>
+        <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}</div>
       </td>
     </template>
     <pagination

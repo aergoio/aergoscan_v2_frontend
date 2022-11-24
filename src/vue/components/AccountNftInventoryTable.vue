@@ -18,7 +18,7 @@
       <td><div>{{ row.symbol }}</div></td>
       <td><div></div></td>
       <td><div><router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${address}`" class="address">{{ row.amount }}</router-link></div></td>
-      <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).fromNow() }}</div></td>
+      <td><div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}</div></td>
     </template>
     <pagination
         slot="pagination"

@@ -40,7 +40,7 @@
                 <td>
                   <div class="tooltipped tooltipped-se tooltipped-align-left-2"
                        :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
-                    {{ moment(row.ts).fromNow() }}
+                    {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </td>
                 <td>
@@ -134,7 +134,7 @@ export default {
         {text: 'BLOCK #', value: 'no', sortable: true},
         {text: 'TIME', value: 'ts', sortable: true},
         {text: 'TXs', value: 'txs', sortable: true},
-        {text: 'COINBASE ACCOUNT', value: 'account', sortable: false},
+        {text: 'BLOCK PRODUCER', value: 'account', sortable: false},
         {text: 'SIZE(BYTE)', value: 'size', sortable: true},
       ]
     },

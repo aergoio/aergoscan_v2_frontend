@@ -42,7 +42,7 @@
             <td>
               <div class="tooltipped tooltipped-se tooltipped-align-left-2"
                    :aria-label="moment(tx.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
-                {{ moment(tx.ts || tx.block.header.timestamp / 1000000).fromNow() }}
+                {{ moment(tx.ts || tx.block.header.timestamp / 1000000).format('YYYY-MM-DD HH:mm:ss') }}
               </div>
             </td>
             <td class="txt-ellipsis">
