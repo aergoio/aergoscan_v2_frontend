@@ -119,10 +119,11 @@ export default {
     },
 
     async performSearch() {
+      console.log(this.query)
       this.predictedType = '';
       if ('' + parseInt(this.query) === this.query) {
         await this.queryBlockDetails(parseInt(this.query))
-      } else if (this.query.includes("aergo.")) {
+      } else if (this.query.includes("aergo.") || this.query.length === 12) {
         this.predictedType = 'address';
         this.predictedString = this.query;
       } else if (this.query.length <= 15 && this.query.length >= 3) {
@@ -131,7 +132,8 @@ export default {
       } else if (this.query.length <= 2) {
         this.predictedType = 'searchNotFound';
         this.predictedString = this.query;
-      } else if (this.query.length > 15) {
+      }
+      else if (this.query.length > 15) {
         try {
           // Try as address
           new Address(this.query);
