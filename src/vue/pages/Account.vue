@@ -37,6 +37,22 @@
                       <div v-html="$options.filters.formatToken(fullBalance, 'aergo')"></div>
                     </td>
                   </tr>
+                  <tr v-if="staking">
+                    <th>
+                      <div>- Staked amount</div>
+                    </th>
+                    <td>
+                      <div v-html="$options.filters.formatToken(staking.amount, 'aergo')"></div>
+                    </td>
+                  </tr>
+                  <tr v-if="staking">
+                    <th>
+                      <div>- Unstaked amount</div>
+                    </th>
+                    <td>
+                      <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
+                    </td>
+                  </tr>
                   <tr>
                     <th>
                       <div>Nonce</div>
@@ -45,15 +61,7 @@
                       <div>{{ accountDetail.nonce }}</div>
                     </td>
                   </tr>
-                  <tr v-if="staking">
-                    <th>
-                      <div>Staked amount</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(staking.amount, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr v-if="staking">
+                  <tr v-if="staking && staking.when">
                     <th>
                       <div>Last action</div>
                     </th>
@@ -61,12 +69,24 @@
                       <div v-if="staking.when"><router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">{{staking.when}}</router-link>(since block)</div>
                     </td>
                   </tr>
-                  <tr v-if="staking">
+                  <tr v-for="item in getContractTx" v-if="getIsContractAccount">
                     <th>
-                      <div>Unstaked amount</div>
+                      <div>Contract Creator</div>
                     </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
+                    <td class="contract-creator-td">
+                      <div v-if="item.creator">
+                        <router-link class="creator-block" :to="`/account/${item.creator}/`">
+                          <Identicon :text="item.creator" size="17" class="mini-identicon"/>
+                          {{ item.creator }}
+                        </router-link>
+                      </div>
+                      at Tx
+                      <div v-if="item.txId">
+                        <router-link class="tx-block" :to="`/transaction/${item.txId}/`">
+                          <Identicon :text="item.txId" size="17" class="mini-identicon"/>
+                          {{ item.txId }}
+                        </router-link>
+                      </div>
                     </td>
                   </tr>
                   </tbody>
@@ -177,6 +197,7 @@ export default {
       nftInventoryTotalItems: 0,
       tokens: [],
       nfts: [],
+      contractTx: [],
     }
   },
   created() {
@@ -229,6 +250,12 @@ export default {
       }
 
       return 'Account'
+    },
+    getIsContractAccount() {
+      return this.accountDetail && this.accountDetail.codehash
+    },
+    getContractTx() {
+      return this.contractTx
     }
   },
   methods: {
@@ -250,6 +277,7 @@ export default {
       this.accountTokens = [];
       this.tokens = [];
       this.nfts = [];
+      this.contractTx = [];
       let isName = false;
       this.showTokenBalances = false;
 
@@ -321,6 +349,30 @@ export default {
               this.nfts.push({
                 text: `${item.token.meta.name}(${item.token.meta.symbol})`,
                 value: item.token.hash,
+              })
+            })
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      })();
+
+      // Contract Tx
+      (async () => {
+        try {
+          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`,
+              {
+                q: `_id:${address}`,
+              }
+          );
+          const data = (await response.json());
+          if (data.hits.length > 0) {
+            data.hits.map(item => {
+              this.contractTx.push({
+                txId: item.meta.tx_id,
+                creator: item.meta.creator,
+                blockNo: item.meta.blockno,
+                ts: item.meta.ts,
               })
             })
           }
@@ -604,7 +656,7 @@ export default {
     }
 
     th {
-      width: 126px;
+      width: 136px;
       height: auto;
       font-size: 14px;
       color: #a391aa;
@@ -612,10 +664,16 @@ export default {
       vertical-align: top;
 
       @media screen and (max-width: 480px) {
-        width: 110px;
+        width: 120px;
         font-size: 15px;
       }
     }
+
+    .contract-creator-td{
+      display: flex;
+      gap: 20px;
+    }
+
 
     td {
       height: auto;
@@ -626,6 +684,29 @@ export default {
 
       @media screen and (max-width: 480px) {
         font-size: 15px;
+      }
+
+      .identicon {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        flex: 18px 0 0;
+        margin-top: -3px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+
+      .tx-block,
+      .creator-block {
+        font-size: 13px;
+        word-break: break-all;
+
+        &:hover {
+          /*font-weight: bold;*/
+          text-shadow: 0px 0px 0px #3c3b3e;
+          color: #3c3b3e;
+          text-decoration: underline;
+        }
       }
     }
   }
