@@ -11,6 +11,8 @@ import Footer from '@/src/vue/components/Footer';
 import {DataTable, Pagination} from '@/src/vue/components/tables';
 import {Tabs, Tab} from '@/src/vue/components/tabs';
 import CopyLinkButton from '@/src/vue/components/CopyLinkButton';
+import QrcodeButton from '@/src/vue/components/QrcodeButton';
+import QRcodeModal from '@/src/vue/components/modal/QRcodeModal';
 
 import store from '@/src/vue/store/index';
 import {shortAddress} from '@/src/vue/filters/address';
@@ -34,6 +36,8 @@ export default async function setup(opts) {
     Vue.component('Tabs', Tabs);
     Vue.component('Tab', Tab);
     Vue.component('CopyLinkButton', CopyLinkButton);
+    Vue.component('QrcodeButton', QrcodeButton);
+    Vue.component('QrcodeModal', QRcodeModal);
     Vue.filter('shortAddress', shortAddress);
     Vue.filter('formatToken', formatToken);
     Vue.filter('formatGenericToken', formatGenericToken);

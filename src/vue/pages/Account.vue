@@ -1,8 +1,11 @@
 <template>
   <div class="wrap">
+
+
     <div id="category" class="account">
       <Header/>
       <div class="category-inner">
+        <qrcode-modal :address="realAddress" @onClose="onCloseQrcode" v-if="isShowQRcode"/>
         <div class="page-wrap">
           <div class="page-content">
             <search/>
@@ -15,6 +18,7 @@
                         {{ realAddress }}
                       </span>
                   <copy-link-button :message="realAddress"/>
+                  <qrcode-button :address="realAddress" @onQrcode="onShowQrcode"/>
                 </div>
               </div>
               <div class="table-wrap">
@@ -198,6 +202,7 @@ export default {
       tokens: [],
       nfts: [],
       contractTx: [],
+      isShowQRcode: false
     }
   },
   created() {
@@ -507,6 +512,12 @@ export default {
     updateNftInventoryTotalCount(count) {
       this.nftInventoryTotalItems = count
     },
+    onShowQrcode() {
+      this.isShowQRcode = true
+    },
+    onCloseQrcode() {
+      this.isShowQRcode = false
+    },
   },
   components: {
     Identicon,
@@ -556,6 +567,11 @@ export default {
         padding: 0 20px;
       }
     }
+
+    .address > .item {
+      display: flex;
+      align-content: center;
+    }
   }
 
   &.contract {
@@ -599,6 +615,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
+
 
       .item-inner {
         padding: 15px;

@@ -41,6 +41,7 @@ export default {
   display: inline-block;
   border: 1px solid #ddd;
   vertical-align: middle;
+  position: relative;
 }
 .tiny-identicon {
   display: inline-block;
