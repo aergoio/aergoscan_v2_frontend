@@ -7,6 +7,7 @@ import Tokens from '../pages/Tokens.vue';
 import Token from '../pages/Token.vue';
 import NFTs from '../pages/NFTs.vue';
 import NFT from '../pages/NFT.vue';
+import Accounts from '../pages/Accounts.vue';
 import Account from '../pages/Account.vue';
 import Consensus from '../pages/Consensus.vue';
 import Search from '../pages/Search.vue';
@@ -23,6 +24,7 @@ export default [
     { path: '/token/:hash', component: Token, name: 'token' },
     { path: '/nfts/', component: NFTs, name: 'nfts' },
     { path: '/nft/:hash', component: NFT, name: 'nft' },
+    { path: '/accounts/', component: Accounts, name: 'accounts' },
     { path: '/account/:address', component: Account, name: 'account' },
     { path: '/votes/', component: Consensus, name: 'votes' },
     { path: '/consensus/', component: Consensus, name: 'consensus' },
