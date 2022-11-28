@@ -1,7 +1,5 @@
 <template>
   <div class="wrap">
-
-
     <div id="category" class="account">
       <Header/>
       <div class="category-inner">
@@ -15,10 +13,10 @@
                 <div class="item">
                       <span class="item-inner">
                         <Identicon :text="realAddress" size="17" class="mini-identicon"/>
-                        {{ realAddress }}
+                        {{ $route.params.address }}
                       </span>
                   <copy-link-button :message="realAddress"/>
-                  <qrcode-button :address="realAddress" @onQrcode="onShowQrcode"/>
+                  <qrcode-button :address="realAddress" @onQrcode="onShowQrcode" v-if="!isName"/>
                 </div>
               </div>
               <div class="table-wrap">
@@ -127,6 +125,14 @@
                                    replace>
                         <span class="main">NFT Inventory</span><span class="sub">{{ nftInventoryTotalItems }}</span>
                       </router-link>
+                      <router-link class="title registered-names" :to="{ query: { ...$route.query, tx: 'registeredNames' } }"
+                                   replace>
+                        <span class="main">Registered Names</span><span class="sub">{{ registeredNamesTotalItems }}</span>
+                      </router-link>
+                      <router-link class="title name-history" :to="{ query: { ...$route.query, tx: 'nameHistory' } }"
+                                   replace>
+                        <span class="main">Name History</span><span class="sub">{{ nameHistoryTotalItems }}</span>
+                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -148,6 +154,12 @@
                   <account-nft-inventory-table ref="accountNftInventoryTable" :address="realAddress"
                                                :active="$route.query.tx === 'nftInventory'"
                                                @onUpdateTotalCount="updateNftInventoryTotalCount"/>
+                  <account-registered-names-table ref="accountRegisteredNamesTable" :address="realAddress"
+                                               :active="$route.query.tx === 'registeredNames'"
+                                               @onUpdateTotalCount="updateRegisteredNameTotalCount"/>
+                  <account-name-history-table ref="accountNameHistoryTable" :address="realAddress"
+                                               :active="$route.query.tx === 'nameHistory'"
+                                               @onUpdateTotalCount="updateNameHistoryTotalCount"/>
                 </div>
               </div>
             </div>
@@ -178,6 +190,9 @@ import AccountTokenTransferTable from '@/src/vue/components/AccountTokenTransfer
 import AccountNftTransferTable from '@/src/vue/components/AccountNftTransferTable';
 import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTable';
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable';
+import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable';
+import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable';
+
 
 function formatTokenAmount(amount, unit, decimals) {
   return `${Amount.moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
@@ -199,10 +214,13 @@ export default {
       nftTransferTotalItems: 0,
       tokenBalanceTotalItems: 0,
       nftInventoryTotalItems: 0,
+      registeredNamesTotalItems: 0,
+      nameHistoryTotalItems: 0,
       tokens: [],
       nfts: [],
       contractTx: [],
-      isShowQRcode: false
+      isShowQRcode: false,
+      isName:false,
     }
   },
   created() {
@@ -217,7 +235,7 @@ export default {
     },
     'realAddress'() {
       this.reloadAllTable(this.realAddress).then(
-          ()=> this.load()
+          // ()=> this.load()
       ).catch(e=>{
         console.log(e);
       })
@@ -229,8 +247,8 @@ export default {
   computed: {
     realAddress() {
       // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.
-      // return this.destinationAddress || this.$route.params.address;
-      return this.$route.params.address;
+      return this.destinationAddress || this.$route.params.address;
+      // return this.$route.params.address;
     },
     filteredTokens() {
       return this.tokens;
@@ -283,29 +301,33 @@ export default {
       this.tokens = [];
       this.nfts = [];
       this.contractTx = [];
-      let isName = false;
+      this.isName = false;
       this.showTokenBalances = false;
 
       // Check address
       try {
         address = new Address(this.$route.params.address);
-        isName = address.isName;
+        this.isName = address.isName;
       } catch (e) {
         this.error = 'Invalid address';
         console.error(e);
         return;
       }
 
+      console.log("isName-", this.isName)
+      console.log("address.isSystemAddress()-", address.isSystemAddress())
+
       // Owner
       try {
         if (address.isName && !address.isSystemAddress()) {
           const nameInfo = await this.$store.dispatch('blockchain/getNameInfo', {name: address.encoded});
+          console.log("nameInfo-", nameInfo)
           this.ownerAddress = nameInfo.owner.toString();
           this.destinationAddress = nameInfo.destination.toString();
           address = this.destinationAddress;
           // todo: 추후 해당케이스 시나리오 수정필요.
           this.isLoadingDetail = false;
-          return;
+          // return;
         }
       } catch (e) {
         this.error = 'Unregistered name';
@@ -314,6 +336,12 @@ export default {
       }
 
       this.address = address;
+
+      if (address.length === 0) {
+        console.log("Account not found")
+        return;
+      }
+
       // State
       try {
         this.accountDetail = Object.freeze(await this.$store.dispatch('blockchain/getAccount', {address}));
@@ -322,6 +350,7 @@ export default {
         console.error(e);
         return;
       }
+
       this.isLoadingDetail = false;
 
       // Staking
@@ -512,6 +541,12 @@ export default {
     updateNftInventoryTotalCount(count) {
       this.nftInventoryTotalItems = count
     },
+    updateRegisteredNameTotalCount(count) {
+      this.registeredNamesTotalItems = count
+    },
+    updateNameHistoryTotalCount(count) {
+      this.nameHistoryTotalItems = count
+    },
     onShowQrcode() {
       this.isShowQRcode = true
     },
@@ -527,7 +562,9 @@ export default {
     AccountTokenTransferTable,
     AccountNftTransferTable,
     AccountTokenBalanceTable,
-    AccountNftInventoryTable
+    AccountNftInventoryTable,
+    AccountNameHistoryTable,
+    AccountRegisteredNamesTable
   }
 };
 </script>
