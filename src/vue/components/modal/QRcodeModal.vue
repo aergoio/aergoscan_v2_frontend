@@ -24,7 +24,6 @@ export default {
     address: String,
   },
   async beforeMount() {
-    console.log(this.address)
     this.inputText = {
       type: 'AERGO_REQUEST',
       address: this.address,

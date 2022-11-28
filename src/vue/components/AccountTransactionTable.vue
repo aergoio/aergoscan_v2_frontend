@@ -166,7 +166,7 @@ export default {
         {text: 'TX HASH', value: 'hash'},
         {text: 'TIME', value: 'ts'},
         {text: 'FROMTO', value: 'fromto'},
-        {text: 'CATEGORY', value: 'category'},
+        {text: 'Tx Type', value: 'category'},
         {text: 'METHOD', value: 'method'},
         {text: 'AMOUNT(AERGO)', value: 'amount_float'},
       ]

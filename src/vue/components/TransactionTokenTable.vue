@@ -76,7 +76,7 @@ export default {
     },
     itemsPerPage: {
       type: Number,
-      default: 5
+      default: 10
     },
     defaultSort: String,
     defaultSortDirection: String,
