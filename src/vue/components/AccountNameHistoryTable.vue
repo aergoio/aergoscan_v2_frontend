@@ -64,9 +64,9 @@ export default {
   computed: {
     headers() {
       return [
-        {text: 'Since Block', value: 'sinceblock'},
-        {text: 'Destination', value: 'destination'},
-        {text: 'Transaction', value: 'transaction'},
+        {text: 'SINCE BLOCK', value: 'sinceblock'},
+        {text: 'DESTINATION', value: 'destination'},
+        {text: 'TRANSACTION', value: 'transaction'},
       ]
     },
     dataTableCss() {

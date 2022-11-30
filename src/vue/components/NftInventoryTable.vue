@@ -149,6 +149,19 @@ export default {
       searchedField: this.searchField,
     }
   },
+  watch: {
+    '$route'(to, from) {
+      console.log("inventory watch to", to)
+      console.log("inventory watch from", from)
+      if (to.query.keyword) {
+        this.searchedField = to.query.keyword;
+        this.reload();
+      } else {
+        this.searchedField = '';
+        this.reload();
+      }
+    },
+  },
   created() {
   },
   beforeDestroy() {

@@ -129,17 +129,19 @@
                   <div class="h-scroll">
                     <div class="tab-header">
                       <router-link class="title nft-transfers router-link-exact-active"
-                                   :to="{ query: { ...$route.query, tx: 'nft' } }" replace v-if="!$route.query.tx">
+                                   :to="{ query: { ...$route.query, tx: 'nft', keyword:'' } }" replace v-if="!$route.query.tx">
                         <span class="main">NFT Transfers</span><span class="sub">{{ nftTransferTotalItems }}</span>
                       </router-link>
-                      <router-link class="title nft-transfers"
-                                   :to="{ query: { ...$route.query, tx: 'nft' } }" replace v-else>
+                      <router-link class="title nft-transfers" :class="$route.query.tx === 'nft' && 'router-link-exact-active'"
+                                   :to="{ query: { ...$route.query, tx: 'nft', keyword:'' } }" replace v-else>
                         <span class="main">NFT Transfers</span><span class="sub">{{ nftTransferTotalItems }}</span>
                       </router-link>
-                      <router-link class="title holders" :to="{ query: { ...$route.query, tx: 'holder' } }" replace>
+                      <router-link class="title holders"  :class="$route.query.tx === 'holder' && 'router-link-exact-active'"
+                                   :to="{ query: { ...$route.query, tx: 'holder', keyword:'' } }" replace>
                         <span class="main">Holders</span><span class="sub">{{ holderTotalItems }}</span>
                       </router-link>
-                      <router-link class="title inventory" :to="{ query: { ...$route.query, tx: 'inventory'} }" replace>
+                      <router-link class="title inventory"  :class="$route.query.tx === 'inventory' && 'router-link-exact-active'"
+                                   :to="{ query: { ...$route.query, tx: 'inventory', keyword:''} }" replace>
                         <span class="main">Inventory</span><span class="sub">{{ inventoryTotalItems }}</span>
                       </router-link>
                     </div>
@@ -184,6 +186,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
+      console.log("watch")
       this.load();
     },
   },

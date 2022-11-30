@@ -28,7 +28,8 @@
       </td>
       <td>
         <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
+             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
         </div>
       </td>
       <td class="txt-ellipsis">
@@ -51,7 +52,11 @@
         <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
       </td>
       <td class="txt-ellipsis">
-        <div class="tooltipped tooltipped-sw tooltipped-align-right-2" :aria-label="row.token_id">{{ $options.filters.formatEllipsisText(row.token_id, 25) }}</div>
+        <div>
+          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${row.token_id}`" class="address">
+            {{ row.token_id }}
+          </router-link>
+        </div>
       </td>
     </template>
     <pagination

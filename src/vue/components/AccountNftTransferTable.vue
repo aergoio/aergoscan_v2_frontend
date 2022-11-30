@@ -67,7 +67,11 @@
         </div>
       </td>
       <td>
-        <div>{{ row.token_id }}</div>
+        <div>
+          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${row.token_id}`" class="address">
+            {{ row.token_id }}
+          </router-link>
+        </div>
       </td>
     </template>
     <pagination
