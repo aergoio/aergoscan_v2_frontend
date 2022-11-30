@@ -54,7 +54,7 @@
           <template v-if="!['BURN'].includes(`${row.to}`.toUpperCase())">
             <Identicon :text="row.to" size="18" class="mini-identicon"/>
             <router-link :to="`/account/${row.to}/`" class="address txt-ellipsis">
-              {{ $options.filters.formatEllipsisText(row.to, 45) }}
+              {{ $options.filters.formatEllipsisText(row.to, 30) }}
             </router-link>
           </template>
         </div>

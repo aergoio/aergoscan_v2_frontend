@@ -28,7 +28,7 @@
         <account-link :css="accountLinkCss"
                       :to-link="`/account/${row.from}/`"
                       :address="row.from.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.from}`.toUpperCase())"
-                      :name="$options.filters.formatEllipsisText(row.from, 47)"
+                      :name="$options.filters.formatEllipsisText(row.from, 30)"
         />
         <div class="txt-center" v-else><span class="txt-ellipsis">MINT</span></div>
       </td>
@@ -39,7 +39,7 @@
         <account-link :css="accountLinkCss"
                       :to-link="`/account/${row.to}/`"
                       :address="row.to.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.to}`.toUpperCase())"
-                      :name="$options.filters.formatEllipsisText(row.to, 47)"
+                      :name="$options.filters.formatEllipsisText(row.to, 30)"
         />
         <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
       </td>

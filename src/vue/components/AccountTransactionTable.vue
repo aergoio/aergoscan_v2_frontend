@@ -50,7 +50,7 @@
             <span class="boxicon blue">FROM</span>
             <Identicon :text="row.from" size="18" class="mini-identicon"/>
             <router-link :to="`/account/${row.from}/`" class="address txt-ellipsis">
-              {{ $options.filters.formatEllipsisText(row.from, 45) }}
+              {{ $options.filters.formatEllipsisText(row.from, 30) }}
             </router-link>
           </template>
           <template v-else>
@@ -58,7 +58,7 @@
             <template v-if="row.to && row.to.toString().length">
               <Identicon :text="row.to" size="18" class="mini-identicon"/>
               <router-link :to="`/account/${row.to}/`" class="address txt-ellipsis">
-                {{ $options.filters.formatEllipsisText(row.to, 45) }}
+                {{ $options.filters.formatEllipsisText(row.to, 30) }}
               </router-link>
             </template>
             <template v-else>
