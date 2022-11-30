@@ -21,7 +21,13 @@
         <account-link :css="accountLinkCss"
                       :to-link="`/account/${row.account}/`" :address="row.account.toString()"/>
       </td>
-      <td><div>{{ row.balance }}</div></td>
+      <td>
+        <div>
+          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${row.account}`" class="address">
+            {{ row.balance }}
+          </router-link>
+        </div>
+      </td>
       <td><div>{{ row.percentage }}%</div></td>
     </template>
     <pagination

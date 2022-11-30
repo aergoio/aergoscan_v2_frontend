@@ -38,7 +38,8 @@
                     <td>
                       <div>
                         <router-link :to="`/account/${destinationAddress}/`" class="alias-account">
-                          <Identicon :text="destinationAddress" size="17" class="mini-identicon"/>{{destinationAddress}}
+                          <Identicon :text="destinationAddress" size="17" class="mini-identicon"/>
+                          {{ destinationAddress }}
                         </router-link>
                         <CopyLinkButton :message="destinationAddress"/>
                       </div>
@@ -51,7 +52,8 @@
                     <td>
                       <div>
                         <router-link :to="`/account/${ownerAddress}/`" class="owned-account">
-                          <Identicon :text="ownerAddress" size="17" class="mini-identicon"/>{{ownerAddress}}
+                          <Identicon :text="ownerAddress" size="17" class="mini-identicon"/>
+                          {{ ownerAddress }}
                         </router-link>
                         <CopyLinkButton :message="ownerAddress"/>
                       </div>
@@ -63,7 +65,10 @@
                       <div>Balance</div>
                     </th>
                     <td>
-                      <div v-html="$options.filters.formatToken(fullBalance, 'aergo')"></div>
+                      <div>
+                        <div v-html="$options.filters.formatToken(fullBalance, 'aergo')"></div>
+                        <span>{{ ` (${getUsdPriceByAergo} $)` }}</span>
+                      </div>
                     </td>
                   </tr>
                   <tr v-if="staking">
@@ -82,17 +87,9 @@
                       <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
                     </td>
                   </tr>
-                  <tr>
-                    <th>
-                      <div>Nonce</div>
-                    </th>
-                    <td>
-                      <div>{{ accountDetail.nonce }}</div>
-                    </td>
-                  </tr>
                   <tr v-if="staking && staking.when">
                     <th>
-                      <div>Last action</div>
+                      <div>- Last action</div>
                     </th>
                     <td>
                       <div v-if="staking.when">
@@ -103,35 +100,44 @@
                       </div>
                     </td>
                   </tr>
+                  <tr>
+                    <th>
+                      <div>Nonce</div>
+                    </th>
+                    <td>
+                      <div>{{ accountDetail.nonce }}</div>
+                    </td>
+                  </tr>
                   <tr v-for="item in getContractTx" v-if="getIsContractAccount">
                     <th>
                       <div>Contract Creator</div>
                     </th>
                     <td>
-<!--                      <div v-if="item.creator">-->
-<!--                        <router-link class="creator-block" :to="`/account/${item.creator}/`">-->
-<!--                          <Identicon :text="item.creator" size="17" class="mini-identicon"/>-->
-<!--                          {{ item.creator }}-->
-<!--                        </router-link>-->
-<!--                      </div>-->
-<!--                      at Tx-->
-<!--                      <div v-if="item.txId">-->
-<!--                        <router-link class="tx-block" :to="`/transaction/${item.txId}/`">-->
-<!--                          {{ item.txId }}-->
-<!--                        </router-link>-->
-<!--                      </div>-->
-                        <div class="from-to">
-                          <router-link class="address contract-creator" :to="`/account/${item.creator}/`" v-if="item.creator">
-                            <Identicon :text="item.creator" size="18" class="mini-identicon"/>
-                            {{ item.creator }}
-                          </router-link>
-                          <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
-                          <router-link class="address contract-creator"
-                                       v-if="item.txId"
-                                       :to="`/transaction/${item.txId}/`">
-                            {{ item.txId }}
-                          </router-link>
-                        </div>
+                      <!--                      <div v-if="item.creator">-->
+                      <!--                        <router-link class="creator-block" :to="`/account/${item.creator}/`">-->
+                      <!--                          <Identicon :text="item.creator" size="17" class="mini-identicon"/>-->
+                      <!--                          {{ item.creator }}-->
+                      <!--                        </router-link>-->
+                      <!--                      </div>-->
+                      <!--                      at Tx-->
+                      <!--                      <div v-if="item.txId">-->
+                      <!--                        <router-link class="tx-block" :to="`/transaction/${item.txId}/`">-->
+                      <!--                          {{ item.txId }}-->
+                      <!--                        </router-link>-->
+                      <!--                      </div>-->
+                      <div class="from-to">
+                        <router-link class="address contract-creator" :to="`/account/${item.creator}/`"
+                                     v-if="item.creator">
+                          <Identicon :text="item.creator" size="18" class="mini-identicon"/>
+                          {{ item.creator }}
+                        </router-link>
+                        <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
+                        <router-link class="address contract-creator"
+                                     v-if="item.txId"
+                                     :to="`/transaction/${item.txId}/`">
+                          {{ item.txId }}
+                        </router-link>
+                      </div>
                     </td>
                   </tr>
                   </tbody>
@@ -240,6 +246,7 @@ import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTa
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable';
 import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable';
 import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable';
+import {toFix} from "@/src/utils/utility";
 
 function formatTokenAmount(amount, unit, decimals) {
   return `${Amount.moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
@@ -266,8 +273,9 @@ export default {
       contractTx: [],
       isShowQRcode: false,
       isName: false,
-      names:[],
-      nameHistory:[],
+      names: [],
+      nameHistory: [],
+      tokenPrice: [],
     }
   },
   created() {
@@ -333,6 +341,14 @@ export default {
         return this.names.filter(name => name.currentAddress == this.realAddress);
       return [];
     },
+    getTokenPriceByUsd() {
+      return this.tokenPrice?.filter(item => item.name === 'aergo')[0]?.price?.usd;
+    },
+    getUsdPriceByAergo() {
+      let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0];
+      let usdPrice = this.tokenPrice?.filter(item => item.name === 'aergo')[0]?.price?.usd;
+      return toFix(Number(usdPrice) * toFix(balance));
+    }
   },
   methods: {
     query(newQuery) {
@@ -355,6 +371,7 @@ export default {
       this.contractTx = [];
       this.isName = false;
       this.showTokenBalances = false;
+      this.tokenPrice = [];
 
       // Check address
       let address;
@@ -471,11 +488,11 @@ export default {
       (async () => {
         try {
           if (!address.isName) {
-            const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `address:${address}`, size: 10 });
+            const response = await this.$fetch.get(`${cfg.API_URL}/names`, {q: `address:${address}`, size: 10});
             const data = (await response.json());
             const names = data.hits;
             for (let name of names) {
-              const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `name:${name.name}`, size: 1 });
+              const response = await this.$fetch.get(`${cfg.API_URL}/names`, {q: `name:${name.name}`, size: 1});
               const data = (await response.json());
               name.currentAddress = data.hits[0].address;
             }
@@ -490,15 +507,29 @@ export default {
       if (this.isName) {
         (async () => {
           try {
-            const response = await this.$fetch.get(`${cfg.API_URL}/names`, { q: `name:${this.$route.params.address}`, size: 10, sort: 'blockno:asc' });
+            const response = await this.$fetch.get(`${cfg.API_URL}/names`, {
+              q: `name:${this.$route.params.address}`,
+              size: 10,
+              sort: 'blockno:asc'
+            });
             const data = (await response.json());
             this.nameHistory = data.hits;
-            console.log(this.nameHistory);
           } catch (e) {
             console.error(e);
           }
         })();
       }
+
+      // Account price
+      (async () => {
+        try {
+          const response = await this.$fetch.get(`${cfg.API_URL}/tokensPrice`);
+          const data = (await response.json());
+          this.tokenPrice = data;
+        } catch (e) {
+          console.error(e);
+        }
+      })();
 
       // // Tokens
       // (async() => {
@@ -686,9 +717,11 @@ export default {
   .address {
     padding: 20px;
     border-bottom: 1px solid #f2f2f2;
+
     &.contract-creator {
       padding: 3px 4px;
     }
+
     .title {
       margin-bottom: 10px;
       font-size: 14px;
