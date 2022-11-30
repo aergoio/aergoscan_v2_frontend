@@ -17,6 +17,13 @@
         <router-link :to="`/token/${row.symbolHash}/`" class="address txt-ellipsis">{{ row.name }}</router-link>
       </div></td>
       <td><div>{{ row.symbol }}</div></td>
+      <td>
+        <div>
+          <router-link :to="`/token/${row.symbolHash}/`" class="address">
+            {{ row.address }}
+          </router-link>
+        </div>
+      </td>
       <td><div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div></td>
       <td>
         <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}</div>
@@ -104,6 +111,7 @@ export default {
       return [
         {text: 'NAME', value: 'name'},
         {text: 'SYMBOL', value: 'symbol'},
+        {text: 'ADDRESS', value: 'address'},
         {text: 'BALANCE', value: 'balance'},
         {text: 'LATEST TRANSACTION', value: 'latesttransaction'},
       ]
@@ -215,5 +223,4 @@ table.token-balance-table {
     }
   }
 }
-
 </style>

@@ -13,92 +13,50 @@
     <template slot="list" slot-scope="{row}">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image"></span>
-          <span class="identicon" v-else><img :src="row.image"></span>
-          <router-link :to="`/nft/${row.symbolHash}/`" class="address txt-ellipsis">{{ row.name }}</router-link>
+          <router-link :to="`/account/${row.name}/`" class="address txt-ellipsis">{{ row.name }}</router-link>
         </div>
-      </td>
-      <td>
-        <div>{{ row.symbol }}</div>
-      </td>
-      <td>
-        <div></div>
       </td>
       <td>
         <div>
-          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${address}`" class="address">
-            {{ row.amount }}
-          </router-link>
+          <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno }}</router-link>
         </div>
       </td>
       <td>
-        <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
-          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
+        <div>
+          <Identicon :text="row.address" size="18" class="mini-identicon"/>
+          <router-link :to="`/account/${row.address}/`" class="address txt-ellipsis">{{ row.address }}</router-link>
+        </div>
+      </td>
+      <td>
+        <div>
+          <router-link :to="`/transaction/${row.tx}/`" class="address txt-ellipsis">{{ row.tx }}</router-link>
         </div>
       </td>
     </template>
-    <pagination
-        slot="pagination"
-        :css="paginationCss"
-        :page="currentPage"
-        :total-items="limitPageTotalCount"
-        :itemsPerPage="itemsPerPage"
-        @onUpdate="changePage"
-        @updateCurrentPage="updateCurrentPage"
-    />
   </data-table>
 </template>
 <script>
 
-import cfg from '@/src/config';
-import moment from 'moment';
+import Identicon from '@/src/vue/components/Identicon';
 
 export default {
-  name: 'AccountNftInventoryTable',
+  name: 'AccountRegisteredNamesTable',
   props: {
     address: String,
     active: {
       type: Boolean,
       default: false,
     },
-    initialPage: {
-      type: Number,
-      default: 1
-    },
-    itemsPerPage: {
-      type: Number,
-      default: 10
-    },
-    defaultSort: String,
-    defaultSortDirection: String,
-    sortField: {
-      type: String,
-      default: 'blockno'
-    },
-    sort: {
-      type: String,
-      default: 'desc'
-    },
+    nameCurrent: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     return {
       error: '',
-      data: [],
-      totalItems: 0,
-      limitPageTotalCount: 0,
+      data: this.nameCurrent,
       isLoading: false,
-      currentPage: this.initialPage,
-      paginationCss: {
-        pagination: "pagination nft-inventory-table",
-        paginationInner: "pagination-inner",
-        moveFirstPage: 'pprev',
-        movePreviousPage: 'prev',
-        moveNextPage: 'next',
-        moveLastPage: 'nnext',
-      },
-      sortedField: this.sortField,
-      sortedDir: this.sort,
     }
   },
   created() {
@@ -108,9 +66,10 @@ export default {
   computed: {
     headers() {
       return [
-        {text: 'NAME', value: 'name'},
-        {text: 'SINCE BLOCK', value: 'sinceblock'},
-        {text: 'TRANSACTION', value: 'transaction'},
+        {text: 'Name', value: 'name'},
+        {text: 'Since Block', value: 'sinceblock'},
+        {text: 'Destination', value: 'destination'},
+        {text: 'Transaction', value: 'transaction'},
       ]
     },
     dataTableCss() {
@@ -119,86 +78,25 @@ export default {
         table: "registered-names-table" + (this.isLoading ? ' is-loading' : ''),
       };
     },
-    isHidePage() {
-      return this.itemsPerPage >= this.limitPageTotalCount
-    }
   },
   mounted() {
-    this.changePage(this.currentPage);
   },
-  methods: {
-    loadInventoryTableData: async function ({id, sortField, sort, currentPage, itemsPerPage}) {
-      this.error = "";
-      const start = (currentPage - 1) * itemsPerPage;
-      const response = await (await this.$fetch.get(`${cfg.API_URL}/nftGroupCountInventory`, {
-        q: `account:${id}`,
-        size: itemsPerPage,
-        from: start,
-        sort: `${sortField}:${sort}`,
-      })).json();
-      if (response.error) {
-        this.error = response.error.msg;
-      } else if (response.hits.length) {
-        this.data = response.hits.map((item, index) => ({
-          address: item.address,
-          amount: item.amount,
-          image: item.token.meta.image,
-          name: item.token.meta.name,
-          symbol: item.token.meta.symbol,
-          symbolHash: item.token.hash,
-          decimals: item.token.meta.decimals,
-        }));
-        this.totalItems = response.total;
-        this.limitPageTotalCount = response.limitPageCount;
-      } else {
-        this.data = [];
-        this.totalItems = 0;
-        this.limitPageTotalCount = 0;
-      }
-      this.$emit('onUpdateTotalCount', this.totalItems);
-    },
-    reload: async function (address) {
-      this.isLoading = true;
-      // await this.loadInventoryTableData({
-      //   id: address ? address : this.address,
-      //   sortField: this.sortedField,
-      //   sort: this.sortedDir,
-      //   currentPage: this.currentPage,
-      //   itemsPerPage: this.itemsPerPage,
-      // });
-      this.isLoading = false;
-    },
-    changePage: function (currentPage) {
-      this.currentPage = currentPage;
-      this.reload();
-    },
-    updateCurrentPage: function (currentPage) {
-      this.currentPage = currentPage;
-    },
-    moment
-  },
-  components: {}
+  methods: {},
+  components: {
+    Identicon
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-table.nft-inventory-table {
+table.registered-names-table {
   th {
-    @media screen and (max-width: 480px) {
-      &:last-child {
-        text-align: right;
 
-        & > div {
-          justify-content: end;
-        }
-      }
-    }
-
-    &:nth-child(3) {
+    &:nth-child(4) {
       text-align: center;
 
-      & > div {
-        justify-content: center;
+      > div {
+        justify-content: left;
       }
     }
 
@@ -208,20 +106,10 @@ table.nft-inventory-table {
   }
 
   td {
-    @media screen and (max-width: 480px) {
-      &:last-child {
-        text-align: right;
-
-        & > div {
-          justify-content: end;
-        }
-      }
-    }
-
-    &:nth-child(3) {
+    &:nth-child(4) {
       text-align: center;
 
-      & > div {
+      > div {
         justify-content: center;
       }
     }

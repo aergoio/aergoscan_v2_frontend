@@ -22,7 +22,11 @@
         <div>{{ row.symbol }}</div>
       </td>
       <td>
-        <div></div>
+        <div>
+          <router-link :to="`/nft/${row.symbolHash}/`" class="address">
+            {{ row.address }}
+          </router-link>
+        </div>
       </td>
       <td>
         <div>
@@ -115,7 +119,7 @@ export default {
       return [
         {text: 'NAME', value: 'name'},
         {text: 'SYMBOL', value: 'symbol'},
-        {text: 'TOKEN ID', value: 'tokenid'},
+        {text: 'ADDRESS', value: 'address'},
         {text: 'TOKEN COUNT', value: 'tokencount'},
         {text: 'LATEST TRANSACTION', value: 'latesttransaction'},
       ]
@@ -147,6 +151,7 @@ export default {
         this.error = response.error.msg;
       } else if (response.hits.length) {
         this.data = response.hits.map((item, index) => ({
+          ts:item.ts,
           address: item.address,
           amount: item.amount,
           image: item.token.meta.image,
@@ -201,13 +206,13 @@ table.nft-inventory-table {
       }
     }
 
-    &:nth-child(3) {
-      text-align: center;
-
-      & > div {
-        justify-content: center;
-      }
-    }
+    //&:nth-child(3) {
+    //  text-align: center;
+    //
+    //  & > div {
+    //    justify-content: center;
+    //  }
+    //}
 
     &:last-child {
       width: 150px;
@@ -225,13 +230,13 @@ table.nft-inventory-table {
       }
     }
 
-    &:nth-child(3) {
-      text-align: center;
-
-      & > div {
-        justify-content: center;
-      }
-    }
+    //&:nth-child(3) {
+    //  text-align: center;
+    //
+    //  & > div {
+    //    justify-content: center;
+    //  }
+    //}
 
     &:last-child {
       width: 150px;
