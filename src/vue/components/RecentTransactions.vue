@@ -48,7 +48,7 @@
             <td class="txt-ellipsis">
               <div class="tooltipped tooltipped-sw tooltipped-align-right-2" :aria-label="tx.from">
                 <router-link class="address txt-ellipsis" :to="`/account/${tx.from}`">
-                  {{ $options.filters.formatEllipsisText(tx.from , 25)}}
+                  {{ $options.filters.formatEllipsisText(tx.from , 20)}}
                 </router-link>
               </div>
             </td>
@@ -59,7 +59,7 @@
               <div class="tooltipped tooltipped-sw tooltipped-align-right-2"
                    :aria-label="tx.to" v-if="tx.to.length !== 0">
                 <router-link class="address txt-ellipsis" :to="`/account/${tx.to}`">
-                  {{ $options.filters.formatEllipsisText(tx.to , 25)}}
+                  {{ $options.filters.formatEllipsisText(tx.to , 20)}}
                 </router-link>
               </div>
               <div v-else>
