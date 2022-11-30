@@ -36,7 +36,12 @@
                       <div>Alias for</div>
                     </th>
                     <td>
-                      <div><router-link :to="`/account/${destinationAddress}/`">{{destinationAddress}}</router-link></div>
+                      <div>
+                        <router-link :to="`/account/${destinationAddress}/`" class="alias-account">
+                          <Identicon :text="destinationAddress" size="17" class="mini-identicon"/>{{destinationAddress}}
+                        </router-link>
+                        <CopyLinkButton :message="destinationAddress"/>
+                      </div>
                     </td>
                   </tr>
                   <tr v-if="ownerAddress && ownerAddress != destinationAddress">
@@ -44,7 +49,12 @@
                       <div>Name owned by</div>
                     </th>
                     <td>
-                      <div><router-link :to="`/account/${ownerAddress}/`">{{ownerAddress}}</router-link></div>
+                      <div>
+                        <router-link :to="`/account/${ownerAddress}/`" class="owned-account">
+                          <Identicon :text="ownerAddress" size="17" class="mini-identicon"/>{{ownerAddress}}
+                        </router-link>
+                        <CopyLinkButton :message="ownerAddress"/>
+                      </div>
                     </td>
                   </tr>
 
@@ -111,12 +121,12 @@
 <!--                        </router-link>-->
 <!--                      </div>-->
                         <div class="from-to">
-                          <router-link class="address" :to="`/account/${item.creator}/`" v-if="item.creator">
-                            <Identicon :text="item.creator" size="17" class="mini-identicon"/>
+                          <router-link class="address contract-creator" :to="`/account/${item.creator}/`" v-if="item.creator">
+                            <Identicon :text="item.creator" size="18" class="mini-identicon"/>
                             {{ item.creator }}
                           </router-link>
                           <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
-                          <router-link class="address"
+                          <router-link class="address contract-creator"
                                        v-if="item.txId"
                                        :to="`/transaction/${item.txId}/`">
                             {{ item.txId }}
@@ -676,7 +686,9 @@ export default {
   .address {
     padding: 20px;
     border-bottom: 1px solid #f2f2f2;
-
+    &.contract-creator {
+      padding: 3px 4px;
+    }
     .title {
       margin-bottom: 10px;
       font-size: 14px;
@@ -768,8 +780,8 @@ export default {
         vertical-align: middle;
       }
 
-      .tx-block,
-      .creator-block {
+      .alias-account,
+      .owned-account {
         font-size: 13px;
         word-break: break-all;
 
