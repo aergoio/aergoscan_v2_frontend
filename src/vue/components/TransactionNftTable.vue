@@ -21,13 +21,15 @@
       </td>
       <td>
         <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
+             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
         </div>
       </td>
       <td class="txt-ellipsis">
         <account-link :css="accountLinkCss"
                       :to-link="`/account/${row.from}/`"
-                      :address="row.from.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.from}`.toUpperCase())"
+                      :address="row.from.toString()"
+                      v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.from}`.toUpperCase())"
                       :name="$options.filters.formatEllipsisText(row.from, 30)"
         />
         <div class="txt-center" v-else><span class="txt-ellipsis">MINT</span></div>
@@ -38,7 +40,8 @@
       <td class="txt-ellipsis">
         <account-link :css="accountLinkCss"
                       :to-link="`/account/${row.to}/`"
-                      :address="row.to.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.to}`.toUpperCase())"
+                      :address="row.to.toString()"
+                      v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.to}`.toUpperCase())"
                       :name="$options.filters.formatEllipsisText(row.to, 30)"
         />
         <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
@@ -47,11 +50,17 @@
         <div>
           <span class="identicon default" v-if="!row.image"></span>
           <span class="identicon" v-else><img :src="row.image"></span>
-          {{ `${row.name} (${row.symbol})` }}
+          <router-link :to="`/nft/${row.address}`" class="address">
+            {{ `${row.name} (${row.symbol})` }}
+          </router-link>
         </div>
       </td>
       <td>
-        <div>{{ row.token_id }}</div>
+        <div>
+          <router-link :to="`/nft/${row.address}/?tx=inventory&keyword=${row.token_id}`" class="address">
+            {{ row.token_id }}
+          </router-link>
+        </div>
       </td>
     </template>
     <pagination
@@ -184,7 +193,7 @@ export default {
     reload: async function (token) {
       this.isLoading = true;
       await this.loadNftTableData({
-        id: token ? token :  this.hash,
+        id: token ? token : this.hash,
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,

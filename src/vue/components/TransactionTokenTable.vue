@@ -1,60 +1,68 @@
 <template>
-    <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
-      <template slot="error" v-if="error">
-        <div class="error transactions show">
-          {{ error }}
+  <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
+    <template slot="error" v-if="error">
+      <div class="error transactions show">
+        {{ error }}
+      </div>
+    </template>
+    <template slot="header" v-for="header in headers">
+      <th v-if="header.value === 'arrow'">
+        <div><img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow"></div>
+      </th>
+      <th v-else>
+        <div>{{ header.text }}</div>
+      </th>
+    </template>
+    <template slot="list" slot-scope="{row}">
+      <td>
+        <div>
+          <router-link class="block" :to="`/block/${row.blockno}/`">{{ row.blockno }}</router-link>
         </div>
-      </template>
-      <template slot="header" v-for="header in headers">
-        <th v-if="header.value === 'arrow'">
-          <div><img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow"></div>
-        </th>
-        <th v-else>
-          <div>{{ header.text }}</div>
-        </th>
-      </template>
-      <template slot="list" slot-scope="{row}">
-        <td>
-          <div><router-link class="block" :to="`/block/${row.blockno}/`">{{ row.blockno }}</router-link></div>
-        </td>
-        <td>
-          <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">{{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
-          </div>
-        </td>
-        <td class="txt-ellipsis">
-          <account-link :css="accountLinkCss"
-                        :to-link="`/account/${row.from}/`" :address="row.from.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.from}`.toUpperCase())"/>
-          <div class="txt-center" v-else><span class="txt-ellipsis">MINT</span></div>
-        </td>
-        <td>
-          <div><img src="~@assets/img/ic-arrow-black@3x.png" class="arrow"></div>
-        </td>
-        <td class="txt-ellipsis">
-          <account-link :css="accountLinkCss"
-                        :to-link="`/account/${row.to}/`" :address="row.to.toString()" v-if="!['1111111111111111111111111111111111111111111111111111', 'BURN'].includes(`${row.to}`.toUpperCase())"/>
-          <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
-        </td>
-        <td>
-          <div>
-            <span class="identicon default" v-if="!row.image"></span>
-            <span class="identicon" v-else><img :src="row.image"></span>
+      </td>
+      <td>
+        <div class="tooltipped tooltipped-se tooltipped-align-left-2"
+             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
+        </div>
+      </td>
+      <td class="txt-ellipsis">
+        <account-link :css="accountLinkCss"
+                      :to-link="`/account/${row.from}/`" :address="row.from.toString()"
+                      v-if="!['1111111111111111111111111111111111111111111111111111', 'MINT'].includes(`${row.from}`.toUpperCase())"/>
+        <div class="txt-center" v-else><span class="txt-ellipsis">MINT</span></div>
+      </td>
+      <td>
+        <div><img src="~@assets/img/ic-arrow-black@3x.png" class="arrow"></div>
+      </td>
+      <td class="txt-ellipsis">
+        <account-link :css="accountLinkCss"
+                      :to-link="`/account/${row.to}/`" :address="row.to.toString()"
+                      v-if="!['1111111111111111111111111111111111111111111111111111', 'BURN'].includes(`${row.to}`.toUpperCase())"/>
+        <div class="txt-center" v-else><span class="txt-ellipsis">BURN</span></div>
+      </td>
+      <td>
+        <div>
+          <span class="identicon default" v-if="!row.image"></span>
+          <span class="identicon" v-else><img :src="row.image"></span>
+          <router-link :to="`/token/${row.address}`" class="address">
             {{ `${row.name} (${row.symbol})` }}
-          </div>
-        </td>
-        <td>
-          <div v-html="$options.filters.formatBigNumAmount(row.amount, false, 6, row.decimals)"></div>
-        </td>
-      </template>
-      <pagination
-          slot="pagination"
-          :css="paginationCss"
-          :page="currentPage"
-          :total-items="limitPageTotalCount"
-          :itemsPerPage="itemsPerPage"
-          @onUpdate="changePage"
-          @updateCurrentPage="updateCurrentPage"
-      />
-    </data-table>
+          </router-link>
+        </div>
+      </td>
+      <td>
+        <div v-html="$options.filters.formatBigNumAmount(row.amount, false, 6, row.decimals)"></div>
+      </td>
+    </template>
+    <pagination
+        slot="pagination"
+        :css="paginationCss"
+        :page="currentPage"
+        :total-items="limitPageTotalCount"
+        :itemsPerPage="itemsPerPage"
+        @onUpdate="changePage"
+        @updateCurrentPage="updateCurrentPage"
+    />
+  </data-table>
 </template>
 <script>
 
@@ -132,7 +140,7 @@ export default {
     },
     dataTableCss() {
       return {
-        wrapper : 'tab-content token-transfers' + (this.active ? ' active' : ''),
+        wrapper: 'tab-content token-transfers' + (this.active ? ' active' : ''),
         table: "transactions-table token" + (this.isLoading ? ' is-loading' : ''),
       };
     },
@@ -176,7 +184,7 @@ export default {
     reload: async function (token) {
       this.isLoading = true;
       await this.loadTokenTableData({
-        id: token ? token :  this.hash,
+        id: token ? token : this.hash,
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,

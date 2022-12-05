@@ -121,9 +121,19 @@ const actions = {
     getTransactionReceipt ({ dispatch, state }, { hash }) {
         return dispatch('fetchTransactionReceipt', { hash });
     },
+    getAccountVotes ({ dispatch }, { address }) {
+        return dispatch('fetchGetAccountVotes', { address });
+    },
     async fetchTransactionReceipt ({ }, { hash }) {
         try {
             return await aergo.getTransactionReceipt(hash);
+        } catch (e) {
+            return null;
+        }
+    },
+    async fetchGetAccountVotes ({ }, { address }) {
+        try {
+            return await aergo.getAccountVotes(address);
         } catch (e) {
             return null;
         }

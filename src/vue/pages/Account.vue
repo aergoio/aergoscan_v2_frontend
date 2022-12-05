@@ -261,6 +261,7 @@ export default {
       transactions: [],
       accountDetail: null,
       staking: null,
+      voteHistory: null,
       ownerAddress: null,
       destinationAddress: null,
       transactionTotalItems: 0,
@@ -360,6 +361,7 @@ export default {
       this.ownerAddress = null;
       this.destinationAddress = null;
       this.staking = null;
+      this.voteHistory = null;
       this.accountDetail = null;
       this.contractAbi = null;
       this.names = [];
@@ -422,6 +424,19 @@ export default {
         try {
           const staking = await this.$store.dispatch('blockchain/getStaking', {address});
           this.staking = Object.freeze(staking);
+          console.log("staking", this.staking)
+        } catch (e) {
+          console.error(e);
+          this.isLoadingDetail = false;
+        }
+      })();
+
+      // VoteHistory
+      (async () => {
+        try {
+          const voteHistory = await this.$store.dispatch('blockchain/getAccountVotes', {address});
+          this.voteHistory = Object.freeze(voteHistory);
+          console.log("voteHistory", this.voteHistory)
         } catch (e) {
           console.error(e);
           this.isLoadingDetail = false;
