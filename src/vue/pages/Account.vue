@@ -87,16 +87,26 @@
                       <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
                     </td>
                   </tr>
+<!--                  <tr v-if="staking && staking.when">-->
+<!--                    <th>-->
+<!--                      <div>- Last action</div>-->
+<!--                    </th>-->
+<!--                    <td>-->
+<!--                      <div>-->
+<!--                        <router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">-->
+<!--                          {{ staking.when }}-->
+<!--                        </router-link>-->
+<!--                        (since block)-->
+<!--                      </div>-->
+<!--                    </td>-->
+<!--                  </tr>-->
                   <tr v-if="staking && staking.when">
                     <th>
-                      <div>- Last action</div>
+                      <div>- voting power</div>
                     </th>
                     <td>
-                      <div v-if="staking.when">
-                        <router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">
-                          {{ staking.when }}
-                        </router-link>
-                        (since block)
+                      <div>
+                        {{votingPower}}
                       </div>
                     </td>
                   </tr>
@@ -236,6 +246,8 @@ import {Address} from '@herajs/client';
 import JSBI from 'jsbi';
 import {Amount} from '@herajs/client';
 import Identicon from '@/src/vue/components/Identicon';
+import {toFix} from "@/src/utils/utility";
+import { formatDistance } from 'date-fns'
 import cfg from '@/src/config';
 import Search from "@/src/vue/components/Search";
 import ContractAbi from '@/src/vue/components/ContractAbi';
@@ -246,11 +258,6 @@ import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTa
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable';
 import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable';
 import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable';
-import {toFix} from "@/src/utils/utility";
-
-function formatTokenAmount(amount, unit, decimals) {
-  return `${Amount.moveDecimalPoint(amount, -decimals)}${unit ? ` ${unit}` : ''}`;
-}
 
 export default {
   data() {
@@ -264,6 +271,7 @@ export default {
       voteHistory: null,
       ownerAddress: null,
       destinationAddress: null,
+      accountNextActionTime: null,
       transactionTotalItems: 0,
       tokenTransferTotalItems: 0,
       nftTransferTotalItems: 0,
@@ -303,6 +311,51 @@ export default {
     this.load();
   },
   computed: {
+    totalVotingPower() {
+      try {
+        return this.voteHistory.getVotingList().map(vote =>
+            new Amount(vote.getAmount(), 'aer')
+        ).reduce((a, b) => a.add(b), new Amount(0));
+      } catch(e) {
+        return new Amount(0);
+      }
+    },
+    maximumVotingPower() {
+      // staked balance  * 5
+      if (!this.staking) return new Amount(0)
+
+      return this.staking.amount.mul(5).toUnit('aergo')
+    },
+    nextActionAvailableTime() {
+      if (!this.staking)
+        return ''
+
+      if (this.staking && this.staking.when) {
+        if (this.nextActionAvailable) {
+          return 'now'
+        } else {
+          return `${this.nextActionRelativeString}`
+        }
+      }
+    },
+    votingPower() {
+      console.log("this.totalVotingPower", this.totalVotingPower.toString())
+      console.log("this.totalVotingPower unit change", this.totalVotingPower.toUnit('aergo').toString())
+      console.log("this.maximumVotingPower", this.maximumVotingPower.toString())
+      console.log("this.nextActionAvailableTime", this.nextActionAvailableTime)
+      // return 'total / maximum / time'
+      return `[  ${this.totalVotingPower}  /  ${this.maximumVotingPower}  ] ,   ${this.nextActionAvailableTime}`
+    },
+    nextActionAvailable() {
+      console.log("this.accountNextActionTime", this.accountNextActionTime)
+      return this.accountNextActionTime && this.accountNextActionTime < new Date();
+    },
+    nextActionRelativeString() {
+      if (!this.accountNextActionTime) {
+        return '';
+      }
+      return `(in ${formatDistance(new Date(), this.accountNextActionTime)})`;
+    },
     realAddress() {
       // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.
       return this.destinationAddress || this.$route.params.address;
@@ -374,6 +427,8 @@ export default {
       this.isName = false;
       this.showTokenBalances = false;
       this.tokenPrice = [];
+      this.accountNextActionTime = null;
+
 
       // Check address
       let address;
@@ -424,7 +479,12 @@ export default {
         try {
           const staking = await this.$store.dispatch('blockchain/getStaking', {address});
           this.staking = Object.freeze(staking);
-          console.log("staking", this.staking)
+          if (this.staking && this.staking.when) {
+            await this.$store.dispatch('blockchain/getBlock', {blockNoOrHash: this.staking.when}).then((block) => {
+              console.log("block-", block)
+              this.accountNextActionTime = new Date(block.header.timestamp/1000000 + (60*60*24*1000));
+            });
+          }
         } catch (e) {
           console.error(e);
           this.isLoadingDetail = false;
@@ -436,7 +496,6 @@ export default {
         try {
           const voteHistory = await this.$store.dispatch('blockchain/getAccountVotes', {address});
           this.voteHistory = Object.freeze(voteHistory);
-          console.log("voteHistory", this.voteHistory)
         } catch (e) {
           console.error(e);
           this.isLoadingDetail = false;
@@ -497,8 +556,6 @@ export default {
         }
       })();
 
-      this.isLoadingDetail = false;
-
       // Assigned names
       (async () => {
         try {
@@ -546,27 +603,7 @@ export default {
         }
       })();
 
-      // // Tokens
-      // (async() => {
-      //   const fetch = await this.$fetch.get(`${cfg.API_URL}/accountTokens`, {
-      //     address
-      //   });
-      //   try {
-      //     const response = await fetch.json();
-      //     if (response.error) {
-      //       console.error(response.error);
-      //     }
-      //     if (response.objects) {
-      //       this.accountTokens = response.objects.map(v => ({...v, balance: null}));
-      //       // Token balances
-      //       if (this.$route.query.tx === 'tokenBalances') {
-      //         this.loadTokenBalances();
-      //       }
-      //     }
-      //   } catch (e) {
-      //     console.error(e);
-      //   }
-      // })();
+      this.isLoadingDetail = false;
 
       const loadTokenMetadata = async () => {
         try {

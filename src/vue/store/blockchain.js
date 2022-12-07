@@ -97,6 +97,7 @@ const actions = {
     async fetchBlock ({ commit }, { blockNoOrHash }) {
         const block = Object.freeze(await aergo.getBlock(blockNoOrHash));
         commit('setBlockDetail', { block });
+        console.log('return block', block)
         return block;
     },
     async fetchBlockMetadata ({ }, { blockNoOrHash }) {
