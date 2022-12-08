@@ -339,7 +339,7 @@ export default {
       }
     },
     votingPower() {
-      return `[  ${this.totalVotingPower}  /  ${this.maximumVotingPower}  ] ,   ${this.nextActionAvailableTime}`
+      return `[  ${this.totalVotingPower}  /  ${this.maximumVotingPower}  ] ${this.nextActionAvailableTime}`
     },
     nextActionAvailable() {
       return this.accountNextActionTime && this.accountNextActionTime < new Date();
@@ -348,7 +348,7 @@ export default {
       if (!this.accountNextActionTime) {
         return '';
       }
-      return `( next voting time in ${formatDistance(new Date(), this.accountNextActionTime)})`;
+      return `,   ( next voting time in ${formatDistance(new Date(), this.accountNextActionTime)})`;
     },
     realAddress() {
       // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.
@@ -475,7 +475,6 @@ export default {
           this.staking = Object.freeze(staking);
           if (this.staking && this.staking.when) {
             await this.$store.dispatch('blockchain/getBlock', {blockNoOrHash: this.staking.when}).then((block) => {
-              console.log("block-", block)
               this.accountNextActionTime = new Date(block.header.timestamp/1000000 + (60*60*24*1000));
             });
           }

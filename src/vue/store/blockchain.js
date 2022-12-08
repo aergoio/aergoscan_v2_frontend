@@ -87,7 +87,7 @@ const actions = {
     },
     getBlock ({ dispatch, state }, { blockNoOrHash }) {
         if (state.blocksByHash[blockNoOrHash]) {
-            console.log('return block from cache', blockNoOrHash);
+            // console.log('return block from cache', blockNoOrHash);
             return new Promise((resolve) => {
                 resolve(state.blocksByHash[blockNoOrHash]);
             });
@@ -97,7 +97,7 @@ const actions = {
     async fetchBlock ({ commit }, { blockNoOrHash }) {
         const block = Object.freeze(await aergo.getBlock(blockNoOrHash));
         commit('setBlockDetail', { block });
-        console.log('return block', block)
+        // console.log('return block', block)
         return block;
     },
     async fetchBlockMetadata ({ }, { blockNoOrHash }) {
