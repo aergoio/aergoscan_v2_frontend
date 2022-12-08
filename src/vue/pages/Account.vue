@@ -339,22 +339,16 @@ export default {
       }
     },
     votingPower() {
-      console.log("this.totalVotingPower", this.totalVotingPower.toString())
-      console.log("this.totalVotingPower unit change", this.totalVotingPower.toUnit('aergo').toString())
-      console.log("this.maximumVotingPower", this.maximumVotingPower.toString())
-      console.log("this.nextActionAvailableTime", this.nextActionAvailableTime)
-      // return 'total / maximum / time'
       return `[  ${this.totalVotingPower}  /  ${this.maximumVotingPower}  ] ,   ${this.nextActionAvailableTime}`
     },
     nextActionAvailable() {
-      console.log("this.accountNextActionTime", this.accountNextActionTime)
       return this.accountNextActionTime && this.accountNextActionTime < new Date();
     },
     nextActionRelativeString() {
       if (!this.accountNextActionTime) {
         return '';
       }
-      return `(in ${formatDistance(new Date(), this.accountNextActionTime)})`;
+      return `( next voting time in ${formatDistance(new Date(), this.accountNextActionTime)})`;
     },
     realAddress() {
       // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.

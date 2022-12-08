@@ -146,7 +146,7 @@ export default {
           ...item.meta,
           hash: item.hash,
           rank: (response.from ) + (index + 1),
-          percentage: this.totalSupply ==='0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(),
+          percentage: this.totalSupply ==='0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(3),
           decimals: item.token.meta.decimals,
         }));
         this.totalItems = response.total;
