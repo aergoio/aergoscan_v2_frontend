@@ -48,7 +48,7 @@
                 </td>
                 <td>
                   <account-link :css="accountLinkCss"
-                                :to-link="`/account/${row.reward_account}/`" :address="row.reward_account.toString()"/>
+                                :to-link="`/votes/?highlight=${row.block_producer}`" :address="row.block_producer.toString()"/>
                 </td>
                 <td>
                   <div>{{ row.size }}</div>

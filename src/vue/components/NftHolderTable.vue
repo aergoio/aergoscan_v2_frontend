@@ -28,7 +28,9 @@
           </router-link>
         </div>
       </td>
-      <td><div>{{ row.percentage }}%</div></td>
+      <td>
+        <div>{{ row.percentage }}%</div>
+      </td>
     </template>
     <pagination
         slot="pagination"
@@ -144,8 +146,8 @@ export default {
         this.data = response.hits.map((item, index) => ({
           ...item.meta,
           hash: item.hash,
-          rank: (response.from ) + (index + 1),
-          percentage: this.totalSupply ==='0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(3),
+          rank: (response.from) + (index + 1),
+          percentage: this.totalSupply === '0' ? 0 : this.$options.filters.formatPercentageText(item.meta.balance, this.totalSupply),
         }));
         this.totalItems = response.total;
         this.limitPageTotalCount = response.limitPageCount;
@@ -217,6 +219,7 @@ table.holders-table {
     }
   }
 }
+
 .tab-content.holders {
   .total {
     padding: 5px 0 10px 0;

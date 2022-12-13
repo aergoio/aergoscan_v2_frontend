@@ -33,6 +33,9 @@
     <template slot="list" slot-scope="{row}">
       <td class="txt-ellipsis">
         <div>
+          <span class="identicon" v-if="row.status === 'ERROR'">
+            <img src="~@assets/img/ic-alert-circle-fill.svg">
+          </span>
           <router-link :to="`/transaction/${row.hash}/`" class="address txt-ellipsis">
             {{ row.hash }}
           </router-link>
@@ -62,9 +65,13 @@
               </router-link>
             </template>
             <template v-else>
-              <div v-if="row.category === 'multicall'"> <Identicon size="19" class="identicon-multi"/> </div>
-              <div v-else> <Identicon size="19" class="identicon-new"/> </div>
-              <span class="address">{{row.category === 'multicall' ? 'N/A' : 'Contract Creation'}}</span>
+              <div v-if="row.category === 'multicall'">
+                <Identicon size="19" class="identicon-multi"/>
+              </div>
+              <div v-else>
+                <Identicon size="19" class="identicon-new"/>
+              </div>
+              <span class="address">{{ row.category === 'multicall' ? 'N/A' : 'Contract Creation' }}</span>
             </template>
           </template>
         </div>
@@ -328,6 +335,16 @@ table.transactions-table {
       > div {
         justify-content: end;
       }
+    }
+
+    .identicon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
+      flex: 18px 0 0;
+      margin-right: 4px;
     }
   }
 }

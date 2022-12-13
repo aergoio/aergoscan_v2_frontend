@@ -50,6 +50,9 @@
               <template slot="list" slot-scope="{row}">
                 <td class="txt-ellipsis">
                   <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="row.hash">
+                    <span class="identicon" v-if="row.status === 'ERROR'">
+                      <img src="~@assets/img/ic-alert-circle-fill.svg">
+                    </span>
                     <router-link class="address txt-ellipsis" :to="`/transaction/${row.hash}/`">{{ row.hash }}
                     </router-link>
                   </div>
@@ -242,7 +245,10 @@ export default {
       if (response.error) {
         this.error = response.error.msg;
       } else if (response.hits.length) {
-        this.data = response.hits.map(item => ({...item.meta, hash: item.hash}));
+        this.data = response.hits.map(item => ({
+          ...item.meta,
+          hash: item.hash
+        }));
         this.totalItems = response.total;
         this.limitPageTotalCount = response.limitPageCount;
       } else {
@@ -371,6 +377,16 @@ table.transactions-table {
           justify-content: end;
         }
       }
+    }
+
+    .identicon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
+      flex: 18px 0 0;
+      margin-right: 4px;
     }
   }
 }

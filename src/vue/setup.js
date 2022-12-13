@@ -20,6 +20,7 @@ import {formatToken, formatGenericToken} from '@/src/vue/filters/format-token';
 import {formatNumber} from '@/src/vue/filters/format-number';
 import {formatBigNumAmount} from '@/src/vue/filters/format-amount';
 import {formatEllipsisText} from '@/src/vue/filters/format-truncate-text';
+import {formatPercentageText} from '@/src/vue/filters/format-percentage-text';
 import {changeStringByKeyword} from '@/src/vue/filters/format-replace';
 import {tooltip} from '@/src/vue/directives/tooltip';
 
@@ -45,6 +46,7 @@ export default async function setup(opts) {
     Vue.filter('formatBigNumAmount', formatBigNumAmount);
     Vue.filter('formatEllipsisText', formatEllipsisText);
     Vue.filter('changeStringByKeyword', changeStringByKeyword);
+    Vue.filter('formatPercentageText', formatPercentageText);
 
     const router = new VueRouter({
         routes,
