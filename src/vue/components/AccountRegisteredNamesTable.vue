@@ -96,7 +96,7 @@ table.registered-names-table {
       text-align: center;
 
       > div {
-        justify-content: left;
+        justify-content: center;
       }
     }
 
@@ -107,10 +107,10 @@ table.registered-names-table {
 
   td {
     &:nth-child(4) {
-      text-align: center;
+      text-align: right;
 
       > div {
-        justify-content: center;
+        justify-content: right;
       }
     }
 
