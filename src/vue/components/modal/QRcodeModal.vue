@@ -4,7 +4,7 @@
       <div class="qrcode-wrap">
         <VueQRCodeComponent
             class="qr"
-            :text="JSON.stringify(inputText).padEnd(220)"
+            :text="inputText"
             :size="170">
         </VueQRCodeComponent>
       </div>
@@ -24,10 +24,7 @@ export default {
     address: String,
   },
   async beforeMount() {
-    this.inputText = {
-      type: 'AERGO_REQUEST',
-      address: this.address,
-    };
+    this.inputText = this.address;
   },
   data() {
     return {
