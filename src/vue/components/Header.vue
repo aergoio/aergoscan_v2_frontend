@@ -122,6 +122,9 @@
                             <span class="icon goto"></span>
                           </span>
                 </a>
+                <router-link :to="`/accounts`" class="item">
+                  <span class="text">Top Accounts</span>
+                </router-link>
                 <router-link :to="`/register`" class="item"
                              onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
                   <span class="text">Contract Registration</span>
