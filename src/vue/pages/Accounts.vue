@@ -7,7 +7,7 @@
           <div class="page-content">
             <search/>
             <div class="title">
-              Accounts
+              Top Accounts
               <span class="sub">{{ totalItems }}</span>
               <div
                   class="btn-refresh"
@@ -18,7 +18,7 @@
             <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
               <template slot="desc">
                 <div class="desc">
-                  This page shows the last 20 recently active accounts only(based on transaction data).
+                  Total aergo supply : 500,000,000
                 </div>
               </template>
               <template slot="error" v-if="error">
@@ -33,10 +33,16 @@
               </template>
               <template slot="list" slot-scope="{row}">
                 <td>
+                  <div>{{ row.rank }}</div>
+                </td>
+                <td>
                   <div>
                     <account-link :css="accountLinkCss"
-                                  :to-link="`/account/${row.key}/`" :address="row.key.toString()"/>
+                                  :to-link="`/account/${row.hash}/`" :address="row.hash.toString()"/>
                   </div>
+                </td>
+                <td>
+                  <div v-html="$options.filters.formatBigNumAmount(row.balance)"></div>
                 </td>
                 <td>
                   <div class="tooltipped tooltipped-se tooltipped-align-left-2"
@@ -44,20 +50,24 @@
                     {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </td>
-                <td class="txt-ellipsis">
+                <td>
                   <div>
-                    <router-link class="address txt-ellipsis" :to="`/transaction/${row.hash}/`">{{
-                        row.hash
-                      }}
-                    </router-link>
+                    <router-link :to="`/block/${row.blockno}/`">{{ row.blockno }}</router-link>
                   </div>
                 </td>
                 <td>
-                  <div>
-                    <router-link :to="`/block/${row.max_blockno}/`">{{ row.max_blockno }}</router-link>
-                  </div>
+                  <div>{{ row.percentage }}%</div>
                 </td>
               </template>
+              <pagination
+                  slot="pagination"
+                  :css="paginationCss"
+                  :page="currentPage"
+                  :total-items="limitPageTotalCount"
+                  :itemsPerPage="itemsPerPage"
+                  @onUpdate="changePage"
+                  @updateCurrentPage="updateCurrentPage"
+              />
             </data-table>
           </div>
         </div>
@@ -73,8 +83,6 @@ import cfg from '@/src/config.js';
 import Search from '@/src/vue/components/Search';
 import ReloadButton from '@/src/vue/components/ReloadButton';
 import AccountLink from "@/src/vue/components/AccountLink";
-import TokenTransferTable from '@/src/vue/components/TokenTransferTable';
-import TokenHolderTable from '@/src/vue/components/TokenHolderTable';
 
 export default {
   props: {
@@ -90,7 +98,7 @@ export default {
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'max_blockno'
+      default: 'balance_float'
     },
     sort: {
       type: String,
@@ -102,12 +110,21 @@ export default {
       error: '',
       data: [],
       totalItems: 0,
+      limitPageTotalCount: 0,
       isLoading: false,
       currentPage: this.initialPage,
       accountLinkCss: {
         wrapper: '',
         address: 'address txt-ellipsis',
         icon: 'mini-identicon'
+      },
+      paginationCss: {
+        pagination: "pagination accounts-table",
+        paginationInner: "pagination-inner",
+        moveFirstPage: 'pprev',
+        movePreviousPage: 'prev',
+        moveNextPage: 'next',
+        moveLastPage: 'nnext',
       },
       sortedField: this.sortField,
       sortedDir: this.sort,
@@ -120,10 +137,12 @@ export default {
   computed: {
     headers() {
       return [
-        {text: 'ADDRESS', value: 'address'},
-        {text: 'LAST TX', value: 'last_tx'},
-        {text: 'TX HASH', value: 'tx_hash'},
-        {text: 'BLOCK #', value: 'max_blockno'},
+        {text: 'RANK', value: 'rank'},
+        {text: 'ACCOUNT', value: 'account'},
+        {text: 'BALANCE(AERGO)', value: 'balance'},
+        {text: 'LAST TIME', value: 'last_time'},
+        {text: 'LAST BLOCK', value: 'last_block'},
+        {text: 'PERCENTAGE', value: 'percentage'},
       ]
     },
     dataTableCss() {
@@ -140,7 +159,7 @@ export default {
     loadTableData: async function ({sortField, sort, currentPage, itemsPerPage}) {
       this.error = "";
       const start = (currentPage - 1) * itemsPerPage;
-      const response = await (await this.$fetch.get(`${cfg.API_URL}/accounts`, {
+      const response = await (await this.$fetch.get(`${cfg.API_URL}/accountsBalance`, {
         size: itemsPerPage,
         from: start,
         sort: `${sortField}:${sort}`,
@@ -148,17 +167,20 @@ export default {
       if (response.error) {
         this.error = response.error.msg;
       } else if (response.hits.length) {
-        this.data = response.hits.map(item => (
+        this.data = response.hits.map((item, index) => (
             {
-              ...item.tx,
-              key: item.key,
-              max_blockno: item.max_blockno
+              ...item.meta,
+              hash: item.hash,
+              rank: (response.from) + (index + 1),
+              percentage: this.$options.filters.formatPercentageText(item.meta.balance, '500000000000000000000000000'),
             }
         ));
         this.totalItems = response.total;
+        this.limitPageTotalCount = response.limitPageCount;
       } else {
         this.data = [];
         this.totalItems = 0;
+        this.limitPageTotalCount = 0;
       }
     },
     reload: async function () {
@@ -184,8 +206,6 @@ export default {
     Search,
     ReloadButton,
     AccountLink,
-    TokenHolderTable,
-    TokenTransferTable
   }
 };
 </script>
@@ -248,7 +268,7 @@ table.accounts-table {
 
   td {
     &:last-child {
-      text-align: right;
+      text-align: center;
 
       > div {
         justify-content: end;

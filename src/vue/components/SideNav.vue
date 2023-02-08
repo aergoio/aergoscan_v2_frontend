@@ -111,6 +111,9 @@
                   <span class="icon goto"></span>
                 </span>
             </a>
+            <router-link :to="`/accounts`" class="item">
+              <span class="text">Top Accounts</span>
+            </router-link>
             <router-link :to="`/register`" class="item">
               <span class="text">Contract Registration</span>
             </router-link>
