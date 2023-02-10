@@ -45,18 +45,12 @@
                   <div v-html="$options.filters.formatBigNumAmount(row.balance)"></div>
                 </td>
                 <td>
-                  <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-                       :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
-                    {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
-                  </div>
+                  <div>{{ row.percentage }}%</div>
                 </td>
                 <td>
                   <div>
-                    <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno }}</router-link>
+                    <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno === 0 ? 'genesis' : row.blockno}}</router-link>
                   </div>
-                </td>
-                <td>
-                  <div>{{ row.percentage }}%</div>
                 </td>
               </template>
               <pagination
@@ -140,9 +134,8 @@ export default {
         {text: 'RANK', value: 'rank'},
         {text: 'ACCOUNT', value: 'account'},
         {text: 'BALANCE(AERGO)', value: 'balance'},
-        {text: 'LAST TIME', value: 'last_time'},
-        {text: 'LAST BLOCK', value: 'last_block'},
         {text: 'PERCENTAGE', value: 'percentage'},
+        {text: 'UPDATE BLOCK', value: 'update_block'},
       ]
     },
     dataTableCss() {
