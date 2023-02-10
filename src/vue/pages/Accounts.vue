@@ -52,7 +52,7 @@
                 </td>
                 <td>
                   <div>
-                    <router-link :to="`/block/${row.blockno}/`">{{ row.blockno }}</router-link>
+                    <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno }}</router-link>
                   </div>
                 </td>
                 <td>
