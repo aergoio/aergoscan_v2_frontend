@@ -42,14 +42,20 @@
                   </div>
                 </td>
                 <td>
-                  <div v-html="$options.filters.formatBigNumAmount(row.balance)"></div>
+                  <div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, 18, true)"></div>
                 </td>
                 <td>
                   <div>{{ row.percentage }}%</div>
                 </td>
+<!--                <td>-->
+<!--                  <div>-->
+<!--                    <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno === 0 ? 'genesis' : row.blockno}}</router-link>-->
+<!--                  </div>-->
+<!--                </td>-->
                 <td>
-                  <div>
-                    <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno === 0 ? 'genesis' : row.blockno}}</router-link>
+                  <div class="tooltipped tooltipped-se tooltipped-align-left-2"
+                       :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+                    {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </td>
               </template>
@@ -135,7 +141,7 @@ export default {
         {text: 'ACCOUNT', value: 'account'},
         {text: 'BALANCE(AERGO)', value: 'balance'},
         {text: 'PERCENTAGE', value: 'percentage'},
-        {text: 'UPDATE BLOCK', value: 'update_block'},
+        {text: 'UPDATE TIME', value: 'update_time'},
       ]
     },
     dataTableCss() {

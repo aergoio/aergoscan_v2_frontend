@@ -10,7 +10,7 @@ String.prototype.fillPadEnd = function(width, pad){
     return this.length >= width ? this : this + new Array(width-this.length+1).join(pad);//남는 길이만큼 pad로 뒤를 채움
 }
 
-export  function formatBigNumAmount(amount = "0", isLimitedDecimal = false, decimalPoint = 6, pointPos = 18) {
+export  function formatBigNumAmount(amount = "0", isLimitedDecimal = false, decimalPoint = 6, pointPos = 18, isCommaValue = false) {
     if(amount === "0") return `<span class="aergo">0.000000</span>`;
 
     let strOrgAmt = amount;
@@ -44,6 +44,9 @@ export  function formatBigNumAmount(amount = "0", isLimitedDecimal = false, deci
     // 정수 여부
     if(bigAmount.isInteger()) {
         const arrayFixedAmt = strFixedAmt.split(".");
+        if(isCommaValue) {
+            return arrayFixedAmt[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +`.`+ `<span class="aergo">` + arrayFixedAmt[1] + `</span>`;
+        }
         return arrayFixedAmt[0] +`.`+ `<span class="aergo">` + arrayFixedAmt[1] + `</span>`;
     }
 
@@ -59,11 +62,25 @@ export  function formatBigNumAmount(amount = "0", isLimitedDecimal = false, deci
             }
         }
         if (foundIndex !== calcDecimalPoint) {
+            if(isCommaValue) {
+                return arrayFixedAmt[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +`.` + arrayFixedAmt[1].substr(0, foundIndex) + `<span class="aergo">` + arrayFixedAmt[1].substr(foundIndex, arrayFixedAmt[1].length-foundIndex) + `</span>`
+            }
             return arrayFixedAmt[0] +`.` + arrayFixedAmt[1].substr(0, foundIndex) + `<span class="aergo">` + arrayFixedAmt[1].substr(foundIndex, arrayFixedAmt[1].length-foundIndex) + `</span>`
         }
+
+        if (isCommaValue) {
+            const arrayFixedCommaAmt = strFixedAmt.split(".");
+            return arrayFixedCommaAmt[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+`.` + arrayFixedCommaAmt[1];
+        }
+
         return strFixedAmt;
     }
 
+    if (isCommaValue) {
+        const arrayFixedCommaAmt = strFixedAmt.split(".");
+        return arrayFixedCommaAmt[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+`.` + arrayFixedCommaAmt[1];
+    }
     // console.log(strFixedAmt)
+
     return strFixedAmt;
 }
