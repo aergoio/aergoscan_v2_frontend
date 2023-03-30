@@ -90,6 +90,7 @@ import Search from '@/src/vue/components/Search';
 import AccountLink from "@/src/vue/components/AccountLink";
 import TokenTransferTable from '@/src/vue/components/TokenTransferTable';
 import TokenHolderTable from '@/src/vue/components/TokenHolderTable';
+import {mapState} from "vuex";
 
 export default {
   props: {
@@ -147,6 +148,16 @@ export default {
   beforeDestroy() {
   },
   computed: {
+    ...mapState({
+      chainInfo: state => state.blockchain.chainInfo
+    }),
+    currentChainId() {
+      try {
+        return this.chainInfo.chainid.magic;
+      } catch (e) {
+      }
+      return 'unknown';
+    },
     headers() {
       return [
         {text: 'NAME', value: 'name'},
@@ -177,10 +188,10 @@ export default {
       this.error = "";
       const start = (currentPage - 1) * itemsPerPage;
       console.log("deployment", cfg.DEPLOYMENT)
-
+      console.log("currentChainId", this.currentChainId)
       let jsonQueryData = {};
       if (searchField.length > 0) {
-        jsonQueryData = cfg.DEPLOYMENT === 'alphanet' ? {
+        jsonQueryData = cfg.DEPLOYMENT !== 'mainnet' ? {
           q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC1`,
           search: searchField,
           size: itemsPerPage,
@@ -195,7 +206,7 @@ export default {
           sort: `${sortField}:${sort}`,
         };
       } else {
-        jsonQueryData = cfg.DEPLOYMENT === 'alphanet' ? {
+        jsonQueryData = cfg.DEPLOYMENT !== 'mainnet' ? {
           q: `type:ARC1`,
           size: itemsPerPage,
           from: start,
