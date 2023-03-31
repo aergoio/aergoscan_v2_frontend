@@ -187,42 +187,24 @@ export default {
     loadTableData: async function ({searchField, sortField, sort, currentPage, itemsPerPage}) {
       this.error = "";
       const start = (currentPage - 1) * itemsPerPage;
-      console.log("deployment", cfg.DEPLOYMENT)
-      console.log("currentChainId", this.currentChainId)
-      let jsonQueryData = {};
-      if (searchField.length > 0) {
-        jsonQueryData = cfg.DEPLOYMENT !== 'mainnet' ? {
-          q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC1`,
-          search: searchField,
-          size: itemsPerPage,
-          from: start,
-          sort: `${sortField}:${sort}`,
-        } : {
-          q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC1`,
-          search: searchField,
-          range: 'REG',
-          size: itemsPerPage,
-          from: start,
-          sort: `${sortField}:${sort}`,
-        };
-      } else {
-        jsonQueryData = cfg.DEPLOYMENT !== 'mainnet' ? {
-          q: `type:ARC1`,
-          size: itemsPerPage,
-          from: start,
-          sort: `${sortField}:${sort}`,
-        } : {
-          q: `type:ARC1`,
-          range: 'REG',
-          size: itemsPerPage,
-          from: start,
-          sort: `${sortField}:${sort}`,
-        };
-      }
 
       const response = await (await this.$fetch.get(`${cfg.API_URL}/token`,
-          jsonQueryData
+          searchField.length > 0 ? {
+            q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC1`,
+            search: searchField,
+            range: 'REG',
+            size: itemsPerPage,
+            from: start,
+            sort: `${sortField}:${sort}`,
+          } : {
+            q: `type:ARC1`,
+            range: 'REG',
+            size: itemsPerPage,
+            from: start,
+            sort: `${sortField}:${sort}`,
+          }
       )).json();
+
       if (response.error) {
         this.error = response.error.msg;
       } else if (response.hits.length) {
