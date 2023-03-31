@@ -126,7 +126,7 @@
                   <span class="text">Top Accounts</span>
                 </router-link>
                 <router-link :to="`/register`" class="item"
-                             onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');">
+                             onclick="document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');" v-if="currentChainId === 'aergo.io'">
                   <span class="text">Contract Registration</span>
                 </router-link>
               </div>
@@ -141,6 +141,7 @@
 <script>
 import { isAndroid, isIOS } from 'mobile-device-detect';
 import NetworkSelector from '@/src/vue/components/NetworkSelector';
+import {mapState} from "vuex";
 
 export default {
   name: 'Header',
@@ -159,7 +160,18 @@ export default {
   },
   beforeDestroy() {
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      chainInfo: state => state.blockchain.chainInfo
+    }),
+    currentChainId() {
+      try {
+        return this.chainInfo?.chainid.magic;
+      } catch (e) {
+      }
+      return 'unknown';
+    },
+  },
   methods: {
     gotoStore: function () {
       document.getElementsByClassName('btn-mobile-menu')[0].classList.remove('show');document.getElementsByClassName('mobile-menu')[0].classList.remove('show');

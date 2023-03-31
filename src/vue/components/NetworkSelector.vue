@@ -55,7 +55,6 @@ export default {
         return item.chainid === this.currentChainId
       })
       return connectedNetwork[0].label.toString().toUpperCase();
-      // return this.options[this.currentChainId] && this.options[this.currentChainId].label.toString().toUpperCase()
     },
     options() {
       let options = [];
@@ -68,7 +67,6 @@ export default {
       if (!hasCurrent) {
         options.push({chainid: current, url: '', label: current});
       }
-      console.log(options)
       return options;
     },
     bestBlock() {

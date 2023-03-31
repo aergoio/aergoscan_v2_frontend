@@ -14,7 +14,7 @@ import Search from '../pages/Search.vue';
 import Register from '../pages/Register.vue';
 import Peers from '../pages/Peers.vue';
 
-export default [
+const routes  = [
     { path: '/', component: MainPage },
     { path: '/blocks/', component: Blocks, name: 'blocks' },
     { path: '/block/:blockNoOrHash', component: Block, name: 'block'},
@@ -32,3 +32,5 @@ export default [
     { path: '/search', component: Search, name: 'search' },
     { path: '/peers/', component: Peers, name: 'peers' },
 ];
+
+export default routes

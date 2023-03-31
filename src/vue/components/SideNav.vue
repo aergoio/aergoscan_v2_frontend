@@ -114,7 +114,7 @@
             <router-link :to="`/accounts`" class="item">
               <span class="text">Top Accounts</span>
             </router-link>
-            <router-link :to="`/register`" class="item">
+            <router-link :to="`/register`" class="item" v-if="currentChainId === 'aergo.io'">
               <span class="text">Contract Registration</span>
             </router-link>
           </div>
@@ -137,6 +137,7 @@
 
 <script>
 import { isAndroid, isIOS } from 'mobile-device-detect';
+import {mapState} from "vuex";
 
 export default {
   name: 'SideNavigation',
@@ -147,7 +148,18 @@ export default {
   },
   beforeDestroy() {
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      chainInfo: state => state.blockchain.chainInfo
+    }),
+    currentChainId() {
+      try {
+        return this.chainInfo?.chainid.magic;
+      } catch (e) {
+      }
+      return 'unknown';
+    },
+  },
   methods: {
     gotoStore: function () {
       if(isAndroid) {
