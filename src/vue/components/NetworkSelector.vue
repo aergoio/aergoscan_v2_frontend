@@ -1,7 +1,7 @@
 <template>
   <div class="select-box">
     <div class="selected-item" onclick="document.getElementsByClassName('select-box')[0].classList.add('show')">
-      <span class="status" v-bind:style="styleObject"></span>{{ NETWORKS[currentChainId] && NETWORKS[currentChainId].label.toString().toUpperCase() }}
+      <span class="status" v-bind:style="styleObject"></span>{{ displayNetworkLabel }}
     </div>
     <div class="list" onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')">
       <div class="item" v-for="option in options" :key="option.chainid"
@@ -45,10 +45,17 @@ export default {
     }),
     currentChainId() {
       try {
-        return this.chainInfo.chainid.magic;
+        return this.chainInfo?.chainid.magic;
       } catch (e) {
       }
       return 'unknown';
+    },
+    displayNetworkLabel() {
+      const connectedNetwork = (this.options).filter((item)=>{
+        return item.chainid === this.currentChainId
+      })
+      return connectedNetwork[0].label.toString().toUpperCase();
+      // return this.options[this.currentChainId] && this.options[this.currentChainId].label.toString().toUpperCase()
     },
     options() {
       let options = [];
@@ -61,6 +68,7 @@ export default {
       if (!hasCurrent) {
         options.push({chainid: current, url: '', label: current});
       }
+      console.log(options)
       return options;
     },
     bestBlock() {
