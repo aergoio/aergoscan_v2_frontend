@@ -20,6 +20,6 @@ if (process.env.AERGO_URL) {
 module.exports = {
     DEPLOYMENT: JSON.stringify('mainnet'),
     NODE_ENV: JSON.stringify('production'),
-    API_URL: JSON.stringify(`${BACKEND_URL}/mainnet/v2`),
+    API_URL: JSON.stringify(`${BACKEND_URL}/v2`),
     AERGO_URL: JSON.stringify(`${AERGO_URL}`),
 }
