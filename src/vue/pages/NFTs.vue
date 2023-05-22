@@ -175,8 +175,8 @@ export default {
       const start = (currentPage - 1) * itemsPerPage;
       const response = await (await this.$fetch.get(`${cfg.API_URL}/nft`,
           searchField.length > 0 ? {
-            q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC2`,
-            search:searchField,
+            q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC2`,
+            search:searchField.toLowerCase(),
             range:'REG',
             size: itemsPerPage,
             from: start,

@@ -190,8 +190,8 @@ export default {
 
       const response = await (await this.$fetch.get(`${cfg.API_URL}/token`,
           searchField.length > 0 ? {
-            q: `(name:*${searchField}* OR symbol:*${searchField}*) AND type:ARC1`,
-            search: searchField,
+            q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC1`,
+            search: searchField.toLowerCase(),
             range: 'REG',
             size: itemsPerPage,
             from: start,

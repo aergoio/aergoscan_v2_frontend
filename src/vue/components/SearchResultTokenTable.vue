@@ -130,8 +130,8 @@ export default {
       const start = (currentPage - 1) * itemsPerPage;
       const response = await (await this.$fetch.get(`${cfg.API_URL}/token`,
           keyword.length > 0 ? {
-            q: `(name:*${keyword}* OR symbol:*${keyword}*) AND type:ARC1`,
-            search: keyword,
+            q: `(name_lower:*${keyword.toLowerCase()}* OR symbol_lower:*${keyword.toLowerCase()}*) AND type:ARC1`,
+            search: keyword.toLowerCase(),
             range: 'ALL',
             size: itemsPerPage,
             from: start,

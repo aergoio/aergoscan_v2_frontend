@@ -35,11 +35,11 @@ Development build with different AERGO node:
 AERGO_NODE=https://testnet-api-http.aergo.io yarn dev
 
 # main net
-AERGO_NODE=https://mainnet-api-http.aergo.io API_URL=https://api2-mainnet.aergoscan.io/mainnet/v2 yarn dev
+AERGO_NODE=https://mainnet-api-http.aergo.io API_URL=https://api2-mainnet.aergoscan.io/v2 yarn dev
 
 # test net
-AERGO_NODE=https://testnet-api-http.aergo.io API_URL=https://api2-testnet.aergoscan.io/testnet/v2 yarn dev
+AERGO_NODE=https://testnet-api-http.aergo.io API_URL=https://api2-testnet.aergoscan.io/v2 yarn dev
 
 # alpha net
-AERGO_NODE=https://alpha-api-http.aergo.io API_URL=https://api2-alpha.aergoscan.io/alpha/v2 yarn dev
+AERGO_NODE=https://alpha-api-http.aergo.io API_URL=https://api2-alpha.aergoscan.io/v2 yarn dev
 ```
