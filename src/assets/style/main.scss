@@ -802,6 +802,9 @@ img {
       }
 
       th {
+        div {
+          white-space: nowrap;
+        }
         @media screen and (max-width: 480px) {
           padding-right: 45px;
 
