@@ -101,9 +101,7 @@
                         </th>
                         <td>
                           <div>
-                            {{
-                              blockDetail.txcount | formatNumber('&#8239;')
-                            }}
+                            {{ blockDetail.txcount | formatNumber('&#8239;') }}
                             TXs
                           </div>
                         </td>
@@ -114,9 +112,7 @@
                         </th>
                         <td>
                           <div>
-                            {{
-                              blockDetail.size | formatNumber('&#8239;')
-                            }}
+                            {{ blockDetail.size | formatNumber('&#8239;') }}
                             bytes
                           </div>
                         </td>
@@ -389,7 +385,6 @@ export default {
   }
 
   .h-scroll {
-    overflow-x: auto;
     height: 100%;
   }
 

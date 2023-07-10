@@ -437,7 +437,6 @@ export default {
   }
 
   .h-scroll {
-    overflow-x: auto;
     height: 100%;
   }
 
