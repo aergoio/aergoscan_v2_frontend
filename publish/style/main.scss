@@ -1081,6 +1081,13 @@ img {
       color: #3c3b3e;
       border-bottom: 1px solid #f2f2f2;
 
+      a {
+        overflow-x: hidden;
+        max-width: 140px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       @media screen and (max-width: 480px) {
         height: 54px;
         font-size: 14px;
