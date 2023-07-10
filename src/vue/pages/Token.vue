@@ -1,11 +1,11 @@
 <template>
   <div class="wrap">
     <div id="category" class="token-details">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="title">
               Token
               <span class="sub-2">ARC-1</span>
@@ -17,59 +17,72 @@
                 <div class="error" v-if="error">
                   {{ error }}
                 </div>
-                <table class="token-detail" :class="(!txMeta && !error) && 'loading'">
+                <table
+                  class="token-detail"
+                  :class="!txMeta && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!txMeta && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <template v-if="txMeta">
-                    <tr>
-                      <th>
-                        <div>Name</div>
-                      </th>
-                      <td>
-                        <div>{{ txMeta.name }}</div>
-                      </td>
+                    <tr class="hidden loading" v-if="!txMeta && !error">
+                      <td colspan="100%">Loading...</td>
                     </tr>
-                    <tr>
-                      <th>
-                        <div>Symbol</div>
-                      </th>
-                      <td>
-                        <div>{{ txMeta.symbol }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Created in transaction</div>
-                      </th>
-                      <td>
-                        <div>
-                          <router-link class="hash-block" :to="`/transaction/${txMeta.tx_id}/`">
-                            {{ txMeta.tx_id }}
-                          </router-link>
-                          <copy-link-button :message="txMeta.tx_id"/>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Contract address</div>
-                      </th>
-                      <td>
-                        <div v-if="$route.params.hash">
-                          <router-link class="prev-block" :to="`/account/${$route.params.hash}/`">
-                            <Identicon :text="$route.params.hash" size="17" class="mini-identicon"/>
-                            {{ $route.params.hash }}
-                          </router-link>
-                          <copy-link-button :message="$route.params.hash"/>
-                        </div>
-                      </td>
-                    </tr>
-                  </template>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txMeta">
+                      <tr>
+                        <th>
+                          <div>Name</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.name }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Symbol</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.symbol }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Created in transaction</div>
+                        </th>
+                        <td>
+                          <div>
+                            <router-link
+                              class="hash-block"
+                              :to="`/transaction/${txMeta.tx_id}/`"
+                            >
+                              {{ txMeta.tx_id }}
+                            </router-link>
+                            <copy-link-button :message="txMeta.tx_id" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Contract address</div>
+                        </th>
+                        <td>
+                          <div v-if="$route.params.hash">
+                            <router-link
+                              class="prev-block"
+                              :to="`/account/${$route.params.hash}/`"
+                            >
+                              <Identicon
+                                :text="$route.params.hash"
+                                size="17"
+                                class="mini-identicon"
+                              />
+                              {{ $route.params.hash }}
+                            </router-link>
+                            <copy-link-button :message="$route.params.hash" />
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -77,48 +90,64 @@
                 <div class="error detail-2" v-if="error">
                   {{ error }}
                 </div>
-                <table class="token-detail detail-2" :class="(!txMeta && !error) && 'loading'">
+                <table
+                  class="token-detail detail-2"
+                  :class="!txMeta && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!txMeta && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <template v-if="txMeta">
-                    <tr>
-                      <th>
-                        <div>Total Supply</div>
-                      </th>
-                      <td>
-                        <div v-html="$options.filters.formatBigNumAmount(txMeta.supply, true, 6, txMeta.decimals)"></div>
-                      </td>
+                    <tr class="hidden loading" v-if="!txMeta && !error">
+                      <td colspan="100%">Loading...</td>
                     </tr>
-                    <tr>
-                      <th>
-                        <div>Total Transfers</div>
-                      </th>
-                      <td>
-                        <div>{{ txMeta.total_transfer }} Transfers</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Decimals</div>
-                      </th>
-                      <td>
-                        <div>{{ txMeta.decimals }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Official Site</div>
-                      </th>
-                      <td>
-                        <div><a :href="txMeta.url" target="_blank">{{ txMeta.url }}</a></div>
-                      </td>
-                    </tr>
-                  </template>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txMeta">
+                      <tr>
+                        <th>
+                          <div>Total Supply</div>
+                        </th>
+                        <td>
+                          <div
+                            v-html="
+                              $options.filters.formatBigNumAmount(
+                                txMeta.supply,
+                                true,
+                                6,
+                                txMeta.decimals
+                              )
+                            "
+                          ></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Total Transfers</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.total_transfer }} Transfers</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Decimals</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.decimals }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Official Site</div>
+                        </th>
+                        <td>
+                          <div>
+                            <a :href="txMeta.url" target="_blank">{{
+                              txMeta.url
+                            }}</a>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -128,42 +157,66 @@
                 <div class="table-tab-header">
                   <div class="h-scroll">
                     <div class="tab-header">
-                      <router-link class="title token-transfers router-link-exact-active"
-                         :to="{ query: { ...$route.query, tx: 'token' } }" replace v-if="!$route.query.tx">
-                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTxTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers router-link-exact-active"
+                        :to="{ query: { ...$route.query, tx: 'token' } }"
+                        replace
+                        v-if="!$route.query.tx"
+                      >
+                        <span class="main">Token Transfers</span
+                        ><span class="sub">{{ tokenTxTotalItems }}</span>
                       </router-link>
-                      <router-link class="title token-transfers"
-                                   :to="{ query: { ...$route.query, tx: 'token' } }" replace v-else>
-                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTxTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers"
+                        :to="{ query: { ...$route.query, tx: 'token' } }"
+                        replace
+                        v-else
+                      >
+                        <span class="main">Token Transfers</span
+                        ><span class="sub">{{ tokenTxTotalItems }}</span>
                       </router-link>
-                      <router-link class="title holders" :to="{ query: { ...$route.query, tx: 'holder' } }" replace>
-                        <span class="main">Holders</span><span class="sub">{{ holderTotalItems }}</span>
+                      <router-link
+                        class="title holders"
+                        :to="{ query: { ...$route.query, tx: 'holder' } }"
+                        replace
+                      >
+                        <span class="main">Holders</span
+                        ><span class="sub">{{ holderTotalItems }}</span>
                       </router-link>
                     </div>
                   </div>
                 </div>
-                <div class="table-tab-content"  v-if="$route.params.hash">
-                  <token-transfer-table :hash="$route.params.hash" :active="!$route.query.tx || $route.query.tx === 'token'"
-                                           @onUpdateTotalCount="updateTokenTxTotalCount"/>
-                  <token-holder-table :hash="$route.params.hash" :active="$route.query.tx === 'holder'" :total-supply="txMeta.supply" :total-decimals="txMeta.decimals"
-                                         @onUpdateTotalCount="updateHolderTotalCount"  v-if="txMeta.supply"/>
+                <div class="table-tab-content" v-if="$route.params.hash">
+                  <token-transfer-table
+                    :hash="$route.params.hash"
+                    :active="!$route.query.tx || $route.query.tx === 'token'"
+                    @onUpdateTotalCount="updateTokenTxTotalCount"
+                  />
+                  <token-holder-table
+                    :hash="$route.params.hash"
+                    :active="$route.query.tx === 'holder'"
+                    :total-supply="txMeta.supply"
+                    :total-decimals="txMeta.decimals"
+                    @onUpdateTotalCount="updateHolderTotalCount"
+                    v-if="txMeta.supply"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import cfg from '@/src/config.js';
-import Search from '@/src/vue/components/Search';
-import Identicon from '@/src/vue/components/Identicon';
-import TokenTransferTable from '@/src/vue/components/TokenTransferTable';
-import TokenHolderTable from '@/src/vue/components/TokenHolderTable';
+import cfg from '@/src/config.js'
+import Search from '@/src/vue/components/Search'
+import Identicon from '@/src/vue/components/Identicon'
+import TokenTransferTable from '@/src/vue/components/TokenTransferTable'
+import TokenHolderTable from '@/src/vue/components/TokenHolderTable'
 
 export default {
   data() {
@@ -174,34 +227,32 @@ export default {
       holderTotalItems: 0,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   watch: {
-    '$route'(to, from) {
-      this.load();
+    $route(to, from) {
+      this.load()
     },
   },
   mounted() {
-    this.load();
+    this.load()
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     query(newQuery) {
-      return {...this.$route.query, ...newQuery};
+      return { ...this.$route.query, ...newQuery }
     },
     async load() {
-      this.error = null;
-      let hash = this.$route.params.hash;
-      (async () => {
-        const response = await (await this.$fetch.get(`${cfg.API_URL}/token`, {q: `_id:${hash}`})).json();
+      this.error = null
+      let hash = this.$route.params.hash
+      ;(async () => {
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/token`, { q: `_id:${hash}` })
+        ).json()
         if (response.hits.length) {
-          this.txMeta = response.hits[0].meta;
+          this.txMeta = response.hits[0].meta
         }
-      })();
-
+      })()
     },
     updateTokenTxTotalCount(count) {
       this.tokenTxTotalItems = count
@@ -214,9 +265,9 @@ export default {
     Search,
     Identicon,
     TokenHolderTable,
-    TokenTransferTable
-  }
-};
+    TokenTransferTable,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -275,6 +326,7 @@ export default {
   }
 
   .h-scroll {
+    overflow-x: auto;
     height: 100%;
   }
 

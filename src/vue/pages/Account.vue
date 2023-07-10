@@ -1,22 +1,34 @@
 <template>
   <div class="wrap">
     <div id="category" class="account">
-      <Header/>
+      <Header />
       <div class="category-inner">
-        <qrcode-modal :address="realAddress" @onClose="onCloseQrcode" v-if="isShowQRcode"/>
+        <qrcode-modal
+          :address="realAddress"
+          @onClose="onCloseQrcode"
+          v-if="isShowQRcode"
+        />
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="title">{{ title }}</div>
             <div class="detail-box account">
               <div class="address">
                 <div class="item">
-                      <span class="item-inner">
-                        <Identicon :text="realAddress" size="17" class="mini-identicon"/>
-                        {{ $route.params.address }}
-                      </span>
-                  <copy-link-button :message="realAddress"/>
-                  <qrcode-button :address="realAddress" @onQrcode="onShowQrcode" v-if="!isName"/>
+                  <span class="item-inner">
+                    <Identicon
+                      :text="realAddress"
+                      size="17"
+                      class="mini-identicon"
+                    />
+                    {{ $route.params.address }}
+                  </span>
+                  <copy-link-button :message="realAddress" />
+                  <qrcode-button
+                    :address="realAddress"
+                    @onQrcode="onShowQrcode"
+                    v-if="!isName"
+                  />
                 </div>
               </div>
               <div class="table-wrap">
@@ -25,131 +37,180 @@
                 </div>
                 <table class="account" v-else>
                   <tbody v-if="accountDetail">
-                  <!--                  <tr class="hidden loading">-->
-                  <!--                    <td colspan="100%">Loading...</td>-->
-                  <!--                  </tr>-->
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <tr v-if="destinationAddress">
-                    <th>
-                      <div>Alias for</div>
-                    </th>
-                    <td>
-                      <div>
-                        <router-link :to="`/account/${destinationAddress}/`" class="alias-account">
-                          <Identicon :text="destinationAddress" size="17" class="mini-identicon"/>
-                          {{ destinationAddress }}
-                        </router-link>
-                        <CopyLinkButton :message="destinationAddress"/>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr v-if="ownerAddress && ownerAddress != destinationAddress">
-                    <th>
-                      <div>Name owned by</div>
-                    </th>
-                    <td>
-                      <div>
-                        <router-link :to="`/account/${ownerAddress}/`" class="owned-account">
-                          <Identicon :text="ownerAddress" size="17" class="mini-identicon"/>
-                          {{ ownerAddress }}
-                        </router-link>
-                        <CopyLinkButton :message="ownerAddress"/>
-                      </div>
-                    </td>
-                  </tr>
+                    <!--                  <tr class="hidden loading">-->
+                    <!--                    <td colspan="100%">Loading...</td>-->
+                    <!--                  </tr>-->
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <tr v-if="destinationAddress">
+                      <th>
+                        <div>Alias for</div>
+                      </th>
+                      <td>
+                        <div>
+                          <router-link
+                            :to="`/account/${destinationAddress}/`"
+                            class="alias-account"
+                          >
+                            <Identicon
+                              :text="destinationAddress"
+                              size="17"
+                              class="mini-identicon"
+                            />
+                            {{ destinationAddress }}
+                          </router-link>
+                          <CopyLinkButton :message="destinationAddress" />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr
+                      v-if="ownerAddress && ownerAddress != destinationAddress"
+                    >
+                      <th>
+                        <div>Name owned by</div>
+                      </th>
+                      <td>
+                        <div>
+                          <router-link
+                            :to="`/account/${ownerAddress}/`"
+                            class="owned-account"
+                          >
+                            <Identicon
+                              :text="ownerAddress"
+                              size="17"
+                              class="mini-identicon"
+                            />
+                            {{ ownerAddress }}
+                          </router-link>
+                          <CopyLinkButton :message="ownerAddress" />
+                        </div>
+                      </td>
+                    </tr>
 
-                  <tr>
-                    <th>
-                      <div>Balance</div>
-                    </th>
-                    <td>
-                      <div>
-                        <div v-html="$options.filters.formatToken(fullBalance, 'aergo')"></div>
-                        <span>{{ ` (${getUsdPriceByAergo} $)` }}</span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr v-if="staking">
-                    <th>
-                      <div>- Staked amount</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(staking.amount, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr v-if="staking">
-                    <th>
-                      <div>- Unstaked amount</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(unstakedBalance, 'aergo')"></div>
-                    </td>
-                  </tr>
-<!--                  <tr v-if="staking && staking.when">-->
-<!--                    <th>-->
-<!--                      <div>- Last action</div>-->
-<!--                    </th>-->
-<!--                    <td>-->
-<!--                      <div>-->
-<!--                        <router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">-->
-<!--                          {{ staking.when }}-->
-<!--                        </router-link>-->
-<!--                        (since block)-->
-<!--                      </div>-->
-<!--                    </td>-->
-<!--                  </tr>-->
-                  <tr v-if="staking && staking.when">
-                    <th>
-                      <div>- voting power</div>
-                    </th>
-                    <td>
-                      <div>
-                        {{votingPower}}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Nonce</div>
-                    </th>
-                    <td>
-                      <div>{{ accountDetail.nonce }}</div>
-                    </td>
-                  </tr>
-                  <tr v-for="item in getContractTx" v-if="getIsContractAccount">
-                    <th>
-                      <div>Contract Creator</div>
-                    </th>
-                    <td>
-                      <!--                      <div v-if="item.creator">-->
-                      <!--                        <router-link class="creator-block" :to="`/account/${item.creator}/`">-->
-                      <!--                          <Identicon :text="item.creator" size="17" class="mini-identicon"/>-->
-                      <!--                          {{ item.creator }}-->
-                      <!--                        </router-link>-->
-                      <!--                      </div>-->
-                      <!--                      at Tx-->
-                      <!--                      <div v-if="item.txId">-->
-                      <!--                        <router-link class="tx-block" :to="`/transaction/${item.txId}/`">-->
-                      <!--                          {{ item.txId }}-->
-                      <!--                        </router-link>-->
-                      <!--                      </div>-->
-                      <div class="from-to">
-                        <router-link class="address contract-creator" :to="`/account/${item.creator}/`"
-                                     v-if="item.creator">
-                          <Identicon :text="item.creator" size="18" class="mini-identicon"/>
-                          {{ item.creator }}
-                        </router-link>
-                        <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
-                        <router-link class="address contract-creator"
-                                     v-if="item.txId"
-                                     :to="`/transaction/${item.txId}/`">
-                          {{ item.txId }}
-                        </router-link>
-                      </div>
-                    </td>
-                  </tr>
+                    <tr>
+                      <th>
+                        <div>Balance</div>
+                      </th>
+                      <td>
+                        <div>
+                          <div
+                            v-html="
+                              $options.filters.formatToken(fullBalance, 'aergo')
+                            "
+                          ></div>
+                          <span>{{ ` (${getUsdPriceByAergo} $)` }}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-if="staking">
+                      <th>
+                        <div>Staked amount</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              staking.amount,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr v-if="staking">
+                      <th>
+                        <div>Unstaked amount</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              unstakedBalance,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <!--                  <tr v-if="staking && staking.when">-->
+                    <!--                    <th>-->
+                    <!--                      <div>- Last action</div>-->
+                    <!--                    </th>-->
+                    <!--                    <td>-->
+                    <!--                      <div>-->
+                    <!--                        <router-link style="text-decoration: underline" :to="`/block/${staking.when}/`">-->
+                    <!--                          {{ staking.when }}-->
+                    <!--                        </router-link>-->
+                    <!--                        (since block)-->
+                    <!--                      </div>-->
+                    <!--                    </td>-->
+                    <!--                  </tr>-->
+                    <tr v-if="staking && staking.when">
+                      <th>
+                        <div>- voting power</div>
+                      </th>
+                      <td>
+                        <div>
+                          {{ votingPower }}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Nonce</div>
+                      </th>
+                      <td>
+                        <div>{{ accountDetail.nonce }}</div>
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="item in getContractTx"
+                      v-if="getIsContractAccount"
+                    >
+                      <th>
+                        <div>Contract Creator</div>
+                      </th>
+                      <td>
+                        <!--                      <div v-if="item.creator">-->
+                        <!--                        <router-link class="creator-block" :to="`/account/${item.creator}/`">-->
+                        <!--                          <Identicon :text="item.creator" size="17" class="mini-identicon"/>-->
+                        <!--                          {{ item.creator }}-->
+                        <!--                        </router-link>-->
+                        <!--                      </div>-->
+                        <!--                      at Tx-->
+                        <!--                      <div v-if="item.txId">-->
+                        <!--                        <router-link class="tx-block" :to="`/transaction/${item.txId}/`">-->
+                        <!--                          {{ item.txId }}-->
+                        <!--                        </router-link>-->
+                        <!--                      </div>-->
+                        <div class="from-to">
+                          <router-link
+                            class="address contract-creator"
+                            :to="`/account/${item.creator}/`"
+                            v-if="item.creator"
+                          >
+                            <Identicon
+                              :text="item.creator"
+                              size="18"
+                              class="mini-identicon"
+                            />
+                            {{ item.creator }}
+                          </router-link>
+                          <img
+                            src="~@assets/img/ic-arrow-black@3x.png"
+                            class="arrow"
+                          />
+                          <router-link
+                            class="address contract-creator"
+                            v-if="item.txId"
+                            :to="`/transaction/${item.txId}/`"
+                          >
+                            {{ item.txId }}
+                          </router-link>
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -159,105 +220,171 @@
                 <div class="table-tab-header">
                   <div class="h-scroll">
                     <div class="tab-header">
-                      <router-link class="title transactions router-link-exact-active"
-                                   :to="{ query: { ...$route.query, tx: 'transactions' } }" replace
-                                   v-if="!$route.query.tx">
-                        <span class="main">Transactions</span><span class="sub">{{ transactionTotalItems }}</span>
+                      <router-link
+                        class="title transactions router-link-exact-active"
+                        :to="{ query: { ...$route.query, tx: 'transactions' } }"
+                        replace
+                        v-if="!$route.query.tx"
+                      >
+                        <span class="main">Transactions</span
+                        ><span class="sub">{{ transactionTotalItems }}</span>
                       </router-link>
-                      <router-link class="title token-transfers"
-                                   :to="{ query: { ...$route.query, tx: 'transactions' } }" replace v-else>
-                        <span class="main">Transactions</span><span class="sub">{{ transactionTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers"
+                        :to="{ query: { ...$route.query, tx: 'transactions' } }"
+                        replace
+                        v-else
+                      >
+                        <span class="main">Transactions</span
+                        ><span class="sub">{{ transactionTotalItems }}</span>
                       </router-link>
-                      <router-link class="title token-transfers"
-                                   :to="{ query: { ...$route.query, tx: 'tokenTransfer' } }" replace>
-                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTransferTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers"
+                        :to="{
+                          query: { ...$route.query, tx: 'tokenTransfer' },
+                        }"
+                        replace
+                      >
+                        <span class="main">Token Transfers</span
+                        ><span class="sub">{{ tokenTransferTotalItems }}</span>
                       </router-link>
-                      <router-link class="title nft-transfers" :to="{ query: { ...$route.query, tx: 'nftTransfer' } }"
-                                   replace>
-                        <span class="main">NFT Transfers</span><span class="sub">{{ nftTransferTotalItems }}</span>
+                      <router-link
+                        class="title nft-transfers"
+                        :to="{ query: { ...$route.query, tx: 'nftTransfer' } }"
+                        replace
+                      >
+                        <span class="main">NFT Transfers</span
+                        ><span class="sub">{{ nftTransferTotalItems }}</span>
                       </router-link>
-                      <router-link class="title token-balance" :to="{ query: { ...$route.query, tx: 'tokenBalance' } }"
-                                   replace>
-                        <span class="main">Token Balance</span><span class="sub">{{ tokenBalanceTotalItems }}</span>
+                      <router-link
+                        class="title token-balance"
+                        :to="{ query: { ...$route.query, tx: 'tokenBalance' } }"
+                        replace
+                      >
+                        <span class="main">Token Balance</span
+                        ><span class="sub">{{ tokenBalanceTotalItems }}</span>
                       </router-link>
-                      <router-link class="title nft-inventory" :to="{ query: { ...$route.query, tx: 'nftInventory' } }"
-                                   replace>
-                        <span class="main">NFT Inventory</span><span class="sub">{{ nftInventoryTotalItems }}</span>
+                      <router-link
+                        class="title nft-inventory"
+                        :to="{ query: { ...$route.query, tx: 'nftInventory' } }"
+                        replace
+                      >
+                        <span class="main">NFT Inventory</span
+                        ><span class="sub">{{ nftInventoryTotalItems }}</span>
                       </router-link>
-                      <router-link class="title registered-names"
-                                   :to="{ query: { ...$route.query, tx: 'registeredNames' } }"
-                                   replace v-if="namesCurrent.length">
-                        <span class="main">Registered Names</span><span class="sub">{{
-                          namesCurrent.length
-                        }}</span>
+                      <router-link
+                        class="title registered-names"
+                        :to="{
+                          query: { ...$route.query, tx: 'registeredNames' },
+                        }"
+                        replace
+                        v-if="namesCurrent.length"
+                      >
+                        <span class="main">Registered Names</span
+                        ><span class="sub">{{ namesCurrent.length }}</span>
                       </router-link>
-                      <router-link class="title name-history" :to="{ query: { ...$route.query, tx: 'nameHistory' } }"
-                                   replace v-if="nameHistory.length">
-                        <span class="main">Name History</span><span class="sub">{{ nameHistory.length }}</span>
+                      <router-link
+                        class="title name-history"
+                        :to="{ query: { ...$route.query, tx: 'nameHistory' } }"
+                        replace
+                        v-if="nameHistory.length"
+                      >
+                        <span class="main">Name History</span
+                        ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
                     </div>
                   </div>
                 </div>
                 <div class="table-tab-content" v-if="realAddress">
-                  <account-transaction-table ref="accountTransactionTable" :address="realAddress"
-                                             :active="!$route.query.tx || $route.query.tx === 'transactions'"
-                                             @onUpdateTotalCount="updateTransactionTotalCount"/>
-                  <account-token-transfer-table ref="accountTokenTransferTable" :address="realAddress"
-                                                :filteredTokens="filteredTokens"
-                                                :active="$route.query.tx === 'tokenTransfer'"
-                                                @onUpdateTotalCount="updateTokenTransactionTotalCount"/>
-                  <account-nft-transfer-table ref="accountNftTransferTable" :address="realAddress"
-                                              :filteredNfts="filteredNfts"
-                                              :active="$route.query.tx === 'nftTransfer'"
-                                              @onUpdateTotalCount="updateNftTransferTotalCount"/>
-                  <account-token-balance-table ref="accountTokenBalanceTable" :address="realAddress"
-                                               :active="$route.query.tx === 'tokenBalance'"
-                                               @onUpdateTotalCount="updateTokenBalanceTotalCount"/>
-                  <account-nft-inventory-table ref="accountNftInventoryTable" :address="realAddress"
-                                               :active="$route.query.tx === 'nftInventory'"
-                                               @onUpdateTotalCount="updateNftInventoryTotalCount"/>
-                  <account-registered-names-table ref="accountRegisteredNamesTable" :address="realAddress"
-                                                  :active="$route.query.tx === 'registeredNames'"
-                                                  :nameCurrent="namesCurrent"
-                                                  v-if="namesCurrent.length"/>
-                  <account-name-history-table ref="accountNameHistoryTable" :address="realAddress"
-                                              :active="$route.query.tx === 'nameHistory'"
-                                              :nameHistory="nameHistory"
-                                              v-if="nameHistory.length"/>
+                  <account-transaction-table
+                    ref="accountTransactionTable"
+                    :address="realAddress"
+                    :active="
+                      !$route.query.tx || $route.query.tx === 'transactions'
+                    "
+                    @onUpdateTotalCount="updateTransactionTotalCount"
+                  />
+                  <account-token-transfer-table
+                    ref="accountTokenTransferTable"
+                    :address="realAddress"
+                    :filteredTokens="filteredTokens"
+                    :active="$route.query.tx === 'tokenTransfer'"
+                    @onUpdateTotalCount="updateTokenTransactionTotalCount"
+                  />
+                  <account-nft-transfer-table
+                    ref="accountNftTransferTable"
+                    :address="realAddress"
+                    :filteredNfts="filteredNfts"
+                    :active="$route.query.tx === 'nftTransfer'"
+                    @onUpdateTotalCount="updateNftTransferTotalCount"
+                  />
+                  <account-token-balance-table
+                    ref="accountTokenBalanceTable"
+                    :address="realAddress"
+                    :active="$route.query.tx === 'tokenBalance'"
+                    @onUpdateTotalCount="updateTokenBalanceTotalCount"
+                  />
+                  <account-nft-inventory-table
+                    ref="accountNftInventoryTable"
+                    :address="realAddress"
+                    :active="$route.query.tx === 'nftInventory'"
+                    @onUpdateTotalCount="updateNftInventoryTotalCount"
+                  />
+                  <account-registered-names-table
+                    ref="accountRegisteredNamesTable"
+                    :address="realAddress"
+                    :active="$route.query.tx === 'registeredNames'"
+                    :nameCurrent="namesCurrent"
+                    v-if="namesCurrent.length"
+                  />
+                  <account-name-history-table
+                    ref="accountNameHistoryTable"
+                    :address="realAddress"
+                    :active="$route.query.tx === 'nameHistory'"
+                    :nameHistory="nameHistory"
+                    v-if="nameHistory.length"
+                  />
                 </div>
               </div>
             </div>
-            <div class="detail-box contract" v-if="!error && accountDetail && accountDetail.codehash">
+            <div
+              class="detail-box contract"
+              v-if="!error && accountDetail && accountDetail.codehash"
+            >
               <div class="title">Contract Details</div>
               <div class="tabs-wrap">
-                <contract-abi :abi="contractAbi" :codehash="accountDetail.codehash" :address="realAddress"/>
+                <contract-abi
+                  :abi="contractAbi"
+                  :codehash="accountDetail.codehash"
+                  :address="realAddress"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import {Address} from '@herajs/client';
-import JSBI from 'jsbi';
-import {Amount} from '@herajs/client';
-import Identicon from '@/src/vue/components/Identicon';
-import {toFix} from "@/src/utils/utility";
+import { Address } from '@herajs/client'
+import JSBI from 'jsbi'
+import { Amount } from '@herajs/client'
+import Identicon from '@/src/vue/components/Identicon'
+import { toFix } from '@/src/utils/utility'
 import { formatDistance } from 'date-fns'
-import cfg from '@/src/config';
-import Search from "@/src/vue/components/Search";
-import ContractAbi from '@/src/vue/components/ContractAbi';
-import AccountTransactionTable from '@/src/vue/components/AccountTransactionTable';
-import AccountTokenTransferTable from '@/src/vue/components/AccountTokenTransferTable';
-import AccountNftTransferTable from '@/src/vue/components/AccountNftTransferTable';
-import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTable';
-import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable';
-import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable';
-import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable';
+import cfg from '@/src/config'
+import Search from '@/src/vue/components/Search'
+import ContractAbi from '@/src/vue/components/ContractAbi'
+import AccountTransactionTable from '@/src/vue/components/AccountTransactionTable'
+import AccountTokenTransferTable from '@/src/vue/components/AccountTokenTransferTable'
+import AccountNftTransferTable from '@/src/vue/components/AccountNftTransferTable'
+import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTable'
+import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable'
+import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable'
+import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable'
 
 export default {
   data() {
@@ -287,37 +414,36 @@ export default {
       tokenPrice: [],
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       if (to.path !== from.path) {
-        this.load();
+        this.load()
       }
     },
-    'realAddress'() {
+    realAddress() {
       this.reloadAllTable(this.realAddress)
-          .then(
-              // ()=> this.load(true)
-          )
-          .catch(e => {
-            console.log(e);
-          })
+        .then
+        // ()=> this.load(true)
+        ()
+        .catch((e) => {
+          console.log(e)
+        })
     },
   },
   mounted() {
-    this.load();
+    this.load()
   },
   computed: {
     totalVotingPower() {
       try {
-        return this.voteHistory.getVotingList().map(vote =>
-            new Amount(vote.getAmount(), 'aer')
-        ).reduce((a, b) => a.add(b), new Amount(0));
-      } catch(e) {
-        return new Amount(0);
+        return this.voteHistory
+          .getVotingList()
+          .map((vote) => new Amount(vote.getAmount(), 'aer'))
+          .reduce((a, b) => a.add(b), new Amount(0))
+      } catch (e) {
+        return new Amount(0)
       }
     },
     maximumVotingPower() {
@@ -327,8 +453,7 @@ export default {
       return this.staking.amount.mul(5).toUnit('aergo')
     },
     nextActionAvailableTime() {
-      if (!this.staking)
-        return ''
+      if (!this.staking) return ''
 
       if (this.staking && this.staking.when) {
         if (this.nextActionAvailable) {
@@ -342,35 +467,46 @@ export default {
       return `[  ${this.totalVotingPower}  /  ${this.maximumVotingPower}  ] ${this.nextActionAvailableTime}`
     },
     nextActionAvailable() {
-      return this.accountNextActionTime && this.accountNextActionTime < new Date();
+      return (
+        this.accountNextActionTime && this.accountNextActionTime < new Date()
+      )
     },
     nextActionRelativeString() {
       if (!this.accountNextActionTime) {
-        return '';
+        return ''
       }
-      return `,   ( next voting time in ${formatDistance(new Date(), this.accountNextActionTime)})`;
+      return `,   ( next voting time in ${formatDistance(
+        new Date(),
+        this.accountNextActionTime
+      )})`
     },
     realAddress() {
       // todo: 추후 해당케이스 시나리오 조건 수정및 고려해야함.
-      return this.destinationAddress || this.$route.params.address;
+      return this.destinationAddress || this.$route.params.address
     },
     filteredTokens() {
-      return this.tokens;
+      return this.tokens
     },
     filteredNfts() {
-      return this.nfts;
+      return this.nfts
     },
     fullBalance() {
       if (!this.staking) {
-        return this.accountDetail.balance;
+        return this.accountDetail.balance
       }
-      return new Amount(JSBI.add(this.accountDetail.balance.value, this.staking.amount.value).toString(), 'aer');
+      return new Amount(
+        JSBI.add(
+          this.accountDetail.balance.value,
+          this.staking.amount.value
+        ).toString(),
+        'aer'
+      )
     },
     unstakedBalance() {
-      return this.accountDetail.balance;
+      return this.accountDetail.balance
     },
     title() {
-      if (this.isLoadingDetail) return '...';
+      if (this.isLoadingDetail) return '...'
 
       if (this.accountDetail && this.accountDetail.codehash) {
         return 'Contract Account'
@@ -386,155 +522,177 @@ export default {
     },
     namesCurrent() {
       if (this.realAddress && this.names.length)
-        return this.names.filter(name => name.currentAddress == this.realAddress);
-      return [];
+        return this.names.filter(
+          (name) => name.currentAddress == this.realAddress
+        )
+      return []
     },
     getTokenPriceByUsd() {
-      return this.tokenPrice?.filter(item => item.name === 'aergo')[0]?.price?.usd;
+      return this.tokenPrice?.filter((item) => item.name === 'aergo')[0]?.price
+        ?.usd
     },
     getUsdPriceByAergo() {
-      let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0];
-      let usdPrice = this.tokenPrice?.filter(item => item.name === 'aergo')[0]?.price?.usd;
-      return toFix(Number(usdPrice) * toFix(balance));
-    }
+      let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
+      let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
+        ?.price?.usd
+      return toFix(Number(usdPrice) * toFix(balance))
+    },
   },
   methods: {
     query(newQuery) {
-      return {...this.$route.query, ...newQuery};
+      return { ...this.$route.query, ...newQuery }
     },
     async load() {
-      this.isLoadingDetail = true;
-      this.error = null;
-      this.ownerAddress = null;
-      this.destinationAddress = null;
-      this.staking = null;
-      this.voteHistory = null;
-      this.accountDetail = null;
-      this.contractAbi = null;
-      this.names = [];
-      this.nameHistory = [];
-      this.token = null;
-      this.accountTokens = [];
-      this.tokens = [];
-      this.nfts = [];
-      this.contractTx = [];
-      this.isName = false;
-      this.showTokenBalances = false;
-      this.tokenPrice = [];
-      this.accountNextActionTime = null;
-
+      this.isLoadingDetail = true
+      this.error = null
+      this.ownerAddress = null
+      this.destinationAddress = null
+      this.staking = null
+      this.voteHistory = null
+      this.accountDetail = null
+      this.contractAbi = null
+      this.names = []
+      this.nameHistory = []
+      this.token = null
+      this.accountTokens = []
+      this.tokens = []
+      this.nfts = []
+      this.contractTx = []
+      this.isName = false
+      this.showTokenBalances = false
+      this.tokenPrice = []
+      this.accountNextActionTime = null
 
       // Check address
-      let address;
+      let address
       try {
-        address = new Address(this.$route.params.address);
-        this.isName = address.isName;
+        address = new Address(this.$route.params.address)
+        this.isName = address.isName
       } catch (e) {
-        this.error = 'Invalid address';
-        console.error(e);
-        return;
+        this.error = 'Invalid address'
+        console.error(e)
+        return
       }
 
       // Owner
       try {
         if (address.isName && !address.isSystemAddress()) {
-          const nameInfo = await this.$store.dispatch('blockchain/getNameInfo', {name: address.encoded});
-          this.ownerAddress = nameInfo.owner.toString();
-          this.destinationAddress = nameInfo.destination.toString();
-          address = this.destinationAddress;
+          const nameInfo = await this.$store.dispatch(
+            'blockchain/getNameInfo',
+            { name: address.encoded }
+          )
+          this.ownerAddress = nameInfo.owner.toString()
+          this.destinationAddress = nameInfo.destination.toString()
+          address = this.destinationAddress
         }
       } catch (e) {
-        this.error = 'Unregistered name';
-        console.error(e);
-        this.isLoadingDetail = false;
-        return;
+        this.error = 'Unregistered name'
+        console.error(e)
+        this.isLoadingDetail = false
+        return
       }
 
-      this.address = address;
+      this.address = address
 
       if (address.length === 0) {
-        console.log("Account not found")
-        this.isLoadingDetail = false;
-        return;
+        console.log('Account not found')
+        this.isLoadingDetail = false
+        return
       }
 
       // State
       try {
-        this.accountDetail = Object.freeze(await this.$store.dispatch('blockchain/getAccount', {address}));
+        this.accountDetail = Object.freeze(
+          await this.$store.dispatch('blockchain/getAccount', { address })
+        )
       } catch (e) {
-        this.error = 'Account not found';
-        console.error(e);
-        this.isLoadingDetail = false;
-        return;
+        this.error = 'Account not found'
+        console.error(e)
+        this.isLoadingDetail = false
+        return
       }
 
       // Staking
-      (async () => {
+      ;(async () => {
         try {
-          const staking = await this.$store.dispatch('blockchain/getStaking', {address});
-          this.staking = Object.freeze(staking);
+          const staking = await this.$store.dispatch('blockchain/getStaking', {
+            address,
+          })
+          this.staking = Object.freeze(staking)
           if (this.staking && this.staking.when) {
-            await this.$store.dispatch('blockchain/getBlock', {blockNoOrHash: this.staking.when}).then((block) => {
-              this.accountNextActionTime = new Date(block.header.timestamp/1000000 + (60*60*24*1000));
-            });
+            await this.$store
+              .dispatch('blockchain/getBlock', {
+                blockNoOrHash: this.staking.when,
+              })
+              .then((block) => {
+                this.accountNextActionTime = new Date(
+                  block.header.timestamp / 1000000 + 60 * 60 * 24 * 1000
+                )
+              })
           }
         } catch (e) {
-          console.error(e);
-          this.isLoadingDetail = false;
+          console.error(e)
+          this.isLoadingDetail = false
         }
-      })();
+      })()
 
       // VoteHistory
-      (async () => {
+      ;(async () => {
         try {
-          const voteHistory = await this.$store.dispatch('blockchain/getAccountVotes', {address});
-          this.voteHistory = Object.freeze(voteHistory);
+          const voteHistory = await this.$store.dispatch(
+            'blockchain/getAccountVotes',
+            { address }
+          )
+          this.voteHistory = Object.freeze(voteHistory)
         } catch (e) {
-          console.error(e);
-          this.isLoadingDetail = false;
+          console.error(e)
+          this.isLoadingDetail = false
         }
-      })();
+      })()
 
       // Assigned tokens, nfts
-      (async () => {
+      ;(async () => {
         try {
-          const response = await this.$fetch.get(`${cfg.API_URL}/existedTxTokenList`,
-              {
-                q: `(from:${address} OR to:${address})`,
-              }
-          );
-          const data = (await response.json());
+          const response = await this.$fetch.get(
+            `${cfg.API_URL}/existedTxTokenList`,
+            {
+              q: `(from:${address} OR to:${address})`,
+            }
+          )
+          const data = await response.json()
           if (data.hits.length > 0) {
-            data.hits.filter(it => it.token.meta.type === 'ARC1').map(item => {
-              this.tokens.push({
-                text: `${item.token.meta.name}(${item.token.meta.symbol})`,
-                value: item.token.hash,
+            data.hits
+              .filter((it) => it.token.meta.type === 'ARC1')
+              .map((item) => {
+                this.tokens.push({
+                  text: `${item.token.meta.name}(${item.token.meta.symbol})`,
+                  value: item.token.hash,
+                })
               })
-            })
-            data.hits.filter(it => it.token.meta.type === 'ARC2').map(item => {
-              this.nfts.push({
-                text: `${item.token.meta.name}(${item.token.meta.symbol})`,
-                value: item.token.hash,
+            data.hits
+              .filter((it) => it.token.meta.type === 'ARC2')
+              .map((item) => {
+                this.nfts.push({
+                  text: `${item.token.meta.name}(${item.token.meta.symbol})`,
+                  value: item.token.hash,
+                })
               })
-            })
           }
         } catch (e) {
-          console.error(e);
-          this.isLoadingDetail = false;
+          console.error(e)
+          this.isLoadingDetail = false
         }
-      })();
+      })()
 
       // Contract Tx
-      (async () => {
+      ;(async () => {
         try {
-          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`,
-              {
-                q: `_id:${address}`,
-              }
-          );
-          const data = (await response.json());
+          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
+            q: `_id:${address}`,
+          })
+          const data = await response.json()
           if (data.hits.length > 0) {
-            data.hits.map(item => {
+            data.hits.map((item) => {
               this.contractTx.push({
                 txId: item.meta.tx_id,
                 creator: item.meta.creator,
@@ -544,113 +702,128 @@ export default {
             })
           }
         } catch (e) {
-          console.error(e);
-          this.isLoadingDetail = false;
+          console.error(e)
+          this.isLoadingDetail = false
         }
-      })();
+      })()
 
       // Assigned names
-      (async () => {
+      ;(async () => {
         try {
           if (!address.isName) {
-            const response = await this.$fetch.get(`${cfg.API_URL}/names`, {q: `address:${address}`, size: 10});
-            const data = (await response.json());
-            const names = data.hits;
+            const response = await this.$fetch.get(`${cfg.API_URL}/names`, {
+              q: `address:${address}`,
+              size: 10,
+            })
+            const data = await response.json()
+            const names = data.hits
             for (let name of names) {
-              const response = await this.$fetch.get(`${cfg.API_URL}/names`, {q: `name:${name.name}`, size: 1});
-              const data = (await response.json());
-              name.currentAddress = data.hits[0].address;
+              const response = await this.$fetch.get(`${cfg.API_URL}/names`, {
+                q: `name:${name.name}`,
+                size: 1,
+              })
+              const data = await response.json()
+              name.currentAddress = data.hits[0].address
             }
-            this.names = names;
+            this.names = names
           }
         } catch (e) {
-          console.error(e);
+          console.error(e)
         }
-      })();
+      })()
 
       // Name history
       if (this.isName) {
-        (async () => {
+        ;(async () => {
           try {
             const response = await this.$fetch.get(`${cfg.API_URL}/names`, {
               q: `name:${this.$route.params.address}`,
               size: 10,
-              sort: 'blockno:asc'
-            });
-            const data = (await response.json());
-            this.nameHistory = data.hits;
+              sort: 'blockno:asc',
+            })
+            const data = await response.json()
+            this.nameHistory = data.hits
           } catch (e) {
-            console.error(e);
+            console.error(e)
           }
-        })();
+        })()
       }
 
       // Account price
-      (async () => {
+      ;(async () => {
         try {
-          const response = await this.$fetch.get(`${cfg.API_URL}/tokensPrice`);
-          const data = (await response.json());
-          this.tokenPrice = data;
+          const response = await this.$fetch.get(`${cfg.API_URL}/tokensPrice`)
+          const data = await response.json()
+          this.tokenPrice = data
         } catch (e) {
-          console.error(e);
+          console.error(e)
         }
-      })();
+      })()
 
-      this.isLoadingDetail = false;
+      this.isLoadingDetail = false
 
       const loadTokenMetadata = async () => {
         try {
-          const response = await (await this.$fetch.get(`${cfg.API_URL}/token`, {q: `_id:${this.$route.params.address}`})).json();
+          const response = await (
+            await this.$fetch.get(`${cfg.API_URL}/token`, {
+              q: `_id:${this.$route.params.address}`,
+            })
+          ).json()
           if (response.hits.length) {
-            this.token = response.hits[0].meta;
+            this.token = response.hits[0].meta
           }
         } catch (e) {
-          console.error(e);
+          console.error(e)
         }
-      };
+      }
 
       // Contract and token info
       try {
         if (this.accountDetail.codehash) {
           Promise.all([
-            this.$store.dispatch('blockchain/getABI', {address}).then(abi => {
-              this.contractAbi = abi;
-            }),
+            this.$store
+              .dispatch('blockchain/getABI', { address })
+              .then((abi) => {
+                this.contractAbi = abi
+              }),
             loadTokenMetadata(),
           ]).then(async () => {
             // Get updated supply
             if (this.contractAbi && this.token) {
-              const supply = await this.$store.dispatch('blockchain/queryContract', {
-                abi: this.contractAbi,
-                name: 'totalSupply',
-                address,
-                args: []
-              });
+              const supply = await this.$store.dispatch(
+                'blockchain/queryContract',
+                {
+                  abi: this.contractAbi,
+                  name: 'totalSupply',
+                  address,
+                  args: [],
+                }
+              )
               if (supply && supply._bignum) {
-                this.token.supply = supply._bignum;
+                this.token.supply = supply._bignum
               }
             }
-          });
+          })
         }
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     },
     async reloadAllTable(address) {
       if (this.$refs.accountTransactionTable) {
-        await this.$refs.accountTransactionTable.reload(address);
+        await this.$refs.accountTransactionTable.reload(address)
       }
       if (this.$refs.accountTokenTransferTable) {
-        await this.$refs.accountTokenTransferTable.reload(address);
+        await this.$refs.accountTokenTransferTable.reload(address)
       }
       if (this.$refs.accountNftTransferTable) {
-        await this.$refs.accountNftTransferTable.reload(address);
+        await this.$refs.accountNftTransferTable.reload(address)
       }
       if (this.$refs.accountTokenBalanceTable) {
-        await this.$refs.accountTokenBalanceTable.reload(address);
+        await this.$refs.accountTokenBalanceTable.reload(address)
       }
       if (this.$refs.accountNftInventoryTable) {
-        await this.$refs.accountNftInventoryTable.reload(address);
+        await this.$refs.accountNftInventoryTable.reload(address)
       }
     },
     updateTransactionTotalCount(count) {
@@ -685,9 +858,9 @@ export default {
     AccountTokenBalanceTable,
     AccountNftInventoryTable,
     AccountNameHistoryTable,
-    AccountRegisteredNamesTable
-  }
-};
+    AccountRegisteredNamesTable,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -778,8 +951,11 @@ export default {
       display: flex;
       align-items: center;
 
-
       .item-inner {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
         padding: 15px;
         border-radius: 5px;
         font-size: 14px;

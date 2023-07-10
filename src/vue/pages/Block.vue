@@ -1,14 +1,18 @@
 <template>
   <div class="wrap">
     <div id="category" class="block-details">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
-            <div class="title block-detail">Block Details
+            <search />
+            <div class="title block-detail">
+              Block Details
               <div class="arrow-box" v-if="blockDetail">
-                <router-link :to="`/block/${blockDetail.header.blockno - 1}/`" v-if="hasPrevious">
+                <router-link
+                  :to="`/block/${blockDetail.header.blockno - 1}/`"
+                  v-if="hasPrevious"
+                >
                   <img src="~@assets/img/ic-prev@3x.png" class="arrow" />
                   <span>Prev</span>
                 </router-link>
@@ -24,72 +28,100 @@
                 <div class="error show" v-if="error">
                   {{ error }}
                 </div>
-                <table class="block-detail" :class="(!blockDetail && !error) && 'loading'">
+                <table
+                  class="block-detail"
+                  :class="!blockDetail && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!blockDetail && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-<!--                  <tr class="hidden not-found">-->
-<!--                    <td colspan="100%">No items found</td>-->
-<!--                  </tr>-->
-                  <template v-if="blockDetail">
-                    <tr>
-                      <th>
-                        <div>Time</div>
-                      </th>
-                      <td>
-                        <div>{{ moment(blockDetail.header.timestamp / 1000000).format('dddd, MMMM Do YYYY, HH:mm:ss') }}
-                          ({{ moment(blockDetail.header.timestamp / 1000000).fromNow() }})
-                        </div>
-                      </td>
+                    <tr class="hidden loading" v-if="!blockDetail && !error">
+                      <td colspan="100%">Loading...</td>
                     </tr>
-                    <tr>
-                      <th>
-                        <div>Hash</div>
-                      </th>
-                      <td>
-                        <div>
-                          <router-link class="hash-block" :to="`/block/${blockDetail.hash}/`">{{
-                              blockDetail.hash
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="blockDetail">
+                      <tr>
+                        <th>
+                          <div>Time</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{
+                              moment(
+                                blockDetail.header.timestamp / 1000000
+                              ).format('dddd, MMMM Do YYYY, HH:mm:ss')
                             }}
-                          </router-link>
-                          <copy-link-button :message="blockDetail.hash"/>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Previous Block</div>
-                      </th>
-                      <td>
-                        <div v-if="blockDetail.header.prevblockhash">
-                          <router-link class="prev-block" :to="`/block/${blockDetail.header.prevblockhash}/`">
-                            {{ blockDetail.header.prevblockhash }}
-                          </router-link>
-                          <copy-link-button :message="blockDetail.header.prevblockhash"/>
-                        </div>
-                        <div v-else>
-                          <span class="prev-block">(none)</span>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Total TXs</div>
-                      </th>
-                      <td>
-                        <div>{{ blockDetail.txcount | formatNumber('&#8239;') }} TXs</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Block Size</div>
-                      </th>
-                      <td>
-                        <div>{{ blockDetail.size | formatNumber('&#8239;') }} bytes</div>
-                      </td>
-                    </tr>
-                  </template>
+                            ({{
+                              moment(
+                                blockDetail.header.timestamp / 1000000
+                              ).fromNow()
+                            }})
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Hash</div>
+                        </th>
+                        <td>
+                          <div>
+                            <router-link
+                              class="hash-block"
+                              :to="`/block/${blockDetail.hash}/`"
+                              >{{ blockDetail.hash }}
+                            </router-link>
+                            <copy-link-button :message="blockDetail.hash" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Previous Block</div>
+                        </th>
+                        <td>
+                          <div v-if="blockDetail.header.prevblockhash">
+                            <router-link
+                              class="prev-block"
+                              :to="`/block/${blockDetail.header.prevblockhash}/`"
+                            >
+                              {{ blockDetail.header.prevblockhash }}
+                            </router-link>
+                            <copy-link-button
+                              :message="blockDetail.header.prevblockhash"
+                            />
+                          </div>
+                          <div v-else>
+                            <span class="prev-block">(none)</span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Total TXs</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{
+                              blockDetail.txcount | formatNumber('&#8239;')
+                            }}
+                            TXs
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Block Size</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{
+                              blockDetail.size | formatNumber('&#8239;')
+                            }}
+                            bytes
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -97,136 +129,175 @@
                 <div class="error" v-if="error">
                   {{ error }}
                 </div>
-                <table class="block-detail" :class="(!blockDetail && !error) && 'loading'">
+                <table
+                  class="block-detail"
+                  :class="!blockDetail && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!blockDetail && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-<!--                  <tr class="hidden not-found">-->
-<!--                    <td colspan="100%">No items found</td>-->
-<!--                  </tr>-->
-                  <template v-if="blockDetail">
-                    <tr v-if="blockDetail.header.blockno">
-                      <th>
-                        <div>Block Producer</div>
-                      </th>
-                      <td>
-                        <div v-if="bpId">
-                          <router-link class="hash-block" :to="`/votes/?highlight=${bpId}`">
-                            <Identicon :text="bpId" size="17" class="mini-identicon"/>
-                            {{ bpId }}
-                          </router-link>
-                          <copy-link-button :message="bpId"/>
-                        </div>
-                        <div v-else>
-                          <a class="hash-block">
-                            <Identicon :text="'Unknown'" size="18" class="mini-identicon"/>
-                            Unknown
-                          </a>
-                        </div>
-                      </td>
+                    <tr class="hidden loading" v-if="!blockDetail && !error">
+                      <td colspan="100%">Loading...</td>
                     </tr>
-                    <tr v-if="blockDetail.header.blockno">
-                      <th>
-                        <div>Coinbase Account</div>
-                      </th>
-                      <td>
-                        <div v-if="blockDetail.header.coinbaseaccount.toString()">
-                          <router-link class="prev-block"
-                                       :to="`/account/${blockDetail.header.coinbaseaccount}/`">
-                            <Identicon :text="blockDetail.header.coinbaseaccount" size="17" class="mini-identicon"/>
-                            {{ blockDetail.header.coinbaseaccount.toString() }}
-                          </router-link>
-                          <copy-link-button :message="blockDetail.header.coinbaseaccount.toString()"/>
-                        </div>
-                        <div v-else>
-                          <Identicon :text="'None'" size="18" class="mini-identicon"/>
-                          None
-                        </div>
-                      </td>
-                    </tr>
-                    <template v-if="!blockDetail.header.rewardaccount.isEmpty()">
-                      <tr>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="blockDetail">
+                      <tr v-if="blockDetail.header.blockno">
                         <th>
-                          <div>Block Reward</div>
+                          <div>Block Producer</div>
                         </th>
                         <td>
-                          <div>{{ blockDetail.voteReward.toString() }}</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>Reward Account</div>
-                        </th>
-                        <td>
-                          <div>
-                            <router-link class="prev-block txt-ellipsis"
-                                         :to="`/account/${blockDetail.header.rewardaccount}/`">
-                              <Identicon :text="blockDetail.header.rewardaccount" size="17" class="mini-identicon"/>
-                              {{ blockDetail.header.rewardaccount.toString() }}
+                          <div v-if="bpId">
+                            <router-link
+                              class="hash-block"
+                              :to="`/votes/?highlight=${bpId}`"
+                            >
+                              <Identicon
+                                :text="bpId"
+                                size="17"
+                                class="mini-identicon"
+                              />
+                              {{ bpId }}
                             </router-link>
-                            <CopyLinkButton :message="blockDetail.header.rewardaccount.toString()"/>
+                            <copy-link-button :message="bpId" />
+                          </div>
+                          <div v-else>
+                            <a class="hash-block">
+                              <Identicon
+                                :text="'Unknown'"
+                                size="18"
+                                class="mini-identicon"
+                              />
+                              Unknown
+                            </a>
                           </div>
                         </td>
                       </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
+                      <tr v-if="blockDetail.header.blockno">
                         <th>
-                          <div>Block Reward</div>
+                          <div>Coinbase Account</div>
                         </th>
                         <td>
-                          <div>None</div>
+                          <div
+                            v-if="blockDetail.header.coinbaseaccount.toString()"
+                          >
+                            <router-link
+                              class="prev-block"
+                              :to="`/account/${blockDetail.header.coinbaseaccount}/`"
+                            >
+                              <Identicon
+                                :text="blockDetail.header.coinbaseaccount"
+                                size="17"
+                                class="mini-identicon"
+                              />
+                              {{
+                                blockDetail.header.coinbaseaccount.toString()
+                              }}
+                            </router-link>
+                            <copy-link-button
+                              :message="
+                                blockDetail.header.coinbaseaccount.toString()
+                              "
+                            />
+                          </div>
+                          <div v-else>
+                            <Identicon
+                              :text="'None'"
+                              size="18"
+                              class="mini-identicon"
+                            />
+                            None
+                          </div>
                         </td>
                       </tr>
+                      <template
+                        v-if="!blockDetail.header.rewardaccount.isEmpty()"
+                      >
+                        <tr>
+                          <th>
+                            <div>Block Reward</div>
+                          </th>
+                          <td>
+                            <div>{{ blockDetail.voteReward.toString() }}</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Reward Account</div>
+                          </th>
+                          <td>
+                            <div>
+                              <router-link
+                                class="prev-block txt-ellipsis"
+                                :to="`/account/${blockDetail.header.rewardaccount}/`"
+                              >
+                                <Identicon
+                                  :text="blockDetail.header.rewardaccount"
+                                  size="17"
+                                  class="mini-identicon"
+                                />
+                                {{
+                                  blockDetail.header.rewardaccount.toString()
+                                }}
+                              </router-link>
+                              <CopyLinkButton
+                                :message="
+                                  blockDetail.header.rewardaccount.toString()
+                                "
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                      <template v-else>
+                        <tr>
+                          <th>
+                            <div>Block Reward</div>
+                          </th>
+                          <td>
+                            <div>None</div>
+                          </td>
+                        </tr>
+                      </template>
                     </template>
-                  </template>
                   </tbody>
                 </table>
               </div>
             </div>
-            <block-tx-table :blockno="blockDetail.header.blockno" v-if="blockDetail"/>
+            <block-tx-table
+              :blockno="blockDetail.header.blockno"
+              v-if="blockDetail"
+            />
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import Search from '@/src/vue/components/Search';
-import BlockTxTable from '@/src/vue/components/BlockTxTable';
-import Identicon from '@/src/vue/components/Identicon';
+import Search from '@/src/vue/components/Search'
+import BlockTxTable from '@/src/vue/components/BlockTxTable'
+import Identicon from '@/src/vue/components/Identicon'
 
-import moment from 'moment';
-import {timedAsync} from 'timed-async';
-import {sha256} from 'hash.js';
-import bs58 from 'bs58';
+import moment from 'moment'
+import { timedAsync } from 'timed-async'
+import { sha256 } from 'hash.js'
+import bs58 from 'bs58'
 
 function pubkeyToPeerid(pubkey) {
-  const decoded = bs58.decode(pubkey);
+  const decoded = bs58.decode(pubkey)
   if (decoded.length == 0) {
-    return "";
+    return ''
   } else if (decoded.length <= 42) {
     return bs58.encode(
-        Buffer.concat(
-            [
-              Buffer.from([0, decoded.length]),
-              decoded
-            ]
-        )
-    );
+      Buffer.concat([Buffer.from([0, decoded.length]), decoded])
+    )
   } else {
-    const hash = Buffer.from(sha256().update(decoded).digest());
+    const hash = Buffer.from(sha256().update(decoded).digest())
     return bs58.encode(
-        Buffer.concat(
-            [
-              Buffer.from([0, 27, 8, 2, 0x12, hash.length]),
-              hash
-            ]
-        )
-    );
+      Buffer.concat([Buffer.from([0, 27, 8, 2, 0x12, hash.length]), hash])
+    )
   }
 }
 
@@ -235,50 +306,55 @@ export default {
     return {
       isLoading: false,
       blockDetail: null,
-      error: null
+      error: null,
     }
   },
   mounted() {
-    this.load();
+    this.load()
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   watch: {
-    '$route'(to, from) {
-      this.load();
-    }
+    $route(to, from) {
+      this.load()
+    },
   },
   computed: {
     hasPrevious() {
-      return this.blockDetail.header.blockno > 0;
-    }
+      return this.blockDetail.header.blockno > 0
+    },
   },
   methods: {
     async load() {
-      let blockNoOrHash = this.$route.params.blockNoOrHash;
-      if ("" + parseInt(this.$route.params.blockNoOrHash) === this.$route.params.blockNoOrHash) {
-        blockNoOrHash = parseInt(this.$route.params.blockNoOrHash);
+      let blockNoOrHash = this.$route.params.blockNoOrHash
+      if (
+        '' + parseInt(this.$route.params.blockNoOrHash) ===
+        this.$route.params.blockNoOrHash
+      ) {
+        blockNoOrHash = parseInt(this.$route.params.blockNoOrHash)
       }
-      this.blockDetail = null;
-      this.error = '';
+      this.blockDetail = null
+      this.error = ''
       try {
-        this.blockDetail = await timedAsync(this.$store.dispatch('blockchain/fetchBlockMetadata', {blockNoOrHash: blockNoOrHash}));
-        this.bpId = pubkeyToPeerid(this.blockDetail.header.pubkey);
+        this.blockDetail = await timedAsync(
+          this.$store.dispatch('blockchain/fetchBlockMetadata', {
+            blockNoOrHash: blockNoOrHash,
+          })
+        )
+        this.bpId = pubkeyToPeerid(this.blockDetail.header.pubkey)
       } catch (error) {
-        this.error = '' + error;
-        console.error(error);
+        this.error = '' + error
+        console.error(error)
       }
     },
-    moment
+    moment,
   },
   components: {
     BlockTxTable,
     Search,
-    Identicon
-  }
-};
+    Identicon,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -313,6 +389,7 @@ export default {
   }
 
   .h-scroll {
+    overflow-x: auto;
     height: 100%;
   }
 
