@@ -1,11 +1,11 @@
 <template>
   <div class="wrap">
     <div id="category" class="transaction-details">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="title">
               Transaction Details
               <div class="address" v-if="txDetail">{{ txDetail.tx.hash }}</div>
@@ -15,169 +15,240 @@
                 <div class="error show" v-if="error">
                   {{ error }}
                 </div>
-                <table class="transaction-detail" :class="(!txDetail && !error) && 'loading'">
+                <table
+                  class="transaction-detail"
+                  :class="!txDetail && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!txDetail && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <template v-if="txDetail">
-                    <tr>
-                      <th>
-                        <div>
-                          From
-                          <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
-                          To
-                        </div>
-                      </th>
-                      <td>
-                        <div>
-                          <div class="from-to">
-                            <router-link class="address" :to="`/account/${txDetail.tx.from}/`">
-                              {{ $options.filters.formatEllipsisText(txDetail.tx.from.toString(), 30) }}
-                            </router-link>
-                            <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow">
-                            <router-link class="address"
-                                         v-if="txDetail.tx.to && txDetail.tx.to.toString().length"
-                                         :to="`/account/${txDetail.tx.to}/`">
-                              {{ $options.filters.formatEllipsisText(txDetail.tx.to.toString(), 28) }}
-                            </router-link>
-                            <a href="javascript:;" class="address"
-                               v-if="!txDetail.tx.to || !txDetail.tx.to.toString().length">{{txDetail.tx.type === 7 ? 'MULTICALL' : 'Contract Creation'}}</a>
+                    <tr class="hidden loading" v-if="!txDetail && !error">
+                      <td colspan="100%">Loading...</td>
+                    </tr>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txDetail">
+                      <tr>
+                        <th>
+                          <div>
+                            From
+                            <img
+                              src="~@assets/img/ic-arrow-black@3x.png"
+                              class="arrow"
+                            />
+                            To
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Amount</div>
-                      </th>
-                      <td>
-                        <div v-html="$options.filters.formatToken(txDetail.tx.amount, 'aergo')"></div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Token transfers</div>
-                      </th>
-                      <td>
-                        <div>{{ tokenTxTotalItems }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>NFT transfers</div>
-                      </th>
-                      <td>
-                        <div>{{ nftTxTotalItems }}</div>
-                      </td>
-                    </tr>
-                    <tr v-if="txReceipt">
-                      <th>
-                        <div>Fee</div>
-                      </th>
-                      <td>
-                        <div>
-                          <span class="ml-5 tpm"
-                                v-html="$options.filters.formatToken(this.txReceipt.fee)">{{ txDetail.tx.limit }}</span>
-                          <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                                aria-label="Fee was paid by contract" v-if="txReceipt.feeDelegation">[delegated]</span>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <div>Gas used</div>
-                      </th>
-                      <td>
-                        <div>{{ txReceipt ? txReceipt.gasused : '...' }} of
-                          <span class="ml-5 tpm" v-if="txDetail.tx.limit">{{ txDetail.tx.limit }}</span>
-                          <span class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                                aria-label="Limit was set to 0, allowing unlimited gas use"
-                                v-if="!txDetail.tx.limit">∞</span>
-                        </div>
-                      </td>
-                    </tr>
-                  </template>
+                        </th>
+                        <td>
+                          <div>
+                            <div class="from-to">
+                              <router-link
+                                class="address"
+                                :to="`/account/${txDetail.tx.from}/`"
+                              >
+                                {{
+                                  $options.filters.formatEllipsisText(
+                                    txDetail.tx.from.toString(),
+                                    30
+                                  )
+                                }}
+                              </router-link>
+                              <img
+                                src="~@assets/img/ic-arrow-black@3x.png"
+                                class="arrow"
+                              />
+                              <router-link
+                                class="address"
+                                v-if="
+                                  txDetail.tx.to &&
+                                  txDetail.tx.to.toString().length
+                                "
+                                :to="`/account/${txDetail.tx.to}/`"
+                              >
+                                {{
+                                  $options.filters.formatEllipsisText(
+                                    txDetail.tx.to.toString(),
+                                    28
+                                  )
+                                }}
+                              </router-link>
+                              <a
+                                href="javascript:;"
+                                class="address"
+                                v-if="
+                                  !txDetail.tx.to ||
+                                  !txDetail.tx.to.toString().length
+                                "
+                                >{{
+                                  txDetail.tx.type === 7
+                                    ? 'MULTICALL'
+                                    : 'Contract Creation'
+                                }}</a
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Amount</div>
+                        </th>
+                        <td>
+                          <div
+                            v-html="
+                              $options.filters.formatToken(
+                                txDetail.tx.amount,
+                                'aergo'
+                              )
+                            "
+                          ></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Token transfers</div>
+                        </th>
+                        <td>
+                          <div>{{ tokenTxTotalItems }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>NFT transfers</div>
+                        </th>
+                        <td>
+                          <div>{{ nftTxTotalItems }}</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txReceipt">
+                        <th>
+                          <div>Fee</div>
+                        </th>
+                        <td>
+                          <div>
+                            <span
+                              class="ml-5 tpm"
+                              v-html="
+                                $options.filters.formatToken(this.txReceipt.fee)
+                              "
+                              >{{ txDetail.tx.limit }}</span
+                            >
+                            <span
+                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                              aria-label="Fee was paid by contract"
+                              v-if="txReceipt.feeDelegation"
+                              >[delegated]</span
+                            >
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Gas used</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{ txReceipt ? txReceipt.gasused : '...' }} of
+                            <span class="ml-5 tpm" v-if="txDetail.tx.limit">{{
+                              txDetail.tx.limit
+                            }}</span>
+                            <span
+                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                              aria-label="Limit was set to 0, allowing unlimited gas use"
+                              v-if="!txDetail.tx.limit"
+                              >∞</span
+                            >
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
                 <div class="error transaction-detail show" v-if="error">
                   {{ error }}
                 </div>
-                <table class="transaction-detail" :class="(!txDetail && !error) && 'loading'">
+                <table
+                  class="transaction-detail"
+                  :class="!txDetail && !error && 'loading'"
+                >
                   <tbody>
-                  <tr class="hidden loading" v-if="(!txDetail && !error)">
-                    <td colspan="100%">Loading...</td>
-                  </tr>
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <template v-if="txDetail">
-                    <tr>
-                      <th>
-                        <div>Nonce</div>
-                      </th>
-                      <td>
-                        <div>{{ txDetail.tx.nonce }}</div>
-                      </td>
+                    <tr class="hidden loading" v-if="!txDetail && !error">
+                      <td colspan="100%">Loading...</td>
                     </tr>
-                    <tr>
-                      <th>
-                        <div>Type</div>
-                      </th>
-                      <td>
-                        <div>{{ typeLabel }}</div>
-                      </td>
-                    </tr>
-                    <tr v-if="txDetail.tx.payload">
-                      <th>
-                        <div>Payload</div>
-                      </th>
-                      <td>
-                        <div>{{ txDetail.tx.payload.length }} bytes</div>
-                      </td>
-                    </tr>
-                    <tr v-if="!txDetail.block">
-                      <th>
-                        <div>Status</div>
-                      </th>
-                      <td>
-                        <div>Pending</div>
-                      </td>
-                    </tr>
-                    <tr v-if="txDetail.block">
-                      <th>
-                        <div>Status</div>
-                      </th>
-                      <td>
-                        <div>Confirmed</div>
-                      </td>
-                    </tr>
-                    <tr v-if="txDetail.block">
-                      <th>
-                        <div>Included in block</div>
-                      </th>
-                      <td>
-                        <div>
-                          <span class="txt-ellipsis">
-                            <router-link :to="`/block/${txDetail.block.hash}/`">{{ txDetail.block.hash }}</router-link>
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr v-if="txMeta.ts">
-                      <th>
-                        <div>Time stamp</div>
-                      </th>
-                      <td>
-                        <div>{{ moment(txMeta.ts).format('dddd, MMMM Do YYYY, HH:mm:ss') }}
-                          ({{ moment(txMeta.ts).fromNow() }})
-                        </div>
-                      </td>
-                    </tr>
-                  </template>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txDetail">
+                      <tr>
+                        <th>
+                          <div>Nonce</div>
+                        </th>
+                        <td>
+                          <div>{{ txDetail.tx.nonce }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Type</div>
+                        </th>
+                        <td>
+                          <div>{{ typeLabel }}</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txDetail.tx.payload">
+                        <th>
+                          <div>Payload</div>
+                        </th>
+                        <td>
+                          <div>{{ txDetail.tx.payload.length }} bytes</div>
+                        </td>
+                      </tr>
+                      <tr v-if="!txDetail.block">
+                        <th>
+                          <div>Status</div>
+                        </th>
+                        <td>
+                          <div>Pending</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txDetail.block">
+                        <th>
+                          <div>Status</div>
+                        </th>
+                        <td>
+                          <div>Confirmed</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txDetail.block">
+                        <th>
+                          <div>Included in block</div>
+                        </th>
+                        <td>
+                          <div>
+                            <span class="txt-ellipsis">
+                              <router-link
+                                :to="`/block/${txDetail.block.hash}/`"
+                                >{{ txDetail.block.hash }}</router-link
+                              >
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr v-if="txMeta.ts">
+                        <th>
+                          <div>Time stamp</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{
+                              moment(txMeta.ts).format(
+                                'dddd, MMMM Do YYYY, HH:mm:ss'
+                              )
+                            }}
+                            ({{ moment(txMeta.ts).fromNow() }})
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -187,29 +258,48 @@
                 <div class="table-tab-header">
                   <div class="h-scroll">
                     <div class="tab-header">
-                      <router-link class="title token-transfers router-link-exact-active"
-                                   :to="{ query: { ...$route.query, tx: 'token' } }" replace v-if="!$route.query.tx">
-                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTxTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers router-link-exact-active"
+                        :to="{ query: { ...$route.query, tx: 'token' } }"
+                        replace
+                        v-if="!$route.query.tx"
+                      >
+                        <span class="main">Token Transfers</span
+                        ><span class="sub">{{ tokenTxTotalItems }}</span>
                       </router-link>
-                      <router-link class="title token-transfers" :to="{ query: { ...$route.query, tx: 'token' } }"
-                                   replace v-else>
-                        <span class="main">Token Transfers</span><span class="sub">{{ tokenTxTotalItems }}</span>
+                      <router-link
+                        class="title token-transfers"
+                        :to="{ query: { ...$route.query, tx: 'token' } }"
+                        replace
+                        v-else
+                      >
+                        <span class="main">Token Transfers</span
+                        ><span class="sub">{{ tokenTxTotalItems }}</span>
                       </router-link>
-                      <router-link class="title nft-transfers" :to="{ query: { ...$route.query, tx: 'nft' } }" replace>
-                        <span class="main">NFT Transfers</span><span class="sub">{{ nftTxTotalItems }}</span>
+                      <router-link
+                        class="title nft-transfers"
+                        :to="{ query: { ...$route.query, tx: 'nft' } }"
+                        replace
+                      >
+                        <span class="main">NFT Transfers</span
+                        ><span class="sub">{{ nftTxTotalItems }}</span>
                       </router-link>
                     </div>
                   </div>
                 </div>
                 <div class="table-tab-content" v-if="txDetail">
-                  <transaction-token-table ref="transactionTokenTable"
-                                           :hash="txDetail.tx.hash"
-                                           :active="!$route.query.tx || $route.query.tx === 'token'"
-                                           @onUpdateTotalCount="updateTokenTxTotalCount"/>
-                  <transaction-nft-table ref="transactionNftTable"
-                                         :hash="txDetail.tx.hash"
-                                         :active="$route.query.tx === 'nft'"
-                                         @onUpdateTotalCount="updateNftTxTotalCount"/>
+                  <transaction-token-table
+                    ref="transactionTokenTable"
+                    :hash="txDetail.tx.hash"
+                    :active="!$route.query.tx || $route.query.tx === 'token'"
+                    @onUpdateTotalCount="updateTokenTxTotalCount"
+                  />
+                  <transaction-nft-table
+                    ref="transactionNftTable"
+                    :hash="txDetail.tx.hash"
+                    :active="$route.query.tx === 'nft'"
+                    @onUpdateTotalCount="updateNftTxTotalCount"
+                  />
                 </div>
               </div>
             </div>
@@ -220,61 +310,125 @@
                 <div class="item">
                   <span class="item-inner" v-if="txReceipt.contractaddress">
                     <router-link :to="`/account/${txReceipt.contractaddress}/`">
-                      <Identicon :text="txReceipt.contractaddress" size="20" class="tiny-identicon"/>
-                        {{ txReceipt.contractaddress }}
+                      <Identicon
+                        :text="txReceipt.contractaddress"
+                        size="20"
+                        class="tiny-identicon"
+                      />
+                      {{ txReceipt.contractaddress }}
                     </router-link>
                   </span>
                 </div>
               </div>
               <div class="tabs-wrap">
-                <Tabs :value="selectedPayloadTab" :routeReplace="true" title="Payload">
-                  <Tab title="Formatted" :route="{ query: query({payload: 'formatted'}) }" :id="'formatted'">
-                    <div class="title" v-if="txDetail.tx.payload.length">{{ formattedTitle }}</div>
+                <Tabs
+                  :value="selectedPayloadTab"
+                  :routeReplace="true"
+                  title="Payload"
+                >
+                  <Tab
+                    title="Formatted"
+                    :route="{ query: query({ payload: 'formatted' }) }"
+                    :id="'formatted'"
+                  >
+                    <div class="title" v-if="txDetail.tx.payload.length">
+                      {{ formattedTitle }}
+                    </div>
                     <div class="content">
-                      <div class="empty-result" v-if="!txDetail.tx.payload.length">
+                      <div
+                        class="empty-result"
+                        v-if="!txDetail.tx.payload.length"
+                      >
                         (No payload)
                       </div>
-                      <payload-formatter :payload="txDetail.tx.payload" :txType="txDetail.tx.type"
-                                         :recipient="txDetail.tx.to" v-if="txDetail.tx.payload"/>
+                      <payload-formatter
+                        :payload="txDetail.tx.payload"
+                        :txType="txDetail.tx.type"
+                        :recipient="txDetail.tx.to"
+                        v-if="txDetail.tx.payload"
+                      />
                     </div>
                   </Tab>
-                  <Tab title="JSON" :route="{ query: query({payload: 'json'}) }" :id="'json'">
+                  <Tab
+                    title="JSON"
+                    :route="{ query: query({ payload: 'json' }) }"
+                    :id="'json'"
+                  >
                     <div class="content">
                       <pre>{{ payloadJson }}</pre>
                     </div>
                   </Tab>
-                  <Tab title="Hex" :route="{ query: query({payload: 'hex'}) }" :id="'hex'">
+                  <Tab
+                    title="Hex"
+                    :route="{ query: query({ payload: 'hex' }) }"
+                    :id="'hex'"
+                  >
                     <div class="content">
                       <p>{{ payloadHex }}</p>
                     </div>
                   </Tab>
                 </Tabs>
-                <Tabs :value="selectedReceiptTab" :routeReplace="true" title="Result">
-                  <Tab title="Formatted" :route="{ query: query({receipt: 'formatted'}) }" :id="'formatted'"
-                       :css="{ extend: txReceipt.status !=='ERROR' ? 'success' : 'error'}">
-                    <div class="title" v-if="txReceipt.status==='SUCCESS' || txReceipt.status==='CREATED'"><img
-                        src="~@assets/img/ic-success.png">{{ statusFormatted }}
+                <Tabs
+                  :value="selectedReceiptTab"
+                  :routeReplace="true"
+                  title="Result"
+                >
+                  <Tab
+                    title="Formatted"
+                    :route="{ query: query({ receipt: 'formatted' }) }"
+                    :id="'formatted'"
+                    :css="{
+                      extend:
+                        txReceipt.status !== 'ERROR' ? 'success' : 'error',
+                    }"
+                  >
+                    <div
+                      class="title"
+                      v-if="
+                        txReceipt.status === 'SUCCESS' ||
+                        txReceipt.status === 'CREATED'
+                      "
+                    >
+                      <img src="~@assets/img/ic-success.png" />{{
+                        statusFormatted
+                      }}
                     </div>
-                    <div class="title" v-if="txReceipt.status==='ERROR'"><img
-                        src="~@assets/img/ic-fail.png">{{ statusFormatted }}
+                    <div class="title" v-if="txReceipt.status === 'ERROR'">
+                      <img src="~@assets/img/ic-fail.png" />{{
+                        statusFormatted
+                      }}
                     </div>
                     <div class="content">
                       <div class="empty-result" v-if="!txReceipt.result">
                         (Empty result)
                       </div>
-                      <span class="monospace" v-else>{{ txReceipt.result }}</span>
+                      <span class="monospace" v-else>{{
+                        txReceipt.result
+                      }}</span>
                     </div>
                   </Tab>
-                  <Tab title="JSON" :route="{ query: query({receipt: 'json'}) }" :id="'json'">
+                  <Tab
+                    title="JSON"
+                    :route="{ query: query({ receipt: 'json' }) }"
+                    :id="'json'"
+                  >
                     <div class="content">
                       <pre>{{ receiptJson }}</pre>
                     </div>
                   </Tab>
-                  <Tab :title="`Events (${events.length})`" :route="{ query: query({receipt: 'events'}) }"
-                       :id="'events'">
+                  <Tab
+                    :title="`Events (${events.length})`"
+                    :route="{ query: query({ receipt: 'events' }) }"
+                    :id="'events'"
+                  >
                     <div class="content">
                       <div class="table-wrap">
-                        <events-list :events="events" :columns="[]" :address="txDetail.tx.to" :css="tabTableCss"/>
+                        <events-list
+                          :events="events"
+                          :columns="[]"
+                          :address="txDetail.tx.to"
+                          :css="tabTableCss"
+                        />
                       </div>
                     </div>
                   </Tab>
@@ -284,25 +438,25 @@
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment';
-import Search from '@/src/vue/components/Search';
-import Identicon from '@/src/vue/components/Identicon';
-import PayloadFormatter from '@/src/vue/components/PayloadFormatter';
-import EventsList from '@/src/vue/components/EventsList';
-import TransactionTokenTable from '@/src/vue/components/TransactionTokenTable';
-import TransactionNftTable from '@/src/vue/components/TransactionNftTable';
+import moment from 'moment'
+import Search from '@/src/vue/components/Search'
+import Identicon from '@/src/vue/components/Identicon'
+import PayloadFormatter from '@/src/vue/components/PayloadFormatter'
+import EventsList from '@/src/vue/components/EventsList'
+import TransactionTokenTable from '@/src/vue/components/TransactionTokenTable'
+import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
 
-import {TxTypes} from '@herajs/common';
-import cfg from '@/src/config';
+import { TxTypes } from '@herajs/common'
+import cfg from '@/src/config'
 
-const payloadTabs = ['formatted', 'json', 'hex'];
-const receiptTabs = ['formatted', 'json', 'events'];
+const payloadTabs = ['formatted', 'json', 'hex']
+const receiptTabs = ['formatted', 'json', 'events']
 
 export default {
   data() {
@@ -321,102 +475,112 @@ export default {
       },
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   watch: {
-    '$route'(to, from) {
-      this.load();
+    $route(to, from) {
+      this.load()
     },
-    'realToken'() {
-      this.reloadAllTable(this.realToken).then(
-          ()=> this.load()
-      ).catch(e=>{
-        console.log(e);
-      })
+    realToken() {
+      this.reloadAllTable(this.realToken)
+        .then(() => this.load())
+        .catch((e) => {
+          console.log(e)
+        })
     },
   },
   mounted() {
     if (this.$route.query.payload) {
-      this.selectedPayloadTab = payloadTabs.indexOf(this.$route.query.payload) || 0;
+      this.selectedPayloadTab =
+        payloadTabs.indexOf(this.$route.query.payload) || 0
     }
     if (this.$route.query.receipt) {
-      this.selectedReceiptTab = receiptTabs.indexOf(this.$route.query.receipt) || 0;
+      this.selectedReceiptTab =
+        receiptTabs.indexOf(this.$route.query.receipt) || 0
     }
-    this.load();
+    this.load()
   },
   computed: {
     realToken() {
-      return this.$route.params.hash;
+      return this.$route.params.hash
     },
     formattedTitle() {
-      if (this.txDetail.tx.type === 1) return 'Function Call' ;
-      else if (this.txDetail.tx.type === 2) return 'Contract Redeploy' ;
-      else if (this.txDetail.tx.type === 5) return 'Function Call' ;
-      else if (this.txDetail.tx.type === 6) return 'Contract Creation' ;
-      else if (this.txDetail.tx.type === 7) return 'MultiCall' ;
-      else return 'Text' ;
+      if (this.txDetail.tx.type === 1) return 'Function Call'
+      else if (this.txDetail.tx.type === 2) return 'Contract Redeploy'
+      else if (this.txDetail.tx.type === 5) return 'Function Call'
+      else if (this.txDetail.tx.type === 6) return 'Contract Creation'
+      else if (this.txDetail.tx.type === 7) return 'MultiCall'
+      else return 'Text'
     },
     statusFormatted() {
-      const status = this.txReceipt.status.toLowerCase();
-      return status.charAt(0).toUpperCase() + status.slice(1);
+      const status = this.txReceipt.status.toLowerCase()
+      return status.charAt(0).toUpperCase() + status.slice(1)
     },
     payloadJson() {
-      if (!this.txDetail.tx.payload) return;
+      if (!this.txDetail.tx.payload) return
       try {
-        let payloadBuffer = Buffer.from(this.txDetail.tx.payload);
-        let parsedData = JSON.parse(payloadBuffer.toString());
-        return JSON.stringify(parsedData, null, 2);
+        let payloadBuffer = Buffer.from(this.txDetail.tx.payload)
+        let parsedData = JSON.parse(payloadBuffer.toString())
+        return JSON.stringify(parsedData, null, 2)
       } catch (e) {
-        return 'Cannot parse payload as JSON';
+        return 'Cannot parse payload as JSON'
       }
     },
     payloadHex() {
-      if (!this.txDetail.tx.payload) return;
-      let payloadBuffer = Buffer.from(this.txDetail.tx.payload);
-      return payloadBuffer.toString('hex');
+      if (!this.txDetail.tx.payload) return
+      let payloadBuffer = Buffer.from(this.txDetail.tx.payload)
+      return payloadBuffer.toString('hex')
     },
     receiptJson() {
-      return JSON.stringify(this.txReceipt, null, 2);
+      return JSON.stringify(this.txReceipt, null, 2)
     },
     typeLabel() {
-      return this.txDetail && TxTypes[this.txDetail.tx.type];
-    }
+      return this.txDetail && TxTypes[this.txDetail.tx.type]
+    },
   },
   methods: {
     query(newQuery) {
-      return {...this.$route.query, ...newQuery};
+      return { ...this.$route.query, ...newQuery }
     },
     async load() {
-      this.error = null;
-      let hash = this.$route.params.hash;
+      this.error = null
+      let hash = this.$route.params.hash
 
-      (async () => {
+      ;(async () => {
         try {
-          this.txDetail = await this.$store.dispatch('blockchain/getTransaction', {hash});
+          this.txDetail = await this.$store.dispatch(
+            'blockchain/getTransaction',
+            { hash }
+          )
         } catch (e) {
-          this.error = '' + e;
-          return;
+          this.error = '' + e
+          return
         }
-      })();
-      (async () => {
-        this.txReceipt = await this.$store.dispatch('blockchain/getTransactionReceipt', {hash});
-        this.events = this.txReceipt.events;
-      })();
-      (async () => {
-        const response = await (await this.$fetch.get(`${cfg.API_URL}/transactions`, {q: `_id:${hash}`})).json();
+      })()
+      ;(async () => {
+        this.txReceipt = await this.$store.dispatch(
+          'blockchain/getTransactionReceipt',
+          { hash }
+        )
+        this.events = this.txReceipt.events
+      })()
+      ;(async () => {
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/transactions`, {
+            q: `_id:${hash}`,
+          })
+        ).json()
         if (response.hits.length) {
-          this.txMeta = response.hits[0].meta;
+          this.txMeta = response.hits[0].meta
         }
-      })();
+      })()
     },
     async reloadAllTable(token) {
       if (this.$refs.transactionTokenTable) {
-        await this.$refs.transactionTokenTable.reload(token);
+        await this.$refs.transactionTokenTable.reload(token)
       }
       if (this.$refs.transactionNftTable) {
-        await this.$refs.transactionNftTable.reload(token);
+        await this.$refs.transactionNftTable.reload(token)
       }
     },
     updateTokenTxTotalCount(count) {
@@ -425,7 +589,7 @@ export default {
     updateNftTxTotalCount(count) {
       this.nftTxTotalItems = count
     },
-    moment
+    moment,
   },
   components: {
     TransactionTokenTable,
@@ -433,8 +597,8 @@ export default {
     PayloadFormatter,
     Search,
     EventsList,
-    Identicon
-  }
+    Identicon,
+  },
 }
 </script>
 
@@ -559,6 +723,10 @@ export default {
       align-items: center;
 
       .item-inner {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
         padding: 10px 15px;
         border-radius: 5px;
         font-size: 14px;
@@ -684,5 +852,4 @@ export default {
     }
   }
 }
-
 </style>

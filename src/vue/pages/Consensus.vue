@@ -1,67 +1,80 @@
 <template>
   <div class="wrap">
     <div id="category" class="bp-list">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="title">Chain Info</div>
             <div class="detail-box">
               <div class="table-wrap">
                 <div class="error" v-if="error">
                   {{ error }}
                 </div>
-                <table class="bp-detail" v-if="!error && chainInfo && chainInfo.chainid">
+                <table
+                  class="bp-detail"
+                  v-if="!error && chainInfo && chainInfo.chainid"
+                >
                   <tbody>
-                  <!--                  <tr class="hidden loading">-->
-                  <!--                    <td colspan="100%">Loading...</td>-->
-                  <!--                  </tr>-->
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <tr>
-                    <th>
-                      <div>Chain ID</div>
-                    </th>
-                    <td>
-                      <div class="chain-id">{{ chainInfo.chainid.magic }} ({{ chainInfo.chainid.public ? 'public' : 'private' }},
-                        {{ chainInfo.chainid.mainnet ? 'main' : 'non-main' }})
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Maximum block size</div>
-                    </th>
-                    <td>
-                      <div>{{ chainInfo.maxblocksize }}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Total token supply</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(chainInfo.maxtokens, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Consensus</div>
-                    </th>
-                    <td>
-                      <div>{{ chainInfo.chainid.consensus }}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>BP number</div>
-                    </th>
-                    <td>
-                      <div>{{ bpNumber }}</div>
-                    </td>
-                  </tr>
+                    <!--                  <tr class="hidden loading">-->
+                    <!--                    <td colspan="100%">Loading...</td>-->
+                    <!--                  </tr>-->
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <tr>
+                      <th>
+                        <div>Chain ID</div>
+                      </th>
+                      <td>
+                        <div class="chain-id">
+                          {{ chainInfo.chainid.magic }} ({{
+                            chainInfo.chainid.public ? 'public' : 'private'
+                          }},
+                          {{ chainInfo.chainid.mainnet ? 'main' : 'non-main' }})
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Maximum block size</div>
+                      </th>
+                      <td>
+                        <div>{{ chainInfo.maxblocksize }}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Total token supply</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              chainInfo.maxtokens,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Consensus</div>
+                      </th>
+                      <td>
+                        <div>{{ chainInfo.chainid.consensus }}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>BP number</div>
+                      </th>
+                      <td>
+                        <div>{{ bpNumber }}</div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -69,162 +82,234 @@
                 <div class="error" v-if="error">
                   {{ error }}
                 </div>
-                <table class="bp-detail" v-if="!error && chainInfo && chainInfo.chainid">
+                <table
+                  class="bp-detail"
+                  v-if="!error && chainInfo && chainInfo.chainid"
+                >
                   <tbody>
-                  <!--                  <tr class="hidden loading">-->
-                  <!--                    <td colspan="100%">Loading...</td>-->
-                  <!--                  </tr>-->
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <tr>
-                    <th>
-                      <div>Min. staking amount</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(chainInfo.stakingminimum, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Total staked amount</div>
-                    </th>
-                    <td class="txt-ellipsis">
-                      <div v-html="$options.filters.formatToken(chainInfo.stakingtotal, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Nameprice</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(chainInfo.nameprice, 'aergo')"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <div>Gasprice</div>
-                    </th>
-                    <td>
-                      <div v-html="$options.filters.formatToken(chainInfo.gasprice, 'aer')"></div>
-                    </td>
-                  </tr>
+                    <!--                  <tr class="hidden loading">-->
+                    <!--                    <td colspan="100%">Loading...</td>-->
+                    <!--                  </tr>-->
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <tr>
+                      <th>
+                        <div>Min. staking amount</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              chainInfo.stakingminimum,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Total staked amount</div>
+                      </th>
+                      <td class="txt-ellipsis">
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              chainInfo.stakingtotal,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Nameprice</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              chainInfo.nameprice,
+                              'aergo'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <div>Gasprice</div>
+                      </th>
+                      <td>
+                        <div
+                          v-html="
+                            $options.filters.formatToken(
+                              chainInfo.gasprice,
+                              'aer'
+                            )
+                          "
+                        ></div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <div class="table-wrap" v-if="chainInfo.chainid && chainInfo.chainid.consensus == 'dpos'">
-              <div class="title">BP List
+            <div
+              class="table-wrap"
+              v-if="chainInfo.chainid && chainInfo.chainid.consensus == 'dpos'"
+            >
+              <div class="title">
+                BP List
                 <div class="btn-refresh">
-                  <ReloadButton :action="loadVotes"/>
+                  <ReloadButton :action="loadVotes" />
                 </div>
               </div>
               <!--              <div class="error bp-list">-->
               <!--                에러메시지 영역입니다.-->
               <!--              </div>-->
               <div class="h-scroll">
-                <table class="bp-list-table main-net" :class="(!votesList || !votesList.length) ? 'loading' : ''">
+                <table
+                  class="bp-list-table main-net"
+                  :class="!votesList || !votesList.length ? 'loading' : ''"
+                >
                   <thead>
-                  <tr>
-                    <th>
-                      <div>POS.</div>
-                    </th>
-                    <th>
-                      <div>PEER ID</div>
-                    </th>
-                    <th>
-                      <div>VOTES</div>
-                    </th>
-                  </tr>
+                    <tr>
+                      <th>
+                        <div>POS.</div>
+                      </th>
+                      <th>
+                        <div>PEER ID</div>
+                      </th>
+                      <th>
+                        <div>VOTES</div>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody v-if="votesList && votesList.length">
-                  <!--                  <tr class="hidden loading">-->
-                  <!--                    <td colspan="100%">Loading...</td>-->
-                  <!--                  </tr>-->
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <tr v-for="(item, index) in votesList" :key="item.candidate"
-                      :class="{focus: $route.query.highlight === item.candidate, 'last-selected': bpNumber && bpNumber === (index+1)}" :tabindex="$route.query.highlight === item.candidate && index">
-                    <td>{{ index + 1 }}</td>
-                    <td>
-                      <div>
-                        <Identicon :text="item.candidate" size="18" class="mini-identicon"/>
-                        {{ item.candidate }}
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        {{ item.amount.toUnit('aergo').toString() }}
-                      </div>
-                    </td>
-                  </tr>
+                    <!--                  <tr class="hidden loading">-->
+                    <!--                    <td colspan="100%">Loading...</td>-->
+                    <!--                  </tr>-->
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <tr
+                      v-for="(item, index) in votesList"
+                      :key="item.candidate"
+                      :class="{
+                        focus: $route.query.highlight === item.candidate,
+                        'last-selected': bpNumber && bpNumber === index + 1,
+                      }"
+                      :tabindex="
+                        $route.query.highlight === item.candidate && index
+                      "
+                    >
+                      <td>{{ index + 1 }}</td>
+                      <td>
+                        <div>
+                          <Identicon
+                            :text="item.candidate"
+                            size="18"
+                            class="mini-identicon"
+                          />
+                          {{ item.candidate }}
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          {{ item.amount.toUnit('aergo').toString() }}
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <div class="table-wrap" v-if="chainInfo.chainid && chainInfo.chainid.consensus == 'raft'">
-              <div class="title">BP List
+            <div
+              class="table-wrap"
+              v-if="chainInfo.chainid && chainInfo.chainid.consensus == 'raft'"
+            >
+              <div class="title">
+                BP List
                 <div class="btn-refresh">
-                  <ReloadButton :action="loadConsensus"/>
+                  <ReloadButton :action="loadConsensus" />
                 </div>
               </div>
               <!--              <div class="error bp-list">-->
               <!--                에러메시지 영역입니다.-->
               <!--              </div>-->
               <div class="h-scroll">
-                <table class="bp-list-table" :class="!consensusInfo ? 'loading' : ''">
+                <table
+                  class="bp-list-table"
+                  :class="!consensusInfo ? 'loading' : ''"
+                >
                   <thead>
-                  <tr>
-                    <th>
-                      <div>POS.</div>
-                    </th>
-                    <th>
-                      <div>NAME</div>
-                    </th>
-                    <th>
-                      <div>RAFT ID</div>
-                    </th>
-                    <th>
-                      <div>PEER ID</div>
-                    </th>
-                    <th>
-                      <div>STATUS</div>
-                    </th>
-                  </tr>
+                    <tr>
+                      <th>
+                        <div>POS.</div>
+                      </th>
+                      <th>
+                        <div>NAME</div>
+                      </th>
+                      <th>
+                        <div>RAFT ID</div>
+                      </th>
+                      <th>
+                        <div>PEER ID</div>
+                      </th>
+                      <th>
+                        <div>STATUS</div>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody v-if="consensusInfo && consensusInfo.bpsList.length">
-                  <!--                  <tr class="hidden loading">-->
-                  <!--                    <td colspan="100%">Loading...</td>-->
-                  <!--                  </tr>-->
-                  <!--                  <tr class="hidden not-found">-->
-                  <!--                    <td colspan="100%">No items found</td>-->
-                  <!--                  </tr>-->
-                  <tr v-for="(item, index) in consensusInfo.bpsList" :key="item.PeerID"
-                      :class="{'focus': $route.query.highlight === item.PeerID, 'last-selected': bpNumber && bpNumber === (index+1)}">
-                    <td>
-                      <div>{{ index + 1 }}</div>
-                    </td>
-                    <td>
-                      <div>{{ item.Name }}</div>
-                    </td>
-                    <td>
-                      <div>{{ item.RaftID }}</div>
-                    </td>
-                    <td>
-                      <div>
-                        <Identicon :text="item.PeerID" size="18" class="mini-identicon"/>
-                        {{ item.PeerID }}
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <span class="boxicon gray" v-if="item.Name == consensusInfo.info.Leader">Leader</span>
-                      </div>
-                    </td>
-                  </tr>
+                    <!--                  <tr class="hidden loading">-->
+                    <!--                    <td colspan="100%">Loading...</td>-->
+                    <!--                  </tr>-->
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <tr
+                      v-for="(item, index) in consensusInfo.bpsList"
+                      :key="item.PeerID"
+                      :class="{
+                        focus: $route.query.highlight === item.PeerID,
+                        'last-selected': bpNumber && bpNumber === index + 1,
+                      }"
+                    >
+                      <td>
+                        <div>{{ index + 1 }}</div>
+                      </td>
+                      <td>
+                        <div>{{ item.Name }}</div>
+                      </td>
+                      <td>
+                        <div>{{ item.RaftID }}</div>
+                      </td>
+                      <td>
+                        <div>
+                          <Identicon
+                            :text="item.PeerID"
+                            size="18"
+                            class="mini-identicon"
+                          />
+                          {{ item.PeerID }}
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <span
+                            class="boxicon gray"
+                            v-if="item.Name == consensusInfo.info.Leader"
+                            >Leader</span
+                          >
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -232,17 +317,17 @@
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import Search from '@/src/vue/components/Search';
-import ReloadButton from '@/src/vue/components/ReloadButton';
-import moment from 'moment';
-import Identicon from '@/src/vue/components/Identicon';
-import {mapState} from 'vuex'
+import Search from '@/src/vue/components/Search'
+import ReloadButton from '@/src/vue/components/ReloadButton'
+import moment from 'moment'
+import Identicon from '@/src/vue/components/Identicon'
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -252,52 +337,58 @@ export default {
       error: null,
     }
   },
-  created() {
-  },
+  created() {},
   watch: {
-    '$route'(to, from) {
-      this.load();
-    }
+    $route(to, from) {
+      this.load()
+    },
   },
   mounted() {
-    this.load();
+    this.load()
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   computed: {
     ...mapState({
-      chainInfo: state => state.blockchain.chainInfo
+      chainInfo: (state) => state.blockchain.chainInfo,
     }),
     bpNumber() {
-      if (this.consensusInfo && this.consensusInfo.info && this.consensusInfo.info.Total) {
-        return Number(this.consensusInfo.info.Total);
+      if (
+        this.consensusInfo &&
+        this.consensusInfo.info &&
+        this.consensusInfo.info.Total
+      ) {
+        return Number(this.consensusInfo.info.Total)
       }
       if (this.chainInfo && this.chainInfo.bpnumber) {
-        return this.chainInfo.bpnumber;
+        return this.chainInfo.bpnumber
       }
-      return 0;
-    }
+      return 0
+    },
   },
   methods: {
     async loadConsensus() {
-      this.consensusInfo = null;
-      this.consensusInfo = await this.$store.dispatch('blockchain/getConsensusInfo');
+      this.consensusInfo = null
+      this.consensusInfo = await this.$store.dispatch(
+        'blockchain/getConsensusInfo'
+      )
     },
     async loadVotes() {
       try {
-        this.votesList = [];
-        const votesList = await this.$store.dispatch('blockchain/getTopVotes', {count: 50});
+        this.votesList = []
+        const votesList = await this.$store.dispatch('blockchain/getTopVotes', {
+          count: 50,
+        })
         for (let vote of votesList) {
-          vote.amount = vote.amount;
+          vote.amount = vote.amount
         }
-        this.votesList = votesList;
+        this.votesList = votesList
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     },
     async load() {
-      await this.loadVotes();
-      await this.loadConsensus();
+      await this.loadVotes()
+      await this.loadConsensus()
     },
     moment,
   },
@@ -305,8 +396,8 @@ export default {
     Search,
     ReloadButton,
     Identicon,
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -346,6 +437,7 @@ export default {
   }
 
   .h-scroll {
+    overflow-x: auto;
     height: 100%;
   }
 

@@ -6,67 +6,105 @@
     </div>
     <div class="h-scroll-main">
       <div class="h-scroll-main-inner">
-        <table class="latest-transactions-table lastest-top" :class="!isConnected && 'loading'">
+        <table
+          class="latest-transactions-table lastest-top"
+          :class="!isConnected && 'loading'"
+        >
           <thead>
-          <tr>
-            <th>
-              <div>TX HASH</div>
-            </th>
-            <th>
-              <div>TIME</div>
-            </th>
-            <th>
-              <div>FROM</div>
-            </th>
-            <th>
-              <div><img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow"></div>
-            </th>
-            <th>
-              <div>TO</div>
-            </th>
-          </tr>
+            <tr>
+              <th>
+                <div>TX HASH</div>
+              </th>
+              <th>
+                <div>TIME</div>
+              </th>
+              <th>
+                <div>FROM</div>
+              </th>
+              <th>
+                <div>
+                  <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow" />
+                </div>
+              </th>
+              <th>
+                <div>TO</div>
+              </th>
+            </tr>
           </thead>
           <tbody>
-          <tr class="hidden loading" v-if="!isConnected">
-            <td colspan="100%" v-html="connectionStatusMessage"></td>
-          </tr>
-          <!--      <tr class="hidden not-found">-->
-          <!--        <td colspan="100%">No items found</td>-->
-          <!--      </tr>-->
-          <tr v-for="(tx, index) in syncedTransactions" :key="tx.hash" v-else>
-            <td class="txt-ellipsis">
-              <div class="tooltipped tooltipped-se tooltipped-align-left-2" :aria-label="tx.hash">
-                <router-link class="address txt-ellipsis" :to="`/transaction/${tx.hash}`">{{ tx.hash }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-                   :aria-label="moment(tx.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
-                {{ moment(tx.ts || tx.block.header.timestamp / 1000000).format('YYYY-MM-DD HH:mm:ss') }}
-              </div>
-            </td>
-            <td class="txt-ellipsis">
-              <div class="tooltipped tooltipped-sw tooltipped-align-right-2" :aria-label="tx.from">
-                <router-link class="address txt-ellipsis" :to="`/account/${tx.from}`">
-                  {{ $options.filters.formatEllipsisText(tx.from , 20)}}
-                </router-link>
-              </div>
-            </td>
-            <td>
-              <div><img src="~@assets/img/ic-arrow@3x.png" class="arrow"></div>
-            </td>
-            <td class="txt-ellipsis">
-              <div class="tooltipped tooltipped-sw tooltipped-align-right-2"
-                   :aria-label="tx.to" v-if="tx.to.length !== 0">
-                <router-link class="address txt-ellipsis" :to="`/account/${tx.to}`">
-                  {{ $options.filters.formatEllipsisText(tx.to , 20)}}
-                </router-link>
-              </div>
-              <div v-else>
-                <span class="address">{{tx.category === 'multicall' ? 'MultiCall' : 'Contract Creation'}}</span>
-              </div>
-            </td>
-          </tr>
+            <tr class="hidden loading" v-if="!isConnected">
+              <td colspan="100%" v-html="connectionStatusMessage"></td>
+            </tr>
+            <!--      <tr class="hidden not-found">-->
+            <!--        <td colspan="100%">No items found</td>-->
+            <!--      </tr>-->
+            <tr v-for="(tx, index) in syncedTransactions" :key="tx.hash" v-else>
+              <td class="txt-ellipsis">
+                <div
+                  class="tooltipped tooltipped-se tooltipped-align-left-2"
+                  :aria-label="tx.hash"
+                >
+                  <router-link
+                    class="address txt-ellipsis"
+                    :to="`/transaction/${tx.hash}`"
+                    >{{ tx.hash }}</router-link
+                  >
+                </div>
+              </td>
+              <td>
+                <div
+                  class="tooltipped tooltipped-se tooltipped-align-left-2"
+                  :aria-label="
+                    moment(tx.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')
+                  "
+                >
+                  {{
+                    moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    )
+                  }}
+                </div>
+              </td>
+              <td class="txt-ellipsis">
+                <div
+                  class="tooltipped tooltipped-sw tooltipped-align-right-2"
+                  :aria-label="tx.from"
+                >
+                  <router-link
+                    class="address txt-ellipsis"
+                    :to="`/account/${tx.from}`"
+                  >
+                    {{ $options.filters.formatEllipsisText(tx.from, 20) }}
+                  </router-link>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <img src="~@assets/img/ic-arrow@3x.png" class="arrow" />
+                </div>
+              </td>
+              <td class="txt-ellipsis">
+                <div
+                  class="tooltipped tooltipped-sw tooltipped-align-right-2"
+                  :aria-label="tx.to"
+                  v-if="tx.to.length !== 0"
+                >
+                  <router-link
+                    class="address txt-ellipsis"
+                    :to="`/account/${tx.to}`"
+                  >
+                    {{ $options.filters.formatEllipsisText(tx.to, 20) }}
+                  </router-link>
+                </div>
+                <div v-else>
+                  <span class="address">{{
+                    tx.category === 'multicall'
+                      ? 'MultiCall'
+                      : 'Contract Creation'
+                  }}</span>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -78,12 +116,13 @@
 </template>
 
 <script>
-import moment from 'moment';
-import {mapState, mapActions} from 'vuex'
-import cfg from '@/src/config.js';
+import moment from 'moment'
+import { mapState, mapActions } from 'vuex'
+import cfg from '@/src/config.js'
 
-const CONNECTING_MSG = 'Connecting...';
-const CONNECTING_SLOW_MSG = 'Connecting...It\'s taking longer than usual, please wait or try again later.';
+const CONNECTING_MSG = 'Connecting...'
+const CONNECTING_SLOW_MSG =
+  "Connecting...It's taking longer than usual, please wait or try again later."
 
 export default {
   name: 'RecentTransactions',
@@ -92,46 +131,53 @@ export default {
       error: '',
       initialTransactions: [],
       syncedTransactions: [],
-      syncInterval: null
+      syncInterval: null,
     }
   },
-  created() {
-  },
+  created() {},
   async mounted() {
-    this.$store.dispatch('blockchain/streamBlocks');
-    this.syncTxList();
+    this.$store.dispatch('blockchain/streamBlocks')
+    this.syncTxList()
     this.syncInterval = setInterval(() => {
-      this.syncTxList();
-    }, 5000);
+      this.syncTxList()
+    }, 5000)
   },
   beforeDestroy() {
-    clearInterval(this.syncInterval);
+    clearInterval(this.syncInterval)
   },
   computed: {
     ...mapState({
-      transactions: state => state.blockchain.recentTransactions,
-      isConnected: state => state.blockchain.streamConnected,
-      connectionStatusMessage: state => state.blockchain.streamState === 'starting-slow' ? CONNECTING_SLOW_MSG : CONNECTING_MSG
-    })
+      transactions: (state) => state.blockchain.recentTransactions,
+      isConnected: (state) => state.blockchain.streamConnected,
+      connectionStatusMessage: (state) =>
+        state.blockchain.streamState === 'starting-slow'
+          ? CONNECTING_SLOW_MSG
+          : CONNECTING_MSG,
+    }),
   },
   methods: {
     viewAllTransactions() {
-      this.$router.push(`/transactions`);
+      this.$router.push(`/transactions`)
     },
     async syncTxList() {
-      this.error = "";
-      const response = await this.$fetch.get(`${cfg.API_URL}/recentTransactions`);
-      const result = await response.json();
+      this.error = ''
+      const response = await this.$fetch.get(
+        `${cfg.API_URL}/recentTransactions`
+      )
+      const result = await response.json()
       if (result.error) {
-        this.error = response.error.msg;
-        console.error(result.error);
+        this.error = response.error.msg
+        console.error(result.error)
       } else {
-        this.syncedTransactions = result.txList.map(tx => ({...tx, ...tx.meta}));
+        this.syncedTransactions = result.txList.map((tx) => ({
+          ...tx,
+          ...tx.meta,
+        }))
       }
     },
-    moment
+    moment,
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -245,7 +291,9 @@ export default {
         box-sizing: content-box;
       }
 
-      &:nth-child(3), &:nth-child(4), &:nth-child(5) {
+      &:nth-child(3),
+      &:nth-child(4),
+      &:nth-child(5) {
         text-align: center;
 
         > div {
@@ -281,7 +329,9 @@ export default {
         color: #908091;
       }
 
-      &:nth-child(3), &:nth-child(4), &:nth-child(5) {
+      &:nth-child(3),
+      &:nth-child(4),
+      &:nth-child(5) {
         text-align: center;
 
         > div {
@@ -308,6 +358,7 @@ export default {
         border-bottom: 1px solid rgba(76, 68, 82, 0.8);
 
         th {
+          min-width: 80px;
           display: inline-block;
           border-bottom: none;
           white-space: normal;
@@ -369,7 +420,7 @@ export default {
         }
 
         &::-webkit-scrollbar-thumb {
-          background-color: rgba(167, 167, 167, .2);
+          background-color: rgba(167, 167, 167, 0.2);
         }
       }
 
@@ -388,10 +439,10 @@ export default {
         }
 
         &.expand {
-          animation: insert-height .3s, insert-bg 1s;
+          animation: insert-height 0.3s, insert-bg 1s;
 
           @media screen and (max-width: 480px) {
-            animation: insert-height-m .3s, insert-bg 1s;
+            animation: insert-height-m 0.3s, insert-bg 1s;
           }
         }
 

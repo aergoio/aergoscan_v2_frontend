@@ -54,7 +54,7 @@
       @media screen and (max-width: 480px) {
         height: 32px;
       }
-    
+
       &:hover {
         box-shadow: none;
       }
@@ -80,6 +80,7 @@
 
 table.tokens-table {
   th {
+    min-width: 110px;
     &:last-child {
       text-align: right;
 
@@ -90,6 +91,7 @@ table.tokens-table {
   }
 
   td {
+    white-space: nowrap;
     &:last-child {
       text-align: right;
 
