@@ -1131,9 +1131,6 @@ img {
         align-items: center;
         height: 100%;
 
-        &:first-child {
-          max-width: 140px;
-        }
         > .txt-ellipsis {
           white-space: nowrap;
           text-overflow: ellipsis;
