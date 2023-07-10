@@ -1,59 +1,83 @@
 <template>
   <div class="table-wrap latest-block-table">
     <div class="title">Latest Blocks</div>
-<!--    <div class="error latest-block show" v-if="error">-->
-<!--      {{ error }}-->
-<!--    </div>-->
+    <!--    <div class="error latest-block show" v-if="error">-->
+    <!--      {{ error }}-->
+    <!--    </div>-->
     <div class="h-scroll-main">
       <div class="h-scroll-main-inner">
-        <table class="latest-block-table lastest-top" :class="!isConnected && 'loading'">
+        <table
+          class="latest-block-table lastest-top"
+          :class="!isConnected && 'loading'"
+        >
           <thead>
-          <tr>
-            <th>
-              <div>BLOCK #</div>
-            </th>
-            <th>
-              <div>TIME</div>
-            </th>
-            <th>
-              <div>TXs</div>
-            </th>
-            <th>
-              <div>BLOCK PRODUCER</div>
-            </th>
-            <th>
-              <div>REWARD (AERGO)</div>
-            </th>
-          </tr>
+            <tr>
+              <th>
+                <div>BLOCK #</div>
+              </th>
+              <th>
+                <div>TIME</div>
+              </th>
+              <th>
+                <div>TXs</div>
+              </th>
+              <th>
+                <div>BLOCK PRODUCER</div>
+              </th>
+              <th>
+                <div>REWARD (AERGO)</div>
+              </th>
+            </tr>
           </thead>
           <tbody>
-          <tr class="hidden loading" v-if="!isConnected">
-            <td colspan="100%" v-html="connectionStatusMessage"></td>
-          </tr>
-          <!--      <tr class="hidden not-found">-->
-          <!--        <td colspan="100%">No items found</td>-->
-          <!--      </tr>-->
-          <tr v-for="(block, index) in reverseBlocks" :key="block.hash" :class="{expand: index === 0}" v-else>
-            <td>
-              <div>
-                <router-link :to="`/block/${block.header.blockno}`">{{ block.header.blockno }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div>{{ moment(block.header.timestamp / 1000000).format('HH:mm:ss') }}</div>
-            </td>
-            <td>
-              <div>{{ block.txcount }}&nbsp;tx</div>
-            </td>
-            <td>
-              <div class="tooltipped tooltipped-sw tooltipped-align-right-2" :aria-label="block.header.pubkey">
-                <Identicon :text="block.header.pubkey" size="18" class="tiny-identicon"/>
-                <span>{{ $options.filters.formatEllipsisText(block.header.pubkey, 17) }}</span></div>
-            </td>
-            <td>
-              <div>{{ block.voteReward.formatNumber() }}</div>
-            </td>
-          </tr>
+            <tr class="hidden loading" v-if="!isConnected">
+              <td colspan="100%" v-html="connectionStatusMessage"></td>
+            </tr>
+            <!--      <tr class="hidden not-found">-->
+            <!--        <td colspan="100%">No items found</td>-->
+            <!--      </tr>-->
+            <tr
+              v-for="(block, index) in reverseBlocks"
+              :key="block.hash"
+              :class="{ expand: index === 0 }"
+              v-else
+            >
+              <td>
+                <div>
+                  <router-link :to="`/block/${block.header.blockno}`">{{
+                    block.header.blockno
+                  }}</router-link>
+                </div>
+              </td>
+              <td>
+                <div>
+                  {{
+                    moment(block.header.timestamp / 1000000).format('HH:mm:ss')
+                  }}
+                </div>
+              </td>
+              <td>
+                <div>{{ block.txcount }}&nbsp;tx</div>
+              </td>
+              <td>
+                <div
+                  class="tooltipped tooltipped-sw tooltipped-align-right-2"
+                  :aria-label="block.header.pubkey"
+                >
+                  <Identicon
+                    :text="block.header.pubkey"
+                    size="18"
+                    class="tiny-identicon"
+                  />
+                  <span>{{
+                    $options.filters.formatEllipsisText(block.header.pubkey, 17)
+                  }}</span>
+                </div>
+              </td>
+              <td>
+                <div>{{ block.voteReward.formatNumber() }}</div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -65,46 +89,47 @@
 </template>
 
 <script>
-import moment from 'moment';
-import {mapState, mapActions} from 'vuex'
-import Identicon from '@/src/vue/components/Identicon';
+import moment from 'moment'
+import { mapState, mapActions } from 'vuex'
+import Identicon from '@/src/vue/components/Identicon'
 
-const CONNECTING_MSG = 'Connecting...';
-const CONNECTING_SLOW_MSG = 'Connecting...It\'s taking longer than usual, please wait or try again later.';
-
+const CONNECTING_MSG = 'Connecting...'
+const CONNECTING_SLOW_MSG =
+  "Connecting...It's taking longer than usual, please wait or try again later."
 
 export default {
   name: 'RecentBlocks',
   data() {
     return {}
   },
-  created() {
-  },
+  created() {},
   mounted() {
-    this.$store.dispatch('blockchain/streamBlocks');
+    this.$store.dispatch('blockchain/streamBlocks')
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   computed: {
     ...mapState({
-      blocks: state => state.blockchain.recentBlocks,
-      isConnected: state => state.blockchain.streamConnected,
-      connectionStatusMessage: state => state.blockchain.streamState === 'starting-slow' ? CONNECTING_SLOW_MSG : CONNECTING_MSG,
+      blocks: (state) => state.blockchain.recentBlocks,
+      isConnected: (state) => state.blockchain.streamConnected,
+      connectionStatusMessage: (state) =>
+        state.blockchain.streamState === 'starting-slow'
+          ? CONNECTING_SLOW_MSG
+          : CONNECTING_MSG,
     }),
     reverseBlocks() {
-      return this.blocks.slice().reverse();
-    }
+      return this.blocks.slice().reverse()
+    },
   },
   components: {
-    Identicon
+    Identicon,
   },
   methods: {
     viewAllBlocks() {
-      this.$router.push(`/blocks`);
+      this.$router.push(`/blocks`)
     },
-    moment
+    moment,
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -287,6 +312,7 @@ export default {
         border-bottom: 1px solid rgba(76, 68, 82, 0.8);
 
         th {
+          min-width: 80px;
           display: inline-block;
           border-bottom: none;
           white-space: normal;
@@ -336,7 +362,7 @@ export default {
         }
 
         &::-webkit-scrollbar-thumb {
-          background-color: rgba(167, 167, 167, .2);
+          background-color: rgba(167, 167, 167, 0.2);
         }
       }
 
@@ -355,11 +381,11 @@ export default {
         }
 
         &.expand {
-          animation: insert-height .3s, insert-bg 1s;
-          animation-duration: .3s;
+          animation: insert-height 0.3s, insert-bg 1s;
+          animation-duration: 0.3s;
 
           @media screen and (max-width: 480px) {
-            animation: insert-height-m .3s, insert-bg 1s;
+            animation: insert-height-m 0.3s, insert-bg 1s;
           }
         }
 
