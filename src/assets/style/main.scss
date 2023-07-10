@@ -933,6 +933,9 @@ img {
 
           td {
             text-align: left !important;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
           }
         }
 
@@ -1079,6 +1082,9 @@ img {
     }
 
     td {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       height: 37px;
       padding-right: 10px;
       font-size: 12px;
