@@ -924,6 +924,9 @@ img {
 
     thead {
       position: relative;
+      > div {
+        white-space: nowrap;
+      }
     }
 
     tbody {
@@ -933,9 +936,6 @@ img {
 
           td {
             text-align: left !important;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
           }
         }
 
@@ -1128,6 +1128,9 @@ img {
         align-items: center;
         height: 100%;
 
+        &:first-child {
+          max-width: 140px;
+        }
         > .txt-ellipsis {
           white-space: nowrap;
           text-overflow: ellipsis;
