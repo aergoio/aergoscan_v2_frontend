@@ -1,43 +1,86 @@
 <template>
   <div>
     <Tabs :value="selectedTab" @tab-change="tabChanged" :routeReplace="true">
-      <Tab title="ABI (JSON)" :route="{ query: query({tab: 'abi'}) }" :id="'abi'">
+      <Tab
+        title="ABI (JSON)"
+        :route="{ query: query({ tab: 'abi' }) }"
+        :id="'abi'"
+      >
         <div class="content">
-          <div class="monospace code-highlight code-highlight-pre" v-html="formattedAbi"></div>
+          <div
+            class="monospace code-highlight code-highlight-pre"
+            v-html="formattedAbi"
+          ></div>
         </div>
       </Tab>
 
-      <Tab title="Interactive" :route="{ query: query({tab: 'interactive'}) }" :id="'interactive'">
+      <Tab
+        title="Interactive"
+        :route="{ query: query({ tab: 'interactive' }) }"
+        :id="'interactive'"
+      >
         <div class="content">
           <div class="monospace interactive-contract code-highlight">
-
             <div v-if="!abi">Loading...</div>
-            <div v-if="abi && abi.functions.length == 0">Contract has no public functions.</div>
+            <div v-if="abi && abi.functions.length == 0">
+              Contract has no public functions.
+            </div>
 
-            <QueryFunction v-for="func in functions" :key="func.name" :abi="abi" :name="func.name" :address="address"/>
-            <QueryStateVariable v-for="variable in stateVariables" :key="variable.name" :abi="abi" :name="variable.name"
-                                :address="address"/>
+            <QueryFunction
+              v-for="func in functions"
+              :key="func.name"
+              :abi="abi"
+              :name="func.name"
+              :address="address"
+            />
+            <QueryStateVariable
+              v-for="variable in stateVariables"
+              :key="variable.name"
+              :abi="abi"
+              :name="variable.name"
+              :address="address"
+            />
           </div>
         </div>
       </Tab>
 
-      <Tab title="Events" :route="{ query: query({tab: 'events'}) }" :id="'events'">
+      <Tab
+        title="Events"
+        :route="{ query: query({ tab: 'events' }) }"
+        :id="'events'"
+      >
         <div class="table-wrap">
           <div class="desc-contract">
-            <span>Showing {{ events.length }} events from block number <span
-                class="loadedNumber">{{ eventsFromMin }}</span> to <span class="loadedNumber">{{ eventsToMax }}</span>.</span>
-            <button class="btn-load-more" v-on:click="loadPreviousEvents"
-                    v-if="canLoadMoreEvents && !isLoadingMoreEvents">LOAD MORE
+            <span
+              >Showing {{ events.length }} events from block number
+              <span class="loadedNumber">{{ eventsFromMin }}</span> to
+              <span class="loadedNumber">{{ eventsToMax }}</span
+              >.</span
+            >
+            <button
+              class="btn-load-more"
+              v-on:click="loadPreviousEvents"
+              v-if="canLoadMoreEvents && !isLoadingMoreEvents"
+            >
+              LOAD MORE
             </button>
-            <button class="btn-load-more" v-if="isLoadingMoreEvents">LOADING...</button>
-            <span v-if="!canLoadMoreEvents && !isLoadingMoreEvents">(Loaded all events)</span>
-            <span style="flex: 1 1 0%;"></span>
+            <button class="btn-load-more" v-if="isLoadingMoreEvents">
+              LOADING...
+            </button>
+            <span v-if="!canLoadMoreEvents && !isLoadingMoreEvents"
+              >(Loaded all events)</span
+            >
+            <span style="flex: 1 1 0%"></span>
             <div class="btn-refresh">
-              <ReloadButton :action="loadNewEvents"/>
+              <ReloadButton :action="loadNewEvents" />
             </div>
           </div>
           <div class="h-scroll">
-            <events-list :events="events" :columns="['blockno', 'tx']" :css="tabTableCss"/>
+            <events-list
+              :events="events"
+              :columns="['blockno', 'tx']"
+              :css="tabTableCss"
+            />
           </div>
         </div>
       </Tab>
@@ -46,20 +89,24 @@
 </template>
 
 <script>
-import {syntaxHighlight} from '@/src/vue/utils/syntax-highlight';
-import {loadAndWait} from '@/src/vue/utils/async';
-import ReloadButton from '@/src/vue/components/ReloadButton';
-import QueryFunction from '@/src/vue/components/QueryFunction';
-import QueryStateVariable from '@/src/vue/components/QueryStateVariable';
-import EventsList from '@/src/vue/components/EventsList.vue';
+import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
+import { loadAndWait } from '@/src/vue/utils/async'
+import ReloadButton from '@/src/vue/components/ReloadButton'
+import QueryFunction from '@/src/vue/components/QueryFunction'
+import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
+import EventsList from '@/src/vue/components/EventsList.vue'
 
-const contractTabs = ['abi', 'interactive', 'events'];
+const contractTabs = ['abi', 'interactive', 'events']
 
-const defaultdict = (def) => new Proxy({}, {
-  get: (target, name) => name in target ? target[name] : def
-});
+const defaultdict = (def) =>
+  new Proxy(
+    {},
+    {
+      get: (target, name) => (name in target ? target[name] : def),
+    }
+  )
 
-const eventPage = 10000;
+const eventPage = 10000
 
 export default {
   props: ['abi', 'codehash', 'address'],
@@ -84,20 +131,18 @@ export default {
   },
   created() {
     if (this.$route.query.tab) {
-      this.selectedTab = contractTabs.indexOf(this.$route.query.tab) || 0;
+      this.selectedTab = contractTabs.indexOf(this.$route.query.tab) || 0
     }
   },
   watch: {
-    'selectedTab'(to, from) {
+    selectedTab(to, from) {
       if (to === 2) {
-        this.loadEvents();
+        this.loadEvents()
       }
-    }
+    },
   },
-  mounted() {
-  },
-  beforeDestroy() {
-  },
+  mounted() {},
+  beforeDestroy() {},
   components: {
     ReloadButton,
     QueryFunction,
@@ -106,80 +151,82 @@ export default {
   },
   computed: {
     functions() {
-      if (!this.abi) return [];
-      return this.abi.functions.filter(func => func.name !== 'constructor');
+      if (!this.abi) return []
+      return this.abi.functions.filter((func) => func.name !== 'constructor')
     },
     stateVariables() {
-      if (!this.abi) return [];
-      return this.abi.state_variables;
+      if (!this.abi) return []
+      return this.abi.state_variables
     },
     formattedAbi() {
-      if (!this.$props.abi) return '';
-      return syntaxHighlight(this.$props.abi);
+      if (!this.$props.abi) return ''
+      return syntaxHighlight(this.$props.abi)
     },
     formattedCode() {
-      if (!this.codehash) return '';
-      const buf = Buffer.from(this.codehash);
-      return Array.from(buf).map(b => b.toString(16).padStart(2, "0")).join(" ");
+      if (!this.codehash) return ''
+      const buf = Buffer.from(this.codehash)
+      return Array.from(buf)
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join(' ')
     },
     canLoadMoreEvents() {
-      return this.eventsFromMin > 0;
-    }
+      return this.eventsFromMin > 0
+    },
   },
   methods: {
     tabChanged(index) {
-      this.selectedTab = index;
+      this.selectedTab = index
     },
     query(newQuery) {
-      return {...this.$route.query, ...newQuery};
+      return { ...this.$route.query, ...newQuery }
     },
     setViewMode(mode) {
-      this.viewMode = mode;
+      this.viewMode = mode
     },
     loadPreviousEvents() {
-      this.loadEvents(true);
+      this.loadEvents(true)
     },
     loadNewEvents() {
-      this.loadEvents(true, true);
+      this.loadEvents(true, true)
     },
     async loadEvents(append = false, loadNew = false) {
-      const wait = loadAndWait();
-      this.isLoadingMoreEvents = true;
+      const wait = loadAndWait()
+      this.isLoadingMoreEvents = true
       if (loadNew || !this.bestBlock) {
-        this.bestBlock = await this.$store.dispatch('blockchain/getBestBlock');
+        this.bestBlock = await this.$store.dispatch('blockchain/getBestBlock')
       }
 
       if (loadNew) {
-        this.eventsTo = this.bestBlock.bestHeight;
-        this.eventsFrom = this.eventsToMax + 1;
+        this.eventsTo = this.bestBlock.bestHeight
+        this.eventsFrom = this.eventsToMax + 1
       } else {
-        this.eventsTo = this.eventsFrom || this.bestBlock.bestHeight;
-        this.eventsFrom = Math.max(0, this.eventsTo - eventPage);
+        this.eventsTo = this.eventsFrom || this.bestBlock.bestHeight
+        this.eventsFrom = Math.max(0, this.eventsTo - eventPage)
       }
-      this.eventsToMax = Math.max(this.eventsToMax, this.eventsTo);
-      this.eventsFromMin = Math.min(this.eventsFromMin, this.eventsFrom);
+      this.eventsToMax = Math.max(this.eventsToMax, this.eventsTo)
+      this.eventsFromMin = Math.min(this.eventsFromMin, this.eventsFrom)
       if (this.eventsFromMin === -1) {
-        this.eventsFromMin = this.eventsFrom;
+        this.eventsFromMin = this.eventsFrom
       }
-      if (!append) this.events = [];
+      if (!append) this.events = []
       try {
         const events = await this.$store.dispatch('blockchain/getEvents', {
           eventName: null,
           args: [],
           address: this.address,
           blockto: this.eventsTo,
-          blockfrom: this.eventsFrom
-        });
-        await wait();
-        this.events.push(...events);
+          blockfrom: this.eventsFrom,
+        })
+        await wait()
+        this.events.push(...events)
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
-      this.isLoadingMoreEvents = false;
+      this.isLoadingMoreEvents = false
     },
-    syntaxHighlight
+    syntaxHighlight,
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -248,47 +295,51 @@ export default {
     background-color: #f0f0f0;
     color: #444;
 
-
     &:hover {
       background-color: #e7e7e7;
     }
 
     &.active {
-      background-color: #1E1E1E;
+      background-color: #1e1e1e;
       color: #fff;
     }
   }
 }
 
 .view-box {
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   padding: 1em;
   line-height: 1.4;
   border-radius: 4px;
   font-weight: 500;
-  color: #D4D4D4;
+  color: #d4d4d4;
   margin-bottom: 20px;
 }
 
 .code-highlight-pre {
+  font-family: 'Consolas', monospace;
   white-space: pre-wrap;
 }
 
 .code-highlight {
-  .string, .boolean, .number, .null, .function {
+  .string,
+  .boolean,
+  .number,
+  .null,
+  .function {
     font-weight: 500;
   }
 
   .function {
-    color: #FCFFA7;
+    color: #fcffa7;
   }
 
   .key {
-    color: #9CDCFE;
+    color: #9cdcfe;
   }
 
   .string {
-    color: #D88E73;
+    color: #d88e73;
   }
 
   .boolean {
@@ -296,7 +347,7 @@ export default {
   }
 
   .number {
-    color: #AECFA4;
+    color: #aecfa4;
   }
 
   .annotation {
@@ -317,7 +368,7 @@ export default {
 }
 
 .btn-call {
-  font-size: .9em;
+  font-size: 0.9em;
   cursor: pointer;
   text-transform: uppercase;
   color: #fff;
@@ -329,7 +380,8 @@ export default {
 }
 
 .event-table {
-  td, th {
+  td,
+  th {
     text-align: left;
     padding: 0 1em 0 0;
     line-height: 2;
