@@ -150,6 +150,7 @@ img {
 }
 
 .h-scroll {
+  overflow-x: auto;
   @media screen and (max-width: 780px) {
     overflow-x: auto;
   }
@@ -790,6 +791,7 @@ img {
   }
 
   .h-scroll {
+    overflow-x: auto;
     @media screen and (max-width: 480px) {
       margin: 0 -20px;
     }
