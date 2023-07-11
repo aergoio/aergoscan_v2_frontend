@@ -59,9 +59,10 @@
                   "
                 >
                   {{
-                    moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
+                    txTimeChanger(tx.ts || tx.block.header.timestamp / 1000000)
+                    // moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+                    //   'YYYY-MM-DD HH:mm:ss'
+                    // )
                   }}
                 </div>
               </td>
@@ -176,6 +177,17 @@ export default {
       }
     },
     moment,
+    txTimeChanger(time){
+      const innerWidth = window.innerWidth
+      if( innerWidth <= 780){
+        return moment(time).format(
+          'YY-MM-DD HH:mm:ss'
+        )
+      } else {
+        return moment(time).format(
+          'YYYY-MM-DD HH:mm:ss'
+        )
+      }
   },
 }
 </script>
