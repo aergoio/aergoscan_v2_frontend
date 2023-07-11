@@ -49,7 +49,7 @@
                 </th>
               </template>
               <template slot="list" slot-scope="{ row }">
-                <td>
+                <td class="txt-ellipsis">
                   <div>
                     <span class="identicon default" v-if="!row.image"></span>
                     <span class="identicon" v-else
