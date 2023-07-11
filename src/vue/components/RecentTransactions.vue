@@ -60,9 +60,6 @@
                 >
                   {{
                     txTimeChanger(tx.ts || tx.block.header.timestamp / 1000000)
-                    // moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                    //   'YYYY-MM-DD HH:mm:ss'
-                    // )
                   }}
                 </div>
               </td>
@@ -176,18 +173,15 @@ export default {
         }))
       }
     },
-    moment,
-    txTimeChanger(time){
+    txTimeChanger(time) {
       const innerWidth = window.innerWidth
-      if( innerWidth <= 780){
-        return moment(time).format(
-          'YY-MM-DD HH:mm:ss'
-        )
+      if (innerWidth <= 780) {
+        return moment(time).format('YY-MM-DD HH:mm:ss')
       } else {
-        return moment(time).format(
-          'YYYY-MM-DD HH:mm:ss'
-        )
+        return moment(time).format('YYYY-MM-DD HH:mm:ss')
       }
+    },
+    moment,
   },
 }
 </script>
@@ -271,7 +265,6 @@ export default {
         white-space: nowrap;
       }
       tbody {
-        white-space: nowrap;
         flex-direction: column;
       }
     }
