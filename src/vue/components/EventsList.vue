@@ -1,15 +1,24 @@
 <template>
   <table :class="[css.table, !events || !events.length ? 'not-found' : '']">
     <thead>
-      <tr>
+      <tr
+        :class="
+          columns.indexOf('blockno') >= 0 && columns.indexOf('tx') >= 0
+            ? 'events contract'
+            : 'events transaction'
+        "
+      >
+        <th>#</th>
         <th v-if="columns.indexOf('blockno') >= 0">Block</th>
         <th v-if="columns.indexOf('tx') >= 0">Tx</th>
         <th>Event Name</th>
+        <th>Contract Address</th>
         <th>Arguments</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in events" :key="`${row.tx_id}${row.event_idx}`">
+      <tr v-for="(row, idx) in events" :key="`${row.tx_id}${row.event_idx}`">
+        <td>{{ idx + 1 }}</td>
         <td v-if="columns.indexOf('blockno') >= 0">
           <router-link :to="`/block/${row.blockno}/`">{{
             row.blockno
@@ -22,17 +31,25 @@
         </td>
         <td>
           {{ row.event_name }}
+        </td>
+        <td>
           <div v-if="`${row.contract}` !== `${address}`">
-            @
-            <router-link :to="`/account/${row.contract}/`"
-              >{{ `${row.contract}`.substr(0, 5) }}...</router-link
-            >
+            <router-link :to="`/account/${row.contract}/`" class="block">{{
+              `@${$options.filters.formatEllipsisText(row.contract, 14)}`
+            }}</router-link>
+          </div>
+          <div v-else>
+            <router-link :to="`/account/${row.contract}/`" class="block">{{
+              `${$options.filters.formatEllipsisText(row.contract, 15)}`
+            }}</router-link>
           </div>
         </td>
         <td width="100%">
           <span class="event-args">
             <span class="args-payload" v-if="JSON.parse(row.event_args).length">
-              <pre><ArgFormatter v-for="arg of JSON.parse(row.event_args)" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
+              <pre
+                :style="{ display: 'flex', flexDirection: 'column' }"
+              ><ArgFormatter v-for="arg of JSON.parse(row.event_args)" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
             </span>
           </span>
         </td>
@@ -61,7 +78,12 @@ const ArgFormatter = {
         content = [
           h(
             'router-link',
-            { props: { to: `/account/${encodeURIComponent(this.arg)}/` } },
+            {
+              class: 'block',
+              props: {
+                to: `/account/${encodeURIComponent(this.arg)}/`,
+              },
+            },
             [this.arg]
           ),
         ]
@@ -109,6 +131,47 @@ export default {
   pre {
     margin: 0;
     font-size: 0.95em;
+  }
+}
+
+.events {
+  &.contract {
+    th {
+      &:nth-child(1) {
+        width: 5%;
+      }
+      &:nth-child(2) {
+        width: 10%;
+      }
+      &:nth-child(3) {
+        width: 20%;
+      }
+      &:nth-child(4) {
+        width: 10%;
+      }
+      &:nth-child(5) {
+        width: 15%;
+      }
+      &:nth-child(6) {
+        width: 45%;
+      }
+    }
+  }
+  &.transaction {
+    th {
+      &:nth-child(1) {
+        width: 5%;
+      }
+      &:nth-child(2) {
+        width: 15%;
+      }
+      &:nth-child(3) {
+        width: 25%;
+      }
+      &:nth-child(4) {
+        width: 55%;
+      }
+    }
   }
 }
 </style>

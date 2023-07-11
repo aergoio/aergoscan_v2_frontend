@@ -349,7 +349,7 @@
                     :id="'json'"
                   >
                     <div class="content">
-                      <pre>{{ payloadJson }}</pre>
+                      <codemirror v-model="payloadJson" :options="cmOption" />
                     </div>
                   </Tab>
                   <Tab
@@ -438,6 +438,21 @@ import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
 import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
 
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/material-ocean.css'
+import 'codemirror/mode/javascript/javascript.js'
+
+// foldGutter
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/brace-fold.js'
+import 'codemirror/addon/fold/comment-fold.js'
+import 'codemirror/addon/fold/foldcode.js'
+import 'codemirror/addon/fold/foldgutter.js'
+import 'codemirror/addon/fold/indent-fold.js'
+import 'codemirror/addon/fold/markdown-fold.js'
+import 'codemirror/addon/fold/xml-fold.js'
+
 const payloadTabs = ['formatted', 'json', 'hex']
 const receiptTabs = ['status', 'events']
 
@@ -455,6 +470,18 @@ export default {
       nftTxTotalItems: 0,
       tabTableCss: {
         table: 'result-events',
+      },
+      cmOption: {
+        tabSize: 8,
+        styleActiveLine: true,
+        mode: 'text/javascript',
+        theme: 'material-ocean',
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
       },
     }
   },
@@ -476,6 +503,7 @@ export default {
   updated() {
     console.log(this.events, 'events')
     console.log(this.txMeta, 'txMeta')
+    console.log(this.payloadJson, 'payloadJson')
     // console.log(this.txReceipt, 'txReceipt')
     // console.log(this.txDetail, 'txDetail')
   },
@@ -597,6 +625,7 @@ export default {
     Search,
     EventsList,
     Identicon,
+    codemirror,
   },
 }
 </script>

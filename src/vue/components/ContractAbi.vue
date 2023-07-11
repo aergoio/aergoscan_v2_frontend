@@ -150,7 +150,7 @@ export default {
       },
       code: {},
       cmOption: {
-        tabSize: 4,
+        tabSize: 8,
         styleActiveLine: true,
         mode: 'text/javascript',
         theme: 'material-ocean',
@@ -594,6 +594,9 @@ export default {
 }
 
 .CodeMirror {
-  height: 500px;
+  font-size: smaller;
+  height: max-content;
+  line-height: 1.5;
+  font-family: 'Roboto Mono', monospace;
 }
 </style>
