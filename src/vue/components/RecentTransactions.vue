@@ -60,9 +60,6 @@
                 >
                   {{
                     txTimeChanger(tx.ts || tx.block.header.timestamp / 1000000)
-                    // moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                    //   'YYYY-MM-DD HH:mm:ss'
-                    // )
                   }}
                 </div>
               </td>
@@ -260,7 +257,6 @@ export default {
         white-space: nowrap;
       }
       tbody {
-        white-space: nowrap;
         flex-direction: column;
       }
     }
