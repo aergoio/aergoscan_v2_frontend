@@ -175,6 +175,7 @@ export default {
     },
     txTimeChanger(time) {
       const innerWidth = window.innerWidth
+      console.log(innerWidth, 'innerWidth')
       if (innerWidth <= 780) {
         return moment(time).format('YY-MM-DD HH:mm:ss')
       } else {
