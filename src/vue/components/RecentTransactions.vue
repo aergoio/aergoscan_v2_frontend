@@ -58,15 +58,7 @@
                     moment(tx.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')
                   "
                 >
-                  {{
-                    window.innerWidth <= '780px'
-                      ? moment(
-                          tx.ts || tx.block.header.timestamp / 1000000
-                        ).format('YY-MM-DD HH:mm:ss')
-                      : moment(
-                          tx.ts || tx.block.header.timestamp / 1000000
-                        ).format('YYYY-MM-DD HH:mm:ss')
-                  }}
+                  {{ time }}
                 </div>
               </td>
               <td class="txt-ellipsis">
@@ -158,6 +150,15 @@ export default {
           ? CONNECTING_SLOW_MSG
           : CONNECTING_MSG,
     }),
+    time() {
+      return window.innerWidth <= '780px'
+        ? moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+            'YY-MM-DD HH:mm:ss'
+          )
+        : moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+            'YYYY-MM-DD HH:mm:ss'
+          )
+    },
   },
   methods: {
     viewAllTransactions() {
