@@ -207,6 +207,9 @@ export default {
     }
 
     &.lastest-top {
+      thead {
+        white-space: nowrap;
+      }
       tbody {
         flex-direction: column;
       }
@@ -312,7 +315,7 @@ export default {
         border-bottom: 1px solid rgba(76, 68, 82, 0.8);
 
         th {
-          min-width: 80px;
+          /* min-width: 80px; */
           display: inline-block;
           border-bottom: none;
           white-space: normal;
@@ -339,6 +342,10 @@ export default {
 
           &:nth-child(5) {
             width: 24% !important;
+
+            @media screen and (max-width: 780px) {
+              width: 19% !important;
+            }
           }
         }
       }
@@ -417,6 +424,10 @@ export default {
 
           &:nth-child(5) {
             width: 24% !important;
+
+            @media screen and (max-width: 780px) {
+              width: 19% !important;
+            }
           }
 
           a:hover {
