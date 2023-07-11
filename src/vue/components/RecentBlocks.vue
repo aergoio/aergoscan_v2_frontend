@@ -211,6 +211,7 @@ export default {
         white-space: nowrap;
       }
       tbody {
+        white-space: nowrap;
         flex-direction: column;
       }
     }

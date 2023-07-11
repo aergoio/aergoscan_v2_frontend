@@ -59,9 +59,13 @@
                   "
                 >
                   {{
-                    moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
+                    window.innerWidth <= '780px'
+                      ? moment(
+                          tx.ts || tx.block.header.timestamp / 1000000
+                        ).format('YY-MM-DD HH:mm:ss')
+                      : moment(
+                          tx.ts || tx.block.header.timestamp / 1000000
+                        ).format('YYYY-MM-DD HH:mm:ss')
                   }}
                 </div>
               </td>
@@ -259,6 +263,7 @@ export default {
         white-space: nowrap;
       }
       tbody {
+        white-space: nowrap;
         flex-direction: column;
       }
     }
