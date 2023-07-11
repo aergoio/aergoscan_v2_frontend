@@ -802,6 +802,9 @@ img {
       }
 
       th {
+        div {
+          white-space: nowrap;
+        }
         @media screen and (max-width: 480px) {
           padding-right: 45px;
 
@@ -924,6 +927,9 @@ img {
 
     thead {
       position: relative;
+      > div {
+        white-space: nowrap;
+      }
     }
 
     tbody {
@@ -1079,6 +1085,9 @@ img {
     }
 
     td {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       height: 37px;
       padding-right: 10px;
       font-size: 12px;

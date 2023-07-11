@@ -1,67 +1,86 @@
 @import './normalize';
 
-@import "@/publish/style/primer-tooltips/index.scss";
-
+@import '@/publish/style/primer-tooltips/index.scss';
 
 @font-face {
-  font-family: "Lato";
-  src: url("../../font/Lato-Black.ttf") format("truetype");
+  font-family: 'Lato';
+  src: url('../../font/Lato-Black.ttf') format('truetype');
   font-style: normal;
   font-weight: 900;
 }
 @font-face {
-  font-family: "Lato";
-  src: url("../../font/Lato-Bold.ttf") format("truetype");
+  font-family: 'Lato';
+  src: url('../../font/Lato-Bold.ttf') format('truetype');
   font-style: normal;
   font-weight: 700;
 }
 @font-face {
-  font-family: "Lato";
-  src: url("../../font/Lato-Regular.ttf") format("truetype");
+  font-family: 'Lato';
+  src: url('../../font/Lato-Regular.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
 }
 @font-face {
-  font-family: "Lato";
-  src: url("../../font/Lato-Light.ttf") format("truetype");
+  font-family: 'Lato';
+  src: url('../../font/Lato-Light.ttf') format('truetype');
   font-style: normal;
   font-weight: 300;
 }
 @font-face {
-  font-family: "Lato";
-  src: url("../../font/Lato-Thin.ttf") format("truetype");
+  font-family: 'Lato';
+  src: url('../../font/Lato-Thin.ttf') format('truetype');
   font-style: normal;
   font-weight: 100;
 }
 
 @keyframes table-progress {
-  from { width: 0%; }
-  to { width: 100%; }
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
 @keyframes insert-bg {
-  from { background: rgba(255, 255, 255, 0.5); }
-  to { background: transparent; }
+  from {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  to {
+    background: transparent;
+  }
 }
 
 @keyframes insert-height {
-  from { height: 0px; }
-  to { height: 38px; }
+  from {
+    height: 0px;
+  }
+  to {
+    height: 38px;
+  }
 }
 
 @keyframes insert-height-m {
-  from { height: 0px; }
-  to { height: 28px; }
+  from {
+    height: 0px;
+  }
+  to {
+    height: 28px;
+  }
 }
 
 body {
-  font-family: "Lato", system-ui, sans-serif;
-  font-size: (13/16)*100%;
+  font-family: 'Lato', system-ui, sans-serif;
+  font-size: (13/16) * 100%;
   margin: 0 auto;
   padding: 0;
   display: flex;
@@ -101,7 +120,7 @@ img {
 
   &.copied {
     &::after {
-      content: "Copied!";
+      content: 'Copied!';
       position: absolute;
       top: 0;
       left: 0;
@@ -119,14 +138,14 @@ img {
 .icon.refresh {
   width: 20px;
   height: 20px;
-  background-image: url("/img/ic-refresh@3x.png");
+  background-image: url('/img/ic-refresh@3x.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   transform: translate3d(0, 0, 1px);
 
-  &.loading  {
-    animation: spin .7s infinite linear;
+  &.loading {
+    animation: spin 0.7s infinite linear;
   }
 }
 
@@ -181,7 +200,9 @@ img {
       background-color: #363344;
       padding: 0 42px 0 32px;
 
-      img { width: 150px; }
+      img {
+        width: 150px;
+      }
     }
 
     .list {
@@ -193,12 +214,13 @@ img {
         align-items: center;
         height: 70px;
         padding: 0 42px 0 36px;
-        font-family: "Lato";
+        font-family: 'Lato';
         font-size: 16px;
         line-height: 1.5;
         color: #a89cb3;
 
-        &:hover, &.router-link-exact-active {
+        &:hover,
+        &.router-link-exact-active {
           color: #fff;
           background-color: #201e2c;
 
@@ -262,7 +284,7 @@ img {
 
             &:hover {
               .text .icon.goto {
-                background-image: url("/img/ic-follow-copy-2@3x.png");
+                background-image: url('/img/ic-follow-copy-2@3x.png');
               }
             }
 
@@ -277,7 +299,7 @@ img {
                 height: 10px;
                 margin: 2px 0 0 4px;
                 vertical-align: top;
-                background-image: url("/img/ic-follow@3x.png");
+                background-image: url('/img/ic-follow@3x.png');
                 background-position: center;
                 background-size: cover;
                 background-repeat: no-repeat;
@@ -400,7 +422,7 @@ img {
       height: 0;
       background-color: #363344;
       overflow: hidden;
-      transition: height .3s;
+      transition: height 0.3s;
 
       &.show {
         height: 100vh;
@@ -420,12 +442,13 @@ img {
           align-items: center;
           height: 74px;
           padding: 0 35px;
-          font-family: "Lato";
+          font-family: 'Lato';
           font-size: 18px;
           line-height: 1.7;
           color: #a89cb3;
 
-          &:hover, &.router-link-exact-active {
+          &:hover,
+          &.router-link-exact-active {
             color: #fff;
             background-color: #201e2c;
 
@@ -482,7 +505,7 @@ img {
 
             &:hover {
               .text .icon.goto {
-                background-image: url("/img/ic-follow-copy-2@3x.png");
+                background-image: url('/img/ic-follow-copy-2@3x.png');
               }
             }
 
@@ -497,7 +520,7 @@ img {
                 height: 14px;
                 margin: 9px 0 0 6px;
                 vertical-align: top;
-                background-image: url("/img/ic-follow@3x.png");
+                background-image: url('/img/ic-follow@3x.png');
                 background-position: center;
                 background-size: cover;
                 background-repeat: no-repeat;
@@ -579,7 +602,8 @@ img {
         gap: 16px 13px;
       }
 
-      .address, .block {
+      .address,
+      .block {
         display: inline-block;
         word-break: break-all;
         color: #fff;
@@ -662,7 +686,8 @@ img {
     margin: 0 -20px;
   }
 
-  > .title, .table-tab-header {
+  > .title,
+  .table-tab-header {
     padding: 0 20px 23px 20px;
     margin: 0 -20px 15px;
     font-size: 16px;
@@ -717,12 +742,13 @@ img {
         cursor: pointer;
       }
 
-      &:hover, &.router-link-exact-active {
+      &:hover,
+      &.router-link-exact-active {
         .main {
           color: #1a1823;
 
           &:after {
-            content: "";
+            content: '';
             position: absolute;
             bottom: 0;
             left: 0;
@@ -831,7 +857,7 @@ img {
     &.loading {
       thead {
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           bottom: 0;
           left: 0;
@@ -842,7 +868,7 @@ img {
         }
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           bottom: 0;
           left: 0;
@@ -892,6 +918,9 @@ img {
 
     thead {
       position: relative;
+      th {
+        min-width: 80px;
+      }
     }
 
     tbody {
@@ -901,6 +930,7 @@ img {
 
           td {
             text-align: left !important;
+            white-space: nowrap;
           }
         }
 
@@ -933,7 +963,7 @@ img {
           background-color: #e8e6ea;
 
           &::before {
-            content: "";
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
@@ -1050,6 +1080,12 @@ img {
       font-size: 12px;
       color: #3c3b3e;
       border-bottom: 1px solid #f2f2f2;
+
+      a {
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
       @media screen and (max-width: 480px) {
         height: 54px;
@@ -1233,7 +1269,7 @@ img {
           path:nth-child(2),
           path:nth-child(3),
           path:nth-child(4) {
-            fill: #DAD8DE;
+            fill: #dad8de;
           }
         }
       }
@@ -1242,7 +1278,7 @@ img {
         path:nth-child(2),
         path:nth-child(3),
         path:nth-child(4) {
-          fill: #5D5960;
+          fill: #5d5960;
         }
       }
     }
@@ -1278,7 +1314,8 @@ img {
         padding: 0 8px;
       }
 
-      &:hover, &.router-link-exact-active {
+      &:hover,
+      &.router-link-exact-active {
         background-color: #363344;
       }
     }
@@ -1320,7 +1357,9 @@ img {
           color: #726e72;
         }
 
-        a { text-decoration: underline; }
+        a {
+          text-decoration: underline;
+        }
       }
     }
   }
