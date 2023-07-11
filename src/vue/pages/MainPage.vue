@@ -1,18 +1,27 @@
 <template>
   <div class="wrap">
     <div id="category" class="main">
-      <Header :css="mainCss"/>
+      <Header :css="mainCss" />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search :css="mainCss" :search-field="$route.query.keyword"/>
+            <search :css="mainCss" :search-field="$route.query.keyword" />
             <div class="summary">
               <div class="latest-block">
                 <div class="title">Latest Block</div>
                 <div class="content">
-                  <span class="icon"><img src="~@assets/img/ic-latest-block@3x.png"></span>
+                  <span class="icon"
+                    ><img src="~@assets/img/ic-latest-block@3x.png"
+                  /></span>
                   <span class="text">
-                    <router-link :to="`/block/${reverseBlocks[0].hash}/`" v-if="reverseBlocks.length">{{reverseBlocks[0].header.blockno | formatNumber('&#8239;')}}</router-link>
+                    <router-link
+                      :to="`/block/${reverseBlocks[0].hash}/`"
+                      v-if="reverseBlocks.length"
+                      >{{
+                        reverseBlocks[0].header.blockno
+                          | formatNumber('&#8239;')
+                      }}</router-link
+                    >
                     <a href="javascript:;" v-else>.</a>
                   </span>
                 </div>
@@ -22,44 +31,68 @@
                 <div class="total-tx">
                   <div class="title">Total TX</div>
                   <div class="content">
-                    <span class="text" v-if="txTotal">{{ txTotal | formatNumber('&#8239;') }}</span>
+                    <span class="text" v-if="txTotal">{{
+                      txTotal | formatNumber('&#8239;')
+                    }}</span>
                     <span class="text" v-else>.</span>
                   </div>
                 </div>
                 <!-- tpm -->
-                <div class="tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                     aria-label="Transactions in the last minute">
+                <div
+                  class="tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                  aria-label="Transactions in the last minute"
+                >
                   <div class="title">TPM (Now)</div>
                   <div class="content">
-                    <span class="text" v-if="maxTpm">{{ maxTpm.meta.txs | formatNumber('&#8239;') }}</span>
+                    <span class="text" v-if="maxTpm">{{
+                      maxTpm.meta.txs | formatNumber('&#8239;')
+                    }}</span>
                     <span class="text" v-else>.</span>
                   </div>
                 </div>
                 <!-- tps -->
-                <router-link class="tps tooltipped tooltipped-se tooltipped-align-left-2" :to="`/block/${maxTps.hash}/`"
-                   aria-label="Peak transaction number. Click to go to block" v-if="maxTps">
+                <router-link
+                  class="tps tooltipped tooltipped-se tooltipped-align-left-2"
+                  :to="`/block/${maxTps.hash}/`"
+                  aria-label="Peak transaction number. Click to go to block"
+                  v-if="maxTps"
+                >
                   <div class="title">TPS (Peak)</div>
                   <div class="content">
-                    <span class="text">{{ maxTps.meta.txs | formatNumber('&#8239;') }}</span>
+                    <span class="text">{{
+                      maxTps.meta.txs | formatNumber('&#8239;')
+                    }}</span>
                   </div>
                 </router-link>
-                <a class="tps tooltipped tooltipped-se tooltipped-align-left-2"
-                             aria-label="Peak transaction number. Click to go to block" href="javascript:;" v-else>
+                <a
+                  class="tps tooltipped tooltipped-se tooltipped-align-left-2"
+                  aria-label="Peak transaction number. Click to go to block"
+                  href="javascript:;"
+                  v-else
+                >
                   <div class="title">TPS (Peak)</div>
                   <div class="content">
                     <span class="text">.</span>
                   </div>
                 </a>
                 <!-- bp list -->
-                <router-link class="bpn tooltipped tooltipped-se tooltipped-align-left-2" :to="`/consensus/`" v-if="consensusInfo"
-                   aria-label="Number of block producers. Click to go to list">
+                <router-link
+                  class="bpn tooltipped tooltipped-se tooltipped-align-left-2"
+                  :to="`/consensus/`"
+                  v-if="consensusInfo"
+                  aria-label="Number of block producers. Click to go to list"
+                >
                   <div class="title">BP Number</div>
                   <div class="content">
-                    <span class="text">{{bpNumber}}</span>
+                    <span class="text">{{ bpNumber }}</span>
                   </div>
                 </router-link>
-                <a class="bpn tooltipped tooltipped-se tooltipped-align-left-2"
-                             aria-label="Number of block producers. Click to go to list" href="javascript:;" v-else>
+                <a
+                  class="bpn tooltipped tooltipped-se tooltipped-align-left-2"
+                  aria-label="Number of block producers. Click to go to list"
+                  href="javascript:;"
+                  v-else
+                >
                   <div class="title">BP Number</div>
                   <div class="content">
                     <span class="text">.</span>
@@ -67,27 +100,27 @@
                 </a>
               </div>
               <!-- tx chart -->
-              <tx-chart :data="txData" :unit="'day'"/>
+              <tx-chart :data="txData" :unit="'day'" />
             </div>
             <div class="table-group">
-              <recent-blocks/>
-              <recent-transactions/>
+              <recent-blocks />
+              <recent-transactions />
             </div>
           </div>
         </div>
       </div>
-      <Footer :css="mainCss"/>
+      <Footer :css="mainCss" />
     </div>
   </div>
 </template>
 <script>
-import moment from 'moment';
-import {mapState, mapActions} from 'vuex'
-import cfg from '@/src/config.js';
-import RecentBlocks from '@/src/vue/components/RecentBlocks';
-import RecentTransactions from '@/src/vue/components/RecentTransactions';
-import TxChart from '@/src/vue/components/TxChart';
-import Search from '@/src/vue/components/Search';
+import moment from 'moment'
+import { mapState, mapActions } from 'vuex'
+import cfg from '@/src/config.js'
+import RecentBlocks from '@/src/vue/components/RecentBlocks'
+import RecentTransactions from '@/src/vue/components/RecentTransactions'
+import TxChart from '@/src/vue/components/TxChart'
+import Search from '@/src/vue/components/Search'
 
 export default {
   data() {
@@ -101,118 +134,125 @@ export default {
       consensusInfo: null,
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {
-    this.$store.dispatch('blockchain/streamBlocks');
-    this.updateMainBlocks();
-    this.updateStats();
+    this.$store.dispatch('blockchain/streamBlocks')
+    this.updateMainBlocks()
+    this.updateStats()
   },
   beforeDestroy() {
     if (this.blockInfoTimeout) {
-      clearTimeout(this.blockInfoTimeout);
+      clearTimeout(this.blockInfoTimeout)
     }
   },
   computed: {
     mainCss() {
       return {
-        page: "main",
-      };
+        page: 'main',
+      }
     },
     ...mapState({
-      blocks: state => state.blockchain.recentBlocks,
-      chainInfo: state => state.blockchain.chainInfo
+      blocks: (state) => state.blockchain.recentBlocks,
+      chainInfo: (state) => state.blockchain.chainInfo,
     }),
     reverseBlocks() {
-      return this.blocks.slice().reverse();
+      return this.blocks.slice().reverse()
     },
     maxTps() {
-      return this.blockInfo.maxTps;
+      return this.blockInfo.maxTps
     },
     txTotal() {
-      return typeof this.blockInfo.txTotal !== 'undefined' ? this.blockInfo.txTotal : false;
+      return typeof this.blockInfo.txTotal !== 'undefined'
+        ? this.blockInfo.txTotal
+        : false
     },
     maxTpm() {
-      return this.blockInfo.maxTpm;
+      return this.blockInfo.maxTpm
     },
     bpNumber() {
-      if (this.consensusInfo && this.consensusInfo.info && this.consensusInfo.info.Total) {
-        return Number(this.consensusInfo.info.Total);
+      if (
+        this.consensusInfo &&
+        this.consensusInfo.info &&
+        this.consensusInfo.info.Total
+      ) {
+        return Number(this.consensusInfo.info.Total)
       }
       if (this.chainInfo && this.chainInfo.bpnumber) {
-        return this.chainInfo.bpnumber;
+        return this.chainInfo.bpnumber
       }
-      return 0;
+      return 0
     },
     txData() {
-      let source;
-      const stats = this.txStats;
-      let dbData = [];
-      source = stats.txPerDay;
+      let source
+      const stats = this.txStats
+      let dbData = []
+      source = stats.txPerDay
       if (source) {
-        dbData = source.map(item => ({
+        dbData = source.map((item) => ({
           x: item.key,
-          y: item.sum_txs.value
-        }));
+          y: item.sum_txs.value,
+        }))
       }
-      return dbData;
-    }
+      return dbData
+    },
   },
   methods: {
     viewBlock(blockNo) {
-      this.$router.push(`/block/${blockNo}`);
+      this.$router.push(`/block/${blockNo}`)
     },
     async loadConsensus() {
-      this.consensusInfo = Object.freeze(await this.$store.dispatch('blockchain/getConsensusInfo'));
+      this.consensusInfo = Object.freeze(
+        await this.$store.dispatch('blockchain/getConsensusInfo')
+      )
     },
     async updateMainBlocks() {
       if (!this.consensusInfo) {
-        this.loadConsensus();
+        this.loadConsensus()
       }
       try {
-        const response = await this.$fetch.get(`${cfg.API_URL}/mainBlockInfo`);
-        this.blockInfo = await response.json();
+        const response = await this.$fetch.get(`${cfg.API_URL}/mainBlockInfo`)
+        this.blockInfo = await response.json()
       } catch (e) {
-        console.error('Failed to connect to stats API: ' + e);
+        console.error('Failed to connect to stats API: ' + e)
       }
       this.blockInfoTimeout = setTimeout(() => {
-        this.updateMainBlocks();
-      }, 3000);
+        this.updateMainBlocks()
+      }, 3000)
     },
 
     async updateStats() {
       try {
-        const response = await this.$fetch.get(`${cfg.API_URL}/txHistory`);
-        this.txStats = await response.json();
+        const response = await this.$fetch.get(`${cfg.API_URL}/txHistory`)
+        this.txStats = await response.json()
       } catch (e) {
-        console.error('Failed to connect to stats API: ' + e);
+        console.error('Failed to connect to stats API: ' + e)
       }
     },
-    moment
+    moment,
   },
   components: {
     Search,
     RecentBlocks,
     RecentTransactions,
     TxChart,
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
 #category {
   background-color: #1e1c2b;
-  background-image: url("~@assets/img/bg-galaxy@3x.png");
+  background-image: url('~@assets/img/bg-galaxy@3x.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
   @media screen and (max-width: 780px) {
-    background-image: url("~@assets/img/bg-galaxy@3x-tablet.png");
+    background-image: url('~@assets/img/bg-galaxy@3x-tablet.png');
   }
 
   @media screen and (max-width: 480px) {
-    background-image: url("~@assets/img/mobile-main-bg@3x.png");
+    background-image: url('~@assets/img/mobile-main-bg@3x.png');
   }
 }
 
@@ -231,8 +271,7 @@ export default {
   }
 }
 
-::v-deep
-.summary {
+::v-deep .summary {
   display: flex;
   margin: 7.5px -7.5px 7.5px;
 
@@ -284,7 +323,7 @@ export default {
     }
 
     @media screen and (max-width: 370px) {
-      width: 100%
+      width: 100%;
     }
 
     .content {
@@ -333,7 +372,7 @@ export default {
     }
 
     @media screen and (max-width: 370px) {
-      width: 100%
+      width: 100%;
     }
 
     > * {
@@ -372,10 +411,9 @@ export default {
     flex-wrap: wrap;
   }
 
-  ::v-deep
-  .h-scroll-main {
+  ::v-deep .h-scroll-main {
     @media screen and (max-width: 780px) {
-      overflow-x: auto;
+      /* overflow-x: auto; */
     }
 
     .h-scroll-main-inner {
@@ -385,5 +423,4 @@ export default {
     }
   }
 }
-
 </style>

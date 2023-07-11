@@ -376,13 +376,30 @@ export default {
 
           &:nth-child(2) {
             width: 18% !important;
+            @media screen and (max-width: 480px) {
+              width: 20% !important;
+            }
           }
 
           &:nth-child(3) {
             width: 24.3% !important;
-
+            @media screen and (max-width: 1600px) {
+              width: 28.5% !important;
+            }
+            @media screen and (max-width: 1400px) {
+              width: 32% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 23.8% !important;
+            }
+            @media screen and (max-width: 960px) {
+              width: 29% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: 32% !important;
+            }
             @media screen and (max-width: 480px) {
-              width: 22.5% !important;
+              width: 28% !important;
             }
           }
 
@@ -436,7 +453,7 @@ export default {
         display: block;
         height: 38px;
         border-bottom: 1px solid rgba(76, 68, 82, 0.8);
-
+        white-space: nowrap;
         @media screen and (max-width: 480px) {
           height: 28px;
         }
@@ -465,13 +482,29 @@ export default {
 
           &:nth-child(2) {
             width: 19% !important;
+
+            @media screen and (max-width: 1600px) {
+              width: 23% !important;
+            }
+            @media screen and (max-width: 1400px) {
+              width: 27% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 18% !important;
+            }
+            @media screen and (max-width: 960px) {
+              width: 24% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: auto !important;
+            }
           }
 
           &:nth-child(3) {
             width: 24.5% !important;
 
             @media screen and (max-width: 480px) {
-              width: 23.4% !important;
+              width: 22.4% !important;
             }
           }
 
@@ -485,9 +518,14 @@ export default {
 
           &:nth-child(5) {
             width: 24.5% !important;
-
+            @media screen and (max-width: 960px) {
+              width: 20% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: 16% !important;
+            }
             @media screen and (max-width: 480px) {
-              width: 24% !important;
+              width: 23% !important;
             }
           }
         }
