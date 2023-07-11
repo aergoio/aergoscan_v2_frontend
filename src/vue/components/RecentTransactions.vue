@@ -60,9 +60,7 @@
                 >
                   {{
                     moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                      window.innerWidth <= '780px'
-                        ? 'YY-MM-DD HH:mm:ss'
-                        : 'YYYY-MM-DD HH:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   }}
                 </div>
