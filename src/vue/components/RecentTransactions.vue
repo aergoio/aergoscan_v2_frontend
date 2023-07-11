@@ -59,9 +59,10 @@
                   "
                 >
                   {{
-                    moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )
+                    txTimeChanger(tx.ts || tx.block.header.timestamp / 1000000)
+                    // moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+                    //   'YYYY-MM-DD HH:mm:ss'
+                    // )
                   }}
                 </div>
               </td>
@@ -175,7 +176,6 @@ export default {
       }
     },
     moment,
-    resizeFormater,
   },
 }
 </script>
