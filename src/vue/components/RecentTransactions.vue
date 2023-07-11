@@ -399,7 +399,7 @@ export default {
               width: 32% !important;
             }
             @media screen and (max-width: 480px) {
-              width: 28% !important;
+              width: 22.5% !important;
             }
           }
 
@@ -416,6 +416,9 @@ export default {
 
             @media screen and (max-width: 480px) {
               width: 22% !important;
+            }
+            @media screen and (max-width: 360px) {
+              width: 5% !important;
             }
           }
         }
@@ -504,7 +507,7 @@ export default {
             width: 24.5% !important;
 
             @media screen and (max-width: 480px) {
-              width: 22.4% !important;
+              width: 23.4% !important;
             }
           }
 
@@ -525,7 +528,7 @@ export default {
               width: 16% !important;
             }
             @media screen and (max-width: 480px) {
-              width: 23% !important;
+              width: 24% !important;
             }
           }
         }
