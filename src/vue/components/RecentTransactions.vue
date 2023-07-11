@@ -59,7 +59,9 @@
                   "
                 >
                   {{
-                    txTimeChanger(tx.ts || tx.block.header.timestamp / 1000000)
+                    moment(tx.ts || tx.block.header.timestamp / 1000000).format(
+                      'YY-MM-DD HH:mm:ss'
+                    )
                   }}
                 </div>
               </td>
@@ -152,14 +154,6 @@ export default {
           ? CONNECTING_SLOW_MSG
           : CONNECTING_MSG,
     }),
-    txTimeChanger(time) {
-      const innerWidth = window.innerWidth
-      if (innerWidth <= 780) {
-        return moment(time).format('YY-MM-DD HH:mm:ss')
-      } else {
-        return moment(time).format('YYYY-MM-DD HH:mm:ss')
-      }
-    },
   },
   methods: {
     viewAllTransactions() {
