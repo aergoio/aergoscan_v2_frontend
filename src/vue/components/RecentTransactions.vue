@@ -60,7 +60,7 @@
                 >
                   {{
                     moment(tx.ts || tx.block.header.timestamp / 1000000).format(
-                      'YY-MM-DD HH:mm:ss'
+                      'YYYY-MM-DD HH:mm:ss'
                     )
                   }}
                 </div>
@@ -381,13 +381,30 @@ export default {
 
           &:nth-child(2) {
             width: 18% !important;
+            @media screen and (max-width: 480px) {
+              width: 20% !important;
+            }
           }
 
           &:nth-child(3) {
             width: 24.3% !important;
-
+            @media screen and (max-width: 1600px) {
+              width: 28.5% !important;
+            }
+            @media screen and (max-width: 1400px) {
+              width: 32% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 23.8% !important;
+            }
+            @media screen and (max-width: 960px) {
+              width: 29% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: 32% !important;
+            }
             @media screen and (max-width: 480px) {
-              width: 22.5% !important;
+              width: 28% !important;
             }
           }
 
@@ -487,17 +504,13 @@ export default {
           &:nth-child(2) {
             min-width: 120px;
             width: 19% !important;
-
-            @media screen and (max-width: 700px) {
-              width: auto !important;
-            }
           }
 
           &:nth-child(3) {
             width: 24.5% !important;
 
             @media screen and (max-width: 480px) {
-              width: 23.4% !important;
+              width: 22.4% !important;
             }
           }
 
@@ -510,10 +523,10 @@ export default {
           }
 
           &:nth-child(5) {
-            width: 22.5% !important;
+            width: 24.5% !important;
 
             @media screen and (max-width: 480px) {
-              width: 24% !important;
+              width: 23% !important;
             }
           }
         }

@@ -247,7 +247,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 780px) {
     background-image: url('~@assets/img/bg-galaxy@3x-tablet.png');
   }
 
@@ -412,7 +412,7 @@ export default {
   }
 
   ::v-deep .h-scroll-main {
-    @media screen and (max-width: 450px) {
+    @media screen and (max-width: 780px) {
       overflow-x: auto;
     }
 
