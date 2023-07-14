@@ -1,19 +1,37 @@
 <template>
   <div class="select-box">
-    <div class="selected-item" onclick="document.getElementsByClassName('select-box')[0].classList.add('show')">
-      <span class="status" v-bind:style="styleObject"></span>{{ displayNetworkLabel }}
+    <div
+      class="selected-item"
+      onclick="document.getElementsByClassName('select-box')[0].classList.add('show')"
+    >
+      <span class="status" v-bind:style="styleObject"></span
+      >{{ displayNetworkLabel }}
     </div>
-    <div class="list" onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')">
-      <div class="item" v-for="option in options" :key="option.chainid"
-           v-on:click="goto(option.url, option.chainid == currentChainId)">
-        <span class="status" v-bind:style="{'background-color': option.chainid == currentChainId ? '#F91263' : 'transparent;'}"></span>{{ option.label.toString().toUpperCase() }}
+    <div
+      class="list"
+      onclick="document.getElementsByClassName('select-box')[0].classList.remove('show')"
+    >
+      <div
+        class="item"
+        v-for="option in options"
+        :key="option.chainid"
+        v-on:click="goto(option.url, option.chainid == currentChainId)"
+      >
+        <span
+          class="status"
+          v-bind:style="{
+            'background-color':
+              option.chainid == currentChainId ? '#F91263' : 'transparent;',
+          }"
+        ></span
+        >{{ option.label.toString().toUpperCase() }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -24,87 +42,88 @@ export default {
       NETWORKS: {
         'aergo.io': {
           url: 'https://mainnet.aergoscan.io',
-          label: 'Mainnet'
+          label: 'Mainnet',
         },
         'testnet.aergo.io': {
           url: 'https://testnet.aergoscan.io',
-          label: 'Testnet'
+          label: 'Testnet',
         },
         'alpha.aergo.io': {
           url: 'https://alpha.aergoscan.io',
-          label: 'Alpha'
-        }
-      }
+          label: 'Alpha',
+        },
+      },
     }
   },
   computed: {
     ...mapState({
-      blocks: state => state.blockchain.recentBlocks,
-      isConnected: state => state.blockchain.streamConnected,
-      chainInfo: state => state.blockchain.chainInfo
+      blocks: (state) => state.blockchain.recentBlocks,
+      isConnected: (state) => state.blockchain.streamConnected,
+      chainInfo: (state) => state.blockchain.chainInfo,
     }),
     currentChainId() {
       try {
-        return this.chainInfo?.chainid.magic;
-      } catch (e) {
-      }
-      return 'unknown';
+        return this.chainInfo?.chainid.magic
+      } catch (e) {}
+      return 'unknown'
     },
     displayNetworkLabel() {
-      const connectedNetwork = (this.options).filter((item)=>{
+      const connectedNetwork = this.options.filter((item) => {
         return item.chainid === this.currentChainId
       })
-      return connectedNetwork[0].label.toString().toUpperCase();
+      return connectedNetwork[0].label.toString().toUpperCase()
     },
     options() {
-      let options = [];
-      let hasCurrent = false;
-      const current = this.currentChainId;
+      let options = []
+      let hasCurrent = false
+      const current = this.currentChainId
       for (let chainid in this.NETWORKS) {
-        options.push({chainid, url: this.NETWORKS[chainid].url, label: this.NETWORKS[chainid].label});
-        if (chainid === current) hasCurrent = true;
+        options.push({
+          chainid,
+          url: this.NETWORKS[chainid].url,
+          label: this.NETWORKS[chainid].label,
+        })
+        if (chainid === current) hasCurrent = true
       }
       if (!hasCurrent) {
-        options.push({chainid: current, url: '', label: current});
+        options.push({ chainid: current, url: '', label: current })
       }
-      return options;
+      return options
     },
     bestBlock() {
-      return this.blocks[this.blocks.length - 1];
+      return this.blocks[this.blocks.length - 1]
     },
     networkDisplay() {
       try {
-        return this.chainInfo.chainid.magic;
-      } catch (e) {
-      }
+        return this.chainInfo.chainid.magic
+      } catch (e) {}
       return this.network.split(':').join(' ')
     },
     styleObject() {
-      const color = '#F91263';
+      const color = '#F91263'
       if (this.isConnected || true) {
         return {
           backgroundColor: color,
-          borderColor: color
+          borderColor: color,
         }
       } else {
         return {
-          borderColor: color
+          borderColor: color,
         }
       }
-
-    }
+    },
   },
   methods: {
     toggleExpanded() {
-      this.expanded = !this.expanded;
+      this.expanded = !this.expanded
     },
     goto(url, current) {
-      if (current) return;
-      window.location.href = url;
+      if (current) return
+      window.location.href = url
     },
   },
-  components: {}
-};
+  components: {},
+}
 </script>
 
 <style lang="scss">
@@ -129,7 +148,6 @@ export default {
     }
   }
 
-
   &.show {
     .list {
       display: block;
@@ -148,7 +166,7 @@ export default {
     color: #4b494c;
     cursor: pointer;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       color: #bab4bf;
       border: solid 1px #972764;
       background-color: transparent;
@@ -172,7 +190,7 @@ export default {
     }
 
     .status {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 13px;
@@ -189,7 +207,7 @@ export default {
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       right: 12px;
@@ -230,7 +248,7 @@ export default {
       }
 
       .status {
-        content: "";
+        content: '';
         position: absolute;
         top: 50%;
         left: 13px;

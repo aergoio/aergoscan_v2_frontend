@@ -23,7 +23,7 @@
               </th>
               <th>
                 <div>
-                  <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow" />
+                  <!-- <img src="~@assets/img/tooltipped@3x.png" class="arrow" /> -->
                 </div>
               </th>
               <th>
@@ -39,7 +39,7 @@
             <!--        <td colspan="100%">No items found</td>-->
             <!--      </tr>-->
             <tr v-for="(tx, index) in syncedTransactions" :key="tx.hash" v-else>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-se tooltipped-align-left-2"
                   :aria-label="tx.hash"
@@ -65,15 +65,12 @@
                   }}
                 </div>
               </td>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-sw tooltipped-align-right-2"
                   :aria-label="tx.from"
                 >
-                  <router-link
-                    class="address txt-ellipsis"
-                    :to="`/account/${tx.from}`"
-                  >
+                  <router-link class="address" :to="`/account/${tx.from}`">
                     {{ $options.filters.formatEllipsisText(tx.from, 20) }}
                   </router-link>
                 </div>
@@ -83,16 +80,13 @@
                   <img src="~@assets/img/ic-arrow@3x.png" class="arrow" />
                 </div>
               </td>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-sw tooltipped-align-right-2"
                   :aria-label="tx.to"
                   v-if="tx.to.length !== 0"
                 >
-                  <router-link
-                    class="address txt-ellipsis"
-                    :to="`/account/${tx.to}`"
-                  >
+                  <router-link class="address" :to="`/account/${tx.to}`">
                     {{ $options.filters.formatEllipsisText(tx.to, 20) }}
                   </router-link>
                 </div>
@@ -319,7 +313,7 @@ export default {
       }
 
       &.txt-ellipsis {
-        @media screen and (max-width: 780px) {
+        @media screen and (max-width: 900px) {
           max-width: 15vw;
         }
 

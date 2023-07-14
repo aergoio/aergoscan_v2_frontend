@@ -49,23 +49,27 @@
                 </th>
               </template>
               <template slot="list" slot-scope="{ row }">
-                <td class="txt-ellipsis">
-                  <div>
+                <td>
+                  <div class="txt-ellipsis">
                     <span class="identicon default" v-if="!row.image"></span>
                     <span class="identicon" v-else
                       ><img :src="row.image"
                     /></span>
                     <router-link
-                      class="block"
+                      class="block tokenName"
                       v-html="row.selectedName"
                       :to="`/nft/${row.hash}/`"
                     >
                     </router-link>
+                    &nbsp; &nbsp;
+                    <div class="selectedSymbol">
+                      {{ `(${row.selectedSymbol})` }}
+                    </div>
                   </div>
                 </td>
-                <td>
+                <!-- <td>
                   <div v-html="row.selectedSymbol"></div>
-                </td>
+                </td> -->
                 <td>
                   <div>
                     <account-link
@@ -161,11 +165,11 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'NAME', value: 'name' },
-        { text: 'SYMBOL', value: 'symbol' },
-        { text: 'CONTRACT ADDRESS', value: 'address' },
-        { text: 'TOTAL SUPPLY', value: 'supply' },
-        { text: 'TOTAL TRANSFERS', value: 'transfer' },
+        { text: 'NFT', value: 'name' },
+        // { text: 'SYMBOL', value: 'symbol' },
+        { text: 'Contract Address', value: 'address' },
+        { text: 'Total Supply', value: 'supply' },
+        { text: 'Total Transfers', value: 'transfer' },
       ]
     },
     dataTableCss() {
@@ -283,7 +287,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -299,7 +303,7 @@ export default {
       font-size: 20px;
       font-weight: bold;
 
-      @media screen and (max-width: 780px) {
+      @media screen and (max-width: 900px) {
         margin-left: 0;
       }
     }
@@ -314,7 +318,7 @@ export default {
       background-color: #2c2938;
       white-space: nowrap;
 
-      @media screen and (max-width: 780px) {
+      @media screen and (max-width: 900px) {
         margin-left: 0;
       }
     }
@@ -361,7 +365,8 @@ export default {
 
 table.tokens-table {
   th {
-    min-width: 110px;
+    /* min-width: 110px; */
+
     &:last-child {
       text-align: right;
 
@@ -372,6 +377,10 @@ table.tokens-table {
   }
 
   td {
+    height: 45px;
+    /* &:nth-child(1) {
+      width: 30% !important;
+    } */
     &:last-child {
       text-align: right;
 

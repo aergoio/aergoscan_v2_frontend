@@ -273,7 +273,7 @@ export default {
       }
 
       &.txt-ellipsis {
-        @media screen and (max-width: 780px) {
+        @media screen and (max-width: 900px) {
           max-width: 15vw;
         }
 
@@ -344,7 +344,7 @@ export default {
           &:nth-child(5) {
             width: 24% !important;
 
-            @media screen and (max-width: 780px) {
+            @media screen and (max-width: 900px) {
               width: 19% !important;
             }
           }
@@ -426,7 +426,7 @@ export default {
           &:nth-child(5) {
             width: 24% !important;
 
-            @media screen and (max-width: 780px) {
+            @media screen and (max-width: 900px) {
               width: 19% !important;
             }
           }

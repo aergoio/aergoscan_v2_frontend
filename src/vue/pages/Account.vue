@@ -868,7 +868,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }

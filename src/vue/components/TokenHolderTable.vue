@@ -1,5 +1,9 @@
 <template>
-  <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
+  <data-table
+    :trans-data="data || []"
+    :is-loading="isLoading"
+    :css="dataTableCss"
+  >
     <template slot="error" v-if="error">
       <div class="error transactions show">
         {{ error }}
@@ -7,44 +11,55 @@
     </template>
     <template slot="header" v-for="header in headers">
       <th v-if="header.value === 'arrow'">
-        <div><img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow"></div>
+        <!-- <div><img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow"></div> -->
       </th>
       <th v-else>
         <div>{{ header.text }}</div>
       </th>
     </template>
-    <template slot="list" slot-scope="{row}">
+    <template slot="list" slot-scope="{ row }">
       <td>
         <div>{{ row.rank }}</div>
       </td>
       <td>
-        <account-link :css="accountLinkCss"
-                      :to-link="`/account/${row.account}/`" :address="row.account.toString()"/>
+        <account-link
+          :css="accountLinkCss"
+          :to-link="`/account/${row.account}/`"
+          :address="row.account.toString()"
+        />
       </td>
       <td>
-        <div v-html="$options.filters.formatBigNumAmount(row.balance, false, 6, row.decimals)"></div>
+        <div
+          v-html="
+            $options.filters.formatBigNumAmount(
+              row.balance,
+              false,
+              6,
+              row.decimals
+            )
+          "
+        ></div>
       </td>
       <td>
         <div>{{ row.percentage }}%</div>
       </td>
     </template>
     <pagination
-        slot="pagination"
-        :css="paginationCss"
-        :page="currentPage"
-        :total-items="limitPageTotalCount"
-        :itemsPerPage="itemsPerPage"
-        @onUpdate="changePage"
-        @updateCurrentPage="updateCurrentPage"
+      slot="pagination"
+      :css="paginationCss"
+      :page="currentPage"
+      :total-items="limitPageTotalCount"
+      :itemsPerPage="itemsPerPage"
+      @onUpdate="changePage"
+      @updateCurrentPage="updateCurrentPage"
     />
   </data-table>
 </template>
 <script>
-
-import cfg from '@/src/config';
-import moment from 'moment';
-import AccountLink from '@/src/vue/components/AccountLink';
-import BigNumber from 'bignumber.js';
+import cfg from '@/src/config'
+import moment from 'moment'
+import AccountLink from '@/src/vue/components/AccountLink'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'TokenHolderTable',
@@ -61,21 +76,21 @@ export default {
     },
     initialPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     itemsPerPage: {
       type: Number,
-      default: 10
+      default: 10,
     },
     defaultSort: String,
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'balance_float'
+      default: 'balance_float',
     },
     sort: {
       type: String,
-      default: 'desc'
+      default: 'desc',
     },
   },
   data() {
@@ -87,8 +102,8 @@ export default {
       isLoading: false,
       currentPage: this.initialPage,
       paginationCss: {
-        pagination: "pagination holders-table",
-        paginationInner: "pagination-inner",
+        pagination: 'pagination holders-table',
+        paginationInner: 'pagination-inner',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
         moveNextPage: 'next',
@@ -97,92 +112,104 @@ export default {
       accountLinkCss: {
         wrapper: 'tooltipped tooltipped-se tooltipped-align-left-2',
         address: 'block',
-        icon: 'mini-identicon'
+        icon: 'mini-identicon',
       },
       sortedField: this.sortField,
       sortedDir: this.sort,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   computed: {
     headers() {
       return [
-        {text: 'RANK', value: 'rank'},
-        {text: 'ADDRESS', value: 'adrress'},
-        {text: 'AMOUNT', value: 'amount_float'},
-        {text: 'PERCENTAGE', value: 'percentage'},
+        { text: 'RANK', value: 'rank' },
+        { text: 'ADDRESS', value: 'adrress' },
+        { text: 'AMOUNT', value: 'amount_float' },
+        { text: 'PERCENTAGE', value: 'percentage' },
       ]
     },
     dataTableCss() {
       return {
         wrapper: 'tab-content holders' + (this.active ? ' active' : ''),
-        table: "holders-table" + (this.isLoading ? ' is-loading' : ''),
-      };
+        table: 'holders-table' + (this.isLoading ? ' is-loading' : ''),
+      }
     },
     isHidePage() {
       return this.itemsPerPage >= this.limitPageTotalCount
-    }
+    },
   },
   mounted() {
-    this.changePage(this.currentPage);
+    this.changePage(this.currentPage)
   },
   methods: {
-    loaHolderTableData: async function ({id, sortField, sort, currentPage, itemsPerPage}) {
-      this.error = "";
-      const start = (currentPage - 1) * itemsPerPage;
-      const response = await (await this.$fetch.get(`${cfg.API_URL}/tokenHolder`, {
-        q: `address:${id} AND type:ARC1 AND balance_float:>0`,
-        size: itemsPerPage,
-        from: start,
-        sort: `${sortField}:${sort}`,
-      })).json();
+    loaHolderTableData: async function ({
+      id,
+      sortField,
+      sort,
+      currentPage,
+      itemsPerPage,
+    }) {
+      this.error = ''
+      const start = (currentPage - 1) * itemsPerPage
+      const response = await (
+        await this.$fetch.get(`${cfg.API_URL}/tokenHolder`, {
+          q: `address:${id} AND type:ARC1 AND balance_float:>0`,
+          size: itemsPerPage,
+          from: start,
+          sort: `${sortField}:${sort}`,
+        })
+      ).json()
       if (response.error) {
-        this.error = response.error.msg;
+        this.error = response.error.msg
       } else if (response.hits.length) {
         this.data = response.hits.map((item, index) => ({
           ...item.meta,
           hash: item.hash,
-          rank: (response.from ) + (index + 1),
-          percentage: this.totalSupply ==='0' ? 0 : this.$options.filters.formatPercentageText(item.meta.balance, this.totalSupply),
+          rank: response.from + (index + 1),
+          percentage:
+            this.totalSupply === '0'
+              ? 0
+              : this.$options.filters.formatPercentageText(
+                  item.meta.balance,
+                  this.totalSupply
+                ),
           decimals: item.token.meta.decimals,
-        }));
-        this.totalItems = response.total;
-        this.limitPageTotalCount = response.limitPageCount;
+        }))
+        this.totalItems = response.total
+        this.limitPageTotalCount = response.limitPageCount
       } else {
-        this.data = [];
-        this.totalItems = 0;
-        this.limitPageTotalCount = 0;
+        this.data = []
+        this.totalItems = 0
+        this.limitPageTotalCount = 0
       }
-      this.$emit('onUpdateTotalCount', this.totalItems);
+      this.$emit('onUpdateTotalCount', this.totalItems)
     },
     reload: async function () {
-      this.isLoading = true;
+      this.isLoading = true
       await this.loaHolderTableData({
         id: this.hash,
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,
         itemsPerPage: this.itemsPerPage,
-      });
-      this.isLoading = false;
+      })
+      this.isLoading = false
     },
     changePage: function (currentPage) {
-      this.currentPage = currentPage;
-      this.reload();
+      this.currentPage = currentPage
+      this.reload()
     },
     updateCurrentPage: function (currentPage) {
-      this.currentPage = currentPage;
+      this.currentPage = currentPage
     },
     moment,
-    BigNumber
+    BigNumber,
   },
   components: {
     AccountLink,
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -195,7 +222,7 @@ table.holders-table {
     &:last-child {
       text-align: right;
 
-      >div {
+      > div {
         justify-content: end;
       }
     }
@@ -209,7 +236,7 @@ table.holders-table {
     &:last-child {
       text-align: right;
 
-      >div {
+      > div {
         justify-content: end;
       }
     }
