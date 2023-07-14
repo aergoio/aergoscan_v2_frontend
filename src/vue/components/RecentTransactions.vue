@@ -358,8 +358,8 @@ export default {
         background-color: rgba(88, 86, 102, 0.5);
 
         &:hover {
-          color: #130f16;
-          background-color: #585666;
+          color: #e3dee7;
+          /* background-color: #585666; */
         }
       }
     }
