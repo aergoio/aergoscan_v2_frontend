@@ -87,7 +87,12 @@
                   v-if="tx.to.length !== 0"
                 >
                   <router-link class="address" :to="`/account/${tx.to}`">
+                    <<<<<<< HEAD
                     {{ resizeFormater(tx.to) }}
+                    =======
+                    {{ $options.filters.formatEllipsisText(tx.to, 20) }}
+                    >>>>>>> d29076b (update: responsive design & table css
+                    details)
                   </router-link>
                 </div>
                 <div v-else>

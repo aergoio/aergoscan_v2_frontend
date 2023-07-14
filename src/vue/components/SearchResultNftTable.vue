@@ -22,8 +22,8 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <span class="identicon default" v-if="!row.image"></span>
+          <span class="identicon" v-else><img :src="row.image" /></span>
           <router-link
             class="block"
             v-html="row.selectedName"
@@ -48,13 +48,12 @@
       <td>
         <div
           v-html="
-          row.supply,
-            // $options.filters.formatBigNumAmount(
-            //   row.supply,
-            //   false,
-            //   6,
-            //   row.decimals
-            // )
+            $options.filters.formatBigNumAmount(
+              row.supply,
+              false,
+              6,
+              row.decimals
+            )
           "
         ></div>
       </td>
@@ -159,23 +158,22 @@ export default {
           `${cfg.API_URL}/nft`,
           keyword.length > 0
             ? {
-                q: `(name_lower:*${keyword.toLowerCase()}* OR symbol_lower:*${keyword.toLowerCase()}*) AND type:ARC2 `,
+                q: `(name_lower:*${keyword.toLowerCase()}* OR symbol_lower:*${keyword.toLowerCase()}*) AND type:ARC2`,
                 search: keyword.toLowerCase(),
-                // range: 'ALL',
+                range: 'ALL',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `type:ARC2 `,
-                // range: 'ALL',
+                q: `type:ARC2`,
+                range: 'ALL',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
         )
       ).json()
-      console.log(response, 'response nft')
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {

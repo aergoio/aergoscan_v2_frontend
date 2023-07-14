@@ -115,6 +115,13 @@
                 @onUpdate="changePage"
                 @updateCurrentPage="updateCurrentPage"
               />
+              <template slot="desc">
+                <div class="desc">
+                  AERGO Scan merely displays quantitative data stored on
+                  blockchain. User's own discretion is advised in the process of
+                  making any judgement.
+                </div>
+              </template>
             </data-table>
           </div>
         </div>

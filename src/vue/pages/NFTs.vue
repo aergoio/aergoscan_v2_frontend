@@ -53,15 +53,9 @@
                 </th>
               </template>
               <template slot="list" slot-scope="{ row }">
-                <td
-                  class="mainTdHover"
-                  @click="() => handleMouseEnter(row.hash)"
-                >
-                  <div class="txt-ellipsis">
-                    <span
-                      class="identicon default"
-                      v-if="!row.image_url"
-                    ></span>
+                <td class="txt-ellipsis">
+                  <div>
+                    <span class="identicon default" v-if="!row.image"></span>
                     <span class="identicon" v-else
                       ><img :src="row.image_url"
                     /></span>
@@ -76,6 +70,9 @@
                       {{ `(${row.selectedSymbol})` }}
                     </div>
                   </div>
+                </td>
+                <td>
+                  <div v-html="row.selectedSymbol"></div>
                 </td>
                 <td>
                   <div>
@@ -396,14 +393,6 @@ table.tokens-table {
   }
 
   td {
-    height: 45px;
-    /* &:nth-child(1) {
-      width: 30% !important;
-    } */
-
-    &:first-child {
-      max-width: 200px;
-    }
     &:last-child {
       text-align: right;
 

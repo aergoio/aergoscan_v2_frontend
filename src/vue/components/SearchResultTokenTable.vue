@@ -22,8 +22,13 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
+          <<<<<<< HEAD
           <span class="identicon default" v-if="!row.image_url"></span>
           <span class="identicon" v-else><img :src="row.image_url" /></span>
+          =======
+          <span class="identicon default" v-if="!row.image"></span>
+          <span class="identicon" v-else><img :src="row.image" /></span>
+          >>>>>>> d29076b (update: responsive design & table css details)
           <router-link
             class="block"
             v-html="row.selectedName"
