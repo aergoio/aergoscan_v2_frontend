@@ -186,10 +186,7 @@ export default {
       deep: true,
     },
   },
-  mounted() {
-    this.changePage(this.currentPage)
-  },
-
+  mounted() {},
   beforeDestroy() {},
   components: {
     ReloadButton,
@@ -428,8 +425,7 @@ export default {
   background-color: #69647e;
 }
 .code-highlight-pre {
-  margin: 0.5rem;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Consolas', monospace;
   white-space: pre-wrap;
 }
 
