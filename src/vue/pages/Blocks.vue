@@ -153,11 +153,11 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'BLOCK #', value: 'no', sortable: true },
-        { text: 'TIME', value: 'ts', sortable: true },
+        { text: 'Block #', value: 'no', sortable: true },
+        { text: 'Time', value: 'ts', sortable: true },
         { text: 'TXs', value: 'txs', sortable: true },
-        { text: 'BLOCK PRODUCER', value: 'account', sortable: false },
-        { text: 'SIZE(BYTE)', value: 'size', sortable: true },
+        { text: 'Block Producer', value: 'account', sortable: false },
+        { text: 'Size (Byte)', value: 'size', sortable: true },
       ]
     },
     dataTableCss() {

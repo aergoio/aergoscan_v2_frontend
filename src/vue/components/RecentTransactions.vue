@@ -13,13 +13,13 @@
           <thead>
             <tr>
               <th>
-                <div>TX HASH</div>
+                <div>TX Hash</div>
               </th>
               <th>
-                <div>TIME</div>
+                <div>Time</div>
               </th>
               <th>
-                <div>FROM</div>
+                <div>From</div>
               </th>
               <th>
                 <div>
@@ -27,7 +27,7 @@
                 </div>
               </th>
               <th>
-                <div>TO</div>
+                <div>To</div>
               </th>
             </tr>
           </thead>
@@ -337,12 +337,13 @@ export default {
       }
 
       .address {
-        font-size: 8px;
-        background-color: rgba(88, 86, 102, 0.5);
+        color: #fff;
+        /* font-size: 8px; */
+        /* background-color: rgba(88, 86, 102, 0.5); */
 
         &:hover {
-          color: #130f16;
-          background-color: #585666;
+          color: #e3dee7;
+          /* background-color: #585666; */
         }
       }
     }

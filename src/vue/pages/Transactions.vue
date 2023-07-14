@@ -237,15 +237,15 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'TX HASH', value: 'hash', sortable: false },
-        { text: 'BLOCK #', value: 'blockno', sortable: true },
-        { text: 'TIME', value: 'ts', sortable: true },
-        { text: 'FROM', value: 'from' },
+        { text: 'TX Hash', value: 'hash', sortable: false },
+        { text: 'Block #', value: 'blockno', sortable: true },
+        { text: 'Time', value: 'ts', sortable: true },
+        { text: 'From', value: 'from' },
         { text: '', value: 'arrow' },
-        { text: 'TO', value: 'to' },
-        { text: 'CATEGORY', value: 'category' },
-        { text: 'METHOD', value: 'method', sortable: false },
-        { text: 'AMOUNT(AERGO)', value: 'amount_float', sortable: true },
+        { text: 'To', value: 'to' },
+        { text: 'Category', value: 'category' },
+        { text: 'Method', value: 'method', sortable: false },
+        { text: 'Amount (Aergo)', value: 'amount_float', sortable: true },
       ]
     },
     categories() {

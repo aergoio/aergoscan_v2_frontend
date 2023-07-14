@@ -13,19 +13,19 @@
           <thead>
             <tr>
               <th>
-                <div>BLOCK #</div>
+                <div>Block #</div>
               </th>
               <th>
-                <div>TIME</div>
+                <div>Time</div>
               </th>
               <th>
                 <div>TXs</div>
               </th>
               <th>
-                <div>BLOCK PRODUCER</div>
+                <div>Block Producer</div>
               </th>
               <th>
-                <div>REWARD (AERGO)</div>
+                <div>Reward (Aergo)</div>
               </th>
             </tr>
           </thead>
