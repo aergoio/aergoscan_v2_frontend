@@ -179,6 +179,15 @@ export default {
         }))
       }
     },
+    handleResize(tx) {
+      if (window.innerWidth < 500) {
+        return this.$options.filters.formatEllipsisText(tx, 12)
+      } else if (window.innerWidth < 600) {
+        return this.$options.filters.formatEllipsisText(tx, 16)
+      } else {
+        return this.$options.filters.formatEllipsisText(tx, 20)
+      }
+    },
     moment,
   },
 }
@@ -339,7 +348,7 @@ export default {
       &:nth-child(2) {
         color: #908091;
       }
-
+      &:nth-child(2),
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -377,17 +386,17 @@ export default {
           border-bottom: none;
           white-space: normal;
           &:nth-child(1) {
-            width: 24.5% !important;
+            width: 20% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 23% !important;
-            }
+            /* @media screen and (max-width: 480px) {
+              width: 19% !important;
+            } */
           }
 
           &:nth-child(2) {
-            width: 18% !important;
-            @media screen and (max-width: 480px) {
-              width: 20% !important;
+            width: 20% !important;
+            @media screen and (max-width: 650px) {
+              width: 25% !important;
             }
           }
 
@@ -417,22 +426,15 @@ export default {
           }
 
           &:nth-child(4) {
-            width: 5% !important;
-
-            @media screen and (max-width: 480px) {
-              width: 7.5% !important;
-            }
+            width: 10% !important;
           }
 
           &:nth-child(5) {
-            width: 23% !important;
+            width: 25% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 22% !important;
-            }
-            @media screen and (max-width: 360px) {
-              width: 5% !important;
-            }
+            /* @media screen and (max-width: 900px) {
+              width: 19% !important;
+            } */
           }
         }
       }
@@ -490,11 +492,11 @@ export default {
           white-space: normal;
 
           &:nth-child(1) {
-            width: 24.5% !important;
+            width: 20% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 23% !important;
-            }
+            /* @media screen and (max-width: 480px) {
+              width: 19% !important;
+            } */
           }
 
           &:nth-child(2) {
@@ -548,11 +550,7 @@ export default {
           }
 
           &:nth-child(4) {
-            width: 5% !important;
-
-            @media screen and (max-width: 480px) {
-              width: 7.5% !important;
-            }
+            width: 10% !important;
           }
 
           &:nth-child(5) {

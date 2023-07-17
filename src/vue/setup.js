@@ -5,7 +5,6 @@ import App from '@/src/vue/App'
 import VueRouter from 'vue-router'
 import VueFetch from 'vue-fetch'
 import VueClipboard from 'vue-clipboard2'
-
 import routes from '@/src/vue/config/routes'
 import Header from '@/src/vue/components/Header'
 import Footer from '@/src/vue/components/Footer'
