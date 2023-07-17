@@ -405,14 +405,14 @@ export default {
             @media screen and (max-width: 960px) {
               width: 29% !important;
             }
+            @media screen and (max-width: 900px) {
+              width: 20% !important;
+            }
             @media screen and (max-width: 550px) {
-              width: 32% !important;
+              width: 30% !important;
             }
             @media screen and (max-width: 480px) {
-              width: 28% !important;
-            }
-            @media screen and (max-width: 360px) {
-              width: 20.5% !important;
+              width: 22.5% !important;
             }
           }
 
@@ -489,18 +489,6 @@ export default {
           border-bottom: none;
           white-space: normal;
 
-          .address {
-            /* padding: auto; */
-            background-color: rgba(88, 86, 102, 0.5);
-            @media screen and (max-width: 700px) {
-              font-size: 9px;
-            }
-            @media screen and (max-width: 480px) {
-              font-size: 8px;
-              padding: 0;
-            }
-          }
-
           &:nth-child(1) {
             width: 24.5% !important;
 
@@ -512,16 +500,50 @@ export default {
           &:nth-child(2) {
             min-width: 120px;
             width: 19% !important;
+
+            @media screen and (max-width: 1600px) {
+              width: 23% !important;
+            }
+            @media screen and (max-width: 1400px) {
+              width: 27% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 18% !important;
+            }
+            @media screen and (max-width: 960px) {
+              width: 24% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: auto !important;
+            }
           }
 
           &:nth-child(3) {
-            width: 24.5% !important;
-
-            @media screen and (max-width: 480px) {
-              width: 20% !important;
+            width: 24% !important;
+            @media screen and (max-width: 1600px) {
+              width: 30% !important;
             }
-            @media screen and (max-width: 360px) {
-              width: 15% !important;
+            @media screen and (max-width: 1400px) {
+              width: 31% !important;
+            }
+            @media screen and (max-width: 1300px) {
+              width: 41% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 24% !important;
+            }
+            @media screen and (max-width: 950px) {
+              width: 26% !important;
+            }
+
+            @media screen and (max-width: 660px) {
+              width: 30% !important;
+            }
+            @media screen and (max-width: 580px) {
+              width: 38% !important;
+            }
+            @media screen and (max-width: 480px) {
+              width: 23.4% !important;
             }
           }
 
@@ -535,9 +557,14 @@ export default {
 
           &:nth-child(5) {
             width: 24.5% !important;
-
+            @media screen and (max-width: 960px) {
+              width: 20% !important;
+            }
+            @media screen and (max-width: 550px) {
+              width: 16% !important;
+            }
             @media screen and (max-width: 480px) {
-              width: 15% !important;
+              width: 24% !important;
             }
           }
         }

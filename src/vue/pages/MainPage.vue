@@ -412,7 +412,7 @@ export default {
   }
 
   ::v-deep .h-scroll-main {
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       /* overflow-x: auto; */
     }
 
