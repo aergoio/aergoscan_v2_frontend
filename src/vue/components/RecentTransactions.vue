@@ -388,12 +388,19 @@ export default {
           &:nth-child(2) {
             width: 20% !important;
             @media screen and (max-width: 650px) {
-              width: 25% !important;
+              width: 33% !important;
             }
           }
 
           &:nth-child(3) {
             width: 25% !important;
+
+            /* @media screen and (max-width: 400px) {
+              width: % !important;
+            } */
+            @media screen and (max-width: 650px) {
+              width: 15% !important;
+            }
           }
 
           &:nth-child(4) {
@@ -402,10 +409,6 @@ export default {
 
           &:nth-child(5) {
             width: 25% !important;
-
-            /* @media screen and (max-width: 900px) {
-              width: 19% !important;
-            } */
           }
         }
       }
@@ -415,7 +418,8 @@ export default {
       display: flex;
       flex-direction: column;
       max-height: 380px;
-      overflow-y: scroll;
+      /* overflow-y: scroll; */
+      /* overflow-y: hidden; */
       margin-right: -8px;
 
       @media screen and (max-width: 480px) {
