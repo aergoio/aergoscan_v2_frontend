@@ -396,7 +396,7 @@ export default {
           &:nth-child(2) {
             width: 20% !important;
             @media screen and (max-width: 650px) {
-              width: 25% !important;
+              width: 33% !important;
             }
           }
 
@@ -431,10 +431,6 @@ export default {
 
           &:nth-child(5) {
             width: 25% !important;
-
-            /* @media screen and (max-width: 900px) {
-              width: 19% !important;
-            } */
           }
         }
       }
