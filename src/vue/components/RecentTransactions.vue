@@ -71,7 +71,7 @@
                   :aria-label="tx.from"
                 >
                   <router-link class="address" :to="`/account/${tx.from}`">
-                    {{ $options.filters.formatEllipsisText(tx.from, 20) }}
+                    {{ handleResize(tx.from) }}
                   </router-link>
                 </div>
               </td>
@@ -87,7 +87,7 @@
                   v-if="tx.to.length !== 0"
                 >
                   <router-link class="address" :to="`/account/${tx.to}`">
-                    {{ $options.filters.formatEllipsisText(tx.to, 20) }}
+                    {{ handleResize(tx.to) }}
                   </router-link>
                 </div>
                 <div v-else>
@@ -128,7 +128,9 @@ export default {
       syncInterval: null,
     }
   },
-  created() {},
+  created() {
+    window.addEventListener('resize', this.handleResize)
+  },
   async mounted() {
     this.$store.dispatch('blockchain/streamBlocks')
     this.syncTxList()
@@ -138,7 +140,9 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.syncInterval)
+    window.removeEventListener('resize', this.handleResize)
   },
+
   computed: {
     ...mapState({
       transactions: (state) => state.blockchain.recentTransactions,
@@ -167,6 +171,15 @@ export default {
           ...tx,
           ...tx.meta,
         }))
+      }
+    },
+    handleResize(tx) {
+      if (window.innerWidth < 500) {
+        return this.$options.filters.formatEllipsisText(tx, 12)
+      } else if (window.innerWidth < 600) {
+        return this.$options.filters.formatEllipsisText(tx, 16)
+      } else {
+        return this.$options.filters.formatEllipsisText(tx, 20)
       }
     },
     moment,
@@ -274,13 +287,15 @@ export default {
       }
 
       &:first-child {
-        padding-left: 0;
+        padding-left: 8px;
       }
 
       &:nth-child(2) {
-        @media screen and (max-width: 480px) {
+        /* min-width: max-content; */
+        /* padding-left: 8px; */
+        /* @media screen and (max-width: 480px) {
           min-width: 55px;
-        }
+        } */
       }
 
       &:nth-child(4) {
@@ -289,6 +304,7 @@ export default {
         box-sizing: content-box;
       }
 
+      &:nth-child(2),
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -326,7 +342,7 @@ export default {
       &:nth-child(2) {
         color: #908091;
       }
-
+      &:nth-child(2),
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -361,64 +377,35 @@ export default {
           display: inline-block;
           border-bottom: none;
           white-space: normal;
-
           &:nth-child(1) {
-            width: 24.5% !important;
+            width: 20% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 23% !important;
-            }
+            /* @media screen and (max-width: 480px) {
+              width: 19% !important;
+            } */
           }
 
           &:nth-child(2) {
-            width: 18% !important;
-            @media screen and (max-width: 480px) {
-              width: 20% !important;
+            width: 20% !important;
+            @media screen and (max-width: 650px) {
+              width: 25% !important;
             }
           }
 
           &:nth-child(3) {
-            width: 24.3% !important;
-            @media screen and (max-width: 1600px) {
-              width: 28.5% !important;
-            }
-            @media screen and (max-width: 1400px) {
-              width: 32% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 23.8% !important;
-            }
-            @media screen and (max-width: 960px) {
-              width: 29% !important;
-            }
-            @media screen and (max-width: 900px) {
-              width: 20% !important;
-            }
-            @media screen and (max-width: 550px) {
-              width: 30% !important;
-            }
-            @media screen and (max-width: 480px) {
-              width: 29% !important;
-            }
+            width: 25% !important;
           }
 
           &:nth-child(4) {
-            width: 5% !important;
-
-            @media screen and (max-width: 480px) {
-              width: 7.5% !important;
-            }
+            width: 10% !important;
           }
 
           &:nth-child(5) {
-            width: 23% !important;
+            width: 25% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 22% !important;
-            }
-            @media screen and (max-width: 360px) {
-              width: 5% !important;
-            }
+            /* @media screen and (max-width: 900px) {
+              width: 19% !important;
+            } */
           }
         }
       }
@@ -473,6 +460,7 @@ export default {
           max-width: inherit !important;
           border-bottom: none;
           white-space: normal;
+
           .address {
             /* padding: auto; */
             background-color: rgba(88, 86, 102, 0.5);
@@ -484,100 +472,37 @@ export default {
               padding: 0;
             }
           }
-          &:nth-child(1) {
-            width: 24.5% !important;
 
-            @media screen and (max-width: 480px) {
-              width: 23% !important;
-            }
+          &:nth-child(1) {
+            width: 20% !important;
+
+            /* @media screen and (max-width: 480px) {
+              width: 19% !important;
+            } */
           }
 
           &:nth-child(2) {
-            width: 19% !important;
-
-            @media screen and (max-width: 1600px) {
-              width: 23% !important;
-            }
-            @media screen and (max-width: 1400px) {
-              width: 27% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 18% !important;
-            }
-            @media screen and (max-width: 960px) {
-              width: 20% !important;
-            }
-            @media screen and (max-width: 900px) {
-              width: 15% !important;
-            }
-            @media screen and (max-width: 850px) {
-              width: 20% !important;
-            }
-            @media screen and (max-width: 550px) {
+            /* width: auto; */
+            width: 20% !important;
+            @media screen and (max-width: 650px) {
               width: auto !important;
             }
           }
 
           &:nth-child(3) {
-            width: 24% !important;
-            @media screen and (max-width: 1600px) {
-              width: 30% !important;
-            }
-            @media screen and (max-width: 1400px) {
-              width: 31% !important;
-            }
-            @media screen and (max-width: 1300px) {
-              width: 41% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 24% !important;
-            }
-            @media screen and (max-width: 950px) {
-              width: 26% !important;
-            }
-
-            @media screen and (max-width: 660px) {
-              width: 30% !important;
-            }
-            @media screen and (max-width: 580px) {
-              width: 38% !important;
-            }
-            @media screen and (max-width: 480px) {
-              width: 33% !important;
-            }
-            @media screen and (max-width: 450px) {
-              width: 40% !important;
-            }
+            width: 25% !important;
           }
 
           &:nth-child(4) {
-            width: 5% !important;
-
-            @media screen and (max-width: 480px) {
-              width: 7.5% !important;
-            }
+            width: 10% !important;
           }
 
           &:nth-child(5) {
-            width: 24.5% !important;
-            @media screen and (max-width: 1500px) {
-              width: 30% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 24% !important;
-            }
-            @media screen and (max-width: 650px) {
-              width: 29% !important;
-            }
-            @media screen and (max-width: 550px) {
-              width: 33% !important;
-            }
-            @media screen and (max-width: 480px) {
-              width: 35% !important;
-            }
-            @media screen and (max-width: 450px) {
-              width: 38% !important;
-            }
+            width: 25% !important;
+
+            /* @media screen and (max-width: 900px) {
+              width: 19% !important;
+            } */
           }
         }
       }
