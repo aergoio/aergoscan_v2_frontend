@@ -188,6 +188,7 @@ export default {
   }
 
   @media screen and (max-width: 480px) {
+    /* overflow-x: auto; */
     width: calc(100% - 15px);
     padding: 15px 10px;
     margin-bottom: 12px;
@@ -390,11 +391,14 @@ export default {
             @media screen and (max-width: 960px) {
               width: 29% !important;
             }
+            @media screen and (max-width: 900px) {
+              width: 20% !important;
+            }
             @media screen and (max-width: 550px) {
-              width: 32% !important;
+              width: 30% !important;
             }
             @media screen and (max-width: 480px) {
-              width: 22.5% !important;
+              width: 29% !important;
             }
           }
 
@@ -469,7 +473,17 @@ export default {
           max-width: inherit !important;
           border-bottom: none;
           white-space: normal;
-
+          .address {
+            /* padding: auto; */
+            background-color: rgba(88, 86, 102, 0.5);
+            @media screen and (max-width: 700px) {
+              font-size: 9px;
+            }
+            @media screen and (max-width: 480px) {
+              font-size: 8px;
+              padding: 0;
+            }
+          }
           &:nth-child(1) {
             width: 24.5% !important;
 
@@ -491,7 +505,13 @@ export default {
               width: 18% !important;
             }
             @media screen and (max-width: 960px) {
-              width: 24% !important;
+              width: 20% !important;
+            }
+            @media screen and (max-width: 900px) {
+              width: 15% !important;
+            }
+            @media screen and (max-width: 850px) {
+              width: 20% !important;
             }
             @media screen and (max-width: 550px) {
               width: auto !important;
@@ -499,10 +519,34 @@ export default {
           }
 
           &:nth-child(3) {
-            width: 24.5% !important;
+            width: 24% !important;
+            @media screen and (max-width: 1600px) {
+              width: 30% !important;
+            }
+            @media screen and (max-width: 1400px) {
+              width: 31% !important;
+            }
+            @media screen and (max-width: 1300px) {
+              width: 41% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 24% !important;
+            }
+            @media screen and (max-width: 950px) {
+              width: 26% !important;
+            }
 
+            @media screen and (max-width: 660px) {
+              width: 30% !important;
+            }
+            @media screen and (max-width: 580px) {
+              width: 38% !important;
+            }
             @media screen and (max-width: 480px) {
-              width: 23.4% !important;
+              width: 33% !important;
+            }
+            @media screen and (max-width: 450px) {
+              width: 40% !important;
             }
           }
 
@@ -516,14 +560,23 @@ export default {
 
           &:nth-child(5) {
             width: 24.5% !important;
-            @media screen and (max-width: 960px) {
-              width: 20% !important;
+            @media screen and (max-width: 1500px) {
+              width: 30% !important;
+            }
+            @media screen and (max-width: 1200px) {
+              width: 24% !important;
+            }
+            @media screen and (max-width: 650px) {
+              width: 29% !important;
             }
             @media screen and (max-width: 550px) {
-              width: 16% !important;
+              width: 33% !important;
             }
             @media screen and (max-width: 480px) {
-              width: 24% !important;
+              width: 35% !important;
+            }
+            @media screen and (max-width: 450px) {
+              width: 38% !important;
             }
           }
         }

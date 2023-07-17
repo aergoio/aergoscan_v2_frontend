@@ -146,6 +146,7 @@ export default {
   }
 
   @media screen and (max-width: 480px) {
+    /* overflow-x: auto; */
     width: calc(100% - 15px);
     padding: 15px 10px;
     margin-bottom: 12px;
