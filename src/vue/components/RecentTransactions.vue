@@ -180,12 +180,28 @@ export default {
       }
     },
     handleResize(tx) {
-      if (window.innerWidth < 500) {
+      if (window.innerWidth < 400) {
         return this.$options.filters.formatEllipsisText(tx, 12)
+      } else if (window.innerWidth < 500) {
+        return this.$options.filters.formatEllipsisText(tx, 14)
       } else if (window.innerWidth < 600) {
         return this.$options.filters.formatEllipsisText(tx, 16)
-      } else {
+      } else if (window.innerWidth < 700) {
+        return this.$options.filters.formatEllipsisText(tx, 18)
+      } else if (window.innerWidth < 800) {
         return this.$options.filters.formatEllipsisText(tx, 20)
+      } else if (window.innerWidth < 900) {
+        return this.$options.filters.formatEllipsisText(tx, 26)
+      } else if (window.innerWidth < 1030) {
+        return this.$options.filters.formatEllipsisText(tx, 22)
+      } else if (window.innerWidth < 1200) {
+        return this.$options.filters.formatEllipsisText(tx, 26)
+      } else if (window.innerWidth < 1400) {
+        return this.$options.filters.formatEllipsisText(tx, 14)
+      } else if (window.innerWidth < 1530) {
+        return this.$options.filters.formatEllipsisText(tx, 18)
+      } else {
+        return this.$options.filters.formatEllipsisText(tx, 22)
       }
     },
     moment,
@@ -386,7 +402,7 @@ export default {
           border-bottom: none;
           white-space: normal;
           &:nth-child(1) {
-            width: 20% !important;
+            width: 22% !important;
 
             /* @media screen and (max-width: 480px) {
               width: 19% !important;
@@ -394,7 +410,7 @@ export default {
           }
 
           &:nth-child(2) {
-            width: 20% !important;
+            width: 22% !important;
             @media screen and (max-width: 650px) {
               width: 33% !important;
             }
@@ -426,11 +442,11 @@ export default {
           }
 
           &:nth-child(4) {
-            width: 10% !important;
+            width: 11% !important;
           }
 
           &:nth-child(5) {
-            width: 25% !important;
+            width: 19% !important;
           }
         }
       }

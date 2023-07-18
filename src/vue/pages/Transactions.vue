@@ -93,9 +93,11 @@
                 </td>
                 <td>
                   <div>
-                    <router-link class="block" :to="`/block/${row.blockno}/`">{{
-                      row.blockno
-                    }}</router-link>
+                    <router-link
+                      class="address"
+                      :to="`/block/${row.blockno}/`"
+                      >{{ row.blockno }}</router-link
+                    >
                   </div>
                 </td>
                 <td>
@@ -272,7 +274,9 @@ export default {
     dataTableCss() {
       return {
         wrapper: 'table-wrap',
-        table: 'transactions-table' + (this.isLoading ? ' is-loading' : ''),
+        table:
+          'transactions-table mainTable' +
+          (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
