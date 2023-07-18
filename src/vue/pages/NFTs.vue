@@ -30,6 +30,7 @@
               :trans-data="data || []"
               :is-loading="isLoading"
               :css="dataTableCss"
+              ref="listButton"
             >
               <template slot="desc">
                 <div class="desc">
@@ -49,7 +50,10 @@
                 </th>
               </template>
               <template slot="list" slot-scope="{ row }">
-                <td>
+                <td
+                  class="mainTdHover"
+                  @click="() => handleMouseEnter(row.hash)"
+                >
                   <div class="txt-ellipsis">
                     <span class="identicon default" v-if="!row.image"></span>
                     <span class="identicon" v-else
@@ -175,7 +179,7 @@ export default {
     dataTableCss() {
       return {
         wrapper: 'table-wrap',
-        table: 'tokens-table' + (this.isLoading ? ' is-loading' : ''),
+        table: 'tokens-table mainTable' + (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
@@ -188,6 +192,7 @@ export default {
     }
     this.changePage(this.currentPage)
   },
+
   methods: {
     loadTableData: async function ({
       searchField,
@@ -273,6 +278,10 @@ export default {
       if (this.searchedField.length === 0) {
         await this.reload()
       }
+    },
+
+    handleMouseEnter(hash) {
+      this.$router.push(`/nft/${hash}/`)
     },
   },
   components: {
@@ -364,6 +373,10 @@ export default {
 }
 
 table.tokens-table {
+  tr:hover {
+    background: #f8f9fa;
+  }
+
   th {
     /* min-width: 110px; */
 
@@ -381,6 +394,10 @@ table.tokens-table {
     /* &:nth-child(1) {
       width: 30% !important;
     } */
+
+    &:first-child {
+      max-width: 200px;
+    }
     &:last-child {
       text-align: right;
 

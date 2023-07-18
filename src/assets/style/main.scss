@@ -820,9 +820,9 @@ img {
       }
 
       td {
-        &:first-child {
-          min-width: 150px;
-        }
+        // &:first-child {
+        //   min-width: 150px;
+        // }
         @media screen and (max-width: 480px) {
           padding-right: 45px;
 
@@ -866,6 +866,15 @@ img {
   table {
     width: 100%;
     border-collapse: collapse;
+    .mainTdHover:hover {
+      div {
+        cursor: pointer;
+        a {
+          color: #279ecc;
+          text-shadow: 0px 0px 0px #3c3b3e;
+        }
+      }
+    }
     .tokenName {
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -1106,7 +1115,7 @@ img {
       text-overflow: ellipsis;
       overflow: hidden;
       height: 37px;
-      // padding-right: 10px;
+      padding-right: 10px;
       font-size: 12px;
       color: #3c3b3e;
       border-bottom: 1px solid #f2f2f2;
@@ -1125,7 +1134,7 @@ img {
       }
 
       &.txt-ellipsis {
-        width: 30%;
+        width: 23%;
         max-width: 0;
 
         @media screen and (max-width: 900px) {
@@ -1213,7 +1222,8 @@ img {
 
       .address {
         display: inline-block;
-        padding: 5px 10.5px;
+        // padding: 5px 10.5px;
+        font-weight: bold;
         border-radius: 2px;
         color: #279ecc;
         // background-color: #f1f1f2;
@@ -1243,6 +1253,17 @@ img {
         background-color: #f9beff;
       }
     }
+
+    &.mainTable {
+      tbody {
+        tr:hover {
+          background: #f8f8f8;
+        }
+      }
+    }
+    // &.arc {
+    //   cursor: pointer;
+    // }
   }
 }
 

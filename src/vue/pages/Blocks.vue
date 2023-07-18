@@ -49,7 +49,7 @@
               <template slot="list" slot-scope="{ row }">
                 <td>
                   <div>
-                    <router-link :to="`/block/${row.no}/`">{{
+                    <router-link class="address" :to="`/block/${row.no}/`">{{
                       row.no
                     }}</router-link>
                   </div>
@@ -163,7 +163,7 @@ export default {
     dataTableCss() {
       return {
         wrapper: 'table-wrap',
-        table: 'block-table' + (this.isLoading ? ' is-loading' : ''),
+        table: 'block-table mainTable' + (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
@@ -281,9 +281,9 @@ export default {
         color: #766877;
       }
 
-      a:hover {
+      /* a:hover {
         text-decoration: underline;
-      }
+      } */
     }
   }
 }

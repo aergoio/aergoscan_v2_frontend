@@ -42,7 +42,10 @@
                 </th>
               </template>
               <template slot="list" slot-scope="{ row }">
-                <td>
+                <td
+                  class="mainTdHover"
+                  @click="() => handleMouseEnter(row.hash)"
+                >
                   <div class="txt-ellipsis">
                     <span class="identicon default" v-if="!row.image"></span>
                     <span class="identicon" v-else
@@ -196,7 +199,7 @@ export default {
     dataTableCss() {
       return {
         wrapper: 'table-wrap',
-        table: 'tokens-table' + (this.isLoading ? ' is-loading' : ''),
+        table: 'tokens-table mainTable' + (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
@@ -297,6 +300,9 @@ export default {
         await this.reload()
       }
     },
+    handleMouseEnter(hash) {
+      this.$router.push(`/account/${hash}/`)
+    },
   },
   components: {
     Search,
@@ -389,6 +395,10 @@ export default {
 }
 
 table.tokens-table {
+  tr:hover {
+    background: #f8f9fa;
+  }
+
   th {
     /* min-width: 110px; */
     &:last-child {

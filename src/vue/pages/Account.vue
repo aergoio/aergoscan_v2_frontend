@@ -999,6 +999,10 @@ export default {
       border-spacing: 0 25px;
     }
 
+    /* tr:hover {
+      background: initial;
+    } */
+
     th {
       width: 136px;
       height: auto;
