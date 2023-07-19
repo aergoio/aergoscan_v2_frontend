@@ -174,7 +174,7 @@ export default {
       }
     },
     handleResize(tx) {
-      if (window.innerWidth < 400) {
+      if (window.innerWidth < 430) {
         return this.$options.filters.formatEllipsisText(tx, 12)
       } else if (window.innerWidth < 500) {
         return this.$options.filters.formatEllipsisText(tx, 14)
@@ -182,7 +182,7 @@ export default {
         return this.$options.filters.formatEllipsisText(tx, 16)
       } else if (window.innerWidth < 700) {
         return this.$options.filters.formatEllipsisText(tx, 18)
-      } else if (window.innerWidth < 800) {
+      } else if (window.innerWidth < 820) {
         return this.$options.filters.formatEllipsisText(tx, 20)
       } else if (window.innerWidth < 900) {
         return this.$options.filters.formatEllipsisText(tx, 26)
@@ -190,6 +190,8 @@ export default {
         return this.$options.filters.formatEllipsisText(tx, 22)
       } else if (window.innerWidth < 1200) {
         return this.$options.filters.formatEllipsisText(tx, 26)
+      } else if (window.innerWidth < 1300) {
+        return this.$options.filters.formatEllipsisText(tx, 12)
       } else if (window.innerWidth < 1400) {
         return this.$options.filters.formatEllipsisText(tx, 14)
       } else if (window.innerWidth < 1530) {
@@ -370,7 +372,9 @@ export default {
       }
 
       .address {
-        color: #fff;
+        color: #e3dee7;
+
+        padding: 5px 10.5px;
         /* font-size: 8px; */
         /* background-color: rgba(88, 86, 102, 0.5); */
 
