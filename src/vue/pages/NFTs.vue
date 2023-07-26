@@ -8,8 +8,8 @@
             <search />
             <div class="title">
               NFT
-              <span class="sub">{{ totalItems }}</span>
               <span class="sub-2">ARC-2</span>
+              <span class="sub">{{ `${totalItems}` }}</span>
               <span style="flex: 1 1 0%"></span>
               <form v-on:submit.prevent.capture="performSearch">
                 <div class="search-bar">

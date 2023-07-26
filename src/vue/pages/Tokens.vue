@@ -8,8 +8,8 @@
             <search />
             <div class="title">
               Tokens
-              <span class="sub">{{ totalItems }}</span>
               <span class="sub-2">ARC-1</span>
+              <span class="sub">{{ `${totalItems}` }}</span>
               <span style="flex: 1 1 0%"></span>
               <form v-on:submit.prevent.capture="performSearch">
                 <div class="search-bar">
@@ -31,6 +31,16 @@
               :is-loading="isLoading"
               :css="dataTableCss"
             >
+              <template slot="desc">
+                <div class="desc">
+                  AERGO Scan merely displays quantitative data stored on
+                  blockchain. User's own discretion is advised in the process of
+                  making any judgement.
+                </div>
+                <div class="desc totalItem">
+                  <span class="sub">{{ `Total: ${totalItems}` }}</span>
+                </div>
+              </template>
               <template slot="error" v-if="error">
                 <div class="error transactions show">
                   {{ error }}
@@ -72,6 +82,7 @@
                       :css="accountLinkCss"
                       :to-link="`/account/${row.hash}/`"
                       :address="row.hash.toString()"
+                      :aria-label="row.hash"
                     />
                   </div>
                 </td>
@@ -100,13 +111,6 @@
                 @onUpdate="changePage"
                 @updateCurrentPage="updateCurrentPage"
               />
-              <template slot="desc">
-                <div class="desc">
-                  AERGO Scan merely displays quantitative data stored on
-                  blockchain. User's own discretion is advised in the process of
-                  making any judgement.
-                </div>
-              </template>
             </data-table>
           </div>
         </div>

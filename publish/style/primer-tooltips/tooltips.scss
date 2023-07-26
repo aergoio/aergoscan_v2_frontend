@@ -34,7 +34,7 @@
   height: 0;
   color: $text-black;
   pointer-events: none;
-  content: "";
+  content: '';
   // stylelint-disable-next-line primer/borders
   border: 6px $border-style transparent;
   opacity: 0;
@@ -222,7 +222,7 @@
 }
 
 .tooltipped-align-left-1,
-.tooltipped-align-left-2, {
+.tooltipped-align-left-2 {
   &::after {
     left: 0;
     margin-left: 0;

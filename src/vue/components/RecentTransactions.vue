@@ -71,7 +71,7 @@
                   :aria-label="tx.from"
                 >
                   <router-link class="address" :to="`/account/${tx.from}`">
-                    {{ handleResize(tx.from) }}
+                    {{ resizeFormater(tx.from) }}
                   </router-link>
                 </div>
               </td>
@@ -87,7 +87,7 @@
                   v-if="tx.to.length !== 0"
                 >
                   <router-link class="address" :to="`/account/${tx.to}`">
-                    {{ handleResize(tx.to) }}
+                    {{ resizeFormater(tx.to) }}
                   </router-link>
                 </div>
                 <div v-else>
@@ -113,6 +113,7 @@
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
 import cfg from '@/src/config.js'
+import { resizeFormater } from '../filters/resizeFormater'
 
 const CONNECTING_MSG = 'Connecting...'
 const CONNECTING_SLOW_MSG =
@@ -173,34 +174,8 @@ export default {
         }))
       }
     },
-    handleResize(tx) {
-      if (window.innerWidth < 430) {
-        return this.$options.filters.formatEllipsisText(tx, 12)
-      } else if (window.innerWidth < 500) {
-        return this.$options.filters.formatEllipsisText(tx, 14)
-      } else if (window.innerWidth < 600) {
-        return this.$options.filters.formatEllipsisText(tx, 16)
-      } else if (window.innerWidth < 700) {
-        return this.$options.filters.formatEllipsisText(tx, 18)
-      } else if (window.innerWidth < 820) {
-        return this.$options.filters.formatEllipsisText(tx, 20)
-      } else if (window.innerWidth < 900) {
-        return this.$options.filters.formatEllipsisText(tx, 26)
-      } else if (window.innerWidth < 1030) {
-        return this.$options.filters.formatEllipsisText(tx, 22)
-      } else if (window.innerWidth < 1200) {
-        return this.$options.filters.formatEllipsisText(tx, 26)
-      } else if (window.innerWidth < 1300) {
-        return this.$options.filters.formatEllipsisText(tx, 12)
-      } else if (window.innerWidth < 1400) {
-        return this.$options.filters.formatEllipsisText(tx, 14)
-      } else if (window.innerWidth < 1530) {
-        return this.$options.filters.formatEllipsisText(tx, 18)
-      } else {
-        return this.$options.filters.formatEllipsisText(tx, 22)
-      }
-    },
     moment,
+    resizeFormater,
   },
 }
 </script>
@@ -360,7 +335,7 @@ export default {
       &:nth-child(2) {
         color: #908091;
       }
-      &:nth-child(2),
+
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -375,12 +350,12 @@ export default {
         color: #e3dee7;
 
         padding: 5px 10.5px;
-        /* font-size: 8px; */
-        /* background-color: rgba(88, 86, 102, 0.5); */
+        font-size: 8px;
+        background-color: rgba(88, 86, 102, 0.5);
 
         &:hover {
-          color: #e3dee7;
-          /* background-color: #585666; */
+          color: #130f16;
+          background-color: #585666;
         }
       }
     }
@@ -398,37 +373,39 @@ export default {
           border-bottom: none;
           white-space: normal;
           &:nth-child(1) {
-            width: 22% !important;
+            width: 24.5% !important;
 
-            /* @media screen and (max-width: 480px) {
-              width: 19% !important;
-            } */
-          }
-
-          &:nth-child(2) {
-            width: 22% !important;
-            @media screen and (max-width: 650px) {
-              width: 33% !important;
+            @media screen and (max-width: 480px) {
+              width: 23% !important;
             }
           }
 
-          &:nth-child(3) {
-            width: 21% !important;
+          &:nth-child(2) {
+            width: 18% !important;
+          }
 
-            /* @media screen and (max-width: 400px) {
-              width: % !important;
-            } */
-            @media screen and (max-width: 650px) {
-              width: 15% !important;
+          &:nth-child(3) {
+            width: 24.3% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 22.5% !important;
             }
           }
 
           &:nth-child(4) {
-            width: 11% !important;
+            width: 5% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 7.5% !important;
+            }
           }
 
           &:nth-child(5) {
-            width: 19% !important;
+            width: 23% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 22% !important;
+            }
           }
         }
       }
@@ -498,35 +475,44 @@ export default {
           }
 
           &:nth-child(1) {
-            width: 20% !important;
+            width: 24.5% !important;
 
-            /* @media screen and (max-width: 480px) {
-              width: 19% !important;
-            } */
+            @media screen and (max-width: 480px) {
+              width: 23% !important;
+            }
           }
 
           &:nth-child(2) {
-            /* width: auto; */
-            width: 20% !important;
-            @media screen and (max-width: 650px) {
+            min-width: 120px;
+            width: 19% !important;
+
+            @media screen and (max-width: 700px) {
               width: auto !important;
             }
           }
 
           &:nth-child(3) {
-            width: 25% !important;
+            width: 24.5% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 23.4% !important;
+            }
           }
 
           &:nth-child(4) {
-            width: 10% !important;
+            width: 5% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 7.5% !important;
+            }
           }
 
           &:nth-child(5) {
-            width: 25% !important;
+            width: 22.5% !important;
 
-            /* @media screen and (max-width: 900px) {
-              width: 19% !important;
-            } */
+            @media screen and (max-width: 480px) {
+              width: 24% !important;
+            }
           }
         }
       }

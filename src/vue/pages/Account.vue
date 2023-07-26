@@ -148,7 +148,7 @@
                     <!--                  </tr>-->
                     <tr v-if="staking && staking.when">
                       <th>
-                        <div>- voting power</div>
+                        <div>Voting power</div>
                       </th>
                       <td>
                         <div>

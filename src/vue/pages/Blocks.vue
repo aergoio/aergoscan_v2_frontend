@@ -252,7 +252,7 @@ export default {
 
 .table-wrap {
   padding: 20px 19px 18px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   box-shadow: 2px 2px 7px 0 #e0e0e0;
   background-color: #fff;
 
