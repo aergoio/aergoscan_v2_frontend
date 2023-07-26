@@ -594,7 +594,7 @@ img {
   .page-content {
     > .title {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 16px 20px;
       align-items: center;
       margin: 52px 0 17px 0;

@@ -87,12 +87,14 @@
                   v-if="tx.to.length !== 0"
                 >
                   <router-link class="address" :to="`/account/${tx.to}`">
-                    <<<<<<< HEAD
+                    <<<<<<< HEAD <<<<<<< HEAD
                     {{ resizeFormater(tx.to) }}
                     =======
                     {{ $options.filters.formatEllipsisText(tx.to, 20) }}
                     >>>>>>> d29076b (update: responsive design & table css
-                    details)
+                    details) =======
+                    {{ resizeFormater(tx.to) }}
+                    >>>>>>> 65efaac (fix: mainpage rollback)
                   </router-link>
                 </div>
                 <div v-else>
@@ -179,34 +181,8 @@ export default {
         }))
       }
     },
-    handleResize(tx) {
-      if (window.innerWidth < 430) {
-        return this.$options.filters.formatEllipsisText(tx, 12)
-      } else if (window.innerWidth < 500) {
-        return this.$options.filters.formatEllipsisText(tx, 14)
-      } else if (window.innerWidth < 600) {
-        return this.$options.filters.formatEllipsisText(tx, 16)
-      } else if (window.innerWidth < 700) {
-        return this.$options.filters.formatEllipsisText(tx, 18)
-      } else if (window.innerWidth < 820) {
-        return this.$options.filters.formatEllipsisText(tx, 20)
-      } else if (window.innerWidth < 900) {
-        return this.$options.filters.formatEllipsisText(tx, 26)
-      } else if (window.innerWidth < 1030) {
-        return this.$options.filters.formatEllipsisText(tx, 22)
-      } else if (window.innerWidth < 1200) {
-        return this.$options.filters.formatEllipsisText(tx, 26)
-      } else if (window.innerWidth < 1300) {
-        return this.$options.filters.formatEllipsisText(tx, 12)
-      } else if (window.innerWidth < 1400) {
-        return this.$options.filters.formatEllipsisText(tx, 14)
-      } else if (window.innerWidth < 1530) {
-        return this.$options.filters.formatEllipsisText(tx, 18)
-      } else {
-        return this.$options.filters.formatEllipsisText(tx, 22)
-      }
-    },
     moment,
+    resizeFormater,
   },
 }
 </script>
@@ -366,7 +342,7 @@ export default {
       &:nth-child(2) {
         color: #908091;
       }
-      &:nth-child(2),
+
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -385,8 +361,8 @@ export default {
         background-color: rgba(88, 86, 102, 0.5);
 
         &:hover {
-          color: #e3dee7;
-          /* background-color: #585666; */
+          color: #130f16;
+          background-color: #585666;
         }
       }
     }
@@ -404,18 +380,15 @@ export default {
           border-bottom: none;
           white-space: normal;
           &:nth-child(1) {
-            width: 22% !important;
+            width: 24.5% !important;
 
-            /* @media screen and (max-width: 480px) {
-              width: 19% !important;
-            } */
+            @media screen and (max-width: 480px) {
+              width: 23% !important;
+            }
           }
 
           &:nth-child(2) {
-            width: 22% !important;
-            @media screen and (max-width: 650px) {
-              width: 33% !important;
-            }
+            width: 18% !important;
           }
 
           &:nth-child(3) {
@@ -444,11 +417,19 @@ export default {
           }
 
           &:nth-child(4) {
-            width: 11% !important;
+            width: 5% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 7.5% !important;
+            }
           }
 
           &:nth-child(5) {
-            width: 19% !important;
+            width: 23% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 22% !important;
+            }
           }
         }
       }
@@ -506,11 +487,11 @@ export default {
           white-space: normal;
 
           &:nth-child(1) {
-            width: 20% !important;
+            width: 24.5% !important;
 
-            /* @media screen and (max-width: 480px) {
-              width: 19% !important;
-            } */
+            @media screen and (max-width: 480px) {
+              width: 23% !important;
+            }
           }
 
           &:nth-child(2) {
@@ -564,7 +545,11 @@ export default {
           }
 
           &:nth-child(4) {
-            width: 10% !important;
+            width: 5% !important;
+
+            @media screen and (max-width: 480px) {
+              width: 7.5% !important;
+            }
           }
 
           &:nth-child(5) {
