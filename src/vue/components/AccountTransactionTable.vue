@@ -1,5 +1,9 @@
 <template>
-  <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
+  <data-table
+    :trans-data="data || []"
+    :is-loading="isLoading"
+    :css="dataTableCss"
+  >
     <template slot="error" v-if="error">
       <div class="error transactions show">
         {{ error }}
@@ -9,19 +13,26 @@
       <th v-if="header.value === 'fromto'">
         <div>
           FROM
-          <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow">
+          <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow" />
           TO
         </div>
       </th>
       <th class="menu-th" v-else-if="header.value === 'category'">
         <div>
           <div class="menu-th" @click="openTableHeaderMenu($event)">
-            {{ header.text }}<span class="icon arrow-down"><img
-              src="~@assets/img/arrow-down-s-box@3x.png"></span>
+            {{ header.text
+            }}<span class="icon arrow-down"
+              ><img src="~@assets/img/arrow-down-s-box@3x.png"
+            /></span>
           </div>
           <div class="menu-th-list">
-            <div class="item" @click="dtUpdateCategory($event, category)" v-for="category in categories"
-                 :key="category">{{ category.toUpperCase() }}
+            <div
+              class="item"
+              @click="dtUpdateCategory($event, category)"
+              v-for="category in categories"
+              :key="category"
+            >
+              {{ category.toUpperCase() }}
             </div>
           </div>
         </div>
@@ -30,48 +41,55 @@
         <div>{{ header.text }}</div>
       </th>
     </template>
-    <template slot="list" slot-scope="{row}">
+    <template slot="list" slot-scope="{ row }">
       <td class="txt-ellipsis">
         <div>
           <span class="identicon" v-if="row.status === 'ERROR'">
-            <img src="~@assets/img/ic-alert-circle-fill.svg">
+            <img src="~@assets/img/ic-alert-circle-fill.svg" />
           </span>
-          <router-link :to="`/transaction/${row.hash}/`" class="address txt-ellipsis">
+          <router-link
+            :to="`/transaction/${row.hash}/`"
+            class="address txt-ellipsis"
+          >
             {{ row.hash }}
           </router-link>
         </div>
       </td>
       <td>
-        <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-             :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+        <div
+          class="tooltipped tooltipped-se tooltipped-align-left-2"
+          :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
+        >
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
         </div>
       </td>
-      <td class="txt-ellipsis">
+      <td >
         <div v-if="row.from !== row.to">
           <template v-if="addressMatches(row.to)">
             <span class="boxicon blue">FROM</span>
-            <Identicon :text="row.from" size="18" class="mini-identicon"/>
-            <router-link :to="`/account/${row.from}/`" class="address txt-ellipsis">
+            <Identicon :text="row.from" size="18" class="mini-identicon" />
+            <router-link :to="`/account/${row.from}/`" class="address">
               {{ $options.filters.formatEllipsisText(row.from, 30) }}
             </router-link>
           </template>
           <template v-else>
             <span class="boxicon red">TO</span>
             <template v-if="row.to && row.to.toString().length">
-              <Identicon :text="row.to" size="18" class="mini-identicon"/>
-              <router-link :to="`/account/${row.to}/`" class="address txt-ellipsis">
+              <Identicon :text="row.to" size="18" class="mini-identicon" />
+              <router-link :to="`/account/${row.to}/`" class="address">
                 {{ $options.filters.formatEllipsisText(row.to, 30) }}
               </router-link>
             </template>
             <template v-else>
               <div v-if="row.category === 'multicall'">
-                <Identicon size="19" class="identicon-multi"/>
+                <Identicon size="19" class="identicon-multi" />
               </div>
               <div v-else>
-                <Identicon size="19" class="identicon-new"/>
+                <Identicon size="19" class="identicon-new" />
               </div>
-              <span class="address">{{ row.category === 'multicall' ? 'N/A' : 'Contract Creation' }}</span>
+              <span class="address">{{
+                row.category === 'multicall' ? 'N/A' : 'Contract Creation'
+              }}</span>
             </template>
           </template>
         </div>
@@ -88,23 +106,22 @@
       </td>
     </template>
     <pagination
-        slot="pagination"
-        :css="paginationCss"
-        :page="currentPage"
-        :total-items="limitPageTotalCount"
-        :itemsPerPage="itemsPerPage"
-        @onUpdate="changePage"
-        @updateCurrentPage="updateCurrentPage"
+      slot="pagination"
+      :css="paginationCss"
+      :page="currentPage"
+      :total-items="limitPageTotalCount"
+      :itemsPerPage="itemsPerPage"
+      @onUpdate="changePage"
+      @updateCurrentPage="updateCurrentPage"
     />
   </data-table>
 </template>
 <script>
-
-import {openTableHeaderMenu} from '@/src/vue/utils/filter-table-header';
-import Identicon from '@/src/vue/components/Identicon';
-import cfg from '@/src/config';
-import moment from 'moment';
-import BigNumber from 'bignumber.js';
+import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
+import Identicon from '@/src/vue/components/Identicon'
+import cfg from '@/src/config'
+import moment from 'moment'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'AccountTransactionTable',
@@ -121,25 +138,25 @@ export default {
     },
     initialPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     itemsPerPage: {
       type: Number,
-      default: 10
+      default: 10,
     },
     defaultSort: String,
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'blockno'
+      default: 'blockno',
     },
     sort: {
       type: String,
-      default: 'desc'
+      default: 'desc',
     },
     category: {
       type: String,
-      default: 'all'
+      default: 'all',
     },
   },
   data() {
@@ -151,8 +168,8 @@ export default {
       isLoading: false,
       currentPage: this.initialPage,
       paginationCss: {
-        pagination: "pagination transactions-table",
-        paginationInner: "pagination-inner",
+        pagination: 'pagination transactions-table',
+        paginationInner: 'pagination-inner',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
         moveNextPage: 'next',
@@ -163,94 +180,109 @@ export default {
       sortedDir: this.sort,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   computed: {
     headers() {
       return [
-        {text: 'TX HASH', value: 'hash'},
-        {text: 'TIME', value: 'ts'},
-        {text: 'FROMTO', value: 'fromto'},
-        {text: 'Tx Type', value: 'category'},
-        {text: 'METHOD', value: 'method'},
-        {text: 'AMOUNT(AERGO)', value: 'amount_float'},
+        { text: 'TX HASH', value: 'hash' },
+        { text: 'TIME', value: 'ts' },
+        { text: 'FROMTO', value: 'fromto' },
+        { text: 'Tx Type', value: 'category' },
+        { text: 'METHOD', value: 'method' },
+        { text: 'AMOUNT(AERGO)', value: 'amount_float' },
       ]
     },
     categories() {
       return [
-        "all",
-        "payload",
-        "call",
-        "transfer",
-        "governance",
-        "system",
-        "staking",
-        "voting",
-        "name",
-        "namecreate",
-        "nameupdate",
-        "enterprise",
-        "conf",
-        "cluster",
-        "deploy",
-        "redeploy"
+        'all',
+        'payload',
+        'call',
+        'transfer',
+        'governance',
+        'system',
+        'staking',
+        'voting',
+        'name',
+        'namecreate',
+        'nameupdate',
+        'enterprise',
+        'conf',
+        'cluster',
+        'deploy',
+        'redeploy',
       ]
     },
     dataTableCss() {
       return {
         wrapper: 'tab-content transactions' + (this.active ? ' active' : ''),
-        table: "transactions-table" + (this.isLoading ? ' is-loading' : ''),
-      };
+        table: 'transactions-table' + (this.isLoading ? ' is-loading' : ''),
+      }
     },
     isHidePage() {
       return this.itemsPerPage >= this.limitPageTotalCount
-    }
+    },
   },
   mounted() {
-    this.changePage(this.currentPage);
+    this.changePage(this.currentPage)
   },
   methods: {
     addressMatches(addr) {
-      return addr === this.address;
+      return addr === this.address
     },
-    loadTransactionTableData: async function ({id, category, sortField, sort, currentPage, itemsPerPage}) {
-      this.error = "";
-      const start = (currentPage - 1) * itemsPerPage;
-      const response = await (await this.$fetch.get(`${cfg.API_URL}/transactions`,
-          category !== 'all' ? {
-            q: `category:${category} AND (from:${id} OR to:${id})`,
-            size: itemsPerPage,
-            from: start,
-            sort: `${sortField}:${sort}`,
-          } : {
-            q: `(from:${id} OR to:${id})`,
-            size: itemsPerPage,
-            from: start,
-            sort: `${sortField}:${sort}`,
-          }
-      )).json();
+    loadTransactionTableData: async function ({
+      id,
+      category,
+      sortField,
+      sort,
+      currentPage,
+      itemsPerPage,
+    }) {
+      this.error = ''
+      const start = (currentPage - 1) * itemsPerPage
+      const response = await (
+        await this.$fetch.get(
+          `${cfg.API_URL}/transactions`,
+          category !== 'all'
+            ? {
+                q: `category:${category} AND (from:${id} OR to:${id})`,
+                size: itemsPerPage,
+                from: start,
+                sort: `${sortField}:${sort}`,
+              }
+            : {
+                q: `(from:${id} OR to:${id})`,
+                size: itemsPerPage,
+                from: start,
+                sort: `${sortField}:${sort}`,
+              }
+        )
+      ).json()
       if (response.error) {
-        this.error = response.error.msg;
+        this.error = response.error.msg
       } else if (response.hits.length) {
         this.data = response.hits.map((item, index) => ({
           ...item.meta,
           hash: item.hash,
-          rank: (response.from) + (index + 1),
-          percentage: this.totalSupply === '0' ? 0 : new BigNumber(item.meta.balance + "00").div(new BigNumber(this.totalSupply)).toFixed(),
-        }));
-        this.totalItems = response.total;
-        this.limitPageTotalCount = response.limitPageCount;
+          rank: response.from + (index + 1),
+          percentage:
+            this.totalSupply === '0'
+              ? 0
+              : new BigNumber(item.meta.balance + '00')
+                  .div(new BigNumber(this.totalSupply))
+                  .toFixed(),
+        }))
+        this.totalItems = response.total
+        this.limitPageTotalCount = response.limitPageCount
       } else {
-        this.data = [];
-        this.totalItems = 0;
-        this.limitPageTotalCount = 0;
+        this.data = []
+        this.totalItems = 0
+        this.limitPageTotalCount = 0
       }
-      this.$emit('onUpdateTotalCount', this.totalItems);
+      this.$emit('onUpdateTotalCount', this.totalItems)
     },
     reload: async function (address) {
-      this.isLoading = true;
+      this.isLoading = true
       await this.loadTransactionTableData({
         id: address ? address : this.address,
         category: this.selectedCategory,
@@ -258,32 +290,32 @@ export default {
         sort: this.sortedDir,
         currentPage: this.currentPage,
         itemsPerPage: this.itemsPerPage,
-      });
-      this.isLoading = false;
+      })
+      this.isLoading = false
     },
     changePage: function (currentPage) {
-      this.currentPage = currentPage;
-      this.reload();
+      this.currentPage = currentPage
+      this.reload()
     },
     updateCurrentPage: function (currentPage) {
-      this.currentPage = currentPage;
+      this.currentPage = currentPage
     },
     dtUpdateCategory: function (event, category) {
-      event.target.closest('th.menu-th').classList.remove('show');
+      event.target.closest('th.menu-th').classList.remove('show')
 
-      this.selectedCategory = category;
-      this.currentPage = this.initialPage;
+      this.selectedCategory = category
+      this.currentPage = this.initialPage
 
-      this.reload();
+      this.reload()
     },
     moment,
     BigNumber,
-    openTableHeaderMenu
+    openTableHeaderMenu,
   },
   components: {
-    Identicon
-  }
-};
+    Identicon,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -348,5 +380,4 @@ table.transactions-table {
     }
   }
 }
-
 </style>

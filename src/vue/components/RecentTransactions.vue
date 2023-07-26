@@ -13,21 +13,21 @@
           <thead>
             <tr>
               <th>
-                <div>TX HASH</div>
+                <div>TX Hash</div>
               </th>
               <th>
-                <div>TIME</div>
+                <div>Time</div>
               </th>
               <th>
-                <div>FROM</div>
+                <div>From</div>
               </th>
               <th>
                 <div>
-                  <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow" />
+                  <!-- <img src="~@assets/img/tooltipped@3x.png" class="arrow" /> -->
                 </div>
               </th>
               <th>
-                <div>TO</div>
+                <div>To</div>
               </th>
             </tr>
           </thead>
@@ -39,7 +39,7 @@
             <!--        <td colspan="100%">No items found</td>-->
             <!--      </tr>-->
             <tr v-for="(tx, index) in syncedTransactions" :key="tx.hash" v-else>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-se tooltipped-align-left-2"
                   :aria-label="tx.hash"
@@ -65,16 +65,13 @@
                   }}
                 </div>
               </td>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-sw tooltipped-align-right-2"
                   :aria-label="tx.from"
                 >
-                  <router-link
-                    class="address txt-ellipsis"
-                    :to="`/account/${tx.from}`"
-                  >
-                    {{ $options.filters.formatEllipsisText(tx.from, 20) }}
+                  <router-link class="address" :to="`/account/${tx.from}`">
+                    {{ resizeFormater(tx.from) }}
                   </router-link>
                 </div>
               </td>
@@ -83,17 +80,14 @@
                   <img src="~@assets/img/ic-arrow@3x.png" class="arrow" />
                 </div>
               </td>
-              <td class="txt-ellipsis">
+              <td>
                 <div
                   class="tooltipped tooltipped-sw tooltipped-align-right-2"
                   :aria-label="tx.to"
                   v-if="tx.to.length !== 0"
                 >
-                  <router-link
-                    class="address txt-ellipsis"
-                    :to="`/account/${tx.to}`"
-                  >
-                    {{ $options.filters.formatEllipsisText(tx.to, 20) }}
+                  <router-link class="address" :to="`/account/${tx.to}`">
+                    {{ resizeFormater(tx.to) }}
                   </router-link>
                 </div>
                 <div v-else>
@@ -119,6 +113,7 @@
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
 import cfg from '@/src/config.js'
+import { resizeFormater } from '../filters/resizeFormater'
 
 const CONNECTING_MSG = 'Connecting...'
 const CONNECTING_SLOW_MSG =
@@ -134,7 +129,9 @@ export default {
       syncInterval: null,
     }
   },
-  created() {},
+  created() {
+    window.addEventListener('resize', this.handleResize)
+  },
   async mounted() {
     this.$store.dispatch('blockchain/streamBlocks')
     this.syncTxList()
@@ -144,7 +141,9 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.syncInterval)
+    window.removeEventListener('resize', this.handleResize)
   },
+
   computed: {
     ...mapState({
       transactions: (state) => state.blockchain.recentTransactions,
@@ -176,6 +175,7 @@ export default {
       }
     },
     moment,
+    resizeFormater,
   },
 }
 </script>
@@ -194,6 +194,7 @@ export default {
   }
 
   @media screen and (max-width: 480px) {
+    /* overflow-x: auto; */
     width: calc(100% - 15px);
     padding: 15px 10px;
     margin-bottom: 12px;
@@ -278,14 +279,16 @@ export default {
         font-size: 10px;
       }
 
-      &:first-child {
-        padding-left: 0;
-      }
+      /* &:first-child {
+        padding-left: 8px;
+      } */
 
       &:nth-child(2) {
-        @media screen and (max-width: 480px) {
+        /* min-width: max-content; */
+        /* padding-left: 8px; */
+        /* @media screen and (max-width: 480px) {
           min-width: 55px;
-        }
+        } */
       }
 
       &:nth-child(4) {
@@ -294,6 +297,7 @@ export default {
         box-sizing: content-box;
       }
 
+      /* &:nth-child(2), */
       &:nth-child(3),
       &:nth-child(4),
       &:nth-child(5) {
@@ -319,7 +323,7 @@ export default {
       }
 
       &.txt-ellipsis {
-        @media screen and (max-width: 780px) {
+        @media screen and (max-width: 900px) {
           max-width: 15vw;
         }
 
@@ -343,6 +347,9 @@ export default {
       }
 
       .address {
+        color: #e3dee7;
+
+        padding: 5px 10.5px;
         font-size: 8px;
         background-color: rgba(88, 86, 102, 0.5);
 
@@ -365,7 +372,6 @@ export default {
           display: inline-block;
           border-bottom: none;
           white-space: normal;
-
           &:nth-child(1) {
             width: 24.5% !important;
 
@@ -376,28 +382,11 @@ export default {
 
           &:nth-child(2) {
             width: 18% !important;
-            @media screen and (max-width: 480px) {
-              width: 20% !important;
-            }
           }
 
           &:nth-child(3) {
             width: 24.3% !important;
-            @media screen and (max-width: 1600px) {
-              width: 28.5% !important;
-            }
-            @media screen and (max-width: 1400px) {
-              width: 32% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 23.8% !important;
-            }
-            @media screen and (max-width: 960px) {
-              width: 29% !important;
-            }
-            @media screen and (max-width: 550px) {
-              width: 32% !important;
-            }
+
             @media screen and (max-width: 480px) {
               width: 22.5% !important;
             }
@@ -429,7 +418,8 @@ export default {
       display: flex;
       flex-direction: column;
       max-height: 380px;
-      overflow-y: scroll;
+      /* overflow-y: scroll; */
+      /* overflow-y: hidden; */
       margin-right: -8px;
 
       @media screen and (max-width: 480px) {
@@ -475,6 +465,18 @@ export default {
           border-bottom: none;
           white-space: normal;
 
+          .address {
+            /* padding: auto; */
+            background-color: rgba(88, 86, 102, 0.5);
+            @media screen and (max-width: 700px) {
+              font-size: 9px;
+            }
+            @media screen and (max-width: 480px) {
+              font-size: 8px;
+              padding: 0;
+            }
+          }
+
           &:nth-child(1) {
             width: 24.5% !important;
 
@@ -484,21 +486,10 @@ export default {
           }
 
           &:nth-child(2) {
+            min-width: 120px;
             width: 19% !important;
 
-            @media screen and (max-width: 1600px) {
-              width: 23% !important;
-            }
-            @media screen and (max-width: 1400px) {
-              width: 27% !important;
-            }
-            @media screen and (max-width: 1200px) {
-              width: 18% !important;
-            }
-            @media screen and (max-width: 960px) {
-              width: 24% !important;
-            }
-            @media screen and (max-width: 550px) {
+            @media screen and (max-width: 700px) {
               width: auto !important;
             }
           }
@@ -520,13 +511,8 @@ export default {
           }
 
           &:nth-child(5) {
-            width: 24.5% !important;
-            @media screen and (max-width: 960px) {
-              width: 20% !important;
-            }
-            @media screen and (max-width: 550px) {
-              width: 16% !important;
-            }
+            width: 22.5% !important;
+
             @media screen and (max-width: 480px) {
               width: 24% !important;
             }

@@ -1,19 +1,26 @@
 <template>
   <div class="wrap">
     <div id="category" class="search-result">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
-            <div class="search-result not-found" v-if="$route.query.found ==='no'">
+            <search />
+            <div
+              class="search-result not-found"
+              v-if="$route.query.found === 'no'"
+            >
               <div class="search-result-inner">
                 <div class="img">
-                  <img src="~@assets/img/aergo-symbol-no-item@3x.png">
+                  <img src="~@assets/img/aergo-symbol-no-item@3x.png" />
                 </div>
                 <div class="content not-found">
                   <h2>No items found</h2>
-                  <template v-if="$route.query.keyword && $route.query.keyword.length < 3">
+                  <template
+                    v-if="
+                      $route.query.keyword && $route.query.keyword.length < 3
+                    "
+                  >
                     <p>Keyword "{{ $route.query.keyword }}" is too short.</p>
                     <p>Please enter at least 3 characters.</p>
                   </template>
@@ -23,7 +30,10 @@
                   </template>
                 </div>
                 <div class="content error">
-                  <p>Sorry. AERGO Scan results cannot be displayed due to a temporary network problem.</p>
+                  <p>
+                    Sorry. AERGO Scan results cannot be displayed due to a
+                    temporary network problem.
+                  </p>
                   <p>Please refresh the page or retry the search.</p>
                 </div>
               </div>
@@ -33,31 +43,36 @@
                 Tokens
                 <span class="sub">{{ tokenTotalItems }}</span>
                 <span class="sub-2">ARC-1</span>
-                <span style="flex: 1 1 0%;"></span>
+                <span style="flex: 1 1 0%"></span>
               </div>
-              <search-result-token-table :keyword="$route.query.keyword" @onUpdateTotalCount="updateTokenTotalCount"
-                                         ref="searchResultTokenTable"/>
+              <search-result-token-table
+                :keyword="$route.query.keyword"
+                @onUpdateTotalCount="updateTokenTotalCount"
+                ref="searchResultTokenTable"
+              />
               <div class="title nfts">
                 NFT
                 <span class="sub">{{ nftTotalItems }}</span>
                 <span class="sub-2">ARC-2</span>
-                <span style="flex: 1 1 0%;"></span>
+                <span style="flex: 1 1 0%"></span>
               </div>
-              <search-result-nft-table :keyword="$route.query.keyword" @onUpdateTotalCount="updateNftTotalCount"
-                                       ref="searchResultNftTable"/>
+              <search-result-nft-table
+                :keyword="$route.query.keyword"
+                @onUpdateTotalCount="updateNftTotalCount"
+                ref="searchResultNftTable"
+              />
             </template>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 <script>
-
-import Search from "@/src/vue/components/Search";
-import SearchResultTokenTable from '@/src/vue/components/SearchResultTokenTable';
-import SearchResultNftTable from '@/src/vue/components/SearchResultNftTable';
+import Search from '@/src/vue/components/Search'
+import SearchResultTokenTable from '@/src/vue/components/SearchResultTokenTable'
+import SearchResultNftTable from '@/src/vue/components/SearchResultNftTable'
 
 export default {
   data() {
@@ -66,19 +81,17 @@ export default {
       nftTotalItems: 0,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   computed: {},
   watch: {
     $route(to, from) {
       if (to.path === from.path && to.query.keyword) {
         if (this.$refs.searchResultTokenTable) {
-          this.$refs.searchResultTokenTable.reload(to.query.keyword);
+          this.$refs.searchResultTokenTable.reload(to.query.keyword)
         }
         if (this.$refs.searchResultNftTable) {
-          this.$refs.searchResultNftTable.reload(to.query.keyword);
+          this.$refs.searchResultNftTable.reload(to.query.keyword)
         }
       }
     },
@@ -94,9 +107,9 @@ export default {
   components: {
     SearchResultNftTable,
     SearchResultTokenTable,
-    Search
-  }
-};
+    Search,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -104,7 +117,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -115,7 +128,7 @@ export default {
   align-items: center;
 
   &.nft {
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       margin-top: 30px;
     }
   }
@@ -143,8 +156,7 @@ export default {
 .page-content > .table-wrap {
   padding-bottom: 25px;
 
-  ::v-deep
-  .btn-wrap {
+  ::v-deep .btn-wrap {
     margin-top: 25px;
     text-align: center;
 

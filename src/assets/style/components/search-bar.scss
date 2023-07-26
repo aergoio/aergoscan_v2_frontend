@@ -16,7 +16,7 @@
     z-index: 0;
   }
 
-  @media screen and (max-width: 780px) {
+  @media screen and (max-width: 900px) {
     margin-top: 0;
   }
 
@@ -43,14 +43,14 @@
     }
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 20px;
       width: 20px;
       height: 20px;
       margin-top: -8px;
-      background-image: url("~@assets/img/ic-search@3x.png");
+      background-image: url('~@assets/img/ic-search@3x.png');
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
@@ -101,7 +101,7 @@
         display: none;
         width: 24px;
         height: 24px;
-        background-image: url("~@assets/img/ic-search@3x.png");
+        background-image: url('~@assets/img/ic-search@3x.png');
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -148,7 +148,7 @@
     cursor: pointer;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -159,7 +159,7 @@
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -183,7 +183,7 @@
     .icon.search {
       width: 20px;
       height: 20px;
-      background-image: url("~@assets/img/btn-search@3x.png");
+      background-image: url('~@assets/img/btn-search@3x.png');
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
@@ -213,7 +213,7 @@
     //   display: none;
     // }
 
-    &:not(:placeholder-shown)+.btn-remove {
+    &:not(:placeholder-shown) + .btn-remove {
       display: block;
     }
   }

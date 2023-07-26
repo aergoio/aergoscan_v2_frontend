@@ -1,17 +1,15 @@
 <template>
   <div class="wrap">
     <div id="category" class="bp-list">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="peers title">
               Peers
-              <div
-                  class="btn-refresh"
-              >
-                <ReloadButton :action="reload" :style="'margin-left: 8px;'"/>
+              <div class="btn-refresh">
+                <ReloadButton :action="reload" :style="'margin-left: 8px;'" />
               </div>
             </div>
             <data-table :trans-data="peersSorted || []" :css="dataTableCss">
@@ -23,14 +21,18 @@
               <template slot="header" v-for="header in headers">
                 <th v-if="header.sortable" :key="header.value">
                   <div>
-                    <div class="btn-th"
-                         @click="sortBy(header.value)"
-                    >
-                      {{ header.text }}<span class="icon arrow-down up"
-                                             v-if="(sorting === header.value && sortingAsc)"><img
-                        src="~@assets/img/arrow-down-s-fill@3x.png"></span>
-                      <span class="icon arrow-down" v-if="(sorting === header.value && !sortingAsc)"><img
-                          src="~@assets/img/arrow-down-s-fill@3x.png"></span>
+                    <div class="btn-th" @click="sortBy(header.value)">
+                      {{ header.text
+                      }}<span
+                        class="icon arrow-down up"
+                        v-if="sorting === header.value && sortingAsc"
+                        ><img src="~@assets/img/arrow-down-s-fill@3x.png"
+                      /></span>
+                      <span
+                        class="icon arrow-down"
+                        v-if="sorting === header.value && !sortingAsc"
+                        ><img src="~@assets/img/arrow-down-s-fill@3x.png"
+                      /></span>
                     </div>
                   </div>
                 </th>
@@ -38,19 +40,40 @@
                   <div>{{ header.text }}</div>
                 </th>
               </template>
-              <template slot="list" slot-scope="{row}">
+              <template slot="list" slot-scope="{ row }">
                 <td class="peers-table peer-id">
                   <div>
-                    <Identicon :text="row.address.peerid" size="18" class="mini-identicon"/>
-                    <span v-if="bpsList.indexOf(row.address.peerid) === -1">{{ row.address.peerid }}</span>
-                    <router-link class="address txt-ellipsis" :to="`/consensus/?highlight=${row.address.peerid}`"
-                                 v-if="bpsList.indexOf(row.address.peerid) !== -1">{{ row.address.peerid }}
+                    <Identicon
+                      :text="row.address.peerid"
+                      size="18"
+                      class="mini-identicon"
+                    />
+                    <span v-if="bpsList.indexOf(row.address.peerid) === -1">{{
+                      row.address.peerid
+                    }}</span>
+                    <router-link
+                      class="address txt-ellipsis"
+                      :to="`/consensus/?highlight=${row.address.peerid}`"
+                      v-if="bpsList.indexOf(row.address.peerid) !== -1"
+                      >{{ row.address.peerid }}
                     </router-link>
 
-                    <span class="peers text-box"
-                          v-if="bpsList.indexOf(row.address.peerid) !== -1 && row.acceptedroleLabel !== 'PRODUCER'">PRODUCER</span>
-                    <span class="peers text-box" v-if="raftLeaderID === row.address.peerid">LEADER</span>
-                    <span class="peers text-box">{{ row.acceptedroleLabel }}</span>
+                    <span
+                      class="peers text-box"
+                      v-if="
+                        bpsList.indexOf(row.address.peerid) !== -1 &&
+                        row.acceptedroleLabel !== 'PRODUCER'
+                      "
+                      >PRODUCER</span
+                    >
+                    <span
+                      class="peers text-box"
+                      v-if="raftLeaderID === row.address.peerid"
+                      >LEADER</span
+                    >
+                    <span class="peers text-box">{{
+                      row.acceptedroleLabel
+                    }}</span>
                     <span class="peers text-box" v-if="row.selfpeer">SELF</span>
                   </div>
                 </td>
@@ -63,18 +86,23 @@
                 </td>
                 <td class="txt-ellipsis">
                   <div>
-                    <router-link class="address txt-ellipsis" :to="`/block/${row.bestblock.blockhash}/`">
+                    <router-link
+                      class="address txt-ellipsis"
+                      :to="`/block/${row.bestblock.blockhash}/`"
+                    >
                       {{ row.bestblock.blockhash }}
                     </router-link>
                   </div>
                 </td>
                 <td>
                   <div v-if="row.bestblock.time">
-                    {{ moment(row.bestblock.time / 1000000).format('MMM Do YYYY, HH:mm:ss') }}
+                    {{
+                      moment(row.bestblock.time / 1000000).format(
+                        'MMM Do YYYY, HH:mm:ss'
+                      )
+                    }}
                   </div>
-                  <div v-if="!row.bestblock.time">
-                    not synced
-                  </div>
+                  <div v-if="!row.bestblock.time">not synced</div>
                 </td>
               </template>
             </data-table>
@@ -82,55 +110,57 @@
               <div class="error" v-if="error">{{ error }}</div>
               <table class="peers">
                 <tbody>
-                <div class="title">Server Info</div>
-                <tr v-for="[key, value] in serverInfoItems" :key="key">
-                  <th>
-                    <div>{{ key }}</div>
-                  </th>
-                  <td>
-                    <div class="chain-id">
-                      {{ value }}
-                    </div>
-                  </td>
-                </tr>
+                  <div class="title">Server Info</div>
+                  <tr v-for="[key, value] in serverInfoItems" :key="key">
+                    <th>
+                      <div>{{ key }}</div>
+                    </th>
+                    <td>
+                      <div class="chain-id">
+                        {{ value }}
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import ReloadButton from '@/src/vue/components/ReloadButton';
-import Search from '@/src/vue/components/Search';
-import Identicon from '@/src/vue/components/Identicon';
-import moment from 'moment';
+import ReloadButton from '@/src/vue/components/ReloadButton'
+import Search from '@/src/vue/components/Search'
+import Identicon from '@/src/vue/components/Identicon'
+import moment from 'moment'
 
 function getKey(obj, keyPath) {
-  const parts = keyPath.split('.');
-  let result = obj;
-  let part;
-  while (part = parts.shift()) {
-    result = result[part];
+  const parts = keyPath.split('.')
+  let result = obj
+  let part
+  while ((part = parts.shift())) {
+    result = result[part]
   }
-  return result;
+  return result
 }
 
 // cache getBlock request Promises to not request the same block multiple times
-const requests = {};
+const requests = {}
 
 function requestBlock($store, hash) {
   if (!requests.hasOwnProperty(hash)) {
-    requests[hash] = $store.dispatch('blockchain/getBlock', {blockNoOrHash: hash});
+    requests[hash] = $store.dispatch('blockchain/getBlock', {
+      blockNoOrHash: hash,
+    })
   }
-  return requests[hash];
+  return requests[hash]
 }
 
-const PeerRoleSort = [0, 2, 3, 1];
+const PeerRoleSort = [0, 2, 3, 1]
 
 export default {
   props: {
@@ -148,127 +178,137 @@ export default {
       loadTime: null,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   watch: {
-    '$route'(to, from) {
-      this.reload();
-    }
+    $route(to, from) {
+      this.reload()
+    },
   },
   mounted() {
-    this.reload();
+    this.reload()
   },
 
   computed: {
     headers() {
       return [
-        {text: 'PEER ID', value: 'address.peerid', sortable: true},
-        {text: 'VERSION', value: 'version', sortable: true},
-        {text: 'HEIGHT', value: 'bestblock.blockno', sortable: true},
-        {text: 'BLOCK HASH', value: 'blockhash', sortable: false},
-        {text: 'BLOCK TIME', value: 'blocktime', sortable: false},
+        { text: 'PEER ID', value: 'address.peerid', sortable: true },
+        { text: 'VERSION', value: 'version', sortable: true },
+        { text: 'HEIGHT', value: 'bestblock.blockno', sortable: true },
+        { text: 'BLOCK HASH', value: 'blockhash', sortable: false },
+        { text: 'BLOCK TIME', value: 'blocktime', sortable: false },
       ]
     },
     dataTableCss() {
       return {
-        wrapper: "table-wrap",
-        table: "peers-table" + (this.isLoading ? ' is-loading' : ''),
-      };
+        wrapper: 'table-wrap',
+        table: 'peers-table' + (this.isLoading ? ' is-loading' : ''),
+      }
     },
     serverInfoItems() {
-      const items = new Map();
-      if (this.serverInfo === null) return items;
-      items.set('peerid', this.serverInfo.statusMap.get('id'));
-      items.set('version', this.serverInfo.statusMap.get('version'));
-      return Array.from(items);
+      const items = new Map()
+      if (this.serverInfo === null) return items
+      items.set('peerid', this.serverInfo.statusMap.get('id'))
+      items.set('version', this.serverInfo.statusMap.get('version'))
+      return Array.from(items)
     },
     selfPeerId() {
-      if (!this.peers || this.peers.length === 0) return '';
-      const [selfPeer] = this.peers.filter(peer => peer.selfpeer);
-      return selfPeer.address.peerid;
+      if (!this.peers || this.peers.length === 0) return ''
+      const [selfPeer] = this.peers.filter((peer) => peer.selfpeer)
+      return selfPeer.address.peerid
     },
     peersSorted() {
-      if (this.peers === null) return [];
-      let peers = [...this.peers];
+      if (this.peers === null) return []
+      let peers = [...this.peers]
       // secondary sort by role
-      peers.sort((a, b) => -(PeerRoleSort.indexOf(a.acceptedrole) - PeerRoleSort.indexOf(b.acceptedrole)));
+      peers.sort(
+        (a, b) =>
+          -(
+            PeerRoleSort.indexOf(a.acceptedrole) -
+            PeerRoleSort.indexOf(b.acceptedrole)
+          )
+      )
       if (this.sorting !== 'acceptedrole') {
         // primary sort by selected field
         peers.sort((a, b) => {
-          const A = getKey(a, this.sorting);
-          const B = getKey(b, this.sorting);
-          if (typeof A === 'string')
-            return A.localeCompare(B);
-          else
-            return A - B;
-        });
+          const A = getKey(a, this.sorting)
+          const B = getKey(b, this.sorting)
+          if (typeof A === 'string') return A.localeCompare(B)
+          else return A - B
+        })
       }
 
       if (!this.sortingAsc) {
-        peers.reverse();
+        peers.reverse()
       }
-      return peers;
+      return peers
     },
     bpsList() {
-      return this.consensusInfo && this.consensusInfo.bpsList ? this.consensusInfo.bpsList.map(item => item.PeerID) : [];
+      return this.consensusInfo && this.consensusInfo.bpsList
+        ? this.consensusInfo.bpsList.map((item) => item.PeerID)
+        : []
     },
     raftLeaderID() {
-      if (!this.consensusInfo.info || !this.consensusInfo.info.Leader) return '';
+      if (!this.consensusInfo.info || !this.consensusInfo.info.Leader) return ''
       try {
-        const peer = this.consensusInfo.bpsList.find(item => item.Name === this.consensusInfo.info.Leader);
-        return peer.PeerID;
+        const peer = this.consensusInfo.bpsList.find(
+          (item) => item.Name === this.consensusInfo.info.Leader
+        )
+        return peer.PeerID
       } catch (e) {
-        console.log(e);
-        return '';
+        console.log(e)
+        return ''
       }
-    }
+    },
   },
   methods: {
     async loadConsensusInfo() {
-      this.consensusInfo = Object.freeze(await this.$store.dispatch('blockchain/getConsensusInfo'));
-      console.log(this.consensusInfo);
+      this.consensusInfo = Object.freeze(
+        await this.$store.dispatch('blockchain/getConsensusInfo')
+      )
+      console.log(this.consensusInfo)
     },
     async loadServerInfo() {
       try {
-        const result = await this.$store.dispatch('blockchain/getServerInfo');
-        console.log(result);
-        this.serverInfo = result;
+        const result = await this.$store.dispatch('blockchain/getServerInfo')
+        console.log(result)
+        this.serverInfo = result
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     },
     async reload() {
       try {
-        this.loadServerInfo();
+        this.loadServerInfo()
 
-        await this.loadConsensusInfo();
+        await this.loadConsensusInfo()
 
-        const peers = await this.$store.dispatch('blockchain/fetchPeers');
+        const peers = await this.$store.dispatch('blockchain/fetchPeers')
         for (let peer of peers) {
-          if (!peer.bestblock) continue;
-          peer.bestblock.time = 0;
+          if (!peer.bestblock) continue
+          peer.bestblock.time = 0
           try {
-            requestBlock(this.$store, peer.bestblock.blockhash).then(block => {
-              peer.bestblock.time = block.header.timestamp;
-            });
+            requestBlock(this.$store, peer.bestblock.blockhash).then(
+              (block) => {
+                peer.bestblock.time = block.header.timestamp
+              }
+            )
           } catch (e) {
-            console.error(e);
+            console.error(e)
           }
         }
-        this.peers = peers;
-        this.loadTime = moment();
+        this.peers = peers
+        this.loadTime = moment()
       } catch (e) {
-        this.error = '' + e;
-        console.error(e);
+        this.error = '' + e
+        console.error(e)
       }
     },
     sortBy(key) {
       if (this.sorting === key) {
-        this.sortingAsc = !this.sortingAsc;
+        this.sortingAsc = !this.sortingAsc
       } else {
-        this.sorting = key;
+        this.sorting = key
       }
     },
     moment,
@@ -277,8 +317,8 @@ export default {
     Search,
     ReloadButton,
     Identicon,
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -286,7 +326,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -311,7 +351,7 @@ table.peers {
     border-bottom: none;
     vertical-align: top;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-right: 20px;
     }
 
@@ -396,8 +436,8 @@ table.peers {
       line-height: 1.5;
       padding: 0 20px 23px 20px;
       margin: 0 -20px 15px;
-      color: #1A1823;
-      border-bottom: 1px solid #F8F8F8;
+      color: #1a1823;
+      border-bottom: 1px solid #f8f8f8;
     }
   }
 

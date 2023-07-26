@@ -405,7 +405,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -432,7 +432,7 @@ export default {
   margin: 0 -7.5px;
   margin-bottom: 15px;
 
-  @media screen and (max-width: 780px) {
+  @media screen and (max-width: 900px) {
     flex-wrap: wrap;
   }
 
@@ -445,7 +445,7 @@ export default {
     padding: 10px 19px 10px 20px;
     margin: 0 7.5px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       width: 100%;
 
       &:first-child {
@@ -468,7 +468,7 @@ table.bp-detail {
     border-bottom: none;
     vertical-align: top;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-right: 20px;
     }
 

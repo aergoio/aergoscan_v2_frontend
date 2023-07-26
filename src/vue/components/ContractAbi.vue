@@ -84,6 +84,12 @@
           </div>
         </div>
       </Tab>
+
+      <!-- <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
+        <div class="table-wrap">
+          <div class="desc-contract"></div>
+        </div>
+      </Tab> -->
     </Tabs>
   </div>
 </template>
@@ -142,6 +148,7 @@ export default {
     },
   },
   mounted() {},
+
   beforeDestroy() {},
   components: {
     ReloadButton,
@@ -317,7 +324,7 @@ export default {
 }
 
 .code-highlight-pre {
-  font-family: 'Consolas', monospace;
+  font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
 }
 

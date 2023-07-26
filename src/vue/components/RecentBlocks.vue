@@ -13,19 +13,19 @@
           <thead>
             <tr>
               <th>
-                <div>BLOCK #</div>
+                <div>Block #</div>
               </th>
               <th>
-                <div>TIME</div>
+                <div>Time</div>
               </th>
               <th>
                 <div>TXs</div>
               </th>
               <th>
-                <div>BLOCK PRODUCER</div>
+                <div>Block Producer</div>
               </th>
               <th>
-                <div>REWARD (AERGO)</div>
+                <div>Reward (Aergo)</div>
               </th>
             </tr>
           </thead>
@@ -146,6 +146,7 @@ export default {
   }
 
   @media screen and (max-width: 480px) {
+    /* overflow-x: auto; */
     width: calc(100% - 15px);
     padding: 15px 10px;
     margin-bottom: 12px;
@@ -273,7 +274,7 @@ export default {
       }
 
       &.txt-ellipsis {
-        @media screen and (max-width: 780px) {
+        @media screen and (max-width: 900px) {
           max-width: 15vw;
         }
 
@@ -344,7 +345,7 @@ export default {
           &:nth-child(5) {
             width: 24% !important;
 
-            @media screen and (max-width: 780px) {
+            @media screen and (max-width: 900px) {
               width: 19% !important;
             }
           }
@@ -426,7 +427,7 @@ export default {
           &:nth-child(5) {
             width: 24% !important;
 
-            @media screen and (max-width: 780px) {
+            @media screen and (max-width: 900px) {
               width: 19% !important;
             }
           }

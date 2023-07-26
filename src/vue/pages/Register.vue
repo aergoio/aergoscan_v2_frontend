@@ -1,17 +1,21 @@
 <template>
   <div class="wrap">
     <div id="category" class="contract-regi">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
-            <div class="title">
-              Contract Registration Request
-            </div>
+            <search />
+            <div class="title">Contract Registration Request</div>
             <div class="content">
-              <p>To enter Token/NFT information, you must fill out the 'Enter Token/NFT Info.' form.</p>
-              <p>For any other enquiries, please contact <a href="mailto:aergoscan@aergo.io">aergoscan@aergo.io</a>.</p>
+              <p>
+                To enter Token/NFT information, you must fill out the 'Enter
+                Token/NFT Info.' form.
+              </p>
+              <p>
+                For any other enquiries, please contact
+                <a href="mailto:aergoscan@aergo.io">aergoscan@aergo.io</a>.
+              </p>
               <p>Thank you.</p>
             </div>
             <div class="btn register" v-on:click="gotoRegister">
@@ -20,34 +24,30 @@
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import Search from '@/src/vue/components/Search';
+import Search from '@/src/vue/components/Search'
 
 export default {
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
-  created () {
-  },
-  beforeDestroy () {
-  },
-  computed: {
-  },
+  created() {},
+  beforeDestroy() {},
+  computed: {},
   methods: {
     gotoRegister: function () {
-        window.open('https://forms.gle/xmDPgfJTEPZHSi1r7');
+      window.open('https://forms.gle/xmDPgfJTEPZHSi1r7')
     },
   },
   components: {
-    Search
-  }
-};
+    Search,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -63,7 +63,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }

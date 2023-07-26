@@ -1,13 +1,17 @@
 <template>
   <div class="wrap">
     <div id="category" class="blocks">
-      <Header/>
+      <Header />
       <div class="category-inner">
         <div class="page-wrap">
           <div class="page-content">
-            <search/>
+            <search />
             <div class="title">Blocks</div>
-            <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
+            <data-table
+              :trans-data="data || []"
+              :is-loading="isLoading"
+              :css="dataTableCss"
+            >
               <template slot="error" v-if="error">
                 <div class="error blocks show">
                   {{ error }}
@@ -16,14 +20,25 @@
               <template slot="header" v-for="header in headers">
                 <th v-if="header.sortable" :key="header.value">
                   <div>
-                    <div class="btn-th"
-                         @click="dtUpdateSort($event, header.value)"
+                    <div
+                      class="btn-th"
+                      @click="dtUpdateSort($event, header.value)"
                     >
-                      {{ header.text }}<span class="icon arrow-down up"
-                                             v-if="(sortedField === header.value && sortedDir === 'asc')"><img
-                        src="~@assets/img/arrow-down-s-fill@3x.png"></span>
-                      <span class="icon arrow-down" v-if="(sortedField === header.value && sortedDir === 'desc')"><img
-                          src="~@assets/img/arrow-down-s-fill@3x.png"></span>
+                      {{ header.text
+                      }}<span
+                        class="icon arrow-down up"
+                        v-if="
+                          sortedField === header.value && sortedDir === 'asc'
+                        "
+                        ><img src="~@assets/img/arrow-down-s-fill@3x.png"
+                      /></span>
+                      <span
+                        class="icon arrow-down"
+                        v-if="
+                          sortedField === header.value && sortedDir === 'desc'
+                        "
+                        ><img src="~@assets/img/arrow-down-s-fill@3x.png"
+                      /></span>
                     </div>
                   </div>
                 </th>
@@ -31,15 +46,21 @@
                   <div>{{ header.text }}</div>
                 </th>
               </template>
-              <template slot="list" slot-scope="{row}">
+              <template slot="list" slot-scope="{ row }">
                 <td>
                   <div>
-                    <router-link :to="`/block/${row.no}/`">{{ row.no }}</router-link>
+                    <router-link class="address" :to="`/block/${row.no}/`">{{
+                      row.no
+                    }}</router-link>
                   </div>
                 </td>
                 <td>
-                  <div class="tooltipped tooltipped-se tooltipped-align-left-2"
-                       :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')">
+                  <div
+                    class="tooltipped tooltipped-se tooltipped-align-left-2"
+                    :aria-label="
+                      moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')
+                    "
+                  >
                     {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </td>
@@ -47,56 +68,59 @@
                   <div>{{ row.txs }}</div>
                 </td>
                 <td>
-                  <account-link :css="accountLinkCss"
-                                :to-link="`/votes/?highlight=${row.block_producer}`" :address="row.block_producer.toString()"/>
+                  <account-link
+                    :css="accountLinkCss"
+                    :to-link="`/votes/?highlight=${row.block_producer}`"
+                    :address="row.block_producer.toString()"
+                  />
                 </td>
                 <td>
                   <div>{{ row.size }}</div>
                 </td>
               </template>
               <pagination
-                  slot="pagination"
-                  :css="paginationCss"
-                  :page="currentPage"
-                  :total-items="limitPageTotalCount"
-                  :itemsPerPage="itemsPerPage"
-                  @onUpdate="changePage"
-                  @updateCurrentPage="updateCurrentPage"
+                slot="pagination"
+                :css="paginationCss"
+                :page="currentPage"
+                :total-items="limitPageTotalCount"
+                :itemsPerPage="itemsPerPage"
+                @onUpdate="changePage"
+                @updateCurrentPage="updateCurrentPage"
               />
             </data-table>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment';
-import cfg from '@/src/config.js';
-import Search from '@/src/vue/components/Search';
-import AccountLink from '@/src/vue/components/AccountLink';
+import moment from 'moment'
+import cfg from '@/src/config.js'
+import Search from '@/src/vue/components/Search'
+import AccountLink from '@/src/vue/components/AccountLink'
 
 export default {
   props: {
     initialPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     itemsPerPage: {
       type: Number,
-      default: 20
+      default: 20,
     },
     defaultSort: String,
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'no'
+      default: 'no',
     },
     sort: {
       type: String,
-      default: 'desc'
+      default: 'desc',
     },
   },
   data() {
@@ -108,8 +132,8 @@ export default {
       isLoading: false,
       currentPage: this.initialPage,
       paginationCss: {
-        pagination: "pagination blocks-table",
-        paginationInner: "pagination-inner",
+        pagination: 'pagination blocks-table',
+        paginationInner: 'pagination-inner',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
         moveNextPage: 'next',
@@ -118,76 +142,84 @@ export default {
       accountLinkCss: {
         wrapper: '',
         address: 'address txt-ellipsis',
-        icon: 'mini-identicon'
+        icon: 'mini-identicon',
       },
       sortedField: this.sortField,
       sortedDir: this.sort,
-    };
+    }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   computed: {
     headers() {
       return [
-        {text: 'BLOCK #', value: 'no', sortable: true},
-        {text: 'TIME', value: 'ts', sortable: true},
-        {text: 'TXs', value: 'txs', sortable: true},
-        {text: 'BLOCK PRODUCER', value: 'account', sortable: false},
-        {text: 'SIZE(BYTE)', value: 'size', sortable: true},
+        { text: 'Block #', value: 'no', sortable: true },
+        { text: 'Time', value: 'ts', sortable: true },
+        { text: 'TXs', value: 'txs', sortable: true },
+        { text: 'Block Producer', value: 'account', sortable: false },
+        { text: 'Size (Byte)', value: 'size', sortable: true },
       ]
     },
     dataTableCss() {
       return {
-        wrapper: "table-wrap",
-        table: "block-table" + (this.isLoading ? ' is-loading' : ''),
-      };
+        wrapper: 'table-wrap',
+        table: 'block-table mainTable' + (this.isLoading ? ' is-loading' : ''),
+      }
     },
     isHidePage() {
       return this.itemsPerPage >= this.limitPageTotalCount
-    }
+    },
   },
   mounted() {
-    this.changePage(this.currentPage);
+    this.changePage(this.currentPage)
   },
   methods: {
-    loadTableData: async function ({sortField, sort, currentPage, itemsPerPage}) {
-      this.error = "";
-      const start = (currentPage - 1) * itemsPerPage;
-      const response = await (await this.$fetch.get(`${cfg.API_URL}/blocks`, {
-        size: itemsPerPage,
-        from: start,
-        sort: `${sortField}:${sort}`,
-      })).json();
+    loadTableData: async function ({
+      sortField,
+      sort,
+      currentPage,
+      itemsPerPage,
+    }) {
+      this.error = ''
+      const start = (currentPage - 1) * itemsPerPage
+      const response = await (
+        await this.$fetch.get(`${cfg.API_URL}/blocks`, {
+          size: itemsPerPage,
+          from: start,
+          sort: `${sortField}:${sort}`,
+        })
+      ).json()
       if (response.error) {
-        this.error = response.error.msg;
+        this.error = response.error.msg
       } else if (response.hits.length) {
-        this.data = response.hits.map(item => ({...item.meta, hash: item.hash}));
-        this.totalItems = response.total;
-        this.limitPageTotalCount = response.limitPageCount;
+        this.data = response.hits.map((item) => ({
+          ...item.meta,
+          hash: item.hash,
+        }))
+        this.totalItems = response.total
+        this.limitPageTotalCount = response.limitPageCount
       } else {
-        this.data = [];
-        this.totalItems = 0;
-        this.limitPageTotalCount = 0;
+        this.data = []
+        this.totalItems = 0
+        this.limitPageTotalCount = 0
       }
     },
     reload: async function () {
-      this.isLoading = true;
+      this.isLoading = true
       await this.loadTableData({
         sortField: this.sortedField,
         sort: this.sortedDir,
         currentPage: this.currentPage,
         itemsPerPage: this.itemsPerPage,
-      });
-      this.isLoading = false;
+      })
+      this.isLoading = false
     },
     changePage: function (currentPage) {
-      this.currentPage = currentPage;
-      this.reload();
+      this.currentPage = currentPage
+      this.reload()
     },
     updateCurrentPage: function (currentPage) {
-      this.currentPage = currentPage;
+      this.currentPage = currentPage
     },
     dtUpdateSort: function (event, sortField) {
       if (this.sortedField === sortField) {
@@ -196,15 +228,15 @@ export default {
         this.sortedDir = 'desc'
         this.sortedField = sortField
       }
-      this.reload();
+      this.reload()
     },
-    moment
+    moment,
   },
   components: {
     Search,
-    AccountLink
-  }
-};
+    AccountLink,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -212,7 +244,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -220,7 +252,7 @@ export default {
 
 .table-wrap {
   padding: 20px 19px 18px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   box-shadow: 2px 2px 7px 0 #e0e0e0;
   background-color: #fff;
 
@@ -249,9 +281,9 @@ export default {
         color: #766877;
       }
 
-      a:hover {
+      /* a:hover {
         text-decoration: underline;
-      }
+      } */
     }
   }
 }

@@ -148,7 +148,7 @@
                     <!--                  </tr>-->
                     <tr v-if="staking && staking.when">
                       <th>
-                        <div>- voting power</div>
+                        <div>Voting power</div>
                       </th>
                       <td>
                         <div>
@@ -868,7 +868,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 900px) {
       padding-top: 20px;
     }
   }
@@ -998,6 +998,10 @@ export default {
     @media screen and (max-width: 480px) {
       border-spacing: 0 25px;
     }
+
+    /* tr:hover {
+      background: initial;
+    } */
 
     th {
       width: 136px;
