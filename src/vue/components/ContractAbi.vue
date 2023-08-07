@@ -98,21 +98,6 @@ import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
-import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
-import { codemirror } from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/material-ocean.css'
-import 'codemirror/mode/javascript/javascript.js'
-
-// foldGutter
-import 'codemirror/addon/fold/foldgutter.css'
-import 'codemirror/addon/fold/brace-fold.js'
-import 'codemirror/addon/fold/comment-fold.js'
-import 'codemirror/addon/fold/foldcode.js'
-import 'codemirror/addon/fold/foldgutter.js'
-import 'codemirror/addon/fold/indent-fold.js'
-import 'codemirror/addon/fold/markdown-fold.js'
-import 'codemirror/addon/fold/xml-fold.js'
 
 const contractTabs = ['abi', 'interactive', 'events']
 
@@ -193,8 +178,6 @@ export default {
     QueryFunction,
     QueryStateVariable,
     EventsList,
-    ConnectLoginButton,
-    codemirror,
   },
   computed: {
     functions() {
@@ -386,46 +369,9 @@ export default {
   color: #d4d4d4;
   margin-bottom: 20px;
 }
-.connect_button {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: fit-content;
-  border: 1px solid rgba(76, 68, 82, 1);
-  background-color: #2d2b37;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  transition: background-color 0.3s ease-out;
-  .status {
-    content: '\f111';
-    margin-right: 4px;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
 
-    &.no_connect {
-      border: solid 5px rgb(220, 53, 69);
-      background-color: rgb(220, 53, 69);
-    }
-    &.connected {
-      border: solid 5px rgb(0, 161, 134);
-      background-color: rgb(0, 161, 134);
-    }
-  }
-  .large_font {
-    font-size: 0.7em;
-  }
-  .small_font {
-    opacity: 0.5;
-    font-size: 0.5em;
-  }
-}
-.connect_button:hover {
-  background-color: #69647e;
-}
 .code-highlight-pre {
-  font-family: 'Consolas', monospace;
+  font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
 }
 
@@ -465,62 +411,7 @@ export default {
 
 .interactive-contract {
   .function-block {
-    border: 1px solid rgba(76, 68, 82, 1);
-    border-radius: 0.5rem;
-
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-    transition: color 0.3s ease-in-out;
-    .function {
-      padding: 0.5rem;
-      background-color: #1e1b26;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      color: #fff;
-      &.show {
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
-    }
-    .function:hover {
-      color: #066a9c;
-    }
-
-    .function_body {
-      animation-duration: 0.3s;
-      &.show {
-        height: 100%;
-        /* background-color: #0f111a; */
-        /* background-color: #443f51; */
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        animation-name: fadeIn;
-      }
-      &.hide {
-        animation-name: fadeOut;
-      }
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes fadeOut {
-        0% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-      }
-    }
+    margin-bottom: 1em;
   }
 
   .arg-field {
@@ -560,15 +451,6 @@ export default {
   border: 1px solid rgba(76, 68, 82, 1);
   border-radius: 0.5rem;
   line-height: 1em;
-  transition: background-color 0.3s;
-
-  &.disabled {
-    cursor: not-allowed;
-    opacity: 0.65;
-  }
-  &:not(.disabled):hover {
-    background-color: #47566a;
-  }
 }
 
 .event-table {
