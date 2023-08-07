@@ -890,7 +890,7 @@ export default {
       align-items: start;
       margin: 0;
 
-      @media screen and (max-width: 900px) {
+      @media screen and (max-width: 1180px) {
         flex-wrap: wrap;
       }
 
@@ -1056,7 +1056,7 @@ export default {
         align-items: center;
         width: 100%;
 
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 1180px) {
           display: block;
           text-align: center;
         }
@@ -1065,7 +1065,7 @@ export default {
           font-size: 11px;
           line-height: 1.2;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1180px) {
             display: block;
           }
 
@@ -1077,7 +1077,7 @@ export default {
         img.arrow {
           margin: 0 5px;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1180px) {
             display: block;
             margin: 6px auto;
             transform: rotate(90deg);

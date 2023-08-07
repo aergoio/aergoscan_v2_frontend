@@ -49,7 +49,7 @@
               <template slot="list" slot-scope="{ row }">
                 <td>
                   <div>
-                    <router-link class="address" :to="`/block/${row.no}/`">{{
+                    <router-link class="block" :to="`/block/${row.no}/`">{{
                       row.no
                     }}</router-link>
                   </div>
