@@ -607,7 +607,7 @@ export default {
   > .page-wrap {
     padding-bottom: 30px;
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1000px) {
       padding-top: 20px;
     }
   }
@@ -630,7 +630,7 @@ export default {
       gap: 0 16px;
       margin: 0;
 
-      @media screen and (max-width: 900px) {
+      @media screen and (max-width: 1000px) {
         flex-wrap: wrap;
       }
 
@@ -809,17 +809,26 @@ export default {
         align-items: center;
         width: 100%;
 
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 1425px) {
           display: block;
           text-align: center;
+        }
+        @media screen and (max-width: 1000px) {
+          display: flex;
+          align-items: center;
+          width: 100%;
         }
 
         .address {
           font-size: 11px;
           line-height: 1.2;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1425px) {
             display: block;
+          }
+          @media screen and (max-width: 1000px) {
+            font-size: 11px;
+            line-height: 1.2;
           }
 
           &:hover {
@@ -830,10 +839,14 @@ export default {
         img.arrow {
           margin: 0 5px;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1425px) {
             display: block;
             margin: 6px auto;
             transform: rotate(90deg);
+          }
+          @media screen and (max-width: 1000px) {
+            transform: none;
+            margin: 0 5px;
           }
         }
 

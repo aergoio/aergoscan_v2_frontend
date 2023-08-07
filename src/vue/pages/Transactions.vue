@@ -93,11 +93,9 @@
                 </td>
                 <td>
                   <div>
-                    <router-link
-                      class="address"
-                      :to="`/block/${row.blockno}/`"
-                      >{{ row.blockno }}</router-link
-                    >
+                    <router-link class="block" :to="`/block/${row.blockno}/`">{{
+                      row.blockno
+                    }}</router-link>
                   </div>
                 </td>
                 <td>

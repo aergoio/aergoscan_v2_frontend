@@ -20,6 +20,7 @@
         :id="'interactive'"
       >
         <div class="content">
+          <ConnectLoginButton />
           <div class="monospace interactive-contract code-highlight">
             <div v-if="!abi">Loading...</div>
             <div v-if="abi && abi.functions.length == 0">
@@ -101,6 +102,7 @@ import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
+import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
 
 const contractTabs = ['abi', 'interactive', 'events']
 
@@ -135,6 +137,7 @@ export default {
       },
     }
   },
+
   created() {
     if (this.$route.query.tab) {
       this.selectedTab = contractTabs.indexOf(this.$route.query.tab) || 0
@@ -155,6 +158,7 @@ export default {
     QueryFunction,
     QueryStateVariable,
     EventsList,
+    ConnectLoginButton,
   },
   computed: {
     functions() {
@@ -322,8 +326,37 @@ export default {
   color: #d4d4d4;
   margin-bottom: 20px;
 }
-
+.connect_button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: fit-content;
+  border: 1px solid rgba(76, 68, 82, 1);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease-out;
+  .status {
+    content: '\f111';
+    margin-right: 4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    &.no_connect {
+      border: solid 5px rgb(220, 53, 69);
+      background-color: rgb(220, 53, 69);
+    }
+    &.connected {
+      border: solid 5px rgb(0, 161, 134);
+      background-color: rgb(0, 161, 134);
+    }
+  }
+}
+.connect_button:hover {
+  background-color: #69647e;
+}
 .code-highlight-pre {
+  margin: 0.5rem;
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
 }
@@ -364,26 +397,96 @@ export default {
 
 .interactive-contract {
   .function-block {
-    margin-bottom: 1em;
+    border: 1px solid rgba(76, 68, 82, 1);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease-in-out;
+    .function {
+      cursor: pointer;
+      color: #fff;
+    }
+    .function:hover {
+      color: #066a9c;
+    }
+
+    .function_body {
+      padding: 0.5rem 0 0.5rem 0;
+      animation-duration: 0.3s;
+
+      &.show {
+        animation-name: fadeIn;
+      }
+      &.hide {
+        animation-name: fadeOut;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+    }
   }
 
   .arg-field {
-    background: rgba(255, 255, 255, 0.1);
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(76, 68, 82, 1);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9062rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #111a2e;
+
+    /* background-clip: border-box; */
+    background-clip: padding-box;
+    appearance: none;
+    border-radius: 0.5rem;
+    /* transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
     border: none;
     color: #fff;
+  }
+  .arg-field:focus {
+    outline: none; /* 포커스 시 나타나는 외곽선 제거 */
+    border: 2px solid rgba(76, 68, 82, 1) !important;
   }
 }
 
 .btn-call {
+  display: inline-block;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
   font-size: 0.9em;
+  padding: 0.5rem;
   cursor: pointer;
-  text-transform: uppercase;
-  color: #fff;
-  border-radius: 3px;
-
-  border: 1px solid #fff;
-  padding: 0 4px;
+  text-align: center;
+  color: #f2f6fa;
+  background-color: #3a4759;
+  border: 1px solid rgba(76, 68, 82, 1);
+  border-radius: 0.5rem;
   line-height: 1em;
+  transition: background-color 0.3s;
+}
+.btn-call:hover {
+  background-color: #47566a;
 }
 
 .event-table {
