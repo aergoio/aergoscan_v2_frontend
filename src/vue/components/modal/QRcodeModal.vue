@@ -2,48 +2,42 @@
   <div class="background" @click="onClose">
     <div class="pop-up">
       <div class="qrcode-wrap">
-        <VueQRCodeComponent
-            class="qr"
-            :text="inputText"
-            :size="170">
+        <VueQRCodeComponent class="qr" :text="inputText" :size="170">
         </VueQRCodeComponent>
       </div>
-      <button @click="onClose">닫기</button>
     </div>
   </div>
 </template>
 
 <script>
-
-import VueQRCodeComponent from 'vue-qrcode-component';
+import VueQRCodeComponent from 'vue-qrcode-component'
 
 export default {
-  components: {VueQRCodeComponent},
+  components: { VueQRCodeComponent },
   props: {
     network: String,
     address: String,
   },
   async beforeMount() {
-    this.inputText = this.address;
+    this.inputText = this.address
   },
   data() {
     return {
-      inputText: ''
-    };
+      inputText: '',
+    }
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     getInputText() {
       return this.inputText
-    }
+    },
   },
   methods: {
     onClose() {
-      this.$emit('onClose');
+      this.$emit('onClose')
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -61,7 +55,7 @@ export default {
     left: 55%;
     top: 30%;
     transform: translate(-50%, -50%);
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0px 2px 15px rgba(192, 200, 226, 0.8);
     border-radius: 8px;
     padding: 20px 24px;
@@ -89,5 +83,4 @@ export default {
     }
   }
 }
-
 </style>
