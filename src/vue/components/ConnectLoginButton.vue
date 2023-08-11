@@ -5,11 +5,17 @@
     @click="connectAccount"
   >
     <div class="status no_connect" />
-    <span>Connect to Aergo Connect 3.0</span>
+    <div :style="{ display: 'flex', flexDirection: 'column' }">
+      <span class="large_font">CONNECT</span>
+      <span class="small_font">with Aergo Connect 3.0</span>
+    </div>
   </div>
   <div v-else class="connect_button" @click="disconnectAccount">
     <div class="status connected" />
-    <span class="connected">Connected {{ activeAccount?.address }}</span>
+    <div :style="{ display: 'flex', flexDirection: 'column' }">
+      <span class="large_font">CONNECTED</span>
+      <span class="small_font">{{ activeAccount?.address }}</span>
+    </div>
   </div>
 </template>
 

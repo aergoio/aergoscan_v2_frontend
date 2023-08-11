@@ -1,6 +1,9 @@
 <template>
   <div class="function-block">
-    <span class="function" @click="handleClick">{{ name }}</span>
+    <span :class="isClick ? `function show` : `function`" @click="handleClick"
+      >{{ name }}
+    </span>
+    <span :class="isClick ? `downbutton` : `upbutton`"></span>
 
     <div
       :class="isClick ? `function_body show` : `function_body hide`"
@@ -21,7 +24,7 @@
         Query
       </span>
       <span
-        class="btn-call"
+        :class="getActiveAccount?.address ? `btn-call` : `btn-call disabled`"
         v-if="!isLoading && !func.view"
         v-on:click="callToConnect"
       >
@@ -41,11 +44,6 @@ import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
 
 export default {
   props: ['abi', 'name', 'address'],
-  computed: {
-    func() {
-      return this.abi.functions.find((func) => func.name === this.name) || {}
-    },
-  },
   data() {
     return {
       args: {},
@@ -53,6 +51,14 @@ export default {
       isLoading: false,
       isClick: false,
     }
+  },
+  computed: {
+    func() {
+      return this.abi.functions.find((func) => func.name === this.name) || {}
+    },
+    getActiveAccount() {
+      return this.$store.getters[`blockchain/getActiveAccount`]
+    },
   },
 
   methods: {
@@ -97,10 +103,27 @@ export default {
       this.isClick = !this.isClick
     },
     async callToConnect() {
-      console.log(`callToConnect ${this.name}`)
+      if (this.getActiveAccount.address) {
+        console.log(
+          `callToConnect ${this.name} ${this.getActiveAccount.address}`
+        )
+      }
     },
   },
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.downbutton {
+  background: url('~@assets/img/arrow-right-svgrepo-com.svg');
+  transform: rotate(90deg);
+}
+
+.upbutton {
+  display: inline-block;
+  vertical-align: middle;
+  background: url('~@assets/img/arrow-right-svgrepo-com.svg');
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+</style>

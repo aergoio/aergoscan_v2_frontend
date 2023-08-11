@@ -34,7 +34,12 @@ const state = {
   activeAccount: {},
 }
 
-const getters = {}
+const getters = {
+  getActiveAccount: (state) => {
+    console.log(state, 'state')
+    return state.activeAccount
+  },
+}
 
 let blockHeaderStream = null
 let previousBlockNumber = 0
