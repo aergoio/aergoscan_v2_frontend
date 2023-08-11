@@ -911,7 +911,7 @@ export default {
     }
 
     .tabs-wrap {
-      padding: 20px 20px 50px;
+      padding: 20px;
     }
   }
 
