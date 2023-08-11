@@ -170,6 +170,12 @@ export default {
       },
       deep: true,
     },
+    $props: {
+      handler() {
+        this.jsonCode = this.calculateJsonCode()
+      },
+      deep: true,
+    },
   },
   mounted() {},
   beforeDestroy() {},
@@ -369,7 +375,6 @@ export default {
   color: #d4d4d4;
   margin-bottom: 20px;
 }
-
 .code-highlight-pre {
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;

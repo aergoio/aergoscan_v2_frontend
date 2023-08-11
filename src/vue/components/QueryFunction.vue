@@ -52,6 +52,14 @@ export default {
       isClick: false,
     }
   },
+  computed: {
+    func() {
+      return this.abi.functions.find((func) => func.name === this.name) || {}
+    },
+    getActiveAccount() {
+      return this.$store.getters[`blockchain/getActiveAccount`]
+    },
+  },
 
   computed: {
     func() {
