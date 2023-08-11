@@ -36,7 +36,6 @@ const state = {
 
 const getters = {
   getActiveAccount: (state) => {
-    console.log(state, 'state')
     return state.activeAccount
   },
 }
@@ -224,6 +223,10 @@ const actions = {
           const detail = event.detail
           if ('error' in event) {
             reject(new Error('request was cancelled by user'))
+            return
+          }
+          if (state.chainInfo.chainid.magic !== detail.account.chainId) {
+            reject(new Error('Network does not match with Aergo Connect 3.0'))
             return
           }
           commit('setActiveAccount', detail.account)

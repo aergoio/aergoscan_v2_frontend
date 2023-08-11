@@ -104,8 +104,24 @@ export default {
     },
     async callToConnect() {
       if (this.getActiveAccount.address) {
+        const args = this.args
+        const argValues = this.func.arguments.map((arg) => args[arg.name])
+        if (argValues.some((item) => typeof item === 'undefined')) {
+          this.result = {
+            error: 'You did not provide all arguments',
+          }
+          return
+        }
+        console.log(args, 'args')
+        console.log(argValues, 'argValues')
         console.log(
-          `callToConnect ${this.name} ${this.getActiveAccount.address}`
+          `callToConnect Name:${this.name} Account:${JSON.stringify(
+            this.getActiveAccount,
+            null,
+            2
+          )} Args[Key:Value]${
+            (JSON.stringify(args), null, 2)
+          }, Arg[Values]:${argValues}`
         )
       }
     },
