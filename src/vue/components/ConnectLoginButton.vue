@@ -31,25 +31,10 @@ export default {
 
   methods: {
     async connectAccount() {
-      //!! chainId 검증해야 함.
+      //TODO: 1.chainId 검증 완료 -> 2.Alert 메시지 띄워야 함.
       this.activeAccount = await this.$store.dispatch(
         'blockchain/refreshActiveAccount'
       )
-
-      //   const chainId = account.chainId
-      //   if (chainId === this.chainId) {
-      //     return
-      //   }
-      //   let nodeUrl = ''
-      //   const chainConfig = ChainConfigs.find((conf) => conf.chainId === chainId)
-      //   if (chainConfig) {
-      //     nodeUrl = chainConfig.nodeUrl
-      //   } else {
-      //     nodeUrl = prompt(
-      //       `Unknown chain id: ${chainId}\nPlease enter a Node URL to connect to this chain.`
-      //     )
-      //   }
-      //   this.$store.dispatch('setChain', { nodeUrl })
     },
     async disconnectAccount() {
       this.activeAccount = await this.$store.dispatch(
