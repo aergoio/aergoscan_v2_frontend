@@ -114,7 +114,7 @@ export default {
         }
         const payload_json = {
           Name: this.name,
-          Args: this.args,
+          Args: [...argValues],
         }
         const data = {
           amount: '0 aergo',
