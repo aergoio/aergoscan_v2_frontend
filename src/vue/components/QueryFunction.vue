@@ -144,6 +144,27 @@ export default {
         this.$emit('onUpdateResultHash', result.hash)
         this.isLoading = false
       }
+      return new Promise((resolve, reject) => {
+        window.addEventListener(
+          responseType,
+          function (event) {
+            if ('error' in event.detail) {
+              reject(event.detail.error)
+            } else {
+              resolve(event.detail)
+            }
+          },
+          { once: true }
+        )
+        window.postMessage(
+          {
+            type: 'AERGO_REQUEST',
+            action: action,
+            data: data,
+          },
+          '*'
+        )
+      })
     },
     aergoConnectCall(action, responseType, d) {
       const data = { ...d }
