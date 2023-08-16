@@ -112,18 +112,52 @@ export default {
           }
           return
         }
-        console.log(args, 'args')
-        console.log(argValues, 'argValues')
-        console.log(
-          `callToConnect Name:${this.name} Account:${JSON.stringify(
-            this.getActiveAccount,
-            null,
-            2
-          )} Args[Key:Value]${
-            (JSON.stringify(args), null, 2)
-          }, Arg[Values]:${argValues}`
+        const payload_json = {
+          Name: this.name,
+          Args: this.args,
+        }
+        const data = {
+          amount: '0 aergo',
+          from: this.getActiveAccount.address,
+          limit: 0,
+          payload_json,
+          to: this.address,
+          type: 5,
+        }
+        const result = await this.aergoConnectCall(
+          'SEND_TX',
+          'CALL_CONTRACT_RESULT',
+          data
         )
+        return result.signature
       }
+    },
+    aergoConnectCall(action, responseType, d) {
+      const data = { ...d }
+      if (!d.payload && !d.payload_json) {
+        data.payload = ''
+      }
+      return new Promise((resolve, reject) => {
+        window.addEventListener(
+          responseType,
+          function (event) {
+            if ('error' in event.detail) {
+              reject(event.detail.error)
+            } else {
+              resolve(event.detail)
+            }
+          },
+          { once: true }
+        )
+        window.postMessage(
+          {
+            type: 'AERGO_REQUEST',
+            action: action,
+            data: data,
+          },
+          '*'
+        )
+      })
     },
   },
 }
