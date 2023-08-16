@@ -52,6 +52,7 @@ export default {
       isClick: false,
     }
   },
+
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}

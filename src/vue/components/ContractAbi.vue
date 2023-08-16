@@ -205,6 +205,13 @@ export default {
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
     },
+    canLoadMoreEvents() {
+      return this.eventsFromMin > 0
+    },
+    // jsonCode() {
+    //   if (!this.$props.abi) return 'Loading...'
+    //   return JSON.stringify(this.$props.abi, null, 2)
+    // },
   },
 
   methods: {
@@ -274,16 +281,6 @@ export default {
       } else {
         return JSON.stringify(this.$props.abi, null, 2)
       }
-    },
-    onUpdateResultHash(callContractHash) {
-      this.$emit('onUpdateResultHash', callContractHash)
-    },
-    changePage: function (currentPage) {
-      this.currentPage = currentPage
-      this.reload()
-    },
-    updateCurrentPage: function (currentPage) {
-      this.currentPage = currentPage
     },
   },
 }
