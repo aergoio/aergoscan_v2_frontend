@@ -357,6 +357,8 @@
                   :abi="contractAbi"
                   :codehash="accountDetail.codehash"
                   :address="realAddress"
+                  :callContractHash="callContractHash"
+                  @onUpdateResultHash="onUpdateResultHash"
                 />
               </div>
             </div>
@@ -369,6 +371,7 @@
 </template>
 
 <script>
+import { loadAndWait } from '@/src/vue/utils/async'
 import { Address } from '@herajs/client'
 import JSBI from 'jsbi'
 import { Amount } from '@herajs/client'
@@ -412,6 +415,7 @@ export default {
       names: [],
       nameHistory: [],
       tokenPrice: [],
+      callContractHash: '',
     }
   },
   created() {},
@@ -430,6 +434,17 @@ export default {
         .catch((e) => {
           console.log(e)
         })
+    },
+    async callContractHash() {
+      const wait = loadAndWait()
+      await wait()
+      setTimeout(async () => {
+        try {
+          await this.reloadAllTable(this.realAddress)
+        } catch (e) {
+          console.log(e)
+        }
+      }, 3000)
     },
   },
   mounted() {
@@ -846,6 +861,9 @@ export default {
     },
     onCloseQrcode() {
       this.isShowQRcode = false
+    },
+    onUpdateResultHash(callContractHash) {
+      this.callContractHash = callContractHash
     },
   },
   components: {

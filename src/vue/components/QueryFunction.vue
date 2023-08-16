@@ -43,7 +43,7 @@ import { loadAndWait } from '@/src/vue/utils/async'
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
 
 export default {
-  props: ['abi', 'name', 'address'],
+  props: ['abi', 'name', 'address', 'callContractHash'],
   data() {
     return {
       args: {},
@@ -52,6 +52,7 @@ export default {
       isClick: false,
     }
   },
+
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}
@@ -103,6 +104,7 @@ export default {
       this.isClick = !this.isClick
     },
     async callToConnect() {
+      const wait = loadAndWait()
       if (this.getActiveAccount.address) {
         const args = this.args
         const argValues = this.func.arguments.map((arg) => args[arg.name])
@@ -126,10 +128,13 @@ export default {
         }
         const result = await this.aergoConnectCall(
           'SEND_TX',
-          'CALL_CONTRACT_RESULT',
+          'AERGO_SEND_TX_RESULT',
           data
         )
-        return result.signature
+        await wait()
+        this.result = result.hash
+        this.$emit('onUpdateResultHash', result.hash)
+        this.isLoading = false
       }
     },
     aergoConnectCall(action, responseType, d) {
