@@ -34,6 +34,7 @@
               :abi="abi"
               :name="func.name"
               :address="address"
+              @onUpdateResultHash="onUpdateResultHash"
             />
             <QueryStateVariable
               v-for="variable in stateVariables"
@@ -219,10 +220,6 @@ export default {
     canLoadMoreEvents() {
       return this.eventsFromMin > 0
     },
-    // jsonCode() {
-    //   if (!this.$props.abi) return 'Loading...'
-    //   return JSON.stringify(this.$props.abi, null, 2)
-    // },
   },
   methods: {
     tabChanged(index) {
@@ -282,6 +279,9 @@ export default {
       } else {
         return JSON.stringify(this.$props.abi, null, 2)
       }
+    },
+    onUpdateResultHash(callContractHash) {
+      this.$emit('onUpdateResultHash', callContractHash)
     },
   },
 }
