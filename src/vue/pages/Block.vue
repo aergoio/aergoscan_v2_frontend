@@ -173,20 +173,26 @@
                           <div>Coinbase Account</div>
                         </th>
                         <td>
-                          <div v-if="blockDetail.meta.coinbase.toString()">
+                          <div
+                            v-if="blockDetail.header.coinbaseaccount.toString()"
+                          >
                             <router-link
                               class="prev-block"
-                              :to="`/account/${blockDetail.meta.coinbase}/`"
+                              :to="`/account/${blockDetail.header.coinbaseaccount}/`"
                             >
                               <Identicon
-                                :text="blockDetail.meta.coinbase"
+                                :text="blockDetail.header.coinbaseaccount"
                                 size="17"
                                 class="mini-identicon"
                               />
-                              {{ blockDetail.meta.coinbase.toString() }}
+                              {{
+                                blockDetail.header.coinbaseaccount.toString()
+                              }}
                             </router-link>
                             <copy-link-button
-                              :message="blockDetail.meta.coinbase.toString()"
+                              :message="
+                                blockDetail.header.coinbaseaccount.toString()
+                              "
                             />
                           </div>
                           <div v-else>
@@ -292,23 +298,23 @@ export default {
   },
 
   methods: {
-    async getBlock() {
-      function isNumeric(input) {
-        return /^[0-9]+$/.test(input) // 숫자인지 여부를 판별하는 정규표현식
+    async load() {
+      let blockNoOrHash = this.$route.params.blockNoOrHash
+      if (
+        '' + parseInt(this.$route.params.blockNoOrHash) ===
+        this.$route.params.blockNoOrHash
+      ) {
+        blockNoOrHash = parseInt(this.$route.params.blockNoOrHash)
       }
-      const blockNoOrHash = this.$route.params.blockNoOrHash
-      const isBlockNo = isNumeric(blockNoOrHash)
-      const getBlockApiAddress = isBlockNo
-        ? `${cfg.API_URL}/blocks?q=no:${blockNoOrHash}`
-        : `${cfg.API_URL}/blocks?q=_id:${blockNoOrHash}`
       this.blockDetail = null
       this.error = ''
       try {
-        const response = await (
-          await this.$fetch.get(getBlockApiAddress)
-        ).json()
-        console.log(response, 'response')
-        this.blockDetail = response.hits[0]
+        this.blockDetail = await timedAsync(
+          this.$store.dispatch('blockchain/fetchBlockMetadata', {
+            blockNoOrHash: blockNoOrHash,
+          })
+        )
+        this.bpId = pubkeyToPeerid(this.blockDetail.header.pubkey)
       } catch (error) {
         this.error = '' + error
         console.error(error)
