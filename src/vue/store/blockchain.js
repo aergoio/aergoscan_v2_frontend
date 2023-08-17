@@ -106,9 +106,9 @@ const actions = {
     // console.log('return block', block)
     return block
   },
-  async fetchBlockMetadata({}, { blockNoOrHash }) {
-    return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
-  },
+  // async fetchBlockMetadata({}, { blockNoOrHash }) {
+  //   return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
+  // },
   async fetchBlockTransactions({}, { hash, offset, size }) {
     return await aergo.getBlockBody(hash, offset, size)
   },
