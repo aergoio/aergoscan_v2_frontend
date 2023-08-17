@@ -10,14 +10,14 @@
               Block Details
               <div class="arrow-box" v-if="blockDetail">
                 <router-link
-                  :to="`/block/${blockDetail.header.blockno - 1}/`"
+                  :to="`/block/${blockDetail.meta.no - 1}/`"
                   v-if="hasPrevious"
                 >
                   <img src="~@assets/img/ic-prev@3x.png" class="arrow" />
                   <span>Prev</span>
                 </router-link>
-                <div class="block"># {{ blockDetail.header.blockno }}</div>
-                <router-link :to="`/block/${blockDetail.header.blockno + 1}/`">
+                <div class="block"># {{ blockDetail.meta.no }}</div>
+                <router-link :to="`/block/${blockDetail.meta.no + 1}/`">
                   <span>Next</span>
                   <img src="~@assets/img/ic-next@3x.png" class="arrow" />
                 </router-link>
@@ -47,15 +47,11 @@
                         <td>
                           <div>
                             {{
-                              moment(
-                                blockDetail.header.timestamp / 1000000
-                              ).format('dddd, MMMM Do YYYY, HH:mm:ss')
+                              moment(blockDetail.meta.ts).format(
+                                'dddd, MMMM Do YYYY, HH:mm:ss'
+                              )
                             }}
-                            ({{
-                              moment(
-                                blockDetail.header.timestamp / 1000000
-                              ).fromNow()
-                            }})
+                            ({{ moment(blockDetail.meta.ts).fromNow() }})
                           </div>
                         </td>
                       </tr>
@@ -79,15 +75,15 @@
                           <div>Previous Block</div>
                         </th>
                         <td>
-                          <div v-if="blockDetail.header.prevblockhash">
+                          <div v-if="blockDetail.meta.previous_block">
                             <router-link
                               class="prev-block"
-                              :to="`/block/${blockDetail.header.prevblockhash}/`"
+                              :to="`/block/${blockDetail.meta.previous_block}/`"
                             >
-                              {{ blockDetail.header.prevblockhash }}
+                              {{ blockDetail.meta.previous_block }}
                             </router-link>
                             <copy-link-button
-                              :message="blockDetail.header.prevblockhash"
+                              :message="blockDetail.meta.previous_block"
                             />
                           </div>
                           <div v-else>
@@ -101,7 +97,7 @@
                         </th>
                         <td>
                           <div>
-                            {{ blockDetail.txcount | formatNumber('&#8239;') }}
+                            {{ blockDetail.meta.txs | formatNumber('&#8239;') }}
                             TXs
                           </div>
                         </td>
@@ -112,7 +108,9 @@
                         </th>
                         <td>
                           <div>
-                            {{ blockDetail.size | formatNumber('&#8239;') }}
+                            {{
+                              blockDetail.meta.size | formatNumber('&#8239;')
+                            }}
                             bytes
                           </div>
                         </td>
@@ -137,24 +135,26 @@
                     <!--                    <td colspan="100%">No items found</td>-->
                     <!--                  </tr>-->
                     <template v-if="blockDetail">
-                      <tr v-if="blockDetail.header.blockno">
+                      <tr v-if="blockDetail.meta.no">
                         <th>
                           <div>Block Producer</div>
                         </th>
                         <td>
-                          <div v-if="bpId">
+                          <div v-if="blockDetail.meta.block_producer">
                             <router-link
                               class="hash-block"
-                              :to="`/votes/?highlight=${bpId}`"
+                              :to="`/votes/?highlight=${blockDetail.meta.block_producer}`"
                             >
                               <Identicon
-                                :text="bpId"
+                                :text="blockDetail.meta.block_producer"
                                 size="17"
                                 class="mini-identicon"
                               />
-                              {{ bpId }}
+                              {{ blockDetail.meta.block_producer }}
                             </router-link>
-                            <copy-link-button :message="bpId" />
+                            <copy-link-button
+                              :message="blockDetail.meta.block_producer"
+                            />
                           </div>
                           <div v-else>
                             <a class="hash-block">
@@ -168,30 +168,28 @@
                           </div>
                         </td>
                       </tr>
-                      <tr v-if="blockDetail.header.blockno">
+                      <tr v-if="blockDetail.meta.no">
                         <th>
                           <div>Coinbase Account</div>
                         </th>
                         <td>
                           <div
-                            v-if="blockDetail.header.coinbaseaccount.toString()"
+                            v-if="blockDetail.meta.reward_account.toString()"
                           >
                             <router-link
                               class="prev-block"
-                              :to="`/account/${blockDetail.header.coinbaseaccount}/`"
+                              :to="`/account/${blockDetail.meta.reward_account}/`"
                             >
                               <Identicon
-                                :text="blockDetail.header.coinbaseaccount"
+                                :text="blockDetail.meta.reward_account"
                                 size="17"
                                 class="mini-identicon"
                               />
-                              {{
-                                blockDetail.header.coinbaseaccount.toString()
-                              }}
+                              {{ blockDetail.meta.reward_account.toString() }}
                             </router-link>
                             <copy-link-button
                               :message="
-                                blockDetail.header.coinbaseaccount.toString()
+                                blockDetail.meta.reward_account.toString()
                               "
                             />
                           </div>
@@ -205,15 +203,15 @@
                           </div>
                         </td>
                       </tr>
-                      <template
-                        v-if="!blockDetail.header.rewardaccount.isEmpty()"
-                      >
+                      <template v-if="blockDetail.meta.reward_account">
                         <tr>
                           <th>
                             <div>Block Reward</div>
                           </th>
                           <td>
-                            <div>{{ blockDetail.voteReward.toString() }}</div>
+                            <div>
+                              {{ blockDetail.meta.reward_amount.toString() }}
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -224,20 +222,18 @@
                             <div>
                               <router-link
                                 class="prev-block txt-ellipsis"
-                                :to="`/account/${blockDetail.header.rewardaccount}/`"
+                                :to="`/account/${blockDetail.meta.reward_account}/`"
                               >
                                 <Identicon
-                                  :text="blockDetail.header.rewardaccount"
+                                  :text="blockDetail.meta.reward_account"
                                   size="17"
                                   class="mini-identicon"
                                 />
-                                {{
-                                  blockDetail.header.rewardaccount.toString()
-                                }}
+                                {{ blockDetail.meta.reward_account.toString() }}
                               </router-link>
                               <CopyLinkButton
                                 :message="
-                                  blockDetail.header.rewardaccount.toString()
+                                  blockDetail.meta.reward_account.toString()
                                 "
                               />
                             </div>
@@ -259,10 +255,7 @@
                 </table>
               </div>
             </div>
-            <block-tx-table
-              :blockno="blockDetail.header.blockno"
-              v-if="blockDetail"
-            />
+            <block-tx-table :blockno="blockDetail.meta.no" v-if="blockDetail" />
           </div>
         </div>
       </div>
@@ -275,27 +268,8 @@
 import Search from '@/src/vue/components/Search'
 import BlockTxTable from '@/src/vue/components/BlockTxTable'
 import Identicon from '@/src/vue/components/Identicon'
-
+import cfg from '@/src/config.js'
 import moment from 'moment'
-import { timedAsync } from 'timed-async'
-import { sha256 } from 'hash.js'
-import bs58 from 'bs58'
-
-function pubkeyToPeerid(pubkey) {
-  const decoded = bs58.decode(pubkey)
-  if (decoded.length == 0) {
-    return ''
-  } else if (decoded.length <= 42) {
-    return bs58.encode(
-      Buffer.concat([Buffer.from([0, decoded.length]), decoded])
-    )
-  } else {
-    const hash = Buffer.from(sha256().update(decoded).digest())
-    return bs58.encode(
-      Buffer.concat([Buffer.from([0, 27, 8, 2, 0x12, hash.length]), hash])
-    )
-  }
-}
 
 export default {
   data() {
@@ -306,42 +280,29 @@ export default {
     }
   },
   mounted() {
-    this.load()
+    this.getBlock()
   },
   created() {},
   beforeDestroy() {},
   watch: {
     $route(to, from) {
-      this.load()
+      this.getBlock()
     },
   },
   computed: {
     hasPrevious() {
-      return this.blockDetail.header.blockno > 0
+      return this.blockDetail.meta.no > 0
     },
   },
+
   methods: {
-    async load() {
-      let blockNoOrHash = this.$route.params.blockNoOrHash
-      if (
-        '' + parseInt(this.$route.params.blockNoOrHash) ===
-        this.$route.params.blockNoOrHash
-      ) {
-        blockNoOrHash = parseInt(this.$route.params.blockNoOrHash)
-      }
-      this.blockDetail = null
-      this.error = ''
-      try {
-        this.blockDetail = await timedAsync(
-          this.$store.dispatch('blockchain/fetchBlockMetadata', {
-            blockNoOrHash: blockNoOrHash,
-          })
+    async getBlock() {
+      const response = await (
+        await this.$fetch.get(
+          `${cfg.API_URL}/blocks?q=no:${this.$route.params.blockNoOrHash}`
         )
-        this.bpId = pubkeyToPeerid(this.blockDetail.header.pubkey)
-      } catch (error) {
-        this.error = '' + error
-        console.error(error)
-      }
+      ).json()
+      this.blockDetail = response.hits[0]
     },
     moment,
   },
