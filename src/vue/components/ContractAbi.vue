@@ -118,17 +118,12 @@ export default {
       interactiveArguments: defaultdict({}),
       isLoading: [],
       events: [],
-      paginationCss: {
-        pagination: 'pagination events',
-        paginationInner: 'pagination-events',
-        moveFirstPage: 'pprev',
-        movePreviousPage: 'prev',
-        moveNextPage: 'next',
-        moveLastPage: 'nnext',
-      },
-      currentPage: 1,
-      itemsPerPage: 20,
-      limitPageTotalCount: 0,
+      eventsFrom: 0,
+      eventsTo: 0,
+      eventsToMax: 0,
+      eventsFromMin: -1,
+      isLoadingMoreEvents: false,
+      bestBlock: false,
       selectedTab: 0,
       tabTableCss: {
         table: 'result-events',
@@ -208,10 +203,6 @@ export default {
     canLoadMoreEvents() {
       return this.eventsFromMin > 0
     },
-    // jsonCode() {
-    //   if (!this.$props.abi) return 'Loading...'
-    //   return JSON.stringify(this.$props.abi, null, 2)
-    // },
   },
 
   methods: {
@@ -224,54 +215,46 @@ export default {
     setViewMode(mode) {
       this.viewMode = mode
     },
-    reload: async function () {
-      this.isLoading = true
-      await this.loadEvents({
-        currentPage: this.currentPage,
-        itemsPerPage: this.itemsPerPage,
-      })
-      this.isLoading = false
+    loadPreviousEvents() {
+      this.loadEvents(true)
     },
-    async loadEvents() {
-      ;(async () => {
-        const start = (this.currentPage - 1) * this.itemsPerPage
-        const response = await (
-          await this.$fetch.get(`${cfg.API_URL}/event`, {
-            q: `contract:${this.address}`,
-            from: start,
-            size: this.itemsPerPage,
-          })
-        ).json()
-        if (response.error) {
-          this.error = response.error.msg
-        } else if (response.hits.length) {
-          this.events = response.hits
-          this.limitPageTotalCount = response.total
-        } else {
-          this.events = []
-          this.limitPageTotalCount = 0
-        }
-      })()
+    loadNewEvents() {
+      this.loadEvents(true, true)
     },
+    async loadEvents(append = false, loadNew = false) {
+      const wait = loadAndWait()
+      this.isLoadingMoreEvents = true
+      if (loadNew || !this.bestBlock) {
+        this.bestBlock = await this.$store.dispatch('blockchain/getBestBlock')
+      }
 
-    async loadCode() {
-      ;(async () => {
-        try {
-          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
-            q: `_id:${this.address}`,
-          })
-          const data = await response.json()
-          if (data.hits.length > 0) {
-            this.code = {
-              code: data.hits[0].meta.code,
-              code_url: data.hits[0].meta.code_url,
-            }
-          }
-        } catch (e) {
-          console.error(e)
-          this.isLoadingDetail = false
-        }
-      })()
+      if (loadNew) {
+        this.eventsTo = this.bestBlock.bestHeight
+        this.eventsFrom = this.eventsToMax + 1
+      } else {
+        this.eventsTo = this.eventsFrom || this.bestBlock.bestHeight
+        this.eventsFrom = Math.max(0, this.eventsTo - eventPage)
+      }
+      this.eventsToMax = Math.max(this.eventsToMax, this.eventsTo)
+      this.eventsFromMin = Math.min(this.eventsFromMin, this.eventsFrom)
+      if (this.eventsFromMin === -1) {
+        this.eventsFromMin = this.eventsFrom
+      }
+      if (!append) this.events = []
+      try {
+        const events = await this.$store.dispatch('blockchain/getEvents', {
+          eventName: null,
+          args: [],
+          address: this.address,
+          blockto: this.eventsTo,
+          blockfrom: this.eventsFrom,
+        })
+        await wait()
+        this.events.push(...events)
+      } catch (e) {
+        console.error(e)
+      }
+      this.isLoadingMoreEvents = false
     },
 
     syntaxHighlight,
