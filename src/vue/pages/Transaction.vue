@@ -305,14 +305,14 @@
               <div class="address">
                 <div class="title">Contract</div>
                 <div class="item">
-                  <span class="item-inner" v-if="txMeta.to">
-                    <router-link :to="`/account/${txMeta.to}/`">
+                  <span class="item-inner" v-if="txMeta.contract">
+                    <router-link :to="`/account/${txMeta.contract}/`">
                       <Identicon
-                        :text="txMeta.to"
+                        :text="txMeta.contract"
                         size="20"
                         class="tiny-identicon"
                       />
-                      {{ txMeta.to }}
+                      {{ txMeta.contract }}
                     </router-link>
                   </span>
                 </div>
@@ -368,9 +368,9 @@
                   title="Result"
                 >
                   <Tab
-                    title="Formatted"
-                    :route="{ query: query({ receipt: 'formatted' }) }"
-                    :id="'formatted'"
+                    title="Status"
+                    :route="{ query: query({ receipt: 'status' }) }"
+                    :id="'status'"
                     :css="{
                       extend: txMeta.status !== 'ERROR' ? 'success' : 'error',
                     }"
@@ -398,15 +398,7 @@
                       <span class="monospace" v-else>{{ txMeta.result }}</span>
                     </div>
                   </Tab>
-                  <Tab
-                    title="JSON"
-                    :route="{ query: query({ receipt: 'json' }) }"
-                    :id="'json'"
-                  >
-                    <div class="content">
-                      <pre>{{ receiptJson }}</pre>
-                    </div>
-                  </Tab>
+
                   <Tab
                     :title="`Events (${events.length})`"
                     :route="{ query: query({ receipt: 'events' }) }"
@@ -447,7 +439,7 @@ import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
 
 const payloadTabs = ['formatted', 'json', 'hex']
-const receiptTabs = ['formatted', 'json', 'events']
+const receiptTabs = ['status', 'events']
 
 export default {
   data() {
@@ -468,6 +460,7 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+
   watch: {
     $route(to, from) {
       this.load()
@@ -481,7 +474,9 @@ export default {
     },
   },
   updated() {
+    console.log(this.events, 'events')
     console.log(this.txMeta, 'txMeta')
+    // console.log(this.txReceipt, 'txReceipt')
     // console.log(this.txDetail, 'txDetail')
   },
   mounted() {
@@ -540,7 +535,6 @@ export default {
     async load() {
       this.error = null
       let hash = this.$route.params.hash
-
       // ;(async () => {
       //   try {
       //     this.txDetail = await this.$store.dispatch(
@@ -567,6 +561,16 @@ export default {
         ).json()
         if (response.hits.length) {
           this.txMeta = response.hits[0].meta
+        }
+      })()
+      ;(async () => {
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/event`, {
+            q: `tx_id:${hash}`,
+          })
+        ).json()
+        if (response.hits.length) {
+          this.events = response.hits
         }
       })()
     },
