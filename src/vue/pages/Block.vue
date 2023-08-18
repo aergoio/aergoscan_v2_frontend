@@ -173,24 +173,20 @@
                           <div>Coinbase Account</div>
                         </th>
                         <td>
-                          <div
-                            v-if="blockDetail.meta.reward_account.toString()"
-                          >
+                          <div v-if="blockDetail.meta.coinbase.toString()">
                             <router-link
                               class="prev-block"
-                              :to="`/account/${blockDetail.meta.reward_account}/`"
+                              :to="`/account/${blockDetail.meta.coinbase}/`"
                             >
                               <Identicon
-                                :text="blockDetail.meta.reward_account"
+                                :text="blockDetail.meta.coinbase"
                                 size="17"
                                 class="mini-identicon"
                               />
-                              {{ blockDetail.meta.reward_account.toString() }}
+                              {{ blockDetail.meta.coinbase.toString() }}
                             </router-link>
                             <copy-link-button
-                              :message="
-                                blockDetail.meta.reward_account.toString()
-                              "
+                              :message="blockDetail.meta.coinbase.toString()"
                             />
                           </div>
                           <div v-else>
@@ -297,12 +293,19 @@ export default {
 
   methods: {
     async getBlock() {
-      const response = await (
-        await this.$fetch.get(
-          `${cfg.API_URL}/blocks?q=no:${this.$route.params.blockNoOrHash}`
-        )
-      ).json()
-      this.blockDetail = response.hits[0]
+      this.blockDetail = null
+      this.error = ''
+      try {
+        const response = await (
+          await this.$fetch.get(
+            `${cfg.API_URL}/blocks?q=no:${this.$route.params.blockNoOrHash}`
+          )
+        ).json()
+        this.blockDetail = response.hits[0]
+      } catch (error) {
+        this.error = '' + error
+        console.error(error)
+      }
     },
     moment,
   },

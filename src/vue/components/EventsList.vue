@@ -9,30 +9,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in events" :key="`${row.txhash}${row.eventidx}`">
+      <tr v-for="row in events" :key="`${row.tx_id}${row.event_idx}`">
         <td v-if="columns.indexOf('blockno') >= 0">
-          <router-link :to="`/block/${row.blockhash}/`">{{
+          <router-link :to="`/block/${row.blockno}/`">{{
             row.blockno
           }}</router-link>
         </td>
         <td v-if="columns.indexOf('tx') >= 0">
-          <router-link :to="`/transaction/${row.txhash}/`">{{
-            row.txhash
+          <router-link :to="`/transaction/${row.tx_id}/`">{{
+            row.tx_id
           }}</router-link>
         </td>
         <td>
-          {{ row.eventName }}
-          <div v-if="`${row.address}` !== `${address}`">
+          {{ row.event_name }}
+          <div v-if="`${row.contract}` !== `${address}`">
             @
-            <router-link :to="`/account/${row.address}/`"
-              >{{ `${row.address}`.substr(0, 5) }}...</router-link
+            <router-link :to="`/account/${row.contract}/`"
+              >{{ `${row.contract}`.substr(0, 5) }}...</router-link
             >
           </div>
         </td>
         <td width="100%">
           <span class="event-args">
-            <span class="args-payload" v-if="row.args.length">
-              <pre><ArgFormatter v-for="arg of row.args" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
+            <span class="args-payload" v-if="JSON.parse(row.event_args).length">
+              <pre><ArgFormatter v-for="arg of JSON.parse(row.event_args)" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
             </span>
           </span>
         </td>

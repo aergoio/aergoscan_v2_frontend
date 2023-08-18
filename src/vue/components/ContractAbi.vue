@@ -53,31 +53,6 @@
         :id="'events'"
       >
         <div class="table-wrap">
-          <div class="desc-contract">
-            <span
-              >Showing {{ events.length }} events from block number
-              <span class="loadedNumber">{{ eventsFromMin }}</span> to
-              <span class="loadedNumber">{{ eventsToMax }}</span
-              >.</span
-            >
-            <button
-              class="btn-load-more"
-              v-on:click="loadPreviousEvents"
-              v-if="canLoadMoreEvents && !isLoadingMoreEvents"
-            >
-              LOAD MORE
-            </button>
-            <button class="btn-load-more" v-if="isLoadingMoreEvents">
-              LOADING...
-            </button>
-            <span v-if="!canLoadMoreEvents && !isLoadingMoreEvents"
-              >(Loaded all events)</span
-            >
-            <span style="flex: 1 1 0%"></span>
-            <div class="btn-refresh">
-              <ReloadButton :action="loadNewEvents" />
-            </div>
-          </div>
           <div class="h-scroll">
             <events-list
               :events="events"
@@ -99,7 +74,8 @@
 
 <script>
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
-import { loadAndWait } from '@/src/vue/utils/async'
+// import { loadAndWait } from '@/src/vue/utils/async'
+import cfg from '@/src/config'
 import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
@@ -141,12 +117,12 @@ export default {
       interactiveArguments: defaultdict({}),
       isLoading: [],
       events: [],
-      eventsFrom: 0,
-      eventsTo: 0,
-      eventsToMax: 0,
-      eventsFromMin: -1,
-      isLoadingMoreEvents: false,
-      bestBlock: false,
+      // eventsFrom: 0,
+      // eventsTo: 0,
+      // eventsToMax: 0,
+      // eventsFromMin: -1,
+      // isLoadingMoreEvents: false,
+      // bestBlock: false,
       selectedTab: 0,
       tabTableCss: {
         table: 'result-events',
@@ -217,9 +193,6 @@ export default {
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
     },
-    canLoadMoreEvents() {
-      return this.eventsFromMin > 0
-    },
   },
   methods: {
     tabChanged(index) {
@@ -231,46 +204,17 @@ export default {
     setViewMode(mode) {
       this.viewMode = mode
     },
-    loadPreviousEvents() {
-      this.loadEvents(true)
-    },
-    loadNewEvents() {
-      this.loadEvents(true, true)
-    },
-    async loadEvents(append = false, loadNew = false) {
-      const wait = loadAndWait()
-      this.isLoadingMoreEvents = true
-      if (loadNew || !this.bestBlock) {
-        this.bestBlock = await this.$store.dispatch('blockchain/getBestBlock')
-      }
-
-      if (loadNew) {
-        this.eventsTo = this.bestBlock.bestHeight
-        this.eventsFrom = this.eventsToMax + 1
-      } else {
-        this.eventsTo = this.eventsFrom || this.bestBlock.bestHeight
-        this.eventsFrom = Math.max(0, this.eventsTo - eventPage)
-      }
-      this.eventsToMax = Math.max(this.eventsToMax, this.eventsTo)
-      this.eventsFromMin = Math.min(this.eventsFromMin, this.eventsFrom)
-      if (this.eventsFromMin === -1) {
-        this.eventsFromMin = this.eventsFrom
-      }
-      if (!append) this.events = []
-      try {
-        const events = await this.$store.dispatch('blockchain/getEvents', {
-          eventName: null,
-          args: [],
-          address: this.address,
-          blockto: this.eventsTo,
-          blockfrom: this.eventsFrom,
-        })
-        await wait()
-        this.events.push(...events)
-      } catch (e) {
-        console.error(e)
-      }
-      this.isLoadingMoreEvents = false
+    async loadEvents() {
+      ;(async () => {
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/event`, {
+            q: `contract:${this.address}`,
+          })
+        ).json()
+        if (response.hits.length) {
+          this.events = response.hits
+        }
+      })()
     },
     syntaxHighlight,
     calculateJsonCode() {
@@ -442,9 +386,9 @@ export default {
     color: #569cd6;
   }
 
-  .number {
+  /* .number {
     color: #aecfa4;
-  }
+  } */
 
   .annotation {
     color: #ccc;

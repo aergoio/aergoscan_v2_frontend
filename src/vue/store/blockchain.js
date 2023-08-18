@@ -106,9 +106,9 @@ const actions = {
     // console.log('return block', block)
     return block
   },
-  // async fetchBlockMetadata({}, { blockNoOrHash }) {
-  //   return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
-  // },
+  async fetchBlockMetadata({}, { blockNoOrHash }) {
+    return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
+  },
   async fetchBlockTransactions({}, { hash, offset, size }) {
     return await aergo.getBlockBody(hash, offset, size)
   },
@@ -128,15 +128,15 @@ const actions = {
   getTransactionReceipt({ dispatch, state }, { hash }) {
     return dispatch('fetchTransactionReceipt', { hash })
   },
-  getAccountVotes({ dispatch }, { address }) {
-    return dispatch('fetchGetAccountVotes', { address })
-  },
   async fetchTransactionReceipt({}, { hash }) {
     try {
       return await aergo.getTransactionReceipt(hash)
     } catch (e) {
       return null
     }
+  },
+  getAccountVotes({ dispatch }, { address }) {
+    return dispatch('fetchGetAccountVotes', { address })
   },
   async fetchGetAccountVotes({}, { address }) {
     try {
