@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SideNav/>
+    <SideNav />
     <div class="page-container">
       <TransitionPage>
         <router-view></router-view>
@@ -10,30 +10,31 @@
 </template>
 
 <script>
-import SideNav from '@/src/vue/components/SideNav';
-import TransitionPage from '@/src/vue/components/TransitionPage';
+import SideNav from '@/src/vue/components/SideNav'
+import TransitionPage from '@/src/vue/components/TransitionPage'
 
 export default {
   data() {
     return {}
   },
   created() {
-    this.$store.dispatch('blockchain/updateChainInfo');
+    this.$store.dispatch('blockchain/updateChainInfo')
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   computed: {},
   methods: {},
   components: {
     SideNav,
-    TransitionPage
-  }
-};
+    TransitionPage,
+  },
+}
 </script>
 
 <style lang="scss">
-.monospace, .hash, pre {
-  font-family: "Lato", monospace;
+.monospace,
+.hash,
+pre {
+  font-family: 'Lato', monospace;
   word-break: break-all;
 }
 pre {
@@ -41,7 +42,7 @@ pre {
   line-height: 1.3;
 }
 .hash {
-  font-size: .9em;
+  font-size: 0.9em;
   min-width: 13em;
 }
 .formatted-value {
@@ -49,10 +50,9 @@ pre {
 
   &.token {
     //background-color: #f0f0f0;
-    padding: 0 3px;
+    /* padding: 0 3px; */
   }
   .unit {
-
   }
   .value {
     font-weight: 500;
