@@ -9,7 +9,11 @@
             <div class="title">
               Token
               <span class="sub-2">ARC-1</span>
-              <span class="identicon"></span>
+              <!-- <span class="identicon"></span> -->
+              <span class="identicon default" v-if="!txMeta.image_url"></span>
+              <span class="identicon" v-else
+                ><img :src="txMeta.image_url"
+              /></span>
               <span class="sub-3" v-if="txMeta">{{ txMeta.name }}</span>
             </div>
             <div class="detail-box">
@@ -141,8 +145,8 @@
                         </th>
                         <td>
                           <div>
-                            <a :href="txMeta.url" target="_blank">{{
-                              txMeta.url
+                            <a :href="txMeta.homepage_url" target="_blank">{{
+                              txMeta.homepage_url
                             }}</a>
                           </div>
                         </td>
@@ -247,7 +251,9 @@ export default {
       let hash = this.$route.params.hash
       ;(async () => {
         const response = await (
-          await this.$fetch.get(`${cfg.API_URL}/token`, { q: `_id:${hash}` })
+          await this.$fetch.get(`${cfg.API_URL}/token`, {
+            q: `_id:${hash}`,
+          })
         ).json()
         if (response.hits.length) {
           this.txMeta = response.hits[0].meta
@@ -286,8 +292,8 @@ export default {
 
     .identicon {
       display: inline-block;
-      width: 18px;
-      height: 18px;
+      /* width: 18px; */
+      /* height: 18px; */
       flex: 18px 0 0;
       margin-left: 20px;
 

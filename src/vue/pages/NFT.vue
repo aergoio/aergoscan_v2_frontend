@@ -9,7 +9,11 @@
             <div class="title">
               NFT
               <span class="sub-2">ARC-2</span>
-              <span class="identicon"></span>
+              <!-- <span class="identicon"></span> -->
+              <span class="identicon default" v-if="!txMeta.image_url"></span>
+              <span class="identicon" v-else
+                ><img :src="txMeta.image_url"
+              /></span>
               <span class="sub-3" v-if="txMeta">{{ txMeta.name }}</span>
             </div>
             <div class="detail-box">
@@ -118,22 +122,22 @@
                           <div>{{ txMeta.total_transfer }} Transfers</div>
                         </td>
                       </tr>
-                      <!--                    <tr>-->
-                      <!--                      <th>-->
-                      <!--                        <div>Decimals</div>-->
-                      <!--                      </th>-->
-                      <!--                      <td>-->
-                      <!--                        <div>{{ txMeta.decimals }}</div>-->
-                      <!--                      </td>-->
-                      <!--                    </tr>-->
+                      <tr>
+                        <th>
+                          <div>Decimals</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.decimals }}</div>
+                        </td>
+                      </tr>
                       <tr>
                         <th>
                           <div>Official Site</div>
                         </th>
                         <td>
                           <div>
-                            <a :href="txMeta.url" target="_blank">{{
-                              txMeta.url
+                            <a :href="txMeta.homepage_url" target="_blank">{{
+                              txMeta.homepage_url
                             }}</a>
                           </div>
                         </td>
@@ -269,6 +273,9 @@ export default {
     this.load()
   },
   computed: {},
+  updated() {
+    console.log(this.txMeta, 'txMeta')
+  },
   methods: {
     query(newQuery) {
       return { ...this.$route.query, ...newQuery }
@@ -321,8 +328,8 @@ export default {
 
     .identicon {
       display: inline-block;
-      width: 18px;
-      height: 18px;
+      /* width: 18px; */
+      /* height: 18px; */
       flex: 18px 0 0;
       margin-left: 20px;
 

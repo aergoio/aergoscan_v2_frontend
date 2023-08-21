@@ -158,16 +158,16 @@ export default {
           `${cfg.API_URL}/nft`,
           keyword.length > 0
             ? {
-                q: `(name_lower:*${keyword.toLowerCase()}* OR symbol_lower:*${keyword.toLowerCase()}*) AND type:ARC2`,
+                q: `(name_lower:*${keyword.toLowerCase()}* OR symbol_lower:*${keyword.toLowerCase()}*) AND type:ARC2 `,
                 search: keyword.toLowerCase(),
-                range: 'ALL',
+                // range: 'ALL',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `type:ARC2`,
-                range: 'ALL',
+                q: `type:ARC2 `,
+                // range: 'ALL',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
