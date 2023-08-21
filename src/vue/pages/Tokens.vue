@@ -185,6 +185,9 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+  updated() {
+    console.log(this.data, 'data')
+  },
   computed: {
     ...mapState({
       chainInfo: (state) => state.blockchain.chainInfo,
