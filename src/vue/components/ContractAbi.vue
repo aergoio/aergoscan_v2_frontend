@@ -72,11 +72,14 @@
         </div>
       </Tab>
 
-      <!-- <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
+      <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
         <div class="table-wrap">
-          <div class="desc-contract"></div>
+          <div class="desc-contract">
+            <div>{{ code.code_url }}</div>
+            <div>{{ code.code }}</div>
+          </div>
         </div>
-      </Tab> -->
+      </Tab>
     </Tabs>
   </div>
 </template>
@@ -115,8 +118,6 @@ const defaultdict = (def) =>
     }
   )
 
-const eventPage = 10000
-
 export default {
   props: ['abi', 'codehash', 'address'],
   data() {
@@ -128,7 +129,7 @@ export default {
       events: [],
       paginationCss: {
         pagination: 'pagination events',
-        paginationInner: 'pagination-inner',
+        paginationInner: 'pagination-events',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
         moveNextPage: 'next',
@@ -141,7 +142,7 @@ export default {
       tabTableCss: {
         table: 'result-events',
       },
-
+      code: {},
       cmOption: {
         tabSize: 4,
         styleActiveLine: true,
@@ -167,6 +168,9 @@ export default {
     selectedTab(to, from) {
       if (to === 2) {
         this.loadEvents()
+      }
+      if (to === 3) {
+        this.loadCode()
       }
     },
     $props: {
@@ -210,6 +214,7 @@ export default {
         .join(' ')
     },
   },
+
   methods: {
     tabChanged(index) {
       this.selectedTab = index
@@ -249,6 +254,27 @@ export default {
         }
       })()
     },
+
+    async loadCode() {
+      ;(async () => {
+        try {
+          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
+            q: `_id:${this.address}`,
+          })
+          const data = await response.json()
+          if (data.hits.length > 0) {
+            this.code = {
+              code: data.hits[0].meta.code,
+              code_url: data.hits[0].meta.code_url,
+            }
+          }
+        } catch (e) {
+          console.error(e)
+          this.isLoadingDetail = false
+        }
+      })()
+    },
+
     syntaxHighlight,
     calculateJsonCode() {
       if (!this.$props.abi) {
