@@ -75,8 +75,8 @@
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
         <div class="table-wrap">
           <div class="desc-contract">
-            <div>{{ code.code_url }}</div>
-            <div>{{ code.code }}</div>
+            <div :style="{ whiteSpace: 'pre' }">{{ code.code }}</div>
+            <div v-if="!code.code">No Authorized Source Code</div>
           </div>
         </div>
       </Tab>
