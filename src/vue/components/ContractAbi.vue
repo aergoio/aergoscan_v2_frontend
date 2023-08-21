@@ -59,6 +59,15 @@
               :columns="['blockno', 'tx']"
               :css="tabTableCss"
             />
+            <pagination
+              slot="pagination"
+              :css="paginationCss"
+              :page="currentPage"
+              :total-items="limitPageTotalCount"
+              :itemsPerPage="itemsPerPage"
+              @onUpdate="changePage"
+              @updateCurrentPage="updateCurrentPage"
+            />
           </div>
         </div>
       </Tab>
@@ -117,12 +126,17 @@ export default {
       interactiveArguments: defaultdict({}),
       isLoading: [],
       events: [],
-      // eventsFrom: 0,
-      // eventsTo: 0,
-      // eventsToMax: 0,
-      // eventsFromMin: -1,
-      // isLoadingMoreEvents: false,
-      // bestBlock: false,
+      paginationCss: {
+        pagination: 'pagination events',
+        paginationInner: 'pagination-inner',
+        moveFirstPage: 'pprev',
+        movePreviousPage: 'prev',
+        moveNextPage: 'next',
+        moveLastPage: 'nnext',
+      },
+      currentPage: 1,
+      itemsPerPage: 20,
+      limitPageTotalCount: 0,
       selectedTab: 0,
       tabTableCss: {
         table: 'result-events',
@@ -162,7 +176,9 @@ export default {
       deep: true,
     },
   },
-  mounted() {},
+  mounted() {
+    this.changePage(this.currentPage)
+  },
 
   beforeDestroy() {},
   components: {
@@ -204,15 +220,32 @@ export default {
     setViewMode(mode) {
       this.viewMode = mode
     },
+    reload: async function () {
+      this.isLoading = true
+      await this.loadEvents({
+        currentPage: this.currentPage,
+        itemsPerPage: this.itemsPerPage,
+      })
+      this.isLoading = false
+    },
     async loadEvents() {
       ;(async () => {
+        const start = (this.currentPage - 1) * this.itemsPerPage
         const response = await (
           await this.$fetch.get(`${cfg.API_URL}/event`, {
             q: `contract:${this.address}`,
+            from: start,
+            size: this.itemsPerPage,
           })
         ).json()
-        if (response.hits.length) {
+        if (response.error) {
+          this.error = response.error.msg
+        } else if (response.hits.length) {
           this.events = response.hits
+          this.limitPageTotalCount = response.total
+        } else {
+          this.events = []
+          this.limitPageTotalCount = 0
         }
       })()
     },
@@ -226,6 +259,13 @@ export default {
     },
     onUpdateResultHash(callContractHash) {
       this.$emit('onUpdateResultHash', callContractHash)
+    },
+    changePage: function (currentPage) {
+      this.currentPage = currentPage
+      this.reload()
+    },
+    updateCurrentPage: function (currentPage) {
+      this.currentPage = currentPage
     },
   },
 }
