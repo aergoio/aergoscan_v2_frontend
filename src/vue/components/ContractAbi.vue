@@ -83,9 +83,12 @@
 
       <!-- <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
         <div class="table-wrap">
-          <div class="desc-contract"></div>
+          <div class="desc-contract">
+            <div>{{ code.code_url }}</div>
+            <div>{{ code.code }}</div>
+          </div>
         </div>
-      </Tab> -->
+      </Tab>
     </Tabs>
   </div>
 </template>
