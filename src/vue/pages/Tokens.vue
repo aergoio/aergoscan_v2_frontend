@@ -229,7 +229,7 @@ export default {
 
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/token`,
+          `${cfg.API_URL}/tokenVerified`,
           searchField.length > 0
             ? {
                 q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC1`,
