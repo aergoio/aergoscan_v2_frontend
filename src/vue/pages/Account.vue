@@ -780,7 +780,7 @@ export default {
       const loadTokenMetadata = async () => {
         try {
           const response = await (
-            await this.$fetch.get(`${cfg.API_URL}/token`, {
+            await this.$fetch.get(`${cfg.API_URL}/tokenVerified`, {
               q: `_id:${this.$route.params.address}`,
             })
           ).json()
