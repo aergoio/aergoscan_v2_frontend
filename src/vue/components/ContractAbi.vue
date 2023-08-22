@@ -80,6 +80,12 @@
           </div>
         </div>
       </Tab>
+
+      <!-- <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
+        <div class="table-wrap">
+          <div class="desc-contract"></div>
+        </div>
+      </Tab> -->
     </Tabs>
   </div>
 </template>
