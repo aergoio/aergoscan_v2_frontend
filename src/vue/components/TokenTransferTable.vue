@@ -218,7 +218,6 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          name: item.token.meta.name,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,
         }))
