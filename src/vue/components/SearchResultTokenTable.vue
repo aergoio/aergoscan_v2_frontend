@@ -22,8 +22,8 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image"></span>
-          <span class="identicon" v-else><img :src="row.image" /></span>
+          <span class="identicon default" v-if="!row.image_url"></span>
+          <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link
             class="block"
             v-html="row.selectedName"

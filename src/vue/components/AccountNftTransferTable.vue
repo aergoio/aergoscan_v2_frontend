@@ -87,8 +87,8 @@
       </td>
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image"></span>
-          <span class="identicon" v-else><img :src="row.image" /></span>
+          <span class="identicon default" v-if="!row.image_url"></span>
+          <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link
             :to="`/nft/${row.symbolHash}/`"
             class="address txt-ellipsis"
@@ -245,7 +245,7 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          image: item.token.meta.image,
+          image_url: item.token.meta.image_url,
           name: item.token.meta.name,
           symbolHash: item.token.hash,
           symbol: item.token.meta.symbol,
