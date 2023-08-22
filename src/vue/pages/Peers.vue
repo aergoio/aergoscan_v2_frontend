@@ -266,12 +266,10 @@ export default {
       this.consensusInfo = Object.freeze(
         await this.$store.dispatch('blockchain/getConsensusInfo')
       )
-      console.log(this.consensusInfo)
     },
     async loadServerInfo() {
       try {
         const result = await this.$store.dispatch('blockchain/getServerInfo')
-        console.log(result)
         this.serverInfo = result
       } catch (e) {
         console.error(e)

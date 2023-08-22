@@ -55,11 +55,9 @@ export default {
   methods: {
     async querySearch(query) {
       try {
-        console.log(query, 'query')
         const response = await this.$fetch.get(`${cfg.API_URL}/search`, {
           q: query,
         })
-        console.log(response, 'response')
         const result = await response.json()
         this.predictedType = ''
         if (result.blocks.length) {
@@ -89,7 +87,11 @@ export default {
         this.error = '' + error
         // console.error(error);
       }
-      if (this.blockDetail && this.blockDetail.header.blockno) {
+      if (
+        this.blockDetail &&
+        (this.blockDetail.header.blockno ||
+          this.blockDetail.header.blockno === 0)
+      ) {
         this.predictedType = 'blockno'
         this.predictedString = '' + parseInt(this.blockDetail.header.blockno)
       } else {
