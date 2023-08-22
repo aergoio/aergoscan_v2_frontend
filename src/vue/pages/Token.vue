@@ -128,7 +128,7 @@
                           <div>Total Transfers</div>
                         </th>
                         <td>
-                          <div>{{ txMeta.total_transfer }} Transfers</div>
+                          <div>{{ tokenTxTotalItems }} Transfers</div>
                         </td>
                       </tr>
                       <tr>
