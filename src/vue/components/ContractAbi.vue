@@ -76,7 +76,7 @@
         <div class="table-wrap">
           <div class="desc-contract">
             <div :style="{ whiteSpace: 'pre' }">{{ code.code }}</div>
-            <div v-if="!code.code">No Authorized Source Code</div>
+            <div v-if="!code.code">No Authorized Code</div>
           </div>
         </div>
       </Tab>

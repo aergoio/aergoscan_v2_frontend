@@ -72,8 +72,8 @@
       </td>
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image"></span>
-          <span class="identicon" v-else><img :src="row.image" /></span>
+          <span class="identicon default" v-if="!row.image_url"></span>
+          <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link :to="`/token/${row.address}`" class="address">
             {{ `${row.name} (${row.symbol})` }}
           </router-link>
@@ -213,7 +213,7 @@ export default {
           ...item.meta,
           hash: item.hash,
           name: item.token.meta.name,
-          image: item.token.meta.image,
+          image_url: item.token.meta.image_url,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,
         }))

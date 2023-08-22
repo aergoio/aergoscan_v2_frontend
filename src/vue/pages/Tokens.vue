@@ -71,9 +71,10 @@
                     >
                     </router-link>
                     &nbsp; &nbsp;
-                    <div class="selectedSymbol">
+                    <div v-html="`(${row.selectedSymbol})`"></div>
+                    <!-- <div class="selectedSymbol">
                       {{ `(${row.selectedSymbol})` }}
-                    </div>
+                    </div> -->
                   </div>
                 </td>
                 <!-- <td>
@@ -184,9 +185,6 @@ export default {
   },
   created() {},
   beforeDestroy() {},
-  updated() {
-    console.log(this.data, 'data')
-  },
   computed: {
     ...mapState({
       chainInfo: (state) => state.blockchain.chainInfo,
@@ -311,7 +309,7 @@ export default {
       }
     },
     handleMouseEnter(hash) {
-      this.$router.push(`/account/${hash}/`)
+      this.$router.push(`/token/${hash}/`)
     },
   },
   components: {

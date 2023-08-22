@@ -99,7 +99,6 @@ export default {
       this.isLoading = false
     },
     handleClick() {
-      console.log(this.isClick, this.name)
       this.isClick = !this.isClick
     },
   },

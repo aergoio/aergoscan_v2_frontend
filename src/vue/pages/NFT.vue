@@ -119,17 +119,17 @@
                           <div>Total Transfers</div>
                         </th>
                         <td>
-                          <div>{{ txMeta.total_transfer }} Transfers</div>
+                          <div>{{ nftTransferTotalItems }} Transfers</div>
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <th>
                           <div>Decimals</div>
                         </th>
                         <td>
                           <div>{{ txMeta.decimals }}</div>
                         </td>
-                      </tr>
+                      </tr> -->
                       <tr>
                         <th>
                           <div>Official Site</div>
@@ -254,7 +254,6 @@ import NftInventoryTable from '@/src/vue/components/NftInventoryTable'
 export default {
   data() {
     return {
-      error: null,
       txMeta: {},
       nftTransferTotalItems: 0,
       holderTotalItems: 0,
