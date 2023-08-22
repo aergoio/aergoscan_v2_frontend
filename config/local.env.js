@@ -1,8 +1,8 @@
 //let BACKEND_URL = 'http://127.0.0.1:8080';
 // let BACKEND_URL = 'http://192.168.1.247:3000'
 // let BACKEND_URL = 'https://api2-testnet.aergoscan.io'
-// let BACKEND_URL = 'http://43.201.91.83:3000'
-let BACKEND_URL = 'https://apiconnect.aergo.io'
+let BACKEND_URL = 'http://43.201.91.83:3000'
+// let BACKEND_URL = 'https://apiconnect.aergo.io'
 
 let API_URL = `${BACKEND_URL}/v2`
 if (process.env.API_URL) {

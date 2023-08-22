@@ -473,12 +473,6 @@ export default {
         })
     },
   },
-  updated() {
-    console.log(this.events, 'events')
-    console.log(this.txMeta, 'txMeta')
-    // console.log(this.txReceipt, 'txReceipt')
-    // console.log(this.txDetail, 'txDetail')
-  },
   mounted() {
     if (this.$route.query.payload) {
       this.selectedPayloadTab =

@@ -87,6 +87,8 @@
       </td>
       <td class="txt-ellipsis">
         <div>
+          <span class="identicon default" v-if="!row.image_url"></span>
+          <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link
             :to="`/token/${row.symbolHash}/`"
             class="address txt-ellipsis"
@@ -242,6 +244,7 @@ export default {
           hash: item.hash,
           symbolHash: item.token.hash,
           name: item.token.meta.name,
+          image_url: item.token.meta.image_url,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,
         }))

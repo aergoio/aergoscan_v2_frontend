@@ -22,8 +22,8 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image"></span>
-          <span class="identicon" v-else><img :src="row.image" /></span>
+          <span class="identicon default" v-if="!row.image_url"></span>
+          <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link
             class="block"
             v-html="row.selectedName"
@@ -48,12 +48,13 @@
       <td>
         <div
           v-html="
-            $options.filters.formatBigNumAmount(
-              row.supply,
-              false,
-              6,
-              row.decimals
-            )
+          row.supply,
+            // $options.filters.formatBigNumAmount(
+            //   row.supply,
+            //   false,
+            //   6,
+            //   row.decimals
+            // )
           "
         ></div>
       </td>
@@ -174,6 +175,7 @@ export default {
               }
         )
       ).json()
+      console.log(response, 'response nft')
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
