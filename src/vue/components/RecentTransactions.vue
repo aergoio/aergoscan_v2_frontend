@@ -406,6 +406,9 @@ export default {
             @media screen and (max-width: 480px) {
               width: 22% !important;
             }
+            @media screen and (max-width: 360px) {
+              width: 5% !important;
+            }
           }
         }
       }
