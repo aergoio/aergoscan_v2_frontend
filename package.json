@@ -1,6 +1,6 @@
 {
   "name": "aergoscan",
-  "version": "2.0.0",
+  "version": "2.3.0",
   "description": "Aergoscan frontend",
   "scripts": {
     "build": "webpack -p --config webpack.config.js",
@@ -27,6 +27,7 @@
     "timed-async": "0.2.0",
     "vue": "^2.6.12",
     "vue-clipboard2": "^0.3.3",
+    "vue-codemirror": "4.0.6",
     "vue-fetch": "^1.1.3",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^3.5.1",

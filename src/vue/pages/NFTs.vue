@@ -38,6 +38,9 @@
                   blockchain. User's own discretion is advised in the process of
                   making any judgement.
                 </div>
+                <div class="desc totalItem">
+                  <span class="sub">{{ `Total: ${totalItems}` }}</span>
+                </div>
               </template>
               <template slot="error" v-if="error">
                 <div class="error transactions show">
@@ -55,9 +58,12 @@
                   @click="() => handleMouseEnter(row.hash)"
                 >
                   <div class="txt-ellipsis">
-                    <span class="identicon default" v-if="!row.image"></span>
+                    <span
+                      class="identicon default"
+                      v-if="!row.image_url"
+                    ></span>
                     <span class="identicon" v-else
-                      ><img :src="row.image"
+                      ><img :src="row.image_url"
                     /></span>
                     <router-link
                       class="block tokenName"
@@ -71,9 +77,6 @@
                     </div>
                   </div>
                 </td>
-                <!-- <td>
-                  <div v-html="row.selectedSymbol"></div>
-                </td> -->
                 <td>
                   <div>
                     <account-link
@@ -166,6 +169,9 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+  updated() {
+    console.log(this.data, 'data?!')
+  },
   computed: {
     headers() {
       return [
@@ -205,19 +211,19 @@ export default {
       const start = (currentPage - 1) * itemsPerPage
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/nft`,
+          `${cfg.API_URL}/tokenVerified`,
           searchField.length > 0
             ? {
-                q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC2`,
+                q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC2 `,
                 search: searchField.toLowerCase(),
-                range: 'REG',
+                // range: 'REG',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `type:ARC2`,
-                range: 'REG',
+                q: `type:ARC2 `,
+                // range: 'REG',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,

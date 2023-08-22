@@ -6,11 +6,12 @@
         :route="{ query: query({ tab: 'abi' }) }"
         :id="'abi'"
       >
-        <div class="content">
-          <div
+        <div class="content code">
+          <!-- <div
             class="monospace code-highlight code-highlight-pre"
             v-html="formattedAbi"
-          ></div>
+          ></div> -->
+          <codemirror v-model="jsonCode" :options="cmOption" />
         </div>
       </Tab>
 
@@ -20,6 +21,7 @@
         :id="'interactive'"
       >
         <div class="content">
+          <ConnectLoginButton />
           <div class="monospace interactive-contract code-highlight">
             <div v-if="!abi">Loading...</div>
             <div v-if="abi && abi.functions.length == 0">
@@ -32,6 +34,7 @@
               :abi="abi"
               :name="func.name"
               :address="address"
+              @onUpdateResultHash="onUpdateResultHash"
             />
             <QueryStateVariable
               v-for="variable in stateVariables"
@@ -50,37 +53,30 @@
         :id="'events'"
       >
         <div class="table-wrap">
-          <div class="desc-contract">
-            <span
-              >Showing {{ events.length }} events from block number
-              <span class="loadedNumber">{{ eventsFromMin }}</span> to
-              <span class="loadedNumber">{{ eventsToMax }}</span
-              >.</span
-            >
-            <button
-              class="btn-load-more"
-              v-on:click="loadPreviousEvents"
-              v-if="canLoadMoreEvents && !isLoadingMoreEvents"
-            >
-              LOAD MORE
-            </button>
-            <button class="btn-load-more" v-if="isLoadingMoreEvents">
-              LOADING...
-            </button>
-            <span v-if="!canLoadMoreEvents && !isLoadingMoreEvents"
-              >(Loaded all events)</span
-            >
-            <span style="flex: 1 1 0%"></span>
-            <div class="btn-refresh">
-              <ReloadButton :action="loadNewEvents" />
-            </div>
-          </div>
           <div class="h-scroll">
             <events-list
               :events="events"
               :columns="['blockno', 'tx']"
               :css="tabTableCss"
             />
+            <pagination
+              slot="pagination"
+              :css="paginationCss"
+              :page="currentPage"
+              :total-items="limitPageTotalCount"
+              :itemsPerPage="itemsPerPage"
+              @onUpdate="changePage"
+              @updateCurrentPage="updateCurrentPage"
+            />
+          </div>
+        </div>
+      </Tab>
+
+      <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
+        <div class="table-wrap">
+          <div class="desc-contract">
+            <div :style="{ whiteSpace: 'pre' }">{{ code.code }}</div>
+            <div v-if="!code.code">No Authorized Source Code</div>
           </div>
         </div>
       </Tab>
@@ -96,11 +92,27 @@
 
 <script>
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
-import { loadAndWait } from '@/src/vue/utils/async'
+// import { loadAndWait } from '@/src/vue/utils/async'
+import cfg from '@/src/config'
 import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
+import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/material-ocean.css'
+import 'codemirror/mode/javascript/javascript.js'
+
+// foldGutter
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/brace-fold.js'
+import 'codemirror/addon/fold/comment-fold.js'
+import 'codemirror/addon/fold/foldcode.js'
+import 'codemirror/addon/fold/foldgutter.js'
+import 'codemirror/addon/fold/indent-fold.js'
+import 'codemirror/addon/fold/markdown-fold.js'
+import 'codemirror/addon/fold/xml-fold.js'
 
 const contractTabs = ['abi', 'interactive', 'events']
 
@@ -112,8 +124,6 @@ const defaultdict = (def) =>
     }
   )
 
-const eventPage = 10000
-
 export default {
   props: ['abi', 'codehash', 'address'],
   data() {
@@ -123,18 +133,38 @@ export default {
       interactiveArguments: defaultdict({}),
       isLoading: [],
       events: [],
-      eventsFrom: 0,
-      eventsTo: 0,
-      eventsToMax: 0,
-      eventsFromMin: -1,
-      isLoadingMoreEvents: false,
-      bestBlock: false,
+      paginationCss: {
+        pagination: 'pagination events',
+        paginationInner: 'pagination-events',
+        moveFirstPage: 'pprev',
+        movePreviousPage: 'prev',
+        moveNextPage: 'next',
+        moveLastPage: 'nnext',
+      },
+      currentPage: 1,
+      itemsPerPage: 20,
+      limitPageTotalCount: 0,
       selectedTab: 0,
       tabTableCss: {
         table: 'result-events',
       },
+      code: {},
+      cmOption: {
+        tabSize: 4,
+        styleActiveLine: true,
+        mode: 'text/javascript',
+        theme: 'material-ocean',
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
+      },
+      jsonCode: this.calculateJsonCode(),
     }
   },
+
   created() {
     if (this.$route.query.tab) {
       this.selectedTab = contractTabs.indexOf(this.$route.query.tab) || 0
@@ -145,9 +175,20 @@ export default {
       if (to === 2) {
         this.loadEvents()
       }
+      if (to === 3) {
+        this.loadCode()
+      }
+    },
+    $props: {
+      handler() {
+        this.jsonCode = this.calculateJsonCode()
+      },
+      deep: true,
     },
   },
-  mounted() {},
+  mounted() {
+    this.changePage(this.currentPage)
+  },
 
   beforeDestroy() {},
   components: {
@@ -155,6 +196,8 @@ export default {
     QueryFunction,
     QueryStateVariable,
     EventsList,
+    ConnectLoginButton,
+    codemirror,
   },
   computed: {
     functions() {
@@ -176,10 +219,8 @@ export default {
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
     },
-    canLoadMoreEvents() {
-      return this.eventsFromMin > 0
-    },
   },
+
   methods: {
     tabChanged(index) {
       this.selectedTab = index
@@ -190,48 +231,74 @@ export default {
     setViewMode(mode) {
       this.viewMode = mode
     },
-    loadPreviousEvents() {
-      this.loadEvents(true)
+    reload: async function () {
+      this.isLoading = true
+      await this.loadEvents({
+        currentPage: this.currentPage,
+        itemsPerPage: this.itemsPerPage,
+      })
+      this.isLoading = false
     },
-    loadNewEvents() {
-      this.loadEvents(true, true)
+    async loadEvents() {
+      ;(async () => {
+        const start = (this.currentPage - 1) * this.itemsPerPage
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/event`, {
+            q: `contract:${this.address}`,
+            from: start,
+            size: this.itemsPerPage,
+          })
+        ).json()
+        if (response.error) {
+          this.error = response.error.msg
+        } else if (response.hits.length) {
+          this.events = response.hits
+          this.limitPageTotalCount = response.total
+        } else {
+          this.events = []
+          this.limitPageTotalCount = 0
+        }
+      })()
     },
-    async loadEvents(append = false, loadNew = false) {
-      const wait = loadAndWait()
-      this.isLoadingMoreEvents = true
-      if (loadNew || !this.bestBlock) {
-        this.bestBlock = await this.$store.dispatch('blockchain/getBestBlock')
-      }
 
-      if (loadNew) {
-        this.eventsTo = this.bestBlock.bestHeight
-        this.eventsFrom = this.eventsToMax + 1
-      } else {
-        this.eventsTo = this.eventsFrom || this.bestBlock.bestHeight
-        this.eventsFrom = Math.max(0, this.eventsTo - eventPage)
-      }
-      this.eventsToMax = Math.max(this.eventsToMax, this.eventsTo)
-      this.eventsFromMin = Math.min(this.eventsFromMin, this.eventsFrom)
-      if (this.eventsFromMin === -1) {
-        this.eventsFromMin = this.eventsFrom
-      }
-      if (!append) this.events = []
-      try {
-        const events = await this.$store.dispatch('blockchain/getEvents', {
-          eventName: null,
-          args: [],
-          address: this.address,
-          blockto: this.eventsTo,
-          blockfrom: this.eventsFrom,
-        })
-        await wait()
-        this.events.push(...events)
-      } catch (e) {
-        console.error(e)
-      }
-      this.isLoadingMoreEvents = false
+    async loadCode() {
+      ;(async () => {
+        try {
+          const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
+            q: `_id:${this.address}`,
+          })
+          const data = await response.json()
+          if (data.hits.length > 0) {
+            this.code = {
+              code: data.hits[0].meta.code,
+              code_url: data.hits[0].meta.code_url,
+            }
+          }
+        } catch (e) {
+          console.error(e)
+          this.isLoadingDetail = false
+        }
+      })()
     },
+
     syntaxHighlight,
+    calculateJsonCode() {
+      if (!this.$props.abi) {
+        return 'Loading...'
+      } else {
+        return JSON.stringify(this.$props.abi, null, 2)
+      }
+    },
+    onUpdateResultHash(callContractHash) {
+      this.$emit('onUpdateResultHash', callContractHash)
+    },
+    changePage: function (currentPage) {
+      this.currentPage = currentPage
+      this.reload()
+    },
+    updateCurrentPage: function (currentPage) {
+      this.currentPage = currentPage
+    },
   },
 }
 </script>
@@ -322,8 +389,46 @@ export default {
   color: #d4d4d4;
   margin-bottom: 20px;
 }
+.connect_button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: fit-content;
+  border: 1px solid rgba(76, 68, 82, 1);
+  background-color: #2d2b37;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease-out;
+  .status {
+    content: '\f111';
+    margin-right: 4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
 
+    &.no_connect {
+      border: solid 5px rgb(220, 53, 69);
+      background-color: rgb(220, 53, 69);
+    }
+    &.connected {
+      border: solid 5px rgb(0, 161, 134);
+      background-color: rgb(0, 161, 134);
+    }
+  }
+  .large_font {
+    font-size: 0.7em;
+  }
+  .small_font {
+    opacity: 0.5;
+    font-size: 0.5em;
+  }
+}
+.connect_button:hover {
+  background-color: #69647e;
+}
 .code-highlight-pre {
+  margin: 0.5rem;
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
 }
@@ -353,9 +458,9 @@ export default {
     color: #569cd6;
   }
 
-  .number {
+  /* .number {
     color: #aecfa4;
-  }
+  } */
 
   .annotation {
     color: #ccc;
@@ -364,26 +469,110 @@ export default {
 
 .interactive-contract {
   .function-block {
-    margin-bottom: 1em;
+    border: 1px solid rgba(76, 68, 82, 1);
+    border-radius: 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease-in-out;
+    .function {
+      padding: 0.5rem;
+      background-color: #1e1b26;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      color: #fff;
+      &.show {
+        border-radius: 0.5rem 0.5rem 0 0;
+      }
+    }
+    .function:hover {
+      color: #066a9c;
+    }
+
+    .function_body {
+      animation-duration: 0.3s;
+      &.show {
+        height: 100%;
+        /* background-color: #0f111a; */
+        /* background-color: #443f51; */
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        animation-name: fadeIn;
+      }
+      &.hide {
+        animation-name: fadeOut;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+    }
   }
 
   .arg-field {
-    background: rgba(255, 255, 255, 0.1);
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(76, 68, 82, 1);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9062rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #111a2e;
+
+    /* background-clip: border-box; */
+    background-clip: padding-box;
+    appearance: none;
+    border-radius: 0.5rem;
+    /* transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
     border: none;
     color: #fff;
+  }
+  .arg-field:focus {
+    outline: none; /* 포커스 시 나타나는 외곽선 제거 */
+    border: 2px solid rgba(76, 68, 82, 1) !important;
   }
 }
 
 .btn-call {
+  display: inline-block;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
   font-size: 0.9em;
+  padding: 0.5rem;
   cursor: pointer;
-  text-transform: uppercase;
-  color: #fff;
-  border-radius: 3px;
-
-  border: 1px solid #fff;
-  padding: 0 4px;
+  text-align: center;
+  color: #f2f6fa;
+  background-color: #3a4759;
+  border: 1px solid rgba(76, 68, 82, 1);
+  border-radius: 0.5rem;
   line-height: 1em;
+  transition: background-color 0.3s;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  &:not(.disabled):hover {
+    background-color: #47566a;
+  }
 }
 
 .event-table {
@@ -402,5 +591,9 @@ export default {
 
 .loadedNumber {
   color: #fff;
+}
+
+.CodeMirror {
+  height: 500px;
 }
 </style>

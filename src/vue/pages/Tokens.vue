@@ -57,9 +57,12 @@
                   @click="() => handleMouseEnter(row.hash)"
                 >
                   <div class="txt-ellipsis">
-                    <span class="identicon default" v-if="!row.image"></span>
+                    <span
+                      class="identicon default"
+                      v-if="!row.image_url"
+                    ></span>
                     <span class="identicon" v-else
-                      ><img :src="row.image"
+                      ><img :src="row.image_url"
                     /></span>
                     <router-link
                       class="block tokenName"
@@ -181,6 +184,9 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+  updated() {
+    console.log(this.data, 'data')
+  },
   computed: {
     ...mapState({
       chainInfo: (state) => state.blockchain.chainInfo,
@@ -229,19 +235,19 @@ export default {
 
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/token`,
+          `${cfg.API_URL}/tokenVerified`,
           searchField.length > 0
             ? {
-                q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC1`,
+                q: `(name_lower:*${searchField.toLowerCase()}* OR symbol_lower:*${searchField.toLowerCase()}*) AND type:ARC1 `,
                 search: searchField.toLowerCase(),
-                range: 'REG',
+                // range: 'REG',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `type:ARC1`,
-                range: 'REG',
+                q: `type:ARC1 `,
+                // range: 'REG',
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,

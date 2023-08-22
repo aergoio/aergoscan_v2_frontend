@@ -1,6 +1,8 @@
 //let BACKEND_URL = 'http://127.0.0.1:8080';
 // let BACKEND_URL = 'http://192.168.1.247:3000'
-let BACKEND_URL = 'https://api2-testnet.aergoscan.io'
+// let BACKEND_URL = 'https://api2-testnet.aergoscan.io'
+// let BACKEND_URL = 'http://43.201.91.83:3000'
+let BACKEND_URL = 'https://apiconnect.aergo.io'
 
 let API_URL = `${BACKEND_URL}/v2`
 if (process.env.API_URL) {
@@ -11,7 +13,7 @@ if (process.env.API_URL) {
   }
 }
 
-let AERGO_URL = `https://testnet-api-http.aergo.io`
+let AERGO_URL = `https://alpha-api-http.aergo.io`
 if (process.env.AERGO_NODE) {
   if (process.env.AERGO_NODE.startsWith('http')) {
     AERGO_URL = process.env.AERGO_NODE

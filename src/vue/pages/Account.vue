@@ -357,6 +357,8 @@
                   :abi="contractAbi"
                   :codehash="accountDetail.codehash"
                   :address="realAddress"
+                  :callContractHash="callContractHash"
+                  @onUpdateResultHash="onUpdateResultHash"
                 />
               </div>
             </div>
@@ -369,6 +371,7 @@
 </template>
 
 <script>
+import { loadAndWait } from '@/src/vue/utils/async'
 import { Address } from '@herajs/client'
 import JSBI from 'jsbi'
 import { Amount } from '@herajs/client'
@@ -412,6 +415,7 @@ export default {
       names: [],
       nameHistory: [],
       tokenPrice: [],
+      callContractHash: '',
     }
   },
   created() {},
@@ -430,6 +434,17 @@ export default {
         .catch((e) => {
           console.log(e)
         })
+    },
+    async callContractHash() {
+      const wait = loadAndWait()
+      await wait()
+      setTimeout(async () => {
+        try {
+          await this.reloadAllTable(this.realAddress)
+        } catch (e) {
+          console.log(e)
+        }
+      }, 3000)
     },
   },
   mounted() {
@@ -765,7 +780,7 @@ export default {
       const loadTokenMetadata = async () => {
         try {
           const response = await (
-            await this.$fetch.get(`${cfg.API_URL}/token`, {
+            await this.$fetch.get(`${cfg.API_URL}/tokenVerified`, {
               q: `_id:${this.$route.params.address}`,
             })
           ).json()
@@ -847,6 +862,9 @@ export default {
     onCloseQrcode() {
       this.isShowQRcode = false
     },
+    onUpdateResultHash(callContractHash) {
+      this.callContractHash = callContractHash
+    },
   },
   components: {
     Identicon,
@@ -890,7 +908,7 @@ export default {
       align-items: start;
       margin: 0;
 
-      @media screen and (max-width: 900px) {
+      @media screen and (max-width: 1180px) {
         flex-wrap: wrap;
       }
 
@@ -911,7 +929,7 @@ export default {
     }
 
     .tabs-wrap {
-      padding: 20px 20px 50px;
+      padding: 20px;
     }
   }
 
@@ -1056,7 +1074,7 @@ export default {
         align-items: center;
         width: 100%;
 
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 1180px) {
           display: block;
           text-align: center;
         }
@@ -1065,7 +1083,7 @@ export default {
           font-size: 11px;
           line-height: 1.2;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1180px) {
             display: block;
           }
 
@@ -1077,7 +1095,7 @@ export default {
         img.arrow {
           margin: 0 5px;
 
-          @media screen and (max-width: 900px) {
+          @media screen and (max-width: 1180px) {
             display: block;
             margin: 6px auto;
             transform: rotate(90deg);
