@@ -211,6 +211,7 @@ export default {
           sort: `${sortField}:${sort}`,
         })
       ).json()
+
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {

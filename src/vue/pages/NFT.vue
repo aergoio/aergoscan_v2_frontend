@@ -272,9 +272,6 @@ export default {
     this.load()
   },
   computed: {},
-  updated() {
-    console.log(this.txMeta, 'txMeta')
-  },
   methods: {
     query(newQuery) {
       return { ...this.$route.query, ...newQuery }

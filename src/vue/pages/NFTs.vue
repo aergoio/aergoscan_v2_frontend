@@ -166,9 +166,6 @@ export default {
   },
   created() {},
   beforeDestroy() {},
-  updated() {
-    console.log(this.data, 'data?!')
-  },
   computed: {
     headers() {
       return [
