@@ -293,14 +293,21 @@ export default {
 
   methods: {
     async getBlock() {
+      function isNumeric(input) {
+        return /^[0-9]+$/.test(input) // 숫자인지 여부를 판별하는 정규표현식
+      }
+      const blockNoOrHash = this.$route.params.blockNoOrHash
+      const isBlockNo = isNumeric(blockNoOrHash)
+      const getBlockApiAddress = isBlockNo
+        ? `${cfg.API_URL}/blocks?q=no:${blockNoOrHash}`
+        : `${cfg.API_URL}/blocks?q=_id:${blockNoOrHash}`
       this.blockDetail = null
       this.error = ''
       try {
         const response = await (
-          await this.$fetch.get(
-            `${cfg.API_URL}/blocks?q=no:${this.$route.params.blockNoOrHash}`
-          )
+          await this.$fetch.get(getBlockApiAddress)
         ).json()
+        console.log(response, 'response')
         this.blockDetail = response.hits[0]
       } catch (error) {
         this.error = '' + error
