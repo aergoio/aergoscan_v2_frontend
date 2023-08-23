@@ -349,7 +349,7 @@ export default {
       tr {
         td {
           a {
-            text-decoration: underline;
+            /* text-decoration: underline; */
           }
         }
       }
@@ -594,6 +594,9 @@ export default {
 }
 
 .CodeMirror {
-  height: 500px;
+  font-size: smaller;
+  height: max-content;
+  line-height: 1.5;
+  font-family: 'Roboto Mono', monospace;
 }
 </style>

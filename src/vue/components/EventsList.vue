@@ -1,32 +1,47 @@
 <template>
   <table :class="[css.table, !events || !events.length ? 'not-found' : '']">
     <thead>
-      <tr>
+      <tr
+        :class="
+          columns.indexOf('blockno') >= 0 && columns.indexOf('tx') >= 0
+            ? 'events contract'
+            : 'events transaction'
+        "
+      >
+        <th>#</th>
         <th v-if="columns.indexOf('blockno') >= 0">Block</th>
         <th v-if="columns.indexOf('tx') >= 0">Tx</th>
         <th>Event Name</th>
+        <th>Contract Address</th>
         <th>Arguments</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in events" :key="`${row.tx_id}${row.event_idx}`">
+      <tr v-for="(row, idx) in events" :key="`${row.tx_id}${row.event_idx}`">
+        <td>{{ idx + 1 }}</td>
         <td v-if="columns.indexOf('blockno') >= 0">
-          <router-link :to="`/block/${row.blockno}/`">{{
+          <router-link class="block" :to="`/block/${row.blockno}/`">{{
             row.blockno
           }}</router-link>
         </td>
         <td v-if="columns.indexOf('tx') >= 0">
-          <router-link :to="`/transaction/${row.tx_id}/`">{{
+          <router-link class="block" :to="`/transaction/${row.tx_id}/`">{{
             row.tx_id
           }}</router-link>
         </td>
         <td>
           {{ row.event_name }}
+        </td>
+        <td>
           <div v-if="`${row.contract}` !== `${address}`">
-            @
-            <router-link :to="`/account/${row.contract}/`"
-              >{{ `${row.contract}`.substr(0, 5) }}...</router-link
-            >
+            <router-link :to="`/account/${row.contract}/`" class="block">{{
+              `@${$options.filters.formatEllipsisText(row.contract, 14)}`
+            }}</router-link>
+          </div>
+          <div v-else>
+            <router-link :to="`/account/${row.contract}/`" class="block">{{
+              `${$options.filters.formatEllipsisText(row.contract, 15)}`
+            }}</router-link>
           </div>
         </td>
         <td width="100%">
@@ -61,7 +76,12 @@ const ArgFormatter = {
         content = [
           h(
             'router-link',
-            { props: { to: `/account/${encodeURIComponent(this.arg)}/` } },
+            {
+              class: 'block',
+              props: {
+                to: `/account/${encodeURIComponent(this.arg)}/`,
+              },
+            },
             [this.arg]
           ),
         ]
@@ -84,7 +104,7 @@ export default {
       default: [],
     },
     address: {
-      type: Object,
+      type: Object | String,
       default: null,
     },
     css: {
@@ -109,6 +129,47 @@ export default {
   pre {
     margin: 0;
     font-size: 0.95em;
+  }
+}
+
+.events {
+  &.contract {
+    th {
+      &:nth-child(1) {
+        width: 5%;
+      }
+      &:nth-child(2) {
+        width: 10%;
+      }
+      &:nth-child(3) {
+        width: 20%;
+      }
+      &:nth-child(4) {
+        width: 10%;
+      }
+      &:nth-child(5) {
+        width: 15%;
+      }
+      &:nth-child(6) {
+        width: 45%;
+      }
+    }
+  }
+  &.transaction {
+    th {
+      &:nth-child(1) {
+        width: 5%;
+      }
+      &:nth-child(2) {
+        width: 15%;
+      }
+      &:nth-child(3) {
+        width: 25%;
+      }
+      &:nth-child(4) {
+        width: 55%;
+      }
+    }
   }
 }
 </style>
