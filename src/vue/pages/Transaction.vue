@@ -349,7 +349,7 @@
                     :id="'json'"
                   >
                     <div class="content">
-                      <pre>{{ payloadJson }}</pre>
+                      <codemirror v-model="payloadJson" :options="cmOption" />
                     </div>
                   </Tab>
                   <Tab
@@ -412,6 +412,15 @@
                           :address="txMeta.to"
                           :css="tabTableCss"
                         />
+                        <pagination
+                          slot="pagination"
+                          :css="paginationCss"
+                          :page="currentPage"
+                          :total-items="limitPageTotalCount"
+                          :itemsPerPage="itemsPerPage"
+                          @onUpdate="changePage"
+                          @updateCurrentPage="updateCurrentPage"
+                        />
                       </div>
                     </div>
                   </Tab>
@@ -438,6 +447,21 @@ import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
 import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
 
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/material-ocean.css'
+import 'codemirror/mode/javascript/javascript.js'
+
+// foldGutter
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/brace-fold.js'
+import 'codemirror/addon/fold/comment-fold.js'
+import 'codemirror/addon/fold/foldcode.js'
+import 'codemirror/addon/fold/foldgutter.js'
+import 'codemirror/addon/fold/indent-fold.js'
+import 'codemirror/addon/fold/markdown-fold.js'
+import 'codemirror/addon/fold/xml-fold.js'
+
 const payloadTabs = ['formatted', 'json', 'hex']
 const receiptTabs = ['status', 'events']
 
@@ -456,6 +480,29 @@ export default {
       tabTableCss: {
         table: 'result-events',
       },
+      paginationCss: {
+        pagination: 'pagination events',
+        paginationInner: 'pagination-events',
+        moveFirstPage: 'pprev',
+        movePreviousPage: 'prev',
+        moveNextPage: 'next',
+        moveLastPage: 'nnext',
+      },
+      currentPage: 1,
+      itemsPerPage: 20,
+      limitPageTotalCount: 0,
+      cmOption: {
+        tabSize: 8,
+        styleActiveLine: true,
+        mode: 'text/javascript',
+        theme: 'material-ocean',
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
+      },
     }
   },
   created() {},
@@ -473,12 +520,7 @@ export default {
         })
     },
   },
-  updated() {
-    console.log(this.events, 'events')
-    console.log(this.txMeta, 'txMeta')
-    // console.log(this.txReceipt, 'txReceipt')
-    // console.log(this.txDetail, 'txDetail')
-  },
+
   mounted() {
     if (this.$route.query.payload) {
       this.selectedPayloadTab =
@@ -489,6 +531,7 @@ export default {
         receiptTabs.indexOf(this.$route.query.receipt) || 0
     }
     this.load()
+    this.changePage(this.currentPage)
   },
   computed: {
     realToken() {
@@ -532,27 +575,15 @@ export default {
     query(newQuery) {
       return { ...this.$route.query, ...newQuery }
     },
+    reload: async function () {
+      this.isLoading = true
+      await this.load()
+      this.isLoading = false
+    },
     async load() {
+      console.log('hello')
       this.error = null
       let hash = this.$route.params.hash
-      // ;(async () => {
-      //   try {
-      //     this.txDetail = await this.$store.dispatch(
-      //       'blockchain/getTransaction',
-      //       { hash }
-      //     )
-      //   } catch (e) {
-      //     this.error = '' + e
-      //     return
-      //   }
-      // })()
-      // ;(async () => {
-      //   this.txReceipt = await this.$store.dispatch(
-      //     'blockchain/getTransactionReceipt',
-      //     { hash }
-      //   )
-      //   this.events = this.txReceipt.events
-      // })()
       ;(async () => {
         const response = await (
           await this.$fetch.get(`${cfg.API_URL}/transactions`, {
@@ -564,13 +595,22 @@ export default {
         }
       })()
       ;(async () => {
+        const start = (this.currentPage - 1) * this.itemsPerPage
         const response = await (
           await this.$fetch.get(`${cfg.API_URL}/event`, {
             q: `tx_id:${hash}`,
+            from: start,
+            size: this.itemsPerPage,
           })
         ).json()
-        if (response.hits.length) {
+        if (response.error) {
+          this.error = response.error.msg
+        } else if (response.hits.length) {
           this.events = response.hits
+          this.limitPageTotalCount = response.total
+        } else {
+          this.events = []
+          this.limitPageTotalCount = 0
         }
       })()
     },
@@ -589,6 +629,13 @@ export default {
       this.nftTxTotalItems = count
     },
     moment,
+    changePage: function (currentPage) {
+      this.currentPage = currentPage
+      this.reload()
+    },
+    updateCurrentPage: function (currentPage) {
+      this.currentPage = currentPage
+    },
   },
   components: {
     TransactionTokenTable,
@@ -597,6 +644,7 @@ export default {
     Search,
     EventsList,
     Identicon,
+    codemirror,
   },
 }
 </script>
