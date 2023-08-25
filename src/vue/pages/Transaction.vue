@@ -575,6 +575,7 @@ export default {
       this.isLoading = false
     },
     async load() {
+      console.log('hello')
       this.error = null
       let hash = this.$route.params.hash
       ;(async () => {
