@@ -492,9 +492,9 @@ export default {
       itemsPerPage: 20,
       limitPageTotalCount: 0,
       cmOption: {
-        tabSize: 8,
+        tabSize: 4,
         styleActiveLine: true,
-        mode: 'text/javascript',
+        mode: 'application/json',
         theme: 'material-ocean',
         lineNumbers: true,
         line: true,
@@ -503,6 +503,7 @@ export default {
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
       },
+      payloadJson: '',
     }
   },
   created() {},
@@ -511,6 +512,9 @@ export default {
   watch: {
     $route(to, from) {
       this.load()
+      if (to.query.payload === 'json') {
+        this.payloadJson = this.calculatePayloadJson()
+      }
     },
     realToken() {
       this.reloadAllTable(this.realToken)
@@ -549,16 +553,6 @@ export default {
       const status = this.txMeta.status.toLowerCase()
       return status.charAt(0).toUpperCase() + status.slice(1)
     },
-    payloadJson() {
-      if (!this.txMeta.payload) return
-      try {
-        let payloadBuffer = Buffer.from(this.txMeta.payload)
-        let parsedData = JSON.parse(payloadBuffer.toString())
-        return JSON.stringify(parsedData, null, 2)
-      } catch (e) {
-        return 'Cannot parse payload as JSON'
-      }
-    },
     payloadHex() {
       if (!this.txMeta.payload) return
       let payloadBuffer = Buffer.from(this.txMeta.payload)
@@ -581,7 +575,6 @@ export default {
       this.isLoading = false
     },
     async load() {
-      console.log('hello')
       this.error = null
       let hash = this.$route.params.hash
       ;(async () => {
@@ -613,6 +606,7 @@ export default {
           this.limitPageTotalCount = 0
         }
       })()
+      await this.$nextTick()
     },
     async reloadAllTable(token) {
       if (this.$refs.transactionTokenTable) {
@@ -635,6 +629,17 @@ export default {
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+    },
+    calculatePayloadJson() {
+      if (!this.txMeta.payload) return
+      try {
+        let payloadBuffer = Buffer.from(this.txMeta.payload)
+        let parsedData = JSON.parse(payloadBuffer.toString())
+
+        return JSON.stringify(parsedData, null, 2)
+      } catch (e) {
+        return 'Cannot parse payload as JSON'
+      }
     },
   },
   components: {

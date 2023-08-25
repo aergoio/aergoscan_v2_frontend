@@ -11,7 +11,7 @@
             class="monospace code-highlight code-highlight-pre"
             v-html="formattedAbi"
           ></div> -->
-          <codemirror v-model="jsonCode" :options="cmOption" />
+          <codemirror v-model="jsonCode" :options="jsonOptions" />
         </div>
       </Tab>
 
@@ -75,7 +75,9 @@
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
         <div class="table-wrap">
           <div class="desc-contract">
-            <div :style="{ whiteSpace: 'pre' }">{{ code.code }}</div>
+            <div :style="{ whiteSpace: 'pre' }">
+              <codemirror v-model="code.code" :options="luaOptions" />
+            </div>
             <div v-if="!code.code">No Authorized Code</div>
           </div>
         </div>
@@ -103,6 +105,7 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material-ocean.css'
 import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/lua/lua.js'
 
 // foldGutter
 import 'codemirror/addon/fold/foldgutter.css'
@@ -149,17 +152,21 @@ export default {
         table: 'result-events',
       },
       code: {},
-      cmOption: {
+      jsonOptions: {
         tabSize: 4,
         styleActiveLine: true,
-        mode: 'text/javascript',
-        theme: 'material-ocean',
         lineNumbers: true,
         line: true,
         lineWrapping: true,
         foldGutter: true,
-        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        theme: 'material-ocean',
+        mode: 'application/json',
+      },
+      luaOptions: {
+        theme: 'material-ocean',
+        mode: 'text/x-lua',
       },
       jsonCode: this.calculateJsonCode(),
     }
