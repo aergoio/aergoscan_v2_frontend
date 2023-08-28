@@ -26,7 +26,7 @@
         </td>
         <td v-if="columns.indexOf('tx') >= 0">
           <router-link class="block" :to="`/transaction/${row.tx_id}/`">{{
-            resizeFormater(row.tx_id)
+            $window.innerWidth < 1530 ? resizeFormater(row.tx_id) : row.tx_id
           }}</router-link>
         </td>
         <td>
