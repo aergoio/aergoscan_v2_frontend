@@ -26,7 +26,7 @@
         </td>
         <td v-if="columns.indexOf('tx') >= 0">
           <router-link class="block" :to="`/transaction/${row.tx_id}/`">{{
-            row.tx_id
+            resizeFormater(row.tx_id)
           }}</router-link>
         </td>
         <td>
@@ -61,6 +61,8 @@
 
 <script>
 import { Address } from '@herajs/client'
+import { resizeFormater } from '../filters/resizeFormater'
+
 const ArgFormatter = {
   name: 'ArgFormatter',
   props: ['arg'],
@@ -120,6 +122,9 @@ export default {
   components: {
     ArgFormatter,
   },
+  methods: {
+    resizeFormater,
+  },
 }
 </script>
 
@@ -142,7 +147,7 @@ export default {
         width: 10%;
       }
       &:nth-child(3) {
-        width: 20%;
+        width: 15%;
       }
       &:nth-child(4) {
         width: 10%;
@@ -151,7 +156,7 @@ export default {
         width: 15%;
       }
       &:nth-child(6) {
-        width: 45%;
+        width: 60%;
       }
     }
   }
