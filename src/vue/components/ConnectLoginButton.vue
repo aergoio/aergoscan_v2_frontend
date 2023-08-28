@@ -28,10 +28,19 @@ export default {
       activeAccount: {},
     }
   },
-
+  watch: {
+    activeAccount() {
+      if (!this.activeAccount) {
+        this.$emit('message', 'Network does not match with Aergo Connect 3.0')
+        this.activeAccount = {}
+      } else if (this.activeAccount.error) {
+        this.$emit('message', this.activeAccount.error)
+        this.activeAccount = {}
+      }
+    },
+  },
   methods: {
     async connectAccount() {
-      //TODO: 1.chainId 검증 완료 -> 2.Alert 메시지 띄워야 함.
       this.activeAccount = await this.$store.dispatch(
         'blockchain/refreshActiveAccount'
       )
