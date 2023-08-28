@@ -221,16 +221,15 @@ const actions = {
         'AERGO_ACTIVE_ACCOUNT',
         function (event) {
           const detail = event.detail
-          if ('error' in event) {
-            reject(new Error('request was cancelled by user'))
-            return
+          if (state?.chainInfo?.chainid?.magic !== detail?.account?.chainId) {
+            if (detail.error) {
+              return resolve(detail)
+            }
+            return resolve(false)
+          } else {
+            commit('setActiveAccount', detail.account)
+            resolve(detail.account)
           }
-          if (state.chainInfo.chainid.magic !== detail.account.chainId) {
-            reject(new Error('Network does not match with Aergo Connect 3.0'))
-            return
-          }
-          commit('setActiveAccount', detail.account)
-          resolve(detail.account)
         },
         { once: true }
       )
