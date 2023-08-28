@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Alert v-if="openAlert" type="error" :message="message" />
     <Tabs :value="selectedTab" @tab-change="tabChanged" :routeReplace="true">
       <Tab
         title="ABI (JSON)"
@@ -7,10 +8,6 @@
         :id="'abi'"
       >
         <div class="content code">
-          <!-- <div
-            class="monospace code-highlight code-highlight-pre"
-            v-html="formattedAbi"
-          ></div> -->
           <codemirror v-model="jsonCode" :options="jsonOptions" />
         </div>
       </Tab>
@@ -21,7 +18,7 @@
         :id="'interactive'"
       >
         <div class="content">
-          <ConnectLoginButton />
+          <ConnectLoginButton @message="handleAlertMessage" />
           <div class="monospace interactive-contract code-highlight">
             <div v-if="!abi">Loading...</div>
             <div v-if="abi && abi.functions.length == 0">
@@ -82,12 +79,6 @@
           </div>
         </div>
       </Tab>
-
-      <!-- <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
-        <div class="table-wrap">
-          <div class="desc-contract"></div>
-        </div>
-      </Tab> -->
     </Tabs>
   </div>
 </template>
@@ -101,6 +92,8 @@ import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
 import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
+import Alert from '../components/Alert.vue'
+
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material-ocean.css'
@@ -145,7 +138,7 @@ export default {
         moveLastPage: 'nnext',
       },
       currentPage: 1,
-      itemsPerPage: 20,
+      itemsPerPage: 10,
       limitPageTotalCount: 0,
       selectedTab: 0,
       tabTableCss: {
@@ -165,10 +158,16 @@ export default {
         mode: 'application/json',
       },
       luaOptions: {
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        readOnly: true,
         theme: 'material-ocean',
         mode: 'text/x-lua',
       },
       jsonCode: this.calculateJsonCode(),
+      message: '',
+      openAlert: false,
     }
   },
 
@@ -192,6 +191,15 @@ export default {
       },
       deep: true,
     },
+    openAlert() {
+      const timer = setTimeout(
+        () => ((this.openAlert = false), (this.message = '')),
+        3000
+      )
+      return () => {
+        clearTimeout(timer)
+      }
+    },
   },
   mounted() {
     this.changePage(this.currentPage)
@@ -205,7 +213,9 @@ export default {
     EventsList,
     ConnectLoginButton,
     codemirror,
+    Alert,
   },
+
   computed: {
     functions() {
       if (!this.abi) return []
@@ -305,6 +315,11 @@ export default {
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+    },
+
+    handleAlertMessage(message) {
+      this.openAlert = true
+      this.message = message
     },
   },
 }
