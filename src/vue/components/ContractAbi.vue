@@ -359,6 +359,7 @@ export default {
       this.clickAll = click
     },
     handleClickReset() {
+      this.clickAll = true
       this.interactiveKey += 1
     },
   },
