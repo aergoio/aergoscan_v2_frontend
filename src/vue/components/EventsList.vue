@@ -134,6 +134,7 @@ export default {
   pre {
     margin: 0;
     font-size: 0.95em;
+    white-space: pre;
   }
 }
 
@@ -150,6 +151,7 @@ export default {
         width: 15%;
       }
       &:nth-child(4) {
+        min-width: 80px;
         width: 10%;
       }
       &:nth-child(5) {

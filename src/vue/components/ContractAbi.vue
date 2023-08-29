@@ -18,8 +18,38 @@
         :id="'interactive'"
       >
         <div class="content">
-          <ConnectLoginButton @message="handleAlertMessage" />
-          <div class="monospace interactive-contract code-highlight">
+          <div
+            :style="{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }"
+          >
+            <ConnectLoginButton @message="handleAlertMessage" />
+            <div
+              :style="{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '140px',
+              }"
+            >
+              <button
+                class="expandButton"
+                @click="() => handleClickAll(!clickAll)"
+              >
+                {{ clickAll ? `[Expand All]` : `[No Expand]` }}
+              </button>
+
+              <button class="expandButton" @click="handleClickReset">
+                [Reset]
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="monospace interactive-contract code-highlight"
+            :key="interactiveKey"
+          >
             <div v-if="!abi">Loading...</div>
             <div v-if="abi && abi.functions.length == 0">
               Contract has no public functions.
@@ -31,6 +61,7 @@
               :abi="abi"
               :name="func.name"
               :address="address"
+              :clickAll="clickAll"
               @onUpdateResultHash="onUpdateResultHash"
             />
             <QueryStateVariable
@@ -39,6 +70,7 @@
               :abi="abi"
               :name="variable.name"
               :address="address"
+              :clickAll="clickAll"
             />
           </div>
         </div>
@@ -110,7 +142,7 @@ import 'codemirror/addon/fold/indent-fold.js'
 import 'codemirror/addon/fold/markdown-fold.js'
 import 'codemirror/addon/fold/xml-fold.js'
 
-const contractTabs = ['abi', 'interactive', 'events']
+const contractTabs = ['abi', 'interactive', 'events', 'code']
 
 const defaultdict = (def) =>
   new Proxy(
@@ -168,6 +200,8 @@ export default {
       jsonCode: this.calculateJsonCode(),
       message: '',
       openAlert: false,
+      clickAll: true,
+      interactiveKey: 0,
     }
   },
 
@@ -321,6 +355,12 @@ export default {
       this.openAlert = true
       this.message = message
     },
+    handleClickAll(click) {
+      this.clickAll = click
+    },
+    handleClickReset() {
+      this.interactiveKey += 1
+    },
   },
 }
 </script>
@@ -453,6 +493,15 @@ export default {
   margin: 0.5rem;
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
+  .result_title {
+    color: rgb(220, 53, 69);
+    border-bottom: 1px solid rgb(76, 68, 82);
+    padding-top: 5px;
+    padding-bottom: 10px;
+  }
+  .result_content {
+    margin-top: 10px;
+  }
 }
 
 .code-highlight {
@@ -489,6 +538,21 @@ export default {
   }
 }
 
+.expandButton {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-block;
+  /* font-weight: bold; */
+  border-radius: 2px;
+  color: #279ecc;
+
+  &:hover {
+    color: #0784c3;
+    text-decoration: none;
+  }
+}
+
 .interactive-contract {
   .function-block {
     border: 1px solid rgba(76, 68, 82, 1);
@@ -513,6 +577,8 @@ export default {
     }
 
     .function_body {
+      /* display: flex;
+      flex-direction: column; */
       animation-duration: 0.3s;
       &.show {
         height: 100%;
