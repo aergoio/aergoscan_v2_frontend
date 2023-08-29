@@ -32,7 +32,10 @@
       </span>
       <span class="btn-call" v-if="isLoading">Loading...</span>
       <div v-if="typeof result !== 'undefined'" class="code-highlight-pre">
-        <span v-html="syntaxHighlight(result)" />
+        <div :style="{ display: 'flex', flexDirection: 'column' }">
+          <span class="result_title">Result</span>
+          <span class="result_content" v-html="syntaxHighlight(result)"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +46,7 @@ import { loadAndWait } from '@/src/vue/utils/async'
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
 
 export default {
-  props: ['abi', 'name', 'address', 'callContractHash'],
+  props: ['abi', 'name', 'address', 'callContractHash', 'clickAll'],
   data() {
     return {
       args: {},
@@ -52,7 +55,15 @@ export default {
       isClick: false,
     }
   },
-
+  watch: {
+    clickAll() {
+      if (!this.clickAll) {
+        this.isClick = true
+      } else {
+        this.isClick = false
+      }
+    },
+  },
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}
