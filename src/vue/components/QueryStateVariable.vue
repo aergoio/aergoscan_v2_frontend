@@ -6,28 +6,26 @@
       :class="isClick ? `function_body show` : `function_body hide`"
       v-if="isClick"
     >
-      <span class="annotation">{{ type }}</span>
-      <span class="input" v-if="type === 'map'">
-        <input
-          type="text"
-          v-model="mapKey"
-          class="arg-field"
-          placeholder="Key to query"
-        />
-      </span>
+      <div>
+        <span class="annotation">{{ type }}</span>
+        <span class="input" v-if="type === 'map'">
+          <input
+            type="text"
+            v-model="mapKey"
+            class="arg-field"
+            placeholder="Key to query"
+          />
+        </span>
+      </div>
       <span class="btn-call" v-if="!isLoading" v-on:click="queryContractState"
         >Query</span
       >
-      <!-- <span
-        class="btn-call"
-        v-if="!isLoading && !func.view"
-        v-on:click="queryContract"
-      >
-        Call
-      </span> -->
       <span class="btn-call" v-if="isLoading">Loading...</span>
       <div v-if="typeof result !== 'undefined'" class="code-highlight-pre">
-        <span v-html="syntaxHighlight(result)"></span>
+        <div :style="{ display: 'flex', flexDirection: 'column' }">
+          <span class="result_title">Result</span>
+          <span class="result_content" v-html="syntaxHighlight(result)"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +36,7 @@ import { loadAndWait } from '@/src/vue/utils/async'
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
 
 export default {
-  props: ['abi', 'name', 'address'],
+  props: ['abi', 'name', 'address', 'clickAll'],
   computed: {
     variable() {
       return (
@@ -49,6 +47,15 @@ export default {
     },
     type() {
       return this.variable ? this.variable.type : ''
+    },
+  },
+  watch: {
+    clickAll() {
+      if (!this.clickAll) {
+        this.isClick = true
+      } else {
+        this.isClick = false
+      }
     },
   },
   data() {
