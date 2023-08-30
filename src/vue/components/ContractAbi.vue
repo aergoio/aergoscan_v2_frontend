@@ -184,8 +184,8 @@ export default {
         line: true,
         lineWrapping: true,
         foldGutter: true,
-        readOnly: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
         theme: 'material-ocean',
         mode: 'application/json',
       },
@@ -374,7 +374,6 @@ export default {
     margin-top: 25px;
     color: #fff;
     font-size: 14px;
-    font-family: DINPro;
 
     .btn-load-more {
       display: flex;
@@ -495,7 +494,7 @@ export default {
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
   .result_title {
-    color: rgb(220, 53, 69);
+    color: #fff;
     border-bottom: 1px solid rgb(76, 68, 82);
     padding-top: 5px;
     padding-bottom: 10px;
@@ -565,7 +564,8 @@ export default {
     transition: color 0.3s ease-in-out;
     .function {
       padding: 0.5rem;
-      background-color: #1e1b26;
+      /* background-color: #1e1b26; */
+      background-color: #2d2b37;
       border-radius: 0.5rem;
       cursor: pointer;
       color: #fff;
@@ -687,5 +687,18 @@ export default {
   height: max-content;
   line-height: 1.5;
   font-family: 'Roboto Mono', monospace;
+
+  &.cm-s-material-ocean,
+  .CodeMirror-foldgutter,
+  .CodeMirror-linenumbers,
+  .CodeMirror-gutters {
+    background: #363344;
+  }
+  .CodeMirror-linenumber {
+    color: #fff;
+  }
+  .CodeMirror-guttermarker-subtle {
+    color: #999;
+  }
 }
 </style>
