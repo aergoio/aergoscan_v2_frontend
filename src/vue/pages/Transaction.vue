@@ -117,7 +117,7 @@
                           <div>{{ nftTxTotalItems }}</div>
                         </td>
                       </tr>
-                      <tr v-if="txMeta">
+                      <tr>
                         <th>
                           <div>Fee</div>
                         </th>
@@ -157,6 +157,11 @@
                             >
                           </div>
                         </td>
+                      </tr>
+
+                      <tr>
+                        <th>Fee Delegation</th>
+                        <td>{{ txMeta.fee_delegation }}</td>
                       </tr>
                     </template>
                   </tbody>
@@ -332,15 +337,17 @@
                       {{ formattedTitle }}
                     </div>
                     <div class="content">
-                      <div class="empty-result" v-if="!txMeta.payload.length">
-                        (No payload)
+                      <div class="h-scroll">
+                        <div class="empty-result" v-if="!txMeta.payload.length">
+                          (No payload)
+                        </div>
+                        <payload-formatter
+                          :payload="txMeta.payload"
+                          :txType="txMeta.type"
+                          :recipient="txMeta.to"
+                          v-if="txMeta.payload"
+                        />
                       </div>
-                      <payload-formatter
-                        :payload="txMeta.payload"
-                        :txType="txMeta.type"
-                        :recipient="txMeta.to"
-                        v-if="txMeta.payload"
-                      />
                     </div>
                   </Tab>
                   <Tab
@@ -406,21 +413,23 @@
                   >
                     <div class="content">
                       <div class="table-wrap">
-                        <events-list
-                          :events="events"
-                          :columns="[]"
-                          :address="txMeta.to"
-                          :css="tabTableCss"
-                        />
-                        <pagination
-                          slot="pagination"
-                          :css="paginationCss"
-                          :page="currentPage"
-                          :total-items="limitPageTotalCount"
-                          :itemsPerPage="itemsPerPage"
-                          @onUpdate="changePage"
-                          @updateCurrentPage="updateCurrentPage"
-                        />
+                        <div class="h-scroll">
+                          <events-list
+                            :events="events"
+                            :columns="[]"
+                            :address="txMeta.to"
+                            :css="tabTableCss"
+                          />
+                          <pagination
+                            slot="pagination"
+                            :css="paginationCss"
+                            :page="currentPage"
+                            :total-items="limitPageTotalCount"
+                            :itemsPerPage="itemsPerPage"
+                            @onUpdate="changePage"
+                            @updateCurrentPage="updateCurrentPage"
+                          />
+                        </div>
                       </div>
                     </div>
                   </Tab>
@@ -575,7 +584,6 @@ export default {
       this.isLoading = false
     },
     async load() {
-      console.log('hello')
       this.error = null
       let hash = this.$route.params.hash
       ;(async () => {
