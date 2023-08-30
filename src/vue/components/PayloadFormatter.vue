@@ -143,6 +143,7 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: 1.5;
+    white-space: pre;
     a {
       &:hover {
         color: #279ecc;
