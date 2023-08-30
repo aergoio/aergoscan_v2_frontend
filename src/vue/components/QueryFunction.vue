@@ -13,10 +13,15 @@
         <div
           v-for="(arg, idx) in func.arguments"
           :key="arg.name"
-          :style="{ minHeight: '60px' }"
+          :style="{ minHeight: '60px', marginBottom: '5px' }"
         >
           <span class="key">{{ arg.name }}</span>
-          <input type="text" v-model="args[arg.name]" class="arg-field" />
+          <input
+            type="text"
+            v-model="args[arg.name]"
+            class="arg-field"
+            :style="{ marginTop: '5px' }"
+          />
           <!-- <span v-if="idx != func.arguments.length - 1"></span> -->
         </div>
       </div>
