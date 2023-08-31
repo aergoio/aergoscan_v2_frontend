@@ -8,7 +8,6 @@
             : 'events transaction'
         "
       >
-        <th>#</th>
         <th v-if="columns.indexOf('blockno') >= 0">Block</th>
         <th v-if="columns.indexOf('tx') >= 0">Tx</th>
         <th>Event Name</th>
@@ -17,8 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, idx) in events" :key="`${row.tx_id}${row.event_idx}`">
-        <td>{{ idx + 1 }}</td>
+      <tr v-for="row in events" :key="`${row.tx_id}${row.event_idx}`">
         <td v-if="columns.indexOf('blockno') >= 0">
           <router-link class="block" :to="`/block/${row.blockno}/`">{{
             row.blockno
@@ -142,22 +140,19 @@ export default {
   &.contract {
     th {
       &:nth-child(1) {
-        width: 5%;
-      }
-      &:nth-child(2) {
         width: 10%;
       }
-      &:nth-child(3) {
+      &:nth-child(2) {
         width: 15%;
       }
-      &:nth-child(4) {
+      &:nth-child(3) {
         min-width: 80px;
         width: 10%;
       }
-      &:nth-child(5) {
+      &:nth-child(4) {
         width: 15%;
       }
-      &:nth-child(6) {
+      &:nth-child(5) {
         width: 60%;
       }
     }
@@ -165,15 +160,14 @@ export default {
   &.transaction {
     th {
       &:nth-child(1) {
-        width: 5%;
-      }
-      &:nth-child(2) {
+        min-width: 100px;
         width: 15%;
       }
-      &:nth-child(3) {
+      &:nth-child(2) {
+        min-width: 120px;
         width: 25%;
       }
-      &:nth-child(4) {
+      &:nth-child(3) {
         width: 55%;
       }
     }
