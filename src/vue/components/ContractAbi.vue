@@ -7,8 +7,14 @@
         :route="{ query: query({ tab: 'abi' }) }"
         :id="'abi'"
       >
-        <div class="content code">
-          <codemirror v-model="jsonCode" :options="jsonOptions" />
+        <div class="content">
+          <codemirror
+            :key="interactiveKey"
+            v-if="jsonCode !== 'Loading...'"
+            v-model="jsonCode"
+            :options="jsonOptions"
+          />
+          <div v-else>Loading...</div>
         </div>
       </Tab>
 
@@ -102,13 +108,14 @@
       </Tab>
 
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
-        <div class="table-wrap">
-          <div class="desc-contract">
-            <div :style="{ whiteSpace: 'pre' }">
-              <codemirror v-model="code.code" :options="luaOptions" />
-            </div>
-            <div v-if="!code.code">No Authorized Code</div>
-          </div>
+        <div class="content">
+          <codemirror
+            v-if="code.code"
+            v-model="code.code"
+            :options="luaOptions"
+          />
+          <div v-else>No Authorized Code</div>
+          <!-- <div class="desc-contract"></div> -->
         </div>
       </Tab>
     </Tabs>
@@ -190,18 +197,22 @@ export default {
         mode: 'application/json',
       },
       luaOptions: {
+        // tabSize: 4,
+        // styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        // foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
         theme: 'material-ocean',
         mode: 'text/x-lua',
       },
-      jsonCode: this.calculateJsonCode(),
       message: '',
       openAlert: false,
       clickAll: true,
       interactiveKey: 0,
+      // jsonCode: '',
     }
   },
 
@@ -212,6 +223,9 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
+      if (to === 0) {
+        this.interactiveKey += 1
+      }
       if (to === 2) {
         this.loadEvents()
       }
@@ -219,12 +233,7 @@ export default {
         this.loadCode()
       }
     },
-    $props: {
-      handler() {
-        this.jsonCode = this.calculateJsonCode()
-      },
-      deep: true,
-    },
+
     openAlert() {
       const timer = setTimeout(
         () => ((this.openAlert = false), (this.message = '')),
@@ -269,6 +278,15 @@ export default {
       return Array.from(buf)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
+    },
+    jsonCode() {
+      if (!this.$props.abi) {
+        return 'Loading...'
+      } else {
+        console.log('here', this.$props.abi)
+        console.log('here2', this.abi)
+        return JSON.stringify(this.$props.abi, null, 2)
+      }
     },
   },
 
@@ -333,13 +351,6 @@ export default {
     },
 
     syntaxHighlight,
-    calculateJsonCode() {
-      if (!this.$props.abi) {
-        return 'Loading...'
-      } else {
-        return JSON.stringify(this.$props.abi, null, 2)
-      }
-    },
     onUpdateResultHash(callContractHash) {
       this.$emit('onUpdateResultHash', callContractHash)
     },
@@ -687,6 +698,7 @@ export default {
   height: max-content;
   line-height: 1.5;
   font-family: 'Roboto Mono', monospace;
+  /* font-family: 'Lato', monospace; */
 
   &.cm-s-material-ocean,
   .CodeMirror-foldgutter,
@@ -696,6 +708,7 @@ export default {
   }
   .CodeMirror-linenumber {
     color: #fff;
+    width: 25px;
   }
   .CodeMirror-guttermarker-subtle {
     color: #999;
