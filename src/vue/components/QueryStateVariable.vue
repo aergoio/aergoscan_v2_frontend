@@ -14,6 +14,7 @@
             v-model="mapKey"
             class="arg-field"
             placeholder="Key to query"
+            :style="{ marginTop: '5px' }"
           />
         </span>
       </div>

@@ -7,8 +7,14 @@
         :route="{ query: query({ tab: 'abi' }) }"
         :id="'abi'"
       >
-        <div class="content code">
-          <codemirror v-model="jsonCode" :options="jsonOptions" />
+        <div class="content">
+          <codemirror
+            :key="interactiveKey"
+            v-if="jsonCode !== 'Loading...'"
+            v-model="jsonCode"
+            :options="jsonOptions"
+          />
+          <div v-else>Loading...</div>
         </div>
       </Tab>
 
@@ -102,13 +108,14 @@
       </Tab>
 
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
-        <div class="table-wrap">
-          <div class="desc-contract">
-            <div :style="{ whiteSpace: 'pre' }">
-              <codemirror v-model="code.code" :options="luaOptions" />
-            </div>
-            <div v-if="!code.code">No Authorized Code</div>
-          </div>
+        <div class="content">
+          <codemirror
+            v-if="code.code"
+            v-model="code.code"
+            :options="luaOptions"
+          />
+          <div v-else>No Authorized Code</div>
+          <!-- <div class="desc-contract"></div> -->
         </div>
       </Tab>
     </Tabs>
@@ -184,24 +191,28 @@ export default {
         line: true,
         lineWrapping: true,
         foldGutter: true,
-        readOnly: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
         theme: 'material-ocean',
         mode: 'application/json',
       },
       luaOptions: {
+        // tabSize: 4,
+        // styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        // foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
         theme: 'material-ocean',
         mode: 'text/x-lua',
       },
-      jsonCode: this.calculateJsonCode(),
       message: '',
       openAlert: false,
       clickAll: true,
       interactiveKey: 0,
+      // jsonCode: '',
     }
   },
 
@@ -212,6 +223,9 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
+      if (to === 0) {
+        this.interactiveKey += 1
+      }
       if (to === 2) {
         this.loadEvents()
       }
@@ -219,12 +233,7 @@ export default {
         this.loadCode()
       }
     },
-    $props: {
-      handler() {
-        this.jsonCode = this.calculateJsonCode()
-      },
-      deep: true,
-    },
+
     openAlert() {
       const timer = setTimeout(
         () => ((this.openAlert = false), (this.message = '')),
@@ -269,6 +278,15 @@ export default {
       return Array.from(buf)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
+    },
+    jsonCode() {
+      if (!this.$props.abi) {
+        return 'Loading...'
+      } else {
+        console.log('here', this.$props.abi)
+        console.log('here2', this.abi)
+        return JSON.stringify(this.$props.abi, null, 2)
+      }
     },
   },
 
@@ -333,13 +351,6 @@ export default {
     },
 
     syntaxHighlight,
-    calculateJsonCode() {
-      if (!this.$props.abi) {
-        return 'Loading...'
-      } else {
-        return JSON.stringify(this.$props.abi, null, 2)
-      }
-    },
     onUpdateResultHash(callContractHash) {
       this.$emit('onUpdateResultHash', callContractHash)
     },
@@ -374,7 +385,6 @@ export default {
     margin-top: 25px;
     color: #fff;
     font-size: 14px;
-    font-family: DINPro;
 
     .btn-load-more {
       display: flex;
@@ -495,7 +505,7 @@ export default {
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
   .result_title {
-    color: rgb(220, 53, 69);
+    color: #fff;
     border-bottom: 1px solid rgb(76, 68, 82);
     padding-top: 5px;
     padding-bottom: 10px;
@@ -565,7 +575,8 @@ export default {
     transition: color 0.3s ease-in-out;
     .function {
       padding: 0.5rem;
-      background-color: #1e1b26;
+      /* background-color: #1e1b26; */
+      background-color: #2d2b37;
       border-radius: 0.5rem;
       cursor: pointer;
       color: #fff;
@@ -687,5 +698,20 @@ export default {
   height: max-content;
   line-height: 1.5;
   font-family: 'Roboto Mono', monospace;
+  /* font-family: 'Lato', monospace; */
+
+  &.cm-s-material-ocean,
+  .CodeMirror-foldgutter,
+  .CodeMirror-linenumbers,
+  .CodeMirror-gutters {
+    background: #363344;
+  }
+  .CodeMirror-linenumber {
+    color: #fff;
+    width: 25px;
+  }
+  .CodeMirror-guttermarker-subtle {
+    color: #999;
+  }
 }
 </style>
