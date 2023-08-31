@@ -307,10 +307,13 @@
             </div>
             <div class="detail-box execution" v-if="txMeta">
               <div class="title">Execution Details</div>
-              <div class="address">
+              <div
+                class="address"
+                v-if="txMeta.type !== 4 && txMeta.type !== 0"
+              >
                 <div class="title">Contract</div>
                 <div class="item">
-                  <span class="item-inner" v-if="txMeta.contract">
+                  <span class="item-inner">
                     <router-link :to="`/account/${txMeta.contract}/`">
                       <Identicon
                         :text="txMeta.contract"
