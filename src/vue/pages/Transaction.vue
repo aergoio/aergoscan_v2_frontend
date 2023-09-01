@@ -158,11 +158,6 @@
                           </div>
                         </td>
                       </tr>
-
-                      <tr>
-                        <th>Fee Delegation</th>
-                        <td>{{ txMeta.fee_delegation }}</td>
-                      </tr>
                     </template>
                   </tbody>
                 </table>
