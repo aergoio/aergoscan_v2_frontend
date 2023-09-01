@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Alert v-if="openAlert" type="error" :message="message" />
     <Tabs :value="selectedTab" @tab-change="tabChanged" :routeReplace="true">
       <Tab
         title="ABI (JSON)"
@@ -31,7 +30,12 @@
               alignItems: 'center',
             }"
           >
-            <ConnectLoginButton @message="handleAlertMessage" />
+            <div :style="{ display: 'flex' }">
+              <ConnectLoginButton @message="handleAlertMessage" />
+              <div class="alert" v-if="alert">
+                {{ message }}
+              </div>
+            </div>
             <div
               :style="{
                 display: 'flex',
@@ -131,7 +135,6 @@ import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
 import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
-import Alert from '../components/Alert.vue'
 
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -197,22 +200,18 @@ export default {
         mode: 'application/json',
       },
       luaOptions: {
-        // tabSize: 4,
-        // styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lineWrapping: true,
-        // foldGutter: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
         theme: 'material-ocean',
         mode: 'text/x-lua',
       },
       message: '',
-      openAlert: false,
+      alert: false,
       clickAll: true,
       interactiveKey: 0,
-      // jsonCode: '',
     }
   },
 
@@ -233,16 +232,6 @@ export default {
         this.loadCode()
       }
     },
-
-    openAlert() {
-      const timer = setTimeout(
-        () => ((this.openAlert = false), (this.message = '')),
-        3000
-      )
-      return () => {
-        clearTimeout(timer)
-      }
-    },
   },
   mounted() {
     this.changePage(this.currentPage)
@@ -256,7 +245,6 @@ export default {
     EventsList,
     ConnectLoginButton,
     codemirror,
-    Alert,
   },
 
   computed: {
@@ -283,8 +271,6 @@ export default {
       if (!this.$props.abi) {
         return 'Loading...'
       } else {
-        console.log('here', this.$props.abi)
-        console.log('here2', this.abi)
         return JSON.stringify(this.$props.abi, null, 2)
       }
     },
@@ -363,8 +349,13 @@ export default {
     },
 
     handleAlertMessage(message) {
-      this.openAlert = true
-      this.message = message
+      if (!message) {
+        this.alert = false
+        this.message = ''
+      } else {
+        this.alert = true
+        this.message = message
+      }
     },
     handleClickAll(click) {
       this.clickAll = click
@@ -713,5 +704,11 @@ export default {
   .CodeMirror-guttermarker-subtle {
     color: #999;
   }
+}
+
+.alert {
+  margin-top: 10px;
+  margin-left: 10px;
+  color: #f07178;
 }
 </style>
