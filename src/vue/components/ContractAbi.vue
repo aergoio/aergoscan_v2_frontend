@@ -200,6 +200,8 @@ export default {
         mode: 'application/json',
       },
       luaOptions: {
+        // tabSize: 4,
+        // styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lineWrapping: true,
@@ -212,6 +214,7 @@ export default {
       alert: false,
       clickAll: true,
       interactiveKey: 0,
+      // jsonCode: '',
     }
   },
 
