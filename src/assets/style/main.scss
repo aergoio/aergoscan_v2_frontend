@@ -1349,8 +1349,7 @@ img {
       display: flex;
       height: 100%;
       padding: 0 8px;
-      border: 1px solid #0f111a;
-      border-right: none;
+      border: 1px solid #443f51;
       align-items: center;
       justify-content: center;
       font-size: 12px;
@@ -1439,8 +1438,8 @@ img {
 
       &.active {
         display: block;
-        // background-color: #363344;
-        background-color: #0f111a;
+        background-color: #363344;
+        // background-color: #0f111a;
       }
 
       .title {

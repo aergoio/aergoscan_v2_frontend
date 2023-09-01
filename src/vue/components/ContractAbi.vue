@@ -1,14 +1,19 @@
 <template>
   <div>
-    <Alert v-if="openAlert" type="error" :message="message" />
     <Tabs :value="selectedTab" @tab-change="tabChanged" :routeReplace="true">
       <Tab
         title="ABI (JSON)"
         :route="{ query: query({ tab: 'abi' }) }"
         :id="'abi'"
       >
-        <div class="content code">
-          <codemirror v-model="jsonCode" :options="jsonOptions" />
+        <div class="content">
+          <codemirror
+            :key="interactiveKey"
+            v-if="jsonCode !== 'Loading...'"
+            v-model="jsonCode"
+            :options="jsonOptions"
+          />
+          <div v-else>Loading...</div>
         </div>
       </Tab>
 
@@ -25,7 +30,12 @@
               alignItems: 'center',
             }"
           >
-            <ConnectLoginButton @message="handleAlertMessage" />
+            <div :style="{ display: 'flex' }">
+              <ConnectLoginButton @message="handleAlertMessage" />
+              <div class="alert" v-if="alert">
+                {{ message }}
+              </div>
+            </div>
             <div
               :style="{
                 display: 'flex',
@@ -102,13 +112,14 @@
       </Tab>
 
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
-        <div class="table-wrap">
-          <div class="desc-contract">
-            <div :style="{ whiteSpace: 'pre' }">
-              <codemirror v-model="code.code" :options="luaOptions" />
-            </div>
-            <div v-if="!code.code">No Authorized Code</div>
-          </div>
+        <div class="content">
+          <codemirror
+            v-if="code.code"
+            v-model="code.code"
+            :options="luaOptions"
+          />
+          <div v-else>No Authorized Code</div>
+          <!-- <div class="desc-contract"></div> -->
         </div>
       </Tab>
     </Tabs>
@@ -124,7 +135,6 @@ import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
 import EventsList from '@/src/vue/components/EventsList.vue'
 import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
-import Alert from '../components/Alert.vue'
 
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -184,8 +194,8 @@ export default {
         line: true,
         lineWrapping: true,
         foldGutter: true,
-        readOnly: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: true,
         theme: 'material-ocean',
         mode: 'application/json',
       },
@@ -193,13 +203,13 @@ export default {
         lineNumbers: true,
         line: true,
         lineWrapping: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: true,
         theme: 'material-ocean',
         mode: 'text/x-lua',
       },
-      jsonCode: this.calculateJsonCode(),
       message: '',
-      openAlert: false,
+      alert: false,
       clickAll: true,
       interactiveKey: 0,
     }
@@ -212,26 +222,14 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
+      if (to === 0) {
+        this.interactiveKey += 1
+      }
       if (to === 2) {
         this.loadEvents()
       }
       if (to === 3) {
         this.loadCode()
-      }
-    },
-    $props: {
-      handler() {
-        this.jsonCode = this.calculateJsonCode()
-      },
-      deep: true,
-    },
-    openAlert() {
-      const timer = setTimeout(
-        () => ((this.openAlert = false), (this.message = '')),
-        3000
-      )
-      return () => {
-        clearTimeout(timer)
       }
     },
   },
@@ -247,7 +245,6 @@ export default {
     EventsList,
     ConnectLoginButton,
     codemirror,
-    Alert,
   },
 
   computed: {
@@ -269,6 +266,13 @@ export default {
       return Array.from(buf)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join(' ')
+    },
+    jsonCode() {
+      if (!this.$props.abi) {
+        return 'Loading...'
+      } else {
+        return JSON.stringify(this.$props.abi, null, 2)
+      }
     },
   },
 
@@ -333,13 +337,6 @@ export default {
     },
 
     syntaxHighlight,
-    calculateJsonCode() {
-      if (!this.$props.abi) {
-        return 'Loading...'
-      } else {
-        return JSON.stringify(this.$props.abi, null, 2)
-      }
-    },
     onUpdateResultHash(callContractHash) {
       this.$emit('onUpdateResultHash', callContractHash)
     },
@@ -352,8 +349,13 @@ export default {
     },
 
     handleAlertMessage(message) {
-      this.openAlert = true
-      this.message = message
+      if (!message) {
+        this.alert = false
+        this.message = ''
+      } else {
+        this.alert = true
+        this.message = message
+      }
     },
     handleClickAll(click) {
       this.clickAll = click
@@ -374,7 +376,6 @@ export default {
     margin-top: 25px;
     color: #fff;
     font-size: 14px;
-    font-family: DINPro;
 
     .btn-load-more {
       display: flex;
@@ -495,7 +496,7 @@ export default {
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
   .result_title {
-    color: rgb(220, 53, 69);
+    color: #fff;
     border-bottom: 1px solid rgb(76, 68, 82);
     padding-top: 5px;
     padding-bottom: 10px;
@@ -565,7 +566,8 @@ export default {
     transition: color 0.3s ease-in-out;
     .function {
       padding: 0.5rem;
-      background-color: #1e1b26;
+      /* background-color: #1e1b26; */
+      background-color: #2d2b37;
       border-radius: 0.5rem;
       cursor: pointer;
       color: #fff;
@@ -687,5 +689,26 @@ export default {
   height: max-content;
   line-height: 1.5;
   font-family: 'Roboto Mono', monospace;
+  /* font-family: 'Lato', monospace; */
+
+  &.cm-s-material-ocean,
+  .CodeMirror-foldgutter,
+  .CodeMirror-linenumbers,
+  .CodeMirror-gutters {
+    background: #363344;
+  }
+  .CodeMirror-linenumber {
+    color: #fff;
+    width: 25px;
+  }
+  .CodeMirror-guttermarker-subtle {
+    color: #999;
+  }
+}
+
+.alert {
+  margin-top: 10px;
+  margin-left: 10px;
+  color: #f07178;
 }
 </style>

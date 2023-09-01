@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="!activeAccount?.address"
-    class="connect_button"
-    @click="connectAccount"
-  >
+  <div v-if="!isConnect" class="connect_button" @click="connectAccount">
     <div class="status no_connect" />
     <div :style="{ display: 'flex', flexDirection: 'column' }">
       <span class="large_font">CONNECT</span>
@@ -26,16 +22,24 @@ export default {
   data() {
     return {
       activeAccount: {},
+      isConnect: false,
     }
   },
   watch: {
     activeAccount() {
-      if (!this.activeAccount) {
+      if (this.activeAccount?.error) {
+        this.$emit('message', this.activeAccount?.error)
+        this.isConnect = false
+      } else if (this.activeAccount?.address) {
+        this.$emit('message', false)
+        this.isConnect = true
+      } else {
         this.$emit('message', 'Network does not match with Aergo Connect 3.0')
-        this.activeAccount = {}
-      } else if (this.activeAccount.error) {
-        this.$emit('message', this.activeAccount.error)
-        this.activeAccount = {}
+      }
+    },
+    isConnect() {
+      if (!this.isConnect) {
+        this.$emit('message', false)
       }
     },
   },
@@ -49,6 +53,7 @@ export default {
       this.activeAccount = await this.$store.dispatch(
         'blockchain/disconnectAccount'
       )
+      this.isConnect = false
     },
   },
 }
