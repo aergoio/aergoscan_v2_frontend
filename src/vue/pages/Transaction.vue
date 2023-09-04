@@ -531,7 +531,6 @@ export default {
             q: `_id:${this.txMeta.to}`,
           })
         ).json()
-
         if (response.hits.length > 0) {
           this.isContract = true
         }
