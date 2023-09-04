@@ -9,7 +9,6 @@
             <div class="title">
               Token
               <span class="sub-2">ARC-1</span>
-              <!-- <span class="identicon"></span> -->
               <span class="identicon default" v-if="!txMeta.image_url"></span>
               <span class="identicon" v-else
                 ><img :src="txMeta.image_url"
@@ -294,8 +293,8 @@ export default {
       display: inline-block;
       /* width: 18px; */
       /* height: 18px; */
-      flex: 18px 0 0;
-      margin-left: 20px;
+      flex: 28px 0 0;
+      margin-left: 10px;
 
       @media screen and (max-width: 480px) {
         margin-left: 54px;
