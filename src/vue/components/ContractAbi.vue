@@ -8,6 +8,7 @@
       >
         <div class="content">
           <codemirror
+            class="json"
             :key="interactiveKey"
             v-if="jsonCode !== 'Loading...'"
             v-model="jsonCode"
@@ -22,12 +23,13 @@
         :route="{ query: query({ tab: 'interactive' }) }"
         :id="'interactive'"
       >
-        <div class="content">
+        <div class="content h-scroll">
           <div
             :style="{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              flexWrap: 'wrap-reverse',
             }"
           >
             <div :style="{ display: 'flex' }">
@@ -41,6 +43,7 @@
                 display: 'flex',
                 justifyContent: 'space-between',
                 width: '140px',
+                minWidth: '140px',
               }"
             >
               <button
@@ -534,9 +537,9 @@ export default {
     color: #569cd6;
   }
 
-  /* .number {
+  .number {
     color: #aecfa4;
-  } */
+  }
 
   .annotation {
     color: #ccc;
@@ -583,13 +586,9 @@ export default {
     }
 
     .function_body {
-      /* display: flex;
-      flex-direction: column; */
       animation-duration: 0.3s;
       &.show {
         height: 100%;
-        /* background-color: #0f111a; */
-        /* background-color: #443f51; */
         padding: 0.5rem;
         border-radius: 0.5rem;
         animation-name: fadeIn;
@@ -597,6 +596,7 @@ export default {
       &.hide {
         animation-name: fadeOut;
       }
+
       @keyframes fadeIn {
         0% {
           opacity: 0;
@@ -708,7 +708,22 @@ export default {
     color: #999;
   }
 }
-
+.json {
+  .cm-s-material-ocean {
+    .cm-string {
+      color: #d88e73;
+    }
+    .cm-property {
+      color: #9cdcfe;
+    }
+    .cm-atom {
+      color: #569cd6;
+    }
+    .cm-number {
+      color: #aecfa4;
+    }
+  }
+}
 .alert {
   margin-top: 10px;
   margin-left: 10px;
