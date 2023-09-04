@@ -143,14 +143,14 @@ export default {
         width: 10%;
       }
       &:nth-child(2) {
-        width: 15%;
+        width: 30%;
       }
       &:nth-child(3) {
         min-width: 80px;
-        width: 10%;
+        width: 13%;
       }
       &:nth-child(4) {
-        width: 15%;
+        width: 16%;
       }
       &:nth-child(5) {
         width: 60%;
