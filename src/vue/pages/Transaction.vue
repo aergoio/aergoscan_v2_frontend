@@ -158,11 +158,6 @@
                           </div>
                         </td>
                       </tr>
-
-                      <tr>
-                        <th>Fee Delegation</th>
-                        <td>{{ txMeta.fee_delegation }}</td>
-                      </tr>
                     </template>
                   </tbody>
                 </table>
@@ -307,10 +302,7 @@
             </div>
             <div class="detail-box execution" v-if="txMeta">
               <div class="title">Execution Details</div>
-              <div
-                class="address"
-                v-if="txMeta.type !== 4 && txMeta.type !== 0"
-              >
+              <div class="address" v-if="isContract">
                 <div class="title">Contract</div>
                 <div class="item">
                   <span class="item-inner">
@@ -516,6 +508,7 @@ export default {
         readOnly: true,
       },
       payloadJson: '',
+      isContract: false,
     }
   },
   created() {},
@@ -534,6 +527,19 @@ export default {
         .catch((e) => {
           console.log(e)
         })
+    },
+    txMeta() {
+      ;(async () => {
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
+            q: `_id:${this.txMeta.to}`,
+          })
+        ).json()
+
+        if (response.hits.length > 0) {
+          this.isContract = true
+        }
+      })()
     },
   },
 
@@ -618,6 +624,7 @@ export default {
           this.limitPageTotalCount = 0
         }
       })()
+
       await this.$nextTick()
     },
     async reloadAllTable(token) {
