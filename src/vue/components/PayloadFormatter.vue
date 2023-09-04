@@ -143,7 +143,7 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: 1.5;
-    white-space: pre;
+    /* white-space: pre; */
     a {
       &:hover {
         color: #279ecc;
@@ -151,7 +151,7 @@ export default {
     }
   }
   span:after {
-    /* content: ", "; */
+    content: ', ';
   }
   span:last-child:after {
     content: '';
