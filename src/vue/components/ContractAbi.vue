@@ -91,7 +91,7 @@
 
       <Tab
         title="Events"
-        :route="{ query: query({ tab: 'events' }) }"
+        :route="{ query: query({ tab: `events ${totalEvents}` }) }"
         :id="'events'"
       >
         <div class="table-wrap">
@@ -174,6 +174,7 @@ export default {
       interactiveArguments: defaultdict({}),
       isLoading: [],
       events: [],
+      totalEvents: 0,
       paginationCss: {
         pagination: 'pagination events',
         paginationInner: 'pagination-events',
@@ -313,6 +314,7 @@ export default {
         if (response.error) {
           this.error = response.error.msg
         } else if (response.hits.length) {
+          this.totalEvents = response.total
           this.events = response.hits
           this.limitPageTotalCount = response.total
         } else {

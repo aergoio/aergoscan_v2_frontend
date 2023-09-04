@@ -402,7 +402,7 @@
                   </Tab>
 
                   <Tab
-                    :title="`Events (${events.length})`"
+                    :title="`Events (${totalEvents})`"
                     :route="{ query: query({ receipt: 'events' }) }"
                     :id="'events'"
                   >
@@ -476,6 +476,7 @@ export default {
       txReceipt: null,
       txMeta: {},
       events: [],
+      totalEvents: 0,
       error: null,
       selectedPayloadTab: 0,
       selectedReceiptTab: 0,
@@ -530,14 +531,15 @@ export default {
             q: `_id:${this.txMeta.to}`,
           })
         ).json()
-
         if (response.hits.length > 0) {
           this.isContract = true
         }
       })()
     },
   },
-
+  updated() {
+    console.log(this.events, 'events')
+  },
   mounted() {
     if (this.$route.query.payload) {
       this.selectedPayloadTab =
@@ -612,6 +614,7 @@ export default {
         if (response.error) {
           this.error = response.error.msg
         } else if (response.hits.length) {
+          this.totalEvents = response.total
           this.events = response.hits
           this.limitPageTotalCount = response.total
         } else {
