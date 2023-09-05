@@ -526,21 +526,12 @@ export default {
     },
     txMeta() {
       ;(async () => {
-<<<<<<< HEAD
-        const response = await (
-          await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
-            q: `_id:${this.txMeta.to}`,
-          })
-        ).json()
-        if (response.hits.length > 0) {
-=======
         const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
           q: `_id:${this.txMeta.contract}`,
         })
         const responseJson = await response.json()
 
         if (responseJson.hits.length > 0) {
->>>>>>> main
           this.isContract = true
         }
       })()
@@ -613,21 +604,6 @@ export default {
       })()
       ;(async () => {
         const start = (this.currentPage - 1) * this.itemsPerPage
-<<<<<<< HEAD
-        const response = await (
-          await this.$fetch.get(`${cfg.API_URL}/event`, {
-            q: `tx_id:${hash}`,
-            from: start,
-            size: this.itemsPerPage,
-          })
-        ).json()
-        if (response.error) {
-          this.error = response.error.msg
-        } else if (response.hits.length) {
-          this.totalEvents = response.total
-          this.events = response.hits
-          this.limitPageTotalCount = response.total
-=======
         const response = await this.$fetch.get(`${cfg.API_URL}/event`, {
           q: `tx_id:${hash}`,
           from: start,
@@ -640,7 +616,6 @@ export default {
           this.totalEvents = responseJson.total
           this.events = responseJson.hits
           this.limitPageTotalCount = responseJson.total
->>>>>>> main
         } else {
           this.events = []
           this.limitPageTotalCount = 0
