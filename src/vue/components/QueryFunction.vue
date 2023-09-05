@@ -1,7 +1,7 @@
 <template>
   <div class="function-block">
     <span :class="isClick ? `function show` : `function`" @click="handleClick"
-      >{{ name }}
+      >{{ `${number + 1}. ${name}` }}
     </span>
     <span :class="isClick ? `downbutton` : `upbutton`"></span>
 
@@ -11,7 +11,7 @@
     >
       <div v-if="func.arguments.length">
         <div
-          v-for="(arg, idx) in func.arguments"
+          v-for="arg in func.arguments"
           :key="arg.name"
           :style="{ minHeight: '60px', marginBottom: '5px' }"
         >
@@ -51,7 +51,7 @@ import { loadAndWait } from '@/src/vue/utils/async'
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
 
 export default {
-  props: ['abi', 'name', 'address', 'callContractHash', 'clickAll'],
+  props: ['abi', 'name', 'number', 'address', 'callContractHash', 'clickAll'],
   data() {
     return {
       args: {},
@@ -60,6 +60,7 @@ export default {
       isClick: false,
     }
   },
+
   watch: {
     clickAll() {
       if (!this.clickAll) {
@@ -68,6 +69,10 @@ export default {
         this.isClick = false
       }
     },
+  },
+  updated() {
+    console.log(this.abi, 'abi')
+    console.log(this.func, 'func')
   },
   computed: {
     func() {
