@@ -67,24 +67,24 @@
             <div v-if="abi && abi.functions.length == 0">
               Contract has no public functions.
             </div>
-
             <QueryFunction
-              v-for="func in functions"
+              v-for="(func, idx) in functions"
               :key="func.name"
               :abi="abi"
               :name="func.name"
+              :number="idx"
               :address="address"
               :clickAll="clickAll"
               @onUpdateResultHash="onUpdateResultHash"
             />
-            <QueryStateVariable
+            <!-- <QueryStateVariable
               v-for="variable in stateVariables"
               :key="variable.name"
               :abi="abi"
               :name="variable.name"
               :address="address"
               :clickAll="clickAll"
-            />
+            /> -->
           </div>
         </div>
       </Tab>
@@ -259,10 +259,10 @@ export default {
       if (!this.abi) return []
       return this.abi.functions.filter((func) => func.name !== 'constructor')
     },
-    stateVariables() {
-      if (!this.abi) return []
-      return this.abi.state_variables
-    },
+    // stateVariables() {
+    //   if (!this.abi) return []
+    //   return this.abi.state_variables
+    // },
     formattedAbi() {
       if (!this.$props.abi) return ''
       return syntaxHighlight(this.$props.abi)
