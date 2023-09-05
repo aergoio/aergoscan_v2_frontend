@@ -526,12 +526,21 @@ export default {
     },
     txMeta() {
       ;(async () => {
+<<<<<<< HEAD
         const response = await (
           await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
             q: `_id:${this.txMeta.to}`,
           })
         ).json()
         if (response.hits.length > 0) {
+=======
+        const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
+          q: `_id:${this.txMeta.contract}`,
+        })
+        const responseJson = await response.json()
+
+        if (responseJson.hits.length > 0) {
+>>>>>>> main
           this.isContract = true
         }
       })()
@@ -593,17 +602,18 @@ export default {
       this.error = null
       let hash = this.$route.params.hash
       ;(async () => {
-        const response = await (
-          await this.$fetch.get(`${cfg.API_URL}/transactions`, {
-            q: `_id:${hash}`,
-          })
-        ).json()
-        if (response.hits.length) {
-          this.txMeta = response.hits[0].meta
+        const response = await this.$fetch.get(`${cfg.API_URL}/transactions`, {
+          q: `_id:${hash}`,
+        })
+        const responseJson = await response.json()
+
+        if (responseJson.hits.length) {
+          this.txMeta = responseJson.hits[0].meta
         }
       })()
       ;(async () => {
         const start = (this.currentPage - 1) * this.itemsPerPage
+<<<<<<< HEAD
         const response = await (
           await this.$fetch.get(`${cfg.API_URL}/event`, {
             q: `tx_id:${hash}`,
@@ -617,6 +627,20 @@ export default {
           this.totalEvents = response.total
           this.events = response.hits
           this.limitPageTotalCount = response.total
+=======
+        const response = await this.$fetch.get(`${cfg.API_URL}/event`, {
+          q: `tx_id:${hash}`,
+          from: start,
+          size: this.itemsPerPage,
+        })
+        const responseJson = await response.json()
+        if (responseJson.error) {
+          this.error = responseJson.error.msg
+        } else if (responseJson.hits.length) {
+          this.totalEvents = responseJson.total
+          this.events = responseJson.hits
+          this.limitPageTotalCount = responseJson.total
+>>>>>>> main
         } else {
           this.events = []
           this.limitPageTotalCount = 0

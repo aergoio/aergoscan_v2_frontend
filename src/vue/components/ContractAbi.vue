@@ -90,8 +90,8 @@
       </Tab>
 
       <Tab
-        title="Events"
-        :route="{ query: query({ tab: `events ${totalEvents}` }) }"
+        :title="`Events (${totalEvents})`"
+        :route="{ query: query({ tab: 'events' }) }"
         :id="'events'"
       >
         <div class="table-wrap">
