@@ -535,11 +535,12 @@ export default {
           this.isContract = true
         }
       })()
+      if (this.selectedPayloadTab === 1) {
+        this.payloadJson = this.calculatePayloadJson()
+      }
     },
   },
-  updated() {
-    console.log(this.events, 'events')
-  },
+
   mounted() {
     if (this.$route.query.payload) {
       this.selectedPayloadTab =
@@ -597,7 +598,6 @@ export default {
           q: `_id:${hash}`,
         })
         const responseJson = await response.json()
-
         if (responseJson.hits.length) {
           this.txMeta = responseJson.hits[0].meta
         }
