@@ -4,7 +4,7 @@
     <div class="error transactions show" v-if="error">
       {{ error }}
     </div>
-    <div class="h-scroll-main">
+    <div class="h-scroll-main dark">
       <div class="h-scroll-main-inner">
         <table
           class="latest-transactions-table lastest-top"
@@ -15,7 +15,7 @@
               <th>
                 <div>TX Hash</div>
               </th>
-              <th>
+              <th :style="{ minWidth: '120px' }">
                 <div>Time</div>
               </th>
               <th>

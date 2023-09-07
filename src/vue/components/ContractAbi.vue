@@ -95,7 +95,7 @@
         :id="'events'"
       >
         <div class="table-wrap">
-          <div class="h-scroll">
+          <div class="h-scroll dark">
             <events-list
               :events="events"
               :columns="['blockno', 'tx']"
@@ -503,6 +503,23 @@ export default {
   margin: 0.5rem;
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
+
+  .resultHash {
+    white-space: initial;
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 2px;
+    color: #279ecc;
+
+    @media screen and (max-width: 480px) {
+      font-size: 13px;
+    }
+
+    &:hover {
+      color: #0784c3;
+      text-decoration: none;
+    }
+  }
   .result_title {
     color: #fff;
     border-bottom: 1px solid rgb(76, 68, 82);
@@ -708,6 +725,29 @@ export default {
   }
   .CodeMirror-guttermarker-subtle {
     color: #999;
+  }
+  .CodeMirror-hscrollbar {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #69647e; /* 배경색 설정 */
+      /* background-color: #363344;  */
+      border-radius: 10px;
+      background-clip: padding-box;
+      border: 3px solid transparent;
+
+      &:hover {
+        background-color: #5f5a68;
+      }
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #363344;
+      height: 10px; /* 스크롤 바 슬라이더 높이 설정 */
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
   }
 }
 .json {
