@@ -176,7 +176,7 @@ export default {
       events: [],
       totalEvents: 0,
       paginationCss: {
-        pagination: 'pagination events',
+        paginarion: 'pagination events',
         paginationInner: 'pagination-events',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
@@ -518,6 +518,25 @@ export default {
     &:hover {
       color: #0784c3;
       text-decoration: none;
+    }
+  }
+  .result_wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(76, 68, 82);
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    .hash {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      color: #279ecc;
+      font-weight: bold;
+
+      &:hover {
+        color: #0784c3;
+      }
     }
   }
   .result_title {
