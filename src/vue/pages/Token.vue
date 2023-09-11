@@ -9,11 +9,24 @@
             <div class="title">
               Token
               <span class="sub-2">ARC-1</span>
-              <span class="identicon default" v-if="!txMeta.image_url"></span>
-              <span class="identicon" v-else
-                ><img :src="txMeta.image_url"
-              /></span>
-              <span class="sub-3" v-if="txMeta">{{ txMeta.name }}</span>
+
+              <div class="token_wrapper">
+                <span class="identicon default" v-if="!txMeta.image_url"></span>
+                <span class="identicon" v-else
+                  ><img :src="txMeta.image_url"
+                /></span>
+                <span class="sub-3" v-if="txMeta.name">{{ txMeta.name }}</span>
+                <span class="sub-4" v-if="txMeta.symbol">{{
+                  `(${txMeta.symbol})`
+                }}</span>
+                <img
+                  class="verifed"
+                  v-if="txMeta.verified_status === 'verified'"
+                  src="~@assets/img/ic-verified.svg"
+                  @click="routeToVerifiedDetail"
+                />
+                <img />
+              </div>
             </div>
             <div class="detail-box">
               <div class="table-wrap">
@@ -265,6 +278,9 @@ export default {
     updateHolderTotalCount(count) {
       this.holderTotalItems = count
     },
+    routeToVerifiedDetail() {
+      console.log('routeToVerifiedDetail')
+    },
   },
   components: {
     Search,
@@ -288,22 +304,8 @@ export default {
   .page-content > .title {
     display: flex;
     align-items: center;
-
-    .identicon {
-      display: inline-block;
-      /* width: 18px; */
-      /* height: 18px; */
-      flex: 28px 0 0;
-      margin-left: 10px;
-
-      @media screen and (max-width: 480px) {
-        margin-left: 54px;
-      }
-    }
-
     .sub-2 {
       padding: 2px 5px;
-      margin-left: 10px;
       margin-top: 4px;
       font-size: 8px;
       color: #fff;
@@ -312,11 +314,37 @@ export default {
       white-space: nowrap;
     }
 
-    .sub-3 {
-      margin-left: 7px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #959295;
+    .token_wrapper {
+      display: flex;
+      align-items: center;
+      .identicon {
+        display: inline-block;
+        flex: 24px 0 0;
+        margin-left: 10px;
+
+        @media screen and (max-width: 480px) {
+          margin-left: 54px;
+        }
+      }
+
+      .sub-3 {
+        margin-left: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #959295;
+      }
+      .sub-4 {
+        margin-left: 4px;
+        font-size: 15px;
+        font-weight: bold;
+        color: rgba(149, 146, 149, 0.675);
+      }
+      .verifed {
+        width: 20px;
+        height: 20px;
+        margin-left: 4px;
+        cursor: pointer;
+      }
     }
   }
 }

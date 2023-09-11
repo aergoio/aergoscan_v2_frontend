@@ -351,7 +351,9 @@
                     :id="'json'"
                   >
                     <div class="content">
-                      <codemirror v-model="payloadJson" :options="cmOption" />
+                      <div class="h-scroll dark">
+                        <codemirror v-model="payloadJson" :options="cmOption" />
+                      </div>
                     </div>
                   </Tab>
                   <Tab
@@ -408,7 +410,7 @@
                   >
                     <div class="content">
                       <div class="table-wrap">
-                        <div class="h-scroll">
+                        <div class="h-scroll dark">
                           <events-list
                             :events="events"
                             :columns="[]"

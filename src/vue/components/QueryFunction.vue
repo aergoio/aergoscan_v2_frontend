@@ -2,8 +2,23 @@
   <div class="function-block">
     <span :class="isClick ? `function show` : `function`" @click="handleClick"
       >{{ `${number + 1}. ${name}` }}
+
+      <svg
+        fill="#ffffff"
+        width="800px"
+        height="800px"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        :class="isClick ? `arrow downbutton` : `arrow upbutton`"
+      >
+        <rect x="0" fill="none" width="24" height="24" />
+        <g>
+          <path
+            d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"
+          />
+        </g>
+      </svg>
     </span>
-    <span :class="isClick ? `downbutton` : `upbutton`"></span>
 
     <div
       :class="isClick ? `function_body show` : `function_body hide`"
@@ -14,15 +29,43 @@
           v-for="arg in func.arguments"
           :key="arg.name"
           :style="{ minHeight: '60px', marginBottom: '5px' }"
+          @click="() => addDynamicArg(arg.name)"
         >
           <span class="key">{{ arg.name }}</span>
-          <input
-            type="text"
-            v-model="args[arg.name]"
-            class="arg-field"
-            :style="{ marginTop: '5px' }"
-          />
-          <!-- <span v-if="idx != func.arguments.length - 1"></span> -->
+          <div
+            :style="{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-between',
+            }"
+          >
+            <input
+              type="text"
+              class="arg-field"
+              :style="{ marginTop: '5px', width: '90%' }"
+              v-model="args[arg.name]"
+            />
+            <span
+              v-if="args[arg.name]"
+              :style="{ display: 'flex', alignItems: 'center' }"
+            >
+              <img
+                v-if="jsonValidate(args[arg.name])"
+                class="validate"
+                src="~@assets/img/ic-success@2x.png"
+              />
+              <img v-else class="validate" src="~@assets/img/ic_fail@2x.png" />
+              <span
+                v-if="jsonValidate(args[arg.name])"
+                :style="{
+                  whiteSpace: 'nowrap',
+                  marginRight: '10px',
+                  textTransform: 'capitalize',
+                }"
+                >{{ jsonTypeof(args[arg.name]) }}</span
+              >
+            </span>
+          </div>
         </div>
       </div>
       <span class="btn-call" v-if="!isLoading" v-on:click="queryContract">
@@ -38,8 +81,31 @@
       <span class="btn-call" v-if="isLoading">Loading...</span>
       <div v-if="typeof result !== 'undefined'" class="code-highlight-pre">
         <div :style="{ display: 'flex', flexDirection: 'column' }">
-          <span class="result_title">Result</span>
-          <span class="result_content" v-html="syntaxHighlight(result)"></span>
+          <div v-if="typeof result === 'string'" class="result_wrapper">
+            <span class="result_title">{{
+              receipt?.status || !receipt ? `Result` : `Loading...`
+            }}</span>
+            <router-link
+              v-if="receipt?.status"
+              :to="`/transaction/${result}/`"
+              class="hash"
+            >
+              <span v-html="result" class="result_content" />
+            </router-link>
+            <span v-else-if="!receipt" v-html="result" class="result_content" />
+          </div>
+          <div v-if="receipt?.status" class="result_wrapper">
+            <span
+              class="result_title"
+              v-html="`Status: ${receipt?.status ?? `Loading...`}`"
+            />
+            <span v-html="receipt?.result" class="result_content" />
+          </div>
+
+          <span
+            v-if="typeof result !== 'string' && !receipt"
+            v-html="syntaxHighlight(result)"
+          />
         </div>
       </div>
     </div>
@@ -49,15 +115,20 @@
 <script>
 import { loadAndWait } from '@/src/vue/utils/async'
 import { syntaxHighlight } from '@/src/vue/utils/syntax-highlight'
+import ArrowSvg from '@assets/img/arrow-right-svgrepo-com.svg'
 
 export default {
   props: ['abi', 'name', 'number', 'address', 'callContractHash', 'clickAll'],
+  components: {
+    ArrowSvg,
+  },
   data() {
     return {
       args: {},
       result: void 0,
       isLoading: false,
       isClick: false,
+      receipt: {},
     }
   },
 
@@ -69,11 +140,17 @@ export default {
         this.isClick = false
       }
     },
+    async result() {
+      const hash = this.result
+      const wait = loadAndWait()
+      await wait()
+      this.receipt = await this.$store.dispatch(
+        'blockchain/fetchTransactionReceipt',
+        { hash }
+      )
+    },
   },
-  updated() {
-    console.log(this.abi, 'abi')
-    console.log(this.func, 'func')
-  },
+
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}
@@ -87,9 +164,10 @@ export default {
     syntaxHighlight,
     async queryContract() {
       const wait = loadAndWait()
-
       const args = this.args
-      const argValues = this.func.arguments.map((arg) => args[arg.name])
+      const argValues = this.func.arguments.map((arg) =>
+        JSON.parse(args[arg.name])
+      )
       if (argValues.some((item) => typeof item === 'undefined')) {
         this.result = {
           error: 'You did not provide all arguments',
@@ -128,7 +206,9 @@ export default {
       const wait = loadAndWait()
       if (this.getActiveAccount.address) {
         const args = this.args
-        const argValues = this.func.arguments.map((arg) => args[arg.name])
+        const argValues = this.func.arguments.map((arg) =>
+          JSON.parse(args[arg.name])
+        )
         if (argValues.some((item) => typeof item === 'undefined')) {
           this.result = {
             error: 'You did not provide all arguments',
@@ -185,21 +265,65 @@ export default {
         )
       })
     },
+    jsonValidate(value) {
+      try {
+        JSON.parse(value)
+        return true
+      } catch (e) {
+        return false
+      }
+    },
+    addDynamicArg(name) {
+      if (!this.args[name]) {
+        this.$set(this.args, name, '""')
+      }
+    },
+    jsonTypeof(value) {
+      const parsedValue = JSON.parse(value)
+      if (typeof parsedValue === 'object') {
+        if (Array.isArray(parsedValue)) {
+          return 'Array'
+        } else {
+          return 'JSON'
+        }
+      } else {
+        return typeof parsedValue
+      }
+    },
   },
 }
 </script>
 
 <style lang="scss">
-.downbutton {
-  background: url('~@assets/img/arrow-right-svgrepo-com.svg');
-  transform: rotate(90deg);
+.validate {
+  height: 35px;
+  margin-left: 8px;
+  margin-right: 8px;
+  position: relative;
+  top: 2px;
 }
 
+.function {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  .arrow {
+    width: 20px;
+    height: 20px;
+  }
+  &:hover {
+    svg {
+      fill: #0784c3;
+    }
+  }
+}
+
+.downbutton {
+  transform: rotate(90deg);
+  transition: transform 0.3s ease-in-out;
+}
 .upbutton {
-  display: inline-block;
-  vertical-align: middle;
-  background: url('~@assets/img/arrow-right-svgrepo-com.svg');
-  background-size: auto 100%;
-  background-repeat: no-repeat;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease-in-out;
 }
 </style>

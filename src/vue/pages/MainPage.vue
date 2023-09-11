@@ -414,11 +414,37 @@ export default {
   ::v-deep .h-scroll-main {
     @media screen and (max-width: 450px) {
       overflow-x: auto;
+      overflow-y: hidden;
     }
 
     .h-scroll-main-inner {
       @media screen and (max-width: 390px) {
         min-width: 390px;
+      }
+    }
+
+    &.dark {
+      &::-webkit-scrollbar {
+        background: transparent;
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        /* background-color: #69647e; */
+        background-color: rgba(167, 167, 167, 0.2);
+        border-radius: 10px;
+        background-clip: padding-box;
+        border: 3px solid transparent;
+
+        &:hover {
+          background-color: #5f5a68;
+        }
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #363344;
+        height: 10px; /* 스크롤 바 슬라이더 높이 설정 */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
       }
     }
   }
