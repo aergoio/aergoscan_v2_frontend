@@ -351,7 +351,9 @@
                     :id="'json'"
                   >
                     <div class="content">
-                      <codemirror v-model="payloadJson" :options="cmOption" />
+                      <div class="h-scroll dark">
+                        <codemirror v-model="payloadJson" :options="cmOption" />
+                      </div>
                     </div>
                   </Tab>
                   <Tab
@@ -408,7 +410,7 @@
                   >
                     <div class="content">
                       <div class="table-wrap">
-                        <div class="h-scroll">
+                        <div class="h-scroll dark">
                           <events-list
                             :events="events"
                             :columns="[]"
@@ -535,6 +537,9 @@ export default {
           this.isContract = true
         }
       })()
+      if (this.selectedPayloadTab === 1) {
+        this.payloadJson = this.calculatePayloadJson()
+      }
     },
   },
 
@@ -595,7 +600,6 @@ export default {
           q: `_id:${hash}`,
         })
         const responseJson = await response.json()
-
         if (responseJson.hits.length) {
           this.txMeta = responseJson.hits[0].meta
         }

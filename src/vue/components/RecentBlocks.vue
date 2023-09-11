@@ -4,7 +4,7 @@
     <!--    <div class="error latest-block show" v-if="error">-->
     <!--      {{ error }}-->
     <!--    </div>-->
-    <div class="h-scroll-main">
+    <div class="h-scroll-main dark">
       <div class="h-scroll-main-inner">
         <table
           class="latest-block-table lastest-top"
