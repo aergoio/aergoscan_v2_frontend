@@ -176,7 +176,7 @@ export default {
       events: [],
       totalEvents: 0,
       paginationCss: {
-        paginarion: 'pagination events',
+        pagination: 'pagination events',
         paginationInner: 'pagination-events',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
@@ -540,13 +540,23 @@ export default {
     }
   }
   .result_title {
+    display: flex;
+    align-items: center;
     color: #fff;
     border-bottom: 1px solid rgb(76, 68, 82);
     padding-top: 5px;
     padding-bottom: 10px;
+
+    .status_img {
+      margin-right: 6px;
+    }
+    .receipt_text {
+      white-space: nowrap;
+    }
   }
   .result_content {
     margin-top: 10px;
+    margin-bottom: 4px;
   }
 }
 
