@@ -31,7 +31,9 @@
           :style="{ minHeight: '60px', marginBottom: '5px' }"
           @click="() => addDynamicArg(arg.name)"
         >
-          <span class="key">{{ arg.name }}</span>
+          <span class="key">{{
+            arg.name === '...' ? 'Variadic argument' : arg.name
+          }}</span>
           <div
             :style="{
               display: 'flex',
@@ -90,22 +92,39 @@
               :to="`/transaction/${result}/`"
               class="hash"
             >
-              <span v-html="result" class="result_content" />
+              <span
+                v-if="receipt?.status"
+                v-html="result"
+                class="result_content"
+              />
             </router-link>
             <span v-else-if="!receipt" v-html="result" class="result_content" />
           </div>
+
           <div v-if="receipt?.status" class="result_wrapper">
-            <span
-              class="result_title"
-              v-html="`Status: ${receipt?.status ?? `Loading...`}`"
-            />
+            <span class="result_title">
+              <span> Status: </span>
+              <img
+                class="status_img"
+                v-if="receipt?.status === 'ERROR'"
+                src="~@assets/img/ic_fail@1x.png"
+              />
+              <img v-else src="~@assets/img/ic-success.png" />
+              <span class="receipt_text">
+                {{ `${receipt?.status ?? `Loading...`}` }}
+              </span>
+            </span>
             <span v-html="receipt?.result" class="result_content" />
           </div>
-
-          <span
+          <div
             v-if="typeof result !== 'string' && !receipt"
-            v-html="syntaxHighlight(result)"
-          />
+            class="result_wrapper"
+          >
+            <span class="result_title">{{
+              result ? `Result` : `Loading...`
+            }}</span>
+            <span class="result_content" v-html="syntaxHighlight(result)" />
+          </div>
         </div>
       </div>
     </div>
@@ -124,7 +143,7 @@ export default {
   },
   data() {
     return {
-      args: {},
+      args: { '...': null },
       result: void 0,
       isLoading: false,
       isClick: false,
@@ -150,7 +169,9 @@ export default {
       )
     },
   },
-
+  updated() {
+    console.log(this.args, 'args')
+  },
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}
