@@ -1,8 +1,14 @@
 <template>
   <div class="function-block">
-    <span :class="isClick ? `function show` : `function`" @click="handleClick"
-      >{{ `${number + 1}. ${name}` }}
-
+    <span :class="isClick ? `function show` : `function`" @click="handleClick">
+      <div>
+        <span>
+          {{ `${number + 1}. ${name}` }}
+        </span>
+        <span class="contract_typemark">{{
+          func.view ? '[read]' : '[write]'
+        }}</span>
+      </div>
       <svg
         fill="#ffffff"
         width="800px"
@@ -103,7 +109,7 @@
 
           <div v-if="receipt?.status" class="result_wrapper">
             <span class="result_title">
-              <span> Status: </span>
+              <span>Status:</span>
               <img
                 class="status_img"
                 v-if="receipt?.status === 'ERROR'"
@@ -115,14 +121,16 @@
               </span>
             </span>
             <span v-html="receipt?.result" class="result_content" />
+            <span v-if="!receipt?.result" class="result_content empty"
+              >Empty Result</span
+            >
           </div>
+
           <div
             v-if="typeof result !== 'string' && !receipt"
             class="result_wrapper"
           >
-            <span class="result_title">{{
-              result ? `Result` : `Loading...`
-            }}</span>
+            <span class="result_title">Result</span>
             <span class="result_content" v-html="syntaxHighlight(result)" />
           </div>
         </div>
@@ -169,9 +177,7 @@ export default {
       )
     },
   },
-  updated() {
-    console.log(this.args, 'args')
-  },
+
   computed: {
     func() {
       return this.abi.functions.find((func) => func.name === this.name) || {}
@@ -221,9 +227,13 @@ export default {
       this.isLoading = false
     },
     handleClick() {
+      if (this.func.arguments.length === 0 && this.func.view && !this.result) {
+        this.queryContract()
+      }
       this.isClick = !this.isClick
     },
     async callToConnect() {
+      this.receipt = {}
       const wait = loadAndWait()
       if (this.getActiveAccount.address) {
         const args = this.args
