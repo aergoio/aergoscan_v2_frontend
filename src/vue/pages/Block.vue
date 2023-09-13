@@ -413,6 +413,8 @@ table.block-detail {
 
     > div {
       align-items: start;
+      white-space: wrap;
+      min-width: 160px;
     }
 
     .identicon {

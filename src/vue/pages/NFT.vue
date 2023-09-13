@@ -351,10 +351,10 @@ export default {
       .identicon {
         display: inline-block;
         flex: 24px 0 0;
-        margin-left: 10px;
+        /* margin-left: 10px; */
 
         @media screen and (max-width: 480px) {
-          margin-left: 54px;
+          /* margin-left: 54px; */
         }
       }
 
@@ -449,6 +449,8 @@ table.nft-detail {
 
     > div {
       align-items: start;
+      white-space: initial;
+      min-width: 170px;
     }
 
     .identicon {
