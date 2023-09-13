@@ -204,8 +204,6 @@ export default {
         mode: 'application/json',
       },
       luaOptions: {
-        // tabSize: 4,
-        // styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lineWrapping: true,
@@ -218,7 +216,6 @@ export default {
       alert: false,
       clickAll: true,
       interactiveKey: 0,
-      // jsonCode: '',
     }
   },
 
@@ -548,7 +545,8 @@ export default {
     padding-bottom: 10px;
 
     .status_img {
-      margin-right: 6px;
+      margin-right: 4px;
+      margin-left: 4px;
     }
     .receipt_text {
       white-space: nowrap;
@@ -557,6 +555,9 @@ export default {
   .result_content {
     margin-top: 10px;
     margin-bottom: 4px;
+    &.empty {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -618,6 +619,7 @@ export default {
     flex-direction: column;
     margin-bottom: 1rem;
     transition: color 0.3s ease-in-out;
+
     .function {
       padding: 0.5rem;
       /* background-color: #1e1b26; */
@@ -625,12 +627,25 @@ export default {
       border-radius: 0.5rem;
       cursor: pointer;
       color: #fff;
+
       &.show {
         border-radius: 0.5rem 0.5rem 0 0;
       }
-    }
-    .function:hover {
-      color: #066a9c;
+      .contract_typemark {
+        padding: 2px 4px;
+        font-size: 12px;
+        opacity: 0.5;
+        white-space: nowrap;
+        &:hover {
+          color: #fff;
+        }
+      }
+      &:hover {
+        color: #066a9c;
+      }
+      &:hover .contract_typemark:not(:hover) {
+        color: #fff;
+      }
     }
 
     .function_body {
