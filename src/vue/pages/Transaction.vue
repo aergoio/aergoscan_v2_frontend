@@ -13,241 +13,243 @@
               </div>
             </div>
             <div class="detail-box transaction" v-if="txMeta">
-              <div class="table-wrap">
-                <div class="error show" v-if="error">
-                  {{ error }}
-                </div>
-                <table
-                  class="transaction-detail"
-                  :class="!txMeta && !error && 'loading'"
-                >
-                  <tbody>
-                    <tr class="hidden loading" v-if="!txMeta && !error">
-                      <td colspan="100%">Loading...</td>
-                    </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
-                    <template v-if="txMeta">
-                      <tr>
-                        <th>
-                          <div>
-                            From
-                            <img
-                              src="~@assets/img/ic-arrow-black@3x.png"
-                              class="arrow"
-                            />
-                            To
-                          </div>
-                        </th>
-                        <td>
-                          <div>
-                            <div class="from-to">
-                              <router-link
-                                class="address"
-                                :to="`/account/${txMeta.from}/`"
-                              >
-                                {{
-                                  $options.filters.formatEllipsisText(
-                                    txMeta.from.toString(),
-                                    30
-                                  )
-                                }}
-                              </router-link>
+              <div class="h-scroll">
+                <div class="table-wrap">
+                  <div class="error show" v-if="error">
+                    {{ error }}
+                  </div>
+                  <table
+                    class="transaction-detail"
+                    :class="!txMeta && !error && 'loading'"
+                  >
+                    <tbody>
+                      <tr class="hidden loading" v-if="!txMeta && !error">
+                        <td colspan="100%">Loading...</td>
+                      </tr>
+                      <!--                  <tr class="hidden not-found">-->
+                      <!--                    <td colspan="100%">No items found</td>-->
+                      <!--                  </tr>-->
+                      <template v-if="txMeta">
+                        <tr>
+                          <th>
+                            <div>
+                              From
                               <img
                                 src="~@assets/img/ic-arrow-black@3x.png"
                                 class="arrow"
                               />
-                              <router-link
-                                class="address"
-                                v-if="txMeta.to && txMeta.to.toString().length"
-                                :to="`/account/${txMeta.to}/`"
-                              >
-                                {{
-                                  $options.filters.formatEllipsisText(
-                                    txMeta.to.toString(),
-                                    28
-                                  )
-                                }}
-                              </router-link>
-                              <a
-                                href="javascript:;"
-                                class="address"
-                                v-if="
-                                  !txMeta.to || !txMeta.to.toString().length
+                              To
+                            </div>
+                          </th>
+                          <td>
+                            <div>
+                              <div class="from-to">
+                                <router-link
+                                  class="address"
+                                  :to="`/account/${txMeta.from}/`"
+                                >
+                                  {{
+                                    $options.filters.formatEllipsisText(
+                                      txMeta.from.toString(),
+                                      30
+                                    )
+                                  }}
+                                </router-link>
+                                <img
+                                  src="~@assets/img/ic-arrow-black@3x.png"
+                                  class="arrow"
+                                />
+                                <router-link
+                                  class="address"
+                                  v-if="
+                                    txMeta.to && txMeta.to.toString().length
+                                  "
+                                  :to="`/account/${txMeta.to}/`"
+                                >
+                                  {{
+                                    $options.filters.formatEllipsisText(
+                                      txMeta.to.toString(),
+                                      28
+                                    )
+                                  }}
+                                </router-link>
+                                <a
+                                  href="javascript:;"
+                                  class="address"
+                                  v-if="
+                                    !txMeta.to || !txMeta.to.toString().length
+                                  "
+                                  >{{
+                                    txMeta.type === 7
+                                      ? 'MULTICALL'
+                                      : 'Contract Creation'
+                                  }}</a
+                                >
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Amount</div>
+                          </th>
+                          <td>
+                            <div
+                              v-html="
+                                $options.filters.formatToken(
+                                  txMeta.amount,
+                                  'aergo'
+                                )
+                              "
+                            ></div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Token transfers</div>
+                          </th>
+                          <td>
+                            <div>{{ tokenTxTotalItems }}</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>NFT transfers</div>
+                          </th>
+                          <td>
+                            <div>{{ nftTxTotalItems }}</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Fee</div>
+                          </th>
+                          <td>
+                            <div>
+                              <span
+                                class="tpm"
+                                v-html="
+                                  $options.filters.formatToken(txMeta.fee_used)
                                 "
-                                >{{
-                                  txMeta.type === 7
-                                    ? 'MULTICALL'
-                                    : 'Contract Creation'
-                                }}</a
+                                >{{ txMeta.gas_limit }}</span
+                              >
+                              <span
+                                class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="Fee was paid by contract"
+                                v-if="txMeta.fee_delegation"
+                                >[delegated]</span
                               >
                             </div>
-                          </div>
-                        </td>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Gas used</div>
+                          </th>
+                          <td>
+                            <div>
+                              {{ txMeta ? txMeta.gas_used : '...' }} of
+                              <span class="ml-5 tpm" v-if="txMeta.gas_limit">{{
+                                txMeta.gas_limit
+                              }}</span>
+                              <span
+                                class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
+                                aria-label="Limit was set to 0, allowing unlimited gas use"
+                                v-if="!txMeta.gas_limit"
+                                >∞</span
+                              >
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                  <div class="error transaction-detail show" v-if="error">
+                    {{ error }}
+                  </div>
+                  <table
+                    class="transaction-detail"
+                    :class="!txMeta && !error && 'loading'"
+                  >
+                    <tbody>
+                      <tr class="hidden loading" v-if="!txMeta && !error">
+                        <td colspan="100%">Loading...</td>
                       </tr>
-                      <tr>
-                        <th>
-                          <div>Amount</div>
-                        </th>
-                        <td>
-                          <div
-                            v-html="
-                              $options.filters.formatToken(
-                                txMeta.amount,
-                                'aergo'
-                              )
-                            "
-                          ></div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>Token transfers</div>
-                        </th>
-                        <td>
-                          <div>{{ tokenTxTotalItems }}</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>NFT transfers</div>
-                        </th>
-                        <td>
-                          <div>{{ nftTxTotalItems }}</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>Fee</div>
-                        </th>
-                        <td>
-                          <div>
-                            <span
-                              class="tpm"
-                              v-html="
-                                $options.filters.formatToken(txMeta.fee_used)
-                              "
-                              >{{ txMeta.gas_limit }}</span
-                            >
-                            <span
-                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                              aria-label="Fee was paid by contract"
-                              v-if="txMeta.fee_delegation"
-                              >[delegated]</span
-                            >
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>Gas used</div>
-                        </th>
-                        <td>
-                          <div>
-                            {{ txMeta ? txMeta.gas_used : '...' }} of
-                            <span class="ml-5 tpm" v-if="txMeta.gas_limit">{{
-                              txMeta.gas_limit
-                            }}</span>
-                            <span
-                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                              aria-label="Limit was set to 0, allowing unlimited gas use"
-                              v-if="!txMeta.gas_limit"
-                              >∞</span
-                            >
-                          </div>
-                        </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-                <div class="error transaction-detail show" v-if="error">
-                  {{ error }}
-                </div>
-                <table
-                  class="transaction-detail"
-                  :class="!txMeta && !error && 'loading'"
-                >
-                  <tbody>
-                    <tr class="hidden loading" v-if="!txMeta && !error">
-                      <td colspan="100%">Loading...</td>
-                    </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
-                    <template v-if="txMeta">
-                      <tr>
-                        <th>
-                          <div>Nonce</div>
-                        </th>
-                        <td>
-                          <div>{{ txMeta.nonce }}</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>
-                          <div>Type</div>
-                        </th>
-                        <td>
-                          <div>{{ typeLabel }}</div>
-                        </td>
-                      </tr>
-                      <tr v-if="txMeta.payload">
-                        <th>
-                          <div>Payload</div>
-                        </th>
-                        <td>
-                          <div>{{ txMeta.payload.length }} bytes</div>
-                        </td>
-                      </tr>
-                      <tr v-if="!txMeta.block_id">
-                        <th>
-                          <div>Status</div>
-                        </th>
-                        <td>
-                          <div>Pending</div>
-                        </td>
-                      </tr>
-                      <tr v-if="txMeta.block_id">
-                        <th>
-                          <div>Status</div>
-                        </th>
-                        <td>
-                          <div>Confirmed</div>
-                        </td>
-                      </tr>
-                      <tr v-if="txMeta.block_id">
-                        <th>
-                          <div>Included in block</div>
-                        </th>
-                        <td>
-                          <div>
-                            <span class="txt-ellipsis">
+                      <!--                  <tr class="hidden not-found">-->
+                      <!--                    <td colspan="100%">No items found</td>-->
+                      <!--                  </tr>-->
+                      <template v-if="txMeta">
+                        <tr>
+                          <th>
+                            <div>Nonce</div>
+                          </th>
+                          <td>
+                            <div>{{ txMeta.nonce }}</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <div>Type</div>
+                          </th>
+                          <td>
+                            <div>{{ typeLabel }}</div>
+                          </td>
+                        </tr>
+                        <tr v-if="txMeta.payload">
+                          <th>
+                            <div>Payload</div>
+                          </th>
+                          <td>
+                            <div>{{ txMeta.payload.length }} bytes</div>
+                          </td>
+                        </tr>
+                        <tr v-if="!txMeta.block_id">
+                          <th>
+                            <div>Status</div>
+                          </th>
+                          <td>
+                            <div>Pending</div>
+                          </td>
+                        </tr>
+                        <tr v-if="txMeta.block_id">
+                          <th>
+                            <div>Status</div>
+                          </th>
+                          <td>
+                            <div>Confirmed</div>
+                          </td>
+                        </tr>
+                        <tr v-if="txMeta.block_id">
+                          <th>
+                            <div>Included in block</div>
+                          </th>
+                          <td>
+                            <div :style="{ textWrap: 'wrap' }">
                               <router-link :to="`/block/${txMeta.block_id}/`">{{
                                 txMeta.block_id
                               }}</router-link>
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr v-if="txMeta.ts">
-                        <th>
-                          <div>Time stamp</div>
-                        </th>
-                        <td>
-                          <div>
-                            {{
-                              moment(txMeta.ts).format(
-                                'dddd, MMMM Do YYYY, HH:mm:ss'
-                              )
-                            }}
-                            ({{ moment(txMeta.ts).fromNow() }})
-                          </div>
-                        </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr v-if="txMeta.ts">
+                          <th>
+                            <div>Time stamp</div>
+                          </th>
+                          <td>
+                            <div :style="{ textWrap: 'wrap' }">
+                              {{
+                                moment(txMeta.ts).format(
+                                  'dddd, MMMM Do YYYY, HH:mm:ss'
+                                )
+                              }}
+                              ({{ moment(txMeta.ts).fromNow() }})
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <div class="table-wrap">
@@ -404,6 +406,21 @@
                   </Tab>
 
                   <Tab
+                    title="JSON"
+                    :route="{ query: query({ receipt: 'json' }) }"
+                    :id="'json'"
+                  >
+                    <div class="content">
+                      <codemirror
+                        v-if="receiptJson !== 'Loading...'"
+                        v-model="receiptJson"
+                        :options="cmOption"
+                      />
+                      <div v-else>Loading...</div>
+                    </div>
+                  </Tab>
+
+                  <Tab
                     :title="`Events (${totalEvents})`"
                     :route="{ query: query({ receipt: 'events' }) }"
                     :id="'events'"
@@ -469,7 +486,7 @@ import 'codemirror/addon/fold/markdown-fold.js'
 import 'codemirror/addon/fold/xml-fold.js'
 
 const payloadTabs = ['formatted', 'json', 'hex']
-const receiptTabs = ['status', 'events']
+const receiptTabs = ['status', 'json', 'events']
 
 export default {
   data() {
@@ -517,6 +534,14 @@ export default {
       this.load()
       if (to.query.payload === 'json') {
         this.payloadJson = this.calculatePayloadJson()
+      }
+      if (to.query.receipt === 'json') {
+        this.getReceipt()
+      }
+    },
+    selectedReceiptTab() {
+      if (this.selectedReceiptTab === 1) {
+        this.getReceipt()
       }
     },
     realToken() {
@@ -577,7 +602,11 @@ export default {
       return payloadBuffer.toString('hex')
     },
     receiptJson() {
-      return JSON.stringify(this.txReceipt, null, 2)
+      if (!this.txReceipt) {
+        return 'Loading...'
+      } else {
+        return JSON.stringify(this.txReceipt, null, 2)
+      }
     },
     typeLabel() {
       return this.txMeta && TxTypes[this.txMeta.type]
@@ -626,6 +655,16 @@ export default {
 
       await this.$nextTick()
     },
+    async getReceipt() {
+      let hash = this.$route.params.hash
+      this.txReceipt = await this.$store.dispatch(
+        'blockchain/getTransactionReceipt',
+        {
+          hash,
+        }
+      )
+    },
+
     async reloadAllTable(token) {
       if (this.$refs.transactionTokenTable) {
         await this.$refs.transactionTokenTable.reload(token)
@@ -870,6 +909,9 @@ export default {
         font-size: 15px;
       }
 
+      div {
+        white-space: initial;
+      }
       img.arrow {
         margin: 0 6px;
       }
@@ -887,6 +929,10 @@ export default {
           display: flex;
           align-items: center;
           width: 100%;
+        }
+        @media screen and (max-width: 690px) {
+          display: block;
+          text-align: center;
         }
 
         .address {
@@ -917,6 +963,12 @@ export default {
           @media screen and (max-width: 1000px) {
             transform: none;
             margin: 0 5px;
+          }
+
+          @media screen and (max-width: 690px) {
+            display: block;
+            margin: 6px auto;
+            transform: rotate(90deg);
           }
         }
 
