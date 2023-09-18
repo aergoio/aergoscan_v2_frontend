@@ -63,7 +63,7 @@
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
         </div>
       </td>
-      <td >
+      <td>
         <div v-if="row.from !== row.to">
           <template v-if="addressMatches(row.to)">
             <span class="boxicon blue">FROM</span>
@@ -199,15 +199,11 @@ export default {
         'payload',
         'call',
         'transfer',
-        'governance',
-        'system',
         'staking',
         'voting',
-        'name',
         'namecreate',
         'nameupdate',
         'enterprise',
-        'conf',
         'cluster',
         'deploy',
         'redeploy',
