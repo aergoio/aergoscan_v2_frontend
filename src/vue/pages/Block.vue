@@ -381,7 +381,7 @@ table.block-detail {
   line-height: 20px;
 
   th {
-    width: 126px;
+    width: 150px;
     height: auto;
     font-size: 14px;
     color: #a391aa;

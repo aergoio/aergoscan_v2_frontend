@@ -354,7 +354,7 @@ export default {
   margin: 0 -7.5px;
   margin-bottom: 15px;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1050px) {
     flex-wrap: wrap;
   }
 
@@ -367,7 +367,7 @@ export default {
     padding: 10px 19px 10px 20px;
     margin: 0 7.5px;
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1050px) {
       width: 100%;
 
       &:first-child {
@@ -384,7 +384,7 @@ table.token-detail {
   line-height: 20px;
 
   th {
-    width: 155px;
+    width: 180px;
     height: auto;
     font-size: 14px;
     color: #a391aa;
@@ -392,7 +392,7 @@ table.token-detail {
     vertical-align: top;
 
     @media screen and (max-width: 900px) {
-      width: 125px;
+      /* width: 125px; */
       padding-right: 20px;
     }
 

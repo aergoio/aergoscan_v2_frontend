@@ -46,7 +46,8 @@
         <div>
           <router-link
             :to="`/transaction/${row.tx_id}/`"
-            class="address txt-ellipsis"
+            class="address txt-ellipsis tooltipped tooltipped-se"
+            :aria-label="row.tx_id"
           >
             {{ row.tx_id }}
           </router-link>
@@ -54,7 +55,7 @@
       </td>
       <td>
         <div
-          class="tooltipped tooltipped-se tooltipped-align-left-2"
+          class="tooltipped tooltipped-s"
           :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
         >
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
@@ -79,7 +80,11 @@
 
           <template v-if="!['BURN'].includes(`${row.to}`.toUpperCase())">
             <Identicon :text="row.to" size="18" class="mini-identicon" />
-            <router-link :to="`/account/${row.to}/`" class="address">
+            <router-link
+              :to="`/account/${row.to}/`"
+              class="address tooltipped tooltipped-s"
+              :aria-label="row.to"
+            >
               {{ $options.filters.formatEllipsisText(row.to, 30) }}
             </router-link>
           </template>
@@ -296,7 +301,11 @@ export default {
 <style lang="scss" scoped>
 table.token-transfers-table {
   th {
+    &:nth-child(1) {
+      min-width: 70px;
+    }
     &:nth-child(3) {
+      min-width: 90px;
       img {
         margin: 0 7px;
       }

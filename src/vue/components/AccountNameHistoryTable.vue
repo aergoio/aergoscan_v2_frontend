@@ -1,5 +1,9 @@
 <template>
-  <data-table :trans-data="data || []" :is-loading="isLoading" :css="dataTableCss">
+  <data-table
+    :trans-data="data || []"
+    :is-loading="isLoading"
+    :css="dataTableCss"
+  >
     <template slot="error" v-if="error">
       <div class="error nft-inventory show">
         {{ error }}
@@ -10,17 +14,27 @@
         <div>{{ header.text }}</div>
       </th>
     </template>
-    <template slot="list" slot-scope="{row}">
+    <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <router-link :to="`/block/${row.blockno}/`" class="address txt-ellipsis">{{ row.blockno }}</router-link>
+          <router-link
+            :to="`/block/${row.blockno}/`"
+            class="address txt-ellipsis"
+            >{{ row.blockno }}</router-link
+          >
         </div>
       </td>
       <td>
         <div>
-          <Identicon :text="row.address" size="18" class="mini-identicon"/>
-          <router-link :to="`/account/${row.address}/`" class="address txt-ellipsis">{{ row.address }}</router-link>
-          <span class="boxicon blue" v-if="row.address === address">Current</span>
+          <Identicon :text="row.address" size="18" class="mini-identicon" />
+          <router-link
+            :to="`/account/${row.address}/`"
+            class="address txt-ellipsis"
+            >{{ row.address }}</router-link
+          >
+          <span class="boxicon blue" v-if="row.address === address"
+            >Current</span
+          >
         </div>
       </td>
       <td>
@@ -34,8 +48,7 @@
   </data-table>
 </template>
 <script>
-
-import Identicon from '@/src/vue/components/Identicon';
+import Identicon from '@/src/vue/components/Identicon'
 
 export default {
   name: 'AccountNameHistoryTable',
@@ -47,8 +60,8 @@ export default {
     },
     nameHistory: {
       type: Array,
-      default:[]
-    }
+      default: [],
+    },
   },
   data() {
     return {
@@ -57,31 +70,27 @@ export default {
       isLoading: false,
     }
   },
-  created() {
-  },
-  beforeDestroy() {
-  },
+  created() {},
+  beforeDestroy() {},
   computed: {
     headers() {
       return [
-        {text: 'SINCE BLOCK', value: 'sinceblock'},
-        {text: 'DESTINATION', value: 'destination'},
-        {text: 'TRANSACTION', value: 'transaction'},
+        { text: 'SINCE BLOCK', value: 'sinceblock' },
+        { text: 'DESTINATION', value: 'destination' },
+        { text: 'TRANSACTION', value: 'transaction' },
       ]
     },
     dataTableCss() {
       return {
         wrapper: 'tab-content nft-inventory' + (this.active ? ' active' : ''),
-        table: "nft-inventory-table" + (this.isLoading ? ' is-loading' : ''),
-      };
+        table: 'nft-inventory-table' + (this.isLoading ? ' is-loading' : ''),
+      }
     },
   },
-  mounted() {
-  },
-  methods: {
-  },
-  components: {Identicon}
-};
+  mounted() {},
+  methods: {},
+  components: { Identicon },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -91,7 +100,7 @@ table.nft-inventory-table {
       &:last-child {
         text-align: right;
 
-        &>div {
+        & > div {
           justify-content: end;
         }
       }
@@ -107,7 +116,7 @@ table.nft-inventory-table {
       &:last-child {
         text-align: right;
 
-        &>div {
+        & > div {
           justify-content: end;
         }
       }

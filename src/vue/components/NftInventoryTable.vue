@@ -406,7 +406,7 @@ table.inventory-table {
       @media screen and (max-width: 900px) {
         order: 2;
         margin-top: 12px;
-        padding-right: 0;
+        /* padding-right: 0; */
       }
     }
   }
