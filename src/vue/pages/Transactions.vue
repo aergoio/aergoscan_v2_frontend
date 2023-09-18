@@ -11,6 +11,7 @@
               :trans-data="data || []"
               :is-loading="isLoading"
               :css="dataTableCss"
+              :style="{ minHeight: '510px' }"
             >
               <template slot="error" v-if="error">
                 <div class="error transactions show">
@@ -63,14 +64,7 @@
                     </div>
                   </div>
                 </th>
-                <th v-else-if="header.value === 'arrow'">
-                  <!-- <div>
-                    <img
-                      src="~@assets/img/ic-arrow-pink@3x.png"
-                      class="arrow"
-                    />
-                  </div> -->
-                </th>
+                <th v-else-if="header.value === 'arrow'"></th>
                 <th v-else>
                   <div>{{ header.text }}</div>
                 </th>
@@ -223,7 +217,7 @@ export default {
         moveLastPage: 'nnext',
       },
       accountLinkCss: {
-        wrapper: 'tooltipped tooltipped-se tooltipped-align-left-2',
+        wrapper: 'tooltipped tooltipped-s',
         address: 'address txt-ellipsis',
         icon: 'mini-identicon',
       },

@@ -13,244 +13,244 @@
               </div>
             </div>
             <div class="detail-box transaction" v-if="txMeta">
-              <div class="h-scroll">
-                <div class="table-wrap">
-                  <div class="error show" v-if="error">
-                    {{ error }}
-                  </div>
-                  <table
-                    class="transaction-detail"
-                    :class="!txMeta && !error && 'loading'"
-                  >
-                    <tbody>
-                      <tr class="hidden loading" v-if="!txMeta && !error">
-                        <td colspan="100%">Loading...</td>
-                      </tr>
-                      <!--                  <tr class="hidden not-found">-->
-                      <!--                    <td colspan="100%">No items found</td>-->
-                      <!--                  </tr>-->
-                      <template v-if="txMeta">
-                        <tr>
-                          <th>
-                            <div>
-                              From
+              <!-- <div class="h-scroll"> -->
+              <div class="table-wrap">
+                <div class="error show" v-if="error">
+                  {{ error }}
+                </div>
+                <table
+                  class="transaction-detail"
+                  :class="!txMeta && !error && 'loading'"
+                >
+                  <tbody>
+                    <tr class="hidden loading" v-if="!txMeta && !error">
+                      <td colspan="100%">Loading...</td>
+                    </tr>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txMeta">
+                      <tr>
+                        <th>
+                          <div>
+                            From
+                            <img
+                              src="~@assets/img/ic-arrow-black@3x.png"
+                              class="arrow"
+                            />
+                            To
+                          </div>
+                        </th>
+                        <td>
+                          <div>
+                            <div class="from-to">
+                              <router-link
+                                class="address tooltipped tooltipped-s"
+                                :to="`/account/${txMeta.from}/`"
+                                :aria-label="txMeta.from"
+                              >
+                                {{
+                                  $options.filters.formatEllipsisText(
+                                    txMeta.from.toString(),
+                                    30
+                                  )
+                                }}
+                              </router-link>
                               <img
                                 src="~@assets/img/ic-arrow-black@3x.png"
                                 class="arrow"
                               />
-                              To
-                            </div>
-                          </th>
-                          <td>
-                            <div>
-                              <div class="from-to">
-                                <router-link
-                                  class="address"
-                                  :to="`/account/${txMeta.from}/`"
-                                >
-                                  {{
-                                    $options.filters.formatEllipsisText(
-                                      txMeta.from.toString(),
-                                      30
-                                    )
-                                  }}
-                                </router-link>
-                                <img
-                                  src="~@assets/img/ic-arrow-black@3x.png"
-                                  class="arrow"
-                                />
-                                <router-link
-                                  class="address"
-                                  v-if="
-                                    txMeta.to && txMeta.to.toString().length
-                                  "
-                                  :to="`/account/${txMeta.to}/`"
-                                >
-                                  {{
-                                    $options.filters.formatEllipsisText(
-                                      txMeta.to.toString(),
-                                      28
-                                    )
-                                  }}
-                                </router-link>
-                                <a
-                                  href="javascript:;"
-                                  class="address"
-                                  v-if="
-                                    !txMeta.to || !txMeta.to.toString().length
-                                  "
-                                  >{{
-                                    txMeta.type === 7
-                                      ? 'MULTICALL'
-                                      : 'Contract Creation'
-                                  }}</a
-                                >
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>Amount</div>
-                          </th>
-                          <td>
-                            <div
-                              v-html="
-                                $options.filters.formatToken(
-                                  txMeta.amount,
-                                  'aergo'
-                                )
-                              "
-                            ></div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>Token transfers</div>
-                          </th>
-                          <td>
-                            <div>{{ tokenTxTotalItems }}</div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>NFT transfers</div>
-                          </th>
-                          <td>
-                            <div>{{ nftTxTotalItems }}</div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>Fee</div>
-                          </th>
-                          <td>
-                            <div>
-                              <span
-                                class="tpm"
-                                v-html="
-                                  $options.filters.formatToken(txMeta.fee_used)
+                              <router-link
+                                class="address tooltipped tooltipped-s"
+                                :aria-label="txMeta.to"
+                                v-if="txMeta.to && txMeta.to.toString().length"
+                                :to="`/account/${txMeta.to}/`"
+                              >
+                                {{
+                                  $options.filters.formatEllipsisText(
+                                    txMeta.to.toString(),
+                                    28
+                                  )
+                                }}
+                              </router-link>
+                              <a
+                                href="javascript:;"
+                                class="address"
+                                v-if="
+                                  !txMeta.to || !txMeta.to.toString().length
                                 "
-                                >{{ txMeta.gas_limit }}</span
-                              >
-                              <span
-                                class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                                aria-label="Fee was paid by contract"
-                                v-if="txMeta.fee_delegation"
-                                >[delegated]</span
+                                >{{
+                                  txMeta.type === 7
+                                    ? 'MULTICALL'
+                                    : 'Contract Creation'
+                                }}</a
                               >
                             </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>Gas used</div>
-                          </th>
-                          <td>
-                            <div>
-                              {{ txMeta ? txMeta.gas_used : '...' }} of
-                              <span class="ml-5 tpm" v-if="txMeta.gas_limit">{{
-                                txMeta.gas_limit
-                              }}</span>
-                              <span
-                                class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2"
-                                aria-label="Limit was set to 0, allowing unlimited gas use"
-                                v-if="!txMeta.gas_limit"
-                                >∞</span
-                              >
-                            </div>
-                          </td>
-                        </tr>
-                      </template>
-                    </tbody>
-                  </table>
-                  <div class="error transaction-detail show" v-if="error">
-                    {{ error }}
-                  </div>
-                  <table
-                    class="transaction-detail"
-                    :class="!txMeta && !error && 'loading'"
-                  >
-                    <tbody>
-                      <tr class="hidden loading" v-if="!txMeta && !error">
-                        <td colspan="100%">Loading...</td>
+                          </div>
+                        </td>
                       </tr>
-                      <!--                  <tr class="hidden not-found">-->
-                      <!--                    <td colspan="100%">No items found</td>-->
-                      <!--                  </tr>-->
-                      <template v-if="txMeta">
-                        <tr>
-                          <th>
-                            <div>Nonce</div>
-                          </th>
-                          <td>
-                            <div>{{ txMeta.nonce }}</div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <div>Type</div>
-                          </th>
-                          <td>
-                            <div>{{ typeLabel }}</div>
-                          </td>
-                        </tr>
-                        <tr v-if="txMeta.payload">
-                          <th>
-                            <div>Payload</div>
-                          </th>
-                          <td>
-                            <div>{{ txMeta.payload.length }} bytes</div>
-                          </td>
-                        </tr>
-                        <tr v-if="!txMeta.block_id">
-                          <th>
-                            <div>Status</div>
-                          </th>
-                          <td>
-                            <div>Pending</div>
-                          </td>
-                        </tr>
-                        <tr v-if="txMeta.block_id">
-                          <th>
-                            <div>Status</div>
-                          </th>
-                          <td>
-                            <div>Confirmed</div>
-                          </td>
-                        </tr>
-                        <tr v-if="txMeta.block_id">
-                          <th>
-                            <div>Included in block</div>
-                          </th>
-                          <td>
-                            <div :style="{ textWrap: 'wrap' }">
-                              <router-link :to="`/block/${txMeta.block_id}/`">{{
-                                txMeta.block_id
-                              }}</router-link>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr v-if="txMeta.ts">
-                          <th>
-                            <div>Time stamp</div>
-                          </th>
-                          <td>
-                            <div :style="{ textWrap: 'wrap' }">
-                              {{
-                                moment(txMeta.ts).format(
-                                  'dddd, MMMM Do YYYY, HH:mm:ss'
-                                )
-                              }}
-                              ({{ moment(txMeta.ts).fromNow() }})
-                            </div>
-                          </td>
-                        </tr>
-                      </template>
-                    </tbody>
-                  </table>
+                      <tr>
+                        <th>
+                          <div>Amount</div>
+                        </th>
+                        <td>
+                          <div
+                            v-html="
+                              $options.filters.formatToken(
+                                txMeta.amount,
+                                'aergo'
+                              )
+                            "
+                          ></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Token transfers</div>
+                        </th>
+                        <td>
+                          <div>{{ tokenTxTotalItems }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>NFT transfers</div>
+                        </th>
+                        <td>
+                          <div>{{ nftTxTotalItems }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Fee</div>
+                        </th>
+                        <td>
+                          <div>
+                            <span
+                              class="tpm"
+                              v-html="
+                                $options.filters.formatToken(txMeta.fee_used)
+                              "
+                              >{{ txMeta.gas_limit }}</span
+                            >
+                            <span
+                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2 help"
+                              aria-label="Fee was paid by contract"
+                              v-if="txMeta.fee_delegation"
+                              >[delegated]</span
+                            >
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Gas used</div>
+                        </th>
+                        <td>
+                          <div>
+                            {{ txMeta ? txMeta.gas_used : '...' }} of
+                            <span class="ml-5 tpm" v-if="txMeta.gas_limit">{{
+                              txMeta.gas_limit
+                            }}</span>
+                            <span
+                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2 help"
+                              aria-label="Limit was set to 0, allowing unlimited gas use"
+                              v-if="!txMeta.gas_limit"
+                              >∞</span
+                            >
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+                <div class="error transaction-detail show" v-if="error">
+                  {{ error }}
                 </div>
+                <table
+                  class="transaction-detail"
+                  :class="!txMeta && !error && 'loading'"
+                >
+                  <tbody>
+                    <tr class="hidden loading" v-if="!txMeta && !error">
+                      <td colspan="100%">Loading...</td>
+                    </tr>
+                    <!--                  <tr class="hidden not-found">-->
+                    <!--                    <td colspan="100%">No items found</td>-->
+                    <!--                  </tr>-->
+                    <template v-if="txMeta">
+                      <tr>
+                        <th>
+                          <div>Nonce</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.nonce }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          <div>Type</div>
+                        </th>
+                        <td>
+                          <div>{{ typeLabel }}</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txMeta.payload">
+                        <th>
+                          <div>Payload</div>
+                        </th>
+                        <td>
+                          <div>{{ txMeta.payload.length }} bytes</div>
+                        </td>
+                      </tr>
+                      <tr v-if="!txMeta.block_id">
+                        <th>
+                          <div>Status</div>
+                        </th>
+                        <td>
+                          <div>Pending</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txMeta.block_id">
+                        <th>
+                          <div>Status</div>
+                        </th>
+                        <td>
+                          <div>Confirmed</div>
+                        </td>
+                      </tr>
+                      <tr v-if="txMeta.block_id">
+                        <th>
+                          <div>Included in block</div>
+                        </th>
+                        <td>
+                          <div :style="{ textWrap: 'wrap' }">
+                            <router-link :to="`/block/${txMeta.block_id}/`">{{
+                              txMeta.block_id
+                            }}</router-link>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr v-if="txMeta.ts">
+                        <th>
+                          <div>Time stamp</div>
+                        </th>
+                        <td>
+                          <div :style="{ textWrap: 'wrap' }">
+                            {{
+                              moment(txMeta.ts).format(
+                                'dddd, MMMM Do YYYY, HH:mm:ss'
+                              )
+                            }}
+                            ({{ moment(txMeta.ts).fromNow() }})
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
               </div>
+              <!-- </div> -->
             </div>
             <div class="table-wrap">
               <div class="table-tab">
@@ -752,7 +752,7 @@ export default {
           padding: 5px 10.5px;
         }
 
-        .tooltipped {
+        .help {
           border-bottom: 1px dashed #aaa;
           cursor: help;
         }
@@ -832,9 +832,9 @@ export default {
       align-items: center;
 
       .item-inner {
-        text-overflow: ellipsis;
+        /* text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
+        overflow: hidden; */
 
         padding: 10px 15px;
         border-radius: 5px;
@@ -881,7 +881,7 @@ export default {
     }
 
     th {
-      width: 126px;
+      width: 150px;
       height: auto;
       font-size: 14px;
       color: #a391aa;
@@ -889,7 +889,6 @@ export default {
       vertical-align: top;
 
       @media screen and (max-width: 480px) {
-        width: 110px;
         font-size: 15px;
       }
 
@@ -972,11 +971,11 @@ export default {
           }
         }
 
-        .txt-ellipsis {
+        /* .txt-ellipsis {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
-        }
+        } */
       }
 
       a {

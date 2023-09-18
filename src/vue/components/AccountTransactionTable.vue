@@ -3,6 +3,7 @@
     :trans-data="data || []"
     :is-loading="isLoading"
     :css="dataTableCss"
+    :style="{ minHeight: '400px' }"
   >
     <template slot="error" v-if="error">
       <div class="error transactions show">
@@ -48,8 +49,9 @@
             <img src="~@assets/img/ic-alert-circle-fill.svg" />
           </span>
           <router-link
+            class="address txt-ellipsis tooltipped tooltipped-se"
+            :aria-label="row.hash"
             :to="`/transaction/${row.hash}/`"
-            class="address txt-ellipsis"
           >
             {{ row.hash }}
           </router-link>
@@ -57,7 +59,7 @@
       </td>
       <td>
         <div
-          class="tooltipped tooltipped-se tooltipped-align-left-2"
+          class="tooltipped tooltipped-s"
           :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
         >
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
@@ -68,7 +70,11 @@
           <template v-if="addressMatches(row.to)">
             <span class="boxicon blue">FROM</span>
             <Identicon :text="row.from" size="18" class="mini-identicon" />
-            <router-link :to="`/account/${row.from}/`" class="address">
+            <router-link
+              :to="`/account/${row.from}/`"
+              class="address tooltipped tooltipped-s"
+              :aria-label="row.from"
+            >
               {{ $options.filters.formatEllipsisText(row.from, 30) }}
             </router-link>
           </template>
@@ -76,7 +82,11 @@
             <span class="boxicon red">TO</span>
             <template v-if="row.to && row.to.toString().length">
               <Identicon :text="row.to" size="18" class="mini-identicon" />
-              <router-link :to="`/account/${row.to}/`" class="address">
+              <router-link
+                :to="`/account/${row.to}/`"
+                class="address tooltipped tooltipped-s"
+                :aria-label="row.to"
+              >
                 {{ $options.filters.formatEllipsisText(row.to, 30) }}
               </router-link>
             </template>
@@ -318,6 +328,7 @@ export default {
 table.transactions-table {
   th {
     &:nth-child(3) {
+      min-width: 90px;
       img {
         margin: 0 7px;
       }

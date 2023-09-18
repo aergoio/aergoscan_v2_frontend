@@ -158,7 +158,7 @@ export default {
         moveLastPage: 'nnext',
       },
       accountLinkCss: {
-        wrapper: 'tooltipped tooltipped-se tooltipped-align-left-2',
+        wrapper: 'tooltipped tooltipped-s',
         address: 'address txt-ellipsis',
         icon: 'mini-identicon',
       },

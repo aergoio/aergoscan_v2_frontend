@@ -122,7 +122,7 @@
             </span>
             <span v-html="receipt?.result" class="result_content" />
             <span v-if="!receipt?.result" class="result_content empty"
-              >Empty Result</span
+              >(Empty Result)</span
             >
           </div>
 
