@@ -433,10 +433,9 @@ table.block-detail {
       word-break: break-all;
 
       &:hover {
-        /*font-weight: bold;*/
+        font-weight: 500;
         text-shadow: 0px 0px 0px #3c3b3e;
         color: #3c3b3e;
-        text-decoration: underline;
       }
     }
 

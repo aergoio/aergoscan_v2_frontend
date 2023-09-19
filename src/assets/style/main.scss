@@ -134,7 +134,7 @@ img {
       font-weight: bold;
       line-height: 2.4;
       border-radius: 2px;
-      background-color: #ff088f;
+      background-color: #7c6b81;
     }
   }
 }
@@ -812,7 +812,9 @@ img {
       display: none;
 
       &.active {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
     }
   }

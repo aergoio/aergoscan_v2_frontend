@@ -80,9 +80,11 @@
         Query
       </span>
       <span
-        :class="getActiveAccount?.address ? `btn-call` : `btn-call disabled`"
+        class="btn-call"
         v-if="!isLoading && !func.view"
-        v-on:click="callToConnect"
+        @click="
+          getActiveAccount?.address ? callToConnect() : connectAfterCall()
+        "
       >
         Call
       </span>
@@ -156,6 +158,7 @@ export default {
       isLoading: false,
       isClick: false,
       receipt: {},
+      activeAccount: {},
     }
   },
 
@@ -267,6 +270,13 @@ export default {
         this.result = result.hash
         this.$emit('onUpdateResultHash', result.hash)
         this.isLoading = false
+      }
+    },
+
+    async connectAfterCall() {
+      await this.$store.dispatch('blockchain/refreshActiveAccount')
+      if (this.getActiveAccount?.address) {
+        await this.callToConnect()
       }
     },
     aergoConnectCall(action, responseType, d) {

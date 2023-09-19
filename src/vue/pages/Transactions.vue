@@ -11,7 +11,9 @@
               :trans-data="data || []"
               :is-loading="isLoading"
               :css="dataTableCss"
-              :style="{ minHeight: '510px' }"
+              :style="{
+                minHeight: '510px',
+              }"
             >
               <template slot="error" v-if="error">
                 <div class="error transactions show">

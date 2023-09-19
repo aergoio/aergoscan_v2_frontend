@@ -3,7 +3,9 @@
     :trans-data="data || []"
     :is-loading="isLoading"
     :css="dataTableCss"
-    :style="{ minHeight: '400px' }"
+    :style="{
+      minHeight: '400px',
+    }"
   >
     <template slot="error" v-if="error">
       <div class="error transactions show">
@@ -44,12 +46,15 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td class="txt-ellipsis">
-        <div>
+        <div
+          class="tooltipped tooltipped-se tooltipped-align-left-2"
+          :aria-label="row.hash"
+        >
           <span class="identicon" v-if="row.status === 'ERROR'">
             <img src="~@assets/img/ic-alert-circle-fill.svg" />
           </span>
           <router-link
-            class="address txt-ellipsis tooltipped tooltipped-se"
+            class="address txt-ellipsis"
             :aria-label="row.hash"
             :to="`/transaction/${row.hash}/`"
           >
@@ -59,7 +64,7 @@
       </td>
       <td>
         <div
-          class="tooltipped tooltipped-s"
+          class="tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
         >
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}

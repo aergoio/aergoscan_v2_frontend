@@ -38,9 +38,6 @@
                   blockchain. User's own discretion is advised in the process of
                   making any judgement.
                 </div>
-                <div class="desc totalItem">
-                  <span class="sub">{{ `Total: ${totalItems}` }}</span>
-                </div>
               </template>
               <template slot="error" v-if="error">
                 <div class="error transactions show">
@@ -78,7 +75,7 @@
                   </div>
                 </td>
                 <td>
-                  <div>
+                  <div :style="{ whiteSpace: 'nowrap' }">
                     <account-link
                       :css="accountLinkCss"
                       :to-link="`/account/${row.hash}/`"

@@ -223,9 +223,14 @@ const actions = {
           const detail = event.detail
           if (state?.chainInfo?.chainid?.magic !== detail?.account?.chainId) {
             if (detail.error) {
+              commit('setActiveAccount', detail)
+              return resolve(detail)
+            } else {
+              delete detail.account
+              detail.error = 'Network does not match with Aergo Connect 3.0'
+              commit('setActiveAccount', detail)
               return resolve(detail)
             }
-            return resolve(false)
           } else {
             commit('setActiveAccount', detail.account)
             resolve(detail.account)
