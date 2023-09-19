@@ -19,13 +19,18 @@
                 <span class="sub-4" v-if="txMeta.symbol">{{
                   `(${txMeta.symbol})`
                 }}</span>
-                <img
-                  class="verifed"
-                  v-if="txMeta.verified_status === 'verified'"
-                  src="~@assets/img/ic-verified.svg"
-                  @click="routeToVerifiedDetail"
-                />
-                <img />
+                <span
+                  class="tooltipped tooltipped-se tooltipped-align-left-2 tooltipped-no-delay"
+                  aria-label="Verified"
+                  :style="{ width: '50px' }"
+                >
+                  <img
+                    class="verifed"
+                    v-if="txMeta.verified_status === 'verified'"
+                    src="~@assets/img/ic-verified.svg"
+                    @click="routeToVerifiedDetail"
+                  />
+                </span>
               </div>
             </div>
             <div class="detail-box">
@@ -437,10 +442,9 @@ table.token-detail {
       word-break: break-all;
 
       &:hover {
-        /*font-weight: bold;*/
+        font-weight: 500;
         text-shadow: 0px 0px 0px #3c3b3e;
         color: #3c3b3e;
-        text-decoration: underline;
       }
     }
 
@@ -448,10 +452,9 @@ table.token-detail {
       word-break: break-all;
 
       &:hover {
-        /*font-weight: bold;*/
+        font-weight: 500;
         text-shadow: 0px 0px 0px #3c3b3e;
         color: #3c3b3e;
-        text-decoration: underline;
       }
     }
 
