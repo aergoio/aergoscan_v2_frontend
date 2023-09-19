@@ -641,11 +641,10 @@ export default {
         }
       }
       &:hover {
-        color: #066a9c;
+        color: #279ecc;
       }
       &:hover .contract_typemark:not(:hover) {
         color: #fff;
-        font-weight: bold;
       }
     }
 
