@@ -433,7 +433,7 @@ export default {
           }
 
           a:hover {
-            text-decoration: underline;
+            font-weight: 600;
           }
         }
       }
