@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!isConnect" class="connect_button" @click="connectAccount">
+  <div
+    v-if="!getActiveAccount?.address"
+    class="connect_button"
+    @click="connectAccount"
+  >
     <div class="status no_connect" />
     <div :style="{ display: 'flex', flexDirection: 'column' }">
       <span class="large_font">CONNECT</span>
@@ -10,7 +14,7 @@
     <div class="status connected" />
     <div :style="{ display: 'flex', flexDirection: 'column' }">
       <span class="large_font">CONNECTED</span>
-      <span class="small_font">{{ activeAccount?.address }}</span>
+      <span class="small_font">{{ getActiveAccount?.address }}</span>
     </div>
   </div>
 </template>
@@ -18,42 +22,30 @@
 <script>
 export default {
   props: [],
-  computed: {},
-  data() {
-    return {
-      activeAccount: {},
-      isConnect: false,
-    }
-  },
-  watch: {
-    activeAccount() {
-      if (this.activeAccount?.error) {
-        this.$emit('message', this.activeAccount?.error)
-        this.isConnect = false
-      } else if (this.activeAccount?.address) {
-        this.$emit('message', false)
-        this.isConnect = true
-      } else {
-        this.$emit('message', 'Network does not match with Aergo Connect 3.0')
-      }
+  computed: {
+    getActiveAccount() {
+      return this.$store.getters[`blockchain/getActiveAccount`]
     },
-    isConnect() {
-      if (!this.isConnect) {
+  },
+  data() {
+    return {}
+  },
+
+  watch: {
+    getActiveAccount() {
+      if (this.getActiveAccount?.error) {
+        this.$emit('message', this.getActiveAccount?.error)
+      } else {
         this.$emit('message', false)
       }
     },
   },
   methods: {
     async connectAccount() {
-      this.activeAccount = await this.$store.dispatch(
-        'blockchain/refreshActiveAccount'
-      )
+      await this.$store.dispatch('blockchain/refreshActiveAccount')
     },
     async disconnectAccount() {
-      this.activeAccount = await this.$store.dispatch(
-        'blockchain/disconnectAccount'
-      )
-      this.isConnect = false
+      await this.$store.dispatch('blockchain/disconnectAccount')
     },
   },
 }
