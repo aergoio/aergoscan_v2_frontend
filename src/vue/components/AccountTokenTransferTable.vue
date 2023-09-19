@@ -43,11 +43,13 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td class="txt-ellipsis">
-        <div>
+        <div
+          class="tooltipped tooltipped-se tooltipped-align-left-2"
+          :aria-label="row.tx_id"
+        >
           <router-link
             :to="`/transaction/${row.tx_id}/`"
-            class="address txt-ellipsis tooltipped tooltipped-se"
-            :aria-label="row.tx_id"
+            class="address txt-ellipsis"
           >
             {{ row.tx_id }}
           </router-link>
@@ -55,7 +57,7 @@
       </td>
       <td>
         <div
-          class="tooltipped tooltipped-s"
+          class="tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
         >
           {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}

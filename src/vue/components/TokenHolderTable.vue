@@ -111,7 +111,7 @@ export default {
       },
       accountLinkCss: {
         // wrapper: 'tooltipped tooltipped-se tooltipped-align-left-2',
-        address: 'block',
+        address: 'address',
         icon: 'mini-identicon',
       },
       sortedField: this.sortField,

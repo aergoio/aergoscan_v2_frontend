@@ -53,7 +53,7 @@
               </td>
               <td>
                 <div
-                  class="tooltipped tooltipped-se tooltipped-align-left-2"
+                  class="tooltipped tooltipped-s"
                   :aria-label="
                     moment(tx.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')
                   "
@@ -66,10 +66,7 @@
                 </div>
               </td>
               <td>
-                <div
-                  class="tooltipped tooltipped-sw tooltipped-align-right-2"
-                  :aria-label="tx.from"
-                >
+                <div class="tooltipped tooltipped-s" :aria-label="tx.from">
                   <router-link class="address" :to="`/account/${tx.from}`">
                     {{ resizeFormater(tx.from) }}
                   </router-link>

@@ -51,7 +51,8 @@
         <account-link
           :css="accountLinkCss"
           :to-link="`/account/${row.from}/`"
-          :address="row.from.toString()"
+          :aria-label="row.from"
+          :name="$options.filters.formatEllipsisText(row.from, 30)"
         />
       </td>
       <td>
@@ -63,7 +64,8 @@
         <account-link
           :css="accountLinkCss"
           :to-link="`/account/${row.to}/`"
-          :address="row.to.toString()"
+          :aria-label="row.to"
+          :name="$options.filters.formatEllipsisText(row.to, 30)"
         />
       </td>
       <td>

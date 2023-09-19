@@ -32,14 +32,24 @@
         </td>
         <td>
           <div v-if="`${row.contract}` !== `${address}`">
-            <router-link :to="`/account/${row.contract}/`" class="block">{{
-              `@${$options.filters.formatEllipsisText(row.contract, 14)}`
-            }}</router-link>
+            <router-link
+              :to="`/account/${row.contract}/`"
+              class="block tooltipped tooltipped-s"
+              :aria-label="row.contract"
+              >{{
+                `@${$options.filters.formatEllipsisText(row.contract, 14)}`
+              }}</router-link
+            >
           </div>
           <div v-else>
-            <router-link :to="`/account/${row.contract}/`" class="block">{{
-              `${$options.filters.formatEllipsisText(row.contract, 15)}`
-            }}</router-link>
+            <router-link
+              :to="`/account/${row.contract}/`"
+              class="block tooltipped tooltipped-s"
+              :aria-label="row.contract"
+              >{{
+                `${$options.filters.formatEllipsisText(row.contract, 15)}`
+              }}</router-link
+            >
           </div>
         </td>
         <td width="100%">
