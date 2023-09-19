@@ -11,6 +11,7 @@
               <div class="address" v-if="txMeta">
                 {{ $route.params.hash }}
               </div>
+              <copy-link-button :message="$route.params.hash" />
             </div>
             <div class="detail-box transaction" v-if="txMeta">
               <!-- <div class="h-scroll"> -->
@@ -134,7 +135,7 @@
                               >{{ txMeta.gas_limit }}</span
                             >
                             <span
-                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2 help"
+                              class="ml-5 tpm tooltipped tooltipped-n help"
                               aria-label="Fee was paid by contract"
                               v-if="txMeta.fee_delegation"
                               >[delegated]</span
@@ -153,7 +154,7 @@
                               txMeta.gas_limit
                             }}</span>
                             <span
-                              class="ml-5 tpm tooltipped tooltipped-se tooltipped-align-left-2 help"
+                              class="ml-5 tpm tooltipped tooltipped-n help"
                               aria-label="Limit was set to 0, allowing unlimited gas use"
                               v-if="!txMeta.gas_limit"
                               >∞</span
@@ -224,7 +225,10 @@
                           <div>Included in block</div>
                         </th>
                         <td>
-                          <div :style="{ textWrap: 'wrap' }">
+                          <div
+                            class="includedBlock"
+                            :style="{ textWrap: 'wrap' }"
+                          >
                             <router-link :to="`/block/${txMeta.block_id}/`">{{
                               txMeta.block_id
                             }}</router-link>
@@ -334,7 +338,7 @@
                       {{ formattedTitle }}
                     </div>
                     <div class="content">
-                      <div class="h-scroll">
+                      <div class="h-scroll dark">
                         <div class="empty-result" v-if="!txMeta.payload.length">
                           (No payload)
                         </div>
@@ -845,7 +849,9 @@ export default {
 
         a {
           &:hover {
-            text-decoration: underline;
+            font-weight: 500;
+            text-shadow: 0px 0px 0px #3c3b3e;
+            color: #3c3b3e;
           }
         }
 
@@ -978,9 +984,11 @@ export default {
         } */
       }
 
-      a {
+      .includedBlock {
         &:hover {
-          text-decoration: underline;
+          font-weight: 500;
+          text-shadow: 0px 0px 0px #3c3b3e;
+          color: #3c3b3e;
         }
       }
     }
