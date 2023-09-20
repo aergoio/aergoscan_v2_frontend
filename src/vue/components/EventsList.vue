@@ -23,9 +23,18 @@
           }}</router-link>
         </td>
         <td v-if="columns.indexOf('tx') >= 0">
-          <router-link class="block" :to="`/transaction/${row.tx_id}/`">{{
-            $window.innerWidth < 1200 ? resizeFormater(row.tx_id) : row.tx_id
-          }}</router-link>
+          <router-link
+            :class="
+              $window.innerWidth < 1200
+                ? `block tooltipped tooltipped-s`
+                : `block`
+            "
+            :to="`/transaction/${row.tx_id}/`"
+            :aria-label="row.tx_id"
+            >{{
+              $window.innerWidth < 1200 ? resizeFormater(row.tx_id) : row.tx_id
+            }}</router-link
+          >
         </td>
         <td>
           {{ row.event_name }}
