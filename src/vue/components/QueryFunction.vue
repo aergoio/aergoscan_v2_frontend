@@ -76,40 +76,45 @@
           </div>
         </div>
       </div>
-      <span class="btn-call" v-if="!isLoading" v-on:click="queryContract">
-        Query
-      </span>
+      <span class="btn-call" v-on:click="queryContract"> Query </span>
       <span
         class="btn-call"
-        v-if="!isLoading && !func.view"
+        v-if="!func.view"
         @click="
           getActiveAccount?.address ? callToConnect() : connectAfterCall()
         "
       >
         Call
       </span>
-      <span class="btn-call" v-if="isLoading">Loading...</span>
-      <div v-if="typeof result !== 'undefined'" class="code-highlight-pre">
+      <div v-if="isLoading" class="loadingProgress" />
+      <div
+        v-if="typeof result !== 'undefined' && !isLoading"
+        class="code-highlight-pre"
+      >
         <div :style="{ display: 'flex', flexDirection: 'column' }">
-          <div v-if="typeof result === 'string'" class="result_wrapper">
-            <span class="result_title">{{
-              receipt?.status || !receipt ? `Result` : `Loading...`
-            }}</span>
+          <div class="result_wrapper">
+            <span class="result_title">Result</span>
             <router-link
               v-if="receipt?.status"
               :to="`/transaction/${result}/`"
               class="hash"
             >
-              <span
-                v-if="receipt?.status"
-                v-html="result"
-                class="result_content"
-              />
+              <span v-html="result" class="result_content" />
             </router-link>
-            <span v-else-if="!receipt" v-html="result" class="result_content" />
+
+            <span
+              v-else-if="typeof result === 'string' && !receipt"
+              v-html="result"
+              class="result_content"
+            />
+            <span
+              v-else-if="typeof result !== 'string' && !receipt"
+              v-html="syntaxHighlight(result)"
+              class="result_content"
+            />
           </div>
 
-          <div v-if="receipt?.status" class="result_wrapper">
+          <div v-if="receipt?.status" class="result_wrapper status">
             <span class="result_title">
               <span>Status:</span>
               <img
@@ -119,21 +124,13 @@
               />
               <img v-else src="~@assets/img/ic-success.png" />
               <span class="receipt_text">
-                {{ `${receipt?.status ?? `Loading...`}` }}
+                {{ receipt?.status }}
               </span>
             </span>
             <span v-html="receipt?.result" class="result_content" />
             <span v-if="!receipt?.result" class="result_content empty"
               >(Empty Result)</span
             >
-          </div>
-
-          <div
-            v-if="typeof result !== 'string' && !receipt"
-            class="result_wrapper"
-          >
-            <span class="result_title">Result</span>
-            <span class="result_content" v-html="syntaxHighlight(result)" />
           </div>
         </div>
       </div>
@@ -173,11 +170,13 @@ export default {
     async result() {
       const hash = this.result
       const wait = loadAndWait()
+      this.isLoading = true
       await wait()
       this.receipt = await this.$store.dispatch(
         'blockchain/fetchTransactionReceipt',
         { hash }
       )
+      this.isLoading = false
     },
   },
 
@@ -188,6 +187,12 @@ export default {
     getActiveAccount() {
       return this.$store.getters[`blockchain/getActiveAccount`]
     },
+  },
+
+  updated() {
+    console.log(this.isLoading, 'isLoading')
+    console.log(this.result, 'result')
+    console.log(this.receipt, 'receipt')
   },
 
   methods: {
@@ -265,6 +270,7 @@ export default {
           'AERGO_SEND_TX_RESULT',
           data
         )
+        this.isLoading = true
         this.receipt = {}
         await wait()
         this.result = result.hash
