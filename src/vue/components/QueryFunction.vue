@@ -236,7 +236,6 @@ export default {
       this.isClick = !this.isClick
     },
     async callToConnect() {
-      this.receipt = {}
       const wait = loadAndWait()
       if (this.getActiveAccount.address) {
         const args = this.args
@@ -266,6 +265,7 @@ export default {
           'AERGO_SEND_TX_RESULT',
           data
         )
+        this.receipt = {}
         await wait()
         this.result = result.hash
         this.$emit('onUpdateResultHash', result.hash)
