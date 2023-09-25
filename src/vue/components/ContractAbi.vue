@@ -63,7 +63,7 @@
             class="monospace interactive-contract code-highlight"
             :key="interactiveKey"
           >
-            <div v-if="!abi">Loading...</div>
+            <QueryFunctionSkeleton v-if="!abi" />
             <div v-if="abi && abi.functions.length == 0">
               Contract has no public functions.
             </div>
@@ -136,6 +136,7 @@ import cfg from '@/src/config'
 import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
+import QueryFunctionSkeleton from '@/src/vue/components/QueryFunctionSkeleton.vue'
 import EventsList from '@/src/vue/components/EventsList.vue'
 import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
 
@@ -245,6 +246,7 @@ export default {
   components: {
     ReloadButton,
     QueryFunction,
+    QueryFunctionSkeleton,
     QueryStateVariable,
     EventsList,
     ConnectLoginButton,
