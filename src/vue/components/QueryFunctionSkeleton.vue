@@ -45,7 +45,7 @@ export default {
     .skeleton-line {
       display: flex;
       justify-content: space-between;
-      animation: loading 0.75s infinite ease-in-out;
+      animation: loading 1s infinite ease-in-out;
       .name {
         border-radius: 6px;
         display: inline-block;
