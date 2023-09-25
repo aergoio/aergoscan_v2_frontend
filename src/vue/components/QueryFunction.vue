@@ -270,7 +270,10 @@ export default {
           'AERGO_SEND_TX_RESULT',
           data
         )
+<<<<<<<<< Temporary merge branch 1
+=========
         this.isLoading = true
+>>>>>>>>> Temporary merge branch 2
         this.receipt = {}
         await wait()
         this.result = result.hash
