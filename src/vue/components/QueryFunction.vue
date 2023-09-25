@@ -189,12 +189,6 @@ export default {
     },
   },
 
-  updated() {
-    console.log(this.isLoading, 'isLoading')
-    console.log(this.result, 'result')
-    console.log(this.receipt, 'receipt')
-  },
-
   methods: {
     syntaxHighlight,
     async queryContract() {
