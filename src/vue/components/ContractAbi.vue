@@ -63,7 +63,7 @@
             class="monospace interactive-contract code-highlight"
             :key="interactiveKey"
           >
-            <div v-if="!abi">Loading...</div>
+            <QueryFunctionSkeleton v-if="!abi" />
             <div v-if="abi && abi.functions.length == 0">
               Contract has no public functions.
             </div>
@@ -121,7 +121,7 @@
             v-model="code.code"
             :options="luaOptions"
           />
-          <div v-else>No Authorized Code</div>
+          <div v-else>No Verified Code</div>
           <!-- <div class="desc-contract"></div> -->
         </div>
       </Tab>
@@ -136,6 +136,7 @@ import cfg from '@/src/config'
 import ReloadButton from '@/src/vue/components/ReloadButton'
 import QueryFunction from '@/src/vue/components/QueryFunction'
 import QueryStateVariable from '@/src/vue/components/QueryStateVariable'
+import QueryFunctionSkeleton from '@/src/vue/components/QueryFunctionSkeleton.vue'
 import EventsList from '@/src/vue/components/EventsList.vue'
 import ConnectLoginButton from '@/src/vue/components/ConnectLoginButton.vue'
 
@@ -245,6 +246,7 @@ export default {
   components: {
     ReloadButton,
     QueryFunction,
+    QueryFunctionSkeleton,
     QueryStateVariable,
     EventsList,
     ConnectLoginButton,
@@ -497,7 +499,7 @@ export default {
   background-color: #69647e;
 }
 .code-highlight-pre {
-  margin: 0.5rem;
+  margin: 0.5rem 0;
   font-family: 'Roboto Mono', monospace;
   white-space: pre-wrap;
 
@@ -523,8 +525,10 @@ export default {
     border: 1px solid rgb(76, 68, 82);
     padding: 5px 10px;
     border-radius: 8px;
-    margin-bottom: 10px;
-
+    margin-top: 4px;
+    &.status {
+      margin-top: 10px;
+    }
     .hash {
       margin-top: 4px;
       margin-bottom: 4px;
@@ -710,7 +714,6 @@ export default {
 
 .btn-call {
   display: inline-block;
-  margin-top: 0.5rem;
   margin-right: 0.5rem;
   font-size: 0.9em;
   padding: 0.5rem;
