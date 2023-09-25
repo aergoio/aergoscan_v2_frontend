@@ -189,12 +189,6 @@ export default {
     },
   },
 
-  updated() {
-    console.log(this.isLoading, 'isLoading')
-    console.log(this.result, 'result')
-    console.log(this.receipt, 'receipt')
-  },
-
   methods: {
     syntaxHighlight,
     async queryContract() {
@@ -270,6 +264,8 @@ export default {
           'AERGO_SEND_TX_RESULT',
           data
         )
+        this.isLoading = true
+        this.receipt = {}
         await wait()
         this.result = result.hash
         this.$emit('onUpdateResultHash', result.hash)
