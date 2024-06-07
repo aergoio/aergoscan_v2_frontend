@@ -12,11 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        <!--        <template v-if="isLoading">-->
-        <!--          <tr class="hidden loading">-->
-        <!--            <td colspan="100%">loading...</td>-->
-        <!--          </tr>-->
-        <!--        </template>-->
+        <template v-if="isLoading">
+          <tr class="hidden loading">
+            <td colspan="100%">loading...</td>
+          </tr>
+        </template>
         <template v-if="transData.length">
           <tr v-for="(row, index) in transData">
             <slot name="list" :row="row" />
