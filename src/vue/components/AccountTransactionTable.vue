@@ -344,7 +344,6 @@ export default {
                   .toFixed(),
           internal: item.internal,
         }))
-        console.log(this.data, 'this.data')
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
       } else {
