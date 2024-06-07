@@ -20,6 +20,7 @@
           TO
         </div>
       </th>
+
       <th class="menu-th" v-else-if="header.value === 'category'">
         <div>
           <div class="menu-th" @click="openTableHeaderMenu($event)">
@@ -110,11 +111,63 @@
         </div>
         <div v-else><span class="boxicon gray">self transfer</span></div>
       </td>
-      <td>
-        <div>{{ row.category.toUpperCase() }}</div>
+      <td v-if="row.internal">
+        <div>
+          <div>
+            <span>
+              {{ row.category.toUpperCase() }}
+            </span>
+            <span>
+              <div
+                v-html="
+                  $options.filters.formatBigNumAmount(row.internal.amount)
+                "
+              ></div>
+            </span>
+          </div>
+          <div>
+            <span>From:</span>
+            <router-link
+              :to="`/account/${row.internal.from}/`"
+              class="address tooltipped tooltipped-s"
+              :aria-label="row.internal.from"
+            >
+              {{
+                $options.filters.formatEllipsisText(row.internal.from, 10)
+              }}</router-link
+            >
+          </div>
+          <div>
+            <span>To:</span>
+            <router-link
+              :to="`/account/${row.internal.to}/`"
+              class="address tooltipped tooltipped-s"
+              :aria-label="row.internal.to"
+            >
+              {{
+                $options.filters.formatEllipsisText(row.internal.to, 10)
+              }}</router-link
+            >
+          </div>
+        </div>
       </td>
       <td>
-        <div>{{ row.method.toUpperCase() }}</div>
+        <div>
+          {{
+            row.internal
+              ? row.internal.category.toUpperCase()
+              : row.category.toUpperCase()
+          }}
+        </div>
+      </td>
+      <td>
+        <div>
+          {{
+            row.internal
+              ? row.internal.method.toUpperCase()
+              : row.method.toUpperCase()
+          }}
+        </div>
       </td>
       <td>
         <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
@@ -199,7 +252,7 @@ export default {
   beforeDestroy() {},
   computed: {
     headers() {
-      return [
+      const headers = [
         { text: 'TX HASH', value: 'hash' },
         { text: 'TIME', value: 'ts' },
         { text: 'FROMTO', value: 'fromto' },
@@ -207,6 +260,13 @@ export default {
         { text: 'METHOD', value: 'method' },
         { text: 'AMOUNT(AERGO)', value: 'amount_float' },
       ]
+
+      // 내부 TX를 포함하는 경우에만 'Internal TX' 헤더 추가
+      if (this.data.some((item) => item.internal)) {
+        headers.splice(3, 0, { text: 'Internal TX', value: 'internal' })
+      }
+
+      return headers
     },
     categories() {
       return [
@@ -282,7 +342,9 @@ export default {
               : new BigNumber(item.meta.balance + '00')
                   .div(new BigNumber(this.totalSupply))
                   .toFixed(),
+          internal: item.internal,
         }))
+        console.log(this.data, 'this.data')
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
       } else {
