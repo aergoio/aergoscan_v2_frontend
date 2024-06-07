@@ -112,21 +112,23 @@
         <div v-else><span class="boxicon gray">self transfer</span></div>
       </td>
       <td v-if="row.internal">
-        <div>
-          <div>
+        <div :style="{ display: 'flex', flexDirection: 'column' }">
+          <div :style="{ display: 'flex' }">
             <span>
               {{ row.category.toUpperCase() }}
             </span>
+            &ensp;
             <span>
               <div
                 v-html="
                   $options.filters.formatBigNumAmount(row.internal.amount)
                 "
               ></div>
+              <span>Aergo</span>
             </span>
           </div>
-          <div>
-            <span>From:</span>
+          <div :style="{ display: 'flex' }">
+            <span>From: </span>
             <router-link
               :to="`/account/${row.internal.from}/`"
               class="address tooltipped tooltipped-s"
@@ -137,8 +139,9 @@
               }}</router-link
             >
           </div>
+          &ensp;
           <div>
-            <span>To:</span>
+            <span>To: </span>
             <router-link
               :to="`/account/${row.internal.to}/`"
               class="address tooltipped tooltipped-s"
