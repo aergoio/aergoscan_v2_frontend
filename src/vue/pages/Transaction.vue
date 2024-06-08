@@ -705,6 +705,9 @@ export default {
     updateNftTxTotalCount(count) {
       this.nftTxTotalItems = count
     },
+    updateInternalTransactionsTotalCount(count) {
+      this.internalTransactionsTotalItems = count
+    },
     moment,
     changePage: function (currentPage) {
       this.currentPage = currentPage
