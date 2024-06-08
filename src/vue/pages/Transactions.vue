@@ -141,10 +141,22 @@
                   </div>
                 </td>
                 <td>
-                  <div>{{ row.category.toUpperCase() }}</div>
+                  <div>
+                    {{
+                      row.internal
+                        ? row.internal.original_category.toUpperCase()
+                        : row.category.toUpperCase()
+                    }}
+                  </div>
                 </td>
                 <td>
-                  <div>{{ row.method.toUpperCase() }}</div>
+                  <div>
+                    {{
+                      row.internal
+                        ? row.internal.method.toUpperCase()
+                        : row.method.toUpperCase()
+                    }}
+                  </div>
                 </td>
                 <td>
                   <div
@@ -309,6 +321,7 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
+          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
