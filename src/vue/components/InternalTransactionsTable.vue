@@ -232,10 +232,18 @@ export default {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
       let q
-      if (id && !hash) {
-        q = `original_category:${category} AND (original_from:${id} OR original_to:${id})`
-      } else if (!id && hash) {
-        q = `original_category:${category} AND _id:${hash}`
+      if (category) {
+        if (id && !hash) {
+          q = `original_category:${category} AND (original_from:${id} OR original_to:${id})`
+        } else if (!id && hash) {
+          q = `original_category:${category} AND _id:${hash}`
+        }
+      } else {
+        if (id && !hash) {
+          q = `(original_from:${id} OR original_to:${id})`
+        } else if (!id && hash) {
+          q = `_id:${hash}`
+        }
       }
 
       const response = await (
@@ -249,7 +257,7 @@ export default {
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(original_from:${id} OR original_to:${id}) OR _id=${hash}`,
+                q,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
