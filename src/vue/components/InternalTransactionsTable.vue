@@ -242,7 +242,7 @@ export default {
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(original_from:${id} OR original_to:${id})`,
+                q: `(original_from:${id} OR original_to:${id}) OR _id=${hash}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
