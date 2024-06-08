@@ -162,7 +162,7 @@
                   <div
                     v-html="
                       $options.filters.formatBigNumAmount(
-                        row.internal ? 0 : row.amount
+                        row.internal ? '0' : row.amount
                       )
                     "
                   ></div>
