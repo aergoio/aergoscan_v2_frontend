@@ -8,20 +8,12 @@
     }"
   >
     <template slot="error" v-if="error">
-      <div class="error transactions show">
+      <div class="error internal-transactions show">
         {{ error }}
       </div>
     </template>
     <template slot="header" v-for="header in headers">
-      <th v-if="header.value === 'fromto'">
-        <div>
-          FROM
-          <img src="~@assets/img/ic-arrow-pink@3x.png" class="arrow" />
-          TO
-        </div>
-      </th>
-
-      <th class="menu-th" v-else-if="header.value === 'category'">
+      <th class="menu-th" v-if="header.value === 'category'" :key="header.text">
         <div>
           <div class="menu-th" @click="openTableHeaderMenu($event)">
             {{ header.text
@@ -41,28 +33,26 @@
           </div>
         </div>
       </th>
-      <th v-else>
+      <th v-else :key="header.text">
         <div>{{ header.text }}</div>
       </th>
     </template>
     <template slot="list" slot-scope="{ row }">
-      <td class="txt-ellipsis">
-        <div
-          class="tooltipped tooltipped-se tooltipped-align-left-2"
+      <td>
+        <router-link
+          :to="`/transaction/${row.hash}/?tx=internalTransactions`"
+          class="address tooltipped tooltipped-s"
           :aria-label="row.hash"
         >
-          <span class="identicon" v-if="row.status === 'ERROR'">
-            <img src="~@assets/img/ic-alert-circle-fill.svg" />
-          </span>
-          <router-link
-            class="address txt-ellipsis"
-            :aria-label="row.hash"
-            :to="`/transaction/${row.hash}/`"
-          >
-            {{ row.hash }}
-          </router-link>
-        </div>
+          {{ row.hash }}
+        </router-link>
       </td>
+      <td class="txt-ellipsis">
+        <router-link class="block" :to="`/block/${row.blockno}/`">
+          {{ row.blockno }}
+        </router-link>
+      </td>
+
       <td>
         <div
           class="tooltipped tooltipped-se tooltipped-align-left-2"
@@ -72,70 +62,36 @@
         </div>
       </td>
       <td>
-        <div v-if="row.from !== row.to">
-          <template v-if="addressMatches(row.to)">
-            <span class="boxicon blue">FROM</span>
-            <Identicon :text="row.from" size="18" class="mini-identicon" />
-            <router-link
-              :to="`/account/${row.from}/`"
-              class="address tooltipped tooltipped-s"
-              :aria-label="row.from"
-            >
-              {{ $options.filters.formatEllipsisText(row.from, 30) }}
-            </router-link>
-          </template>
-          <template v-else>
-            <span class="boxicon red">TO</span>
-            <template v-if="row.to && row.to.toString().length">
-              <Identicon :text="row.to" size="18" class="mini-identicon" />
-              <router-link
-                :to="`/account/${row.to}/`"
-                class="address tooltipped tooltipped-s"
-                :aria-label="row.to"
-              >
-                {{ $options.filters.formatEllipsisText(row.to, 30) }}
-              </router-link>
-            </template>
-            <template v-else>
-              <div v-if="row.category === 'multicall'">
-                <Identicon size="19" class="identicon-multi" />
-              </div>
-              <div v-else>
-                <Identicon size="19" class="identicon-new" />
-              </div>
-              <span class="address">{{
-                row.category === 'multicall' ? 'N/A' : 'Contract Creation'
-              }}</span>
-            </template>
-          </template>
+        <router-link
+          :to="`/account/${row.from}/?tx=internalTransactions`"
+          class="address tooltipped tooltipped-s"
+          :aria-label="row.from"
+        >
+          {{ $options.filters.formatEllipsisText(row.from, 30) }}
+        </router-link>
+      </td>
+      <td>
+        <div>
+          <img src="~@assets/img/ic-arrow-black@3x.png" class="arrow" />
         </div>
-        <div v-else><span class="boxicon gray">self transfer</span></div>
+      </td>
+      <td>
+        <router-link
+          :to="`/account/${row.to}/?tx=internalTransactions`"
+          class="address tooltipped tooltipped-s"
+          :aria-label="row.to"
+        >
+          {{ $options.filters.formatEllipsisText(row.to, 30) }}
+        </router-link>
+      </td>
+      <td>
+        <div>
+          {{ row.category.toUpperCase() }}
+        </div>
       </td>
 
       <td>
-        <div>
-          {{
-            row.internal
-              ? row.internal.original_category.toUpperCase()
-              : row.category.toUpperCase()
-          }}
-        </div>
-      </td>
-      <td>
-        <div>
-          {{
-            row.internal
-              ? row.internal.method.toUpperCase()
-              : row.method.toUpperCase()
-          }}
-        </div>
-      </td>
-      <td>
-        <div
-          v-html="
-            $options.filters.formatBigNumAmount(row.internal ? '0' : row.amount)
-          "
-        ></div>
+        <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
       </td>
     </template>
     <pagination
@@ -157,9 +113,10 @@ import moment from 'moment'
 import BigNumber from 'bignumber.js'
 
 export default {
-  name: 'AccountTransactionTable',
+  name: 'InternalTransactionsTable',
   props: {
-    address: String,
+    address: { type: String, default: '' },
+    hash: { type: String, default: '' },
     active: {
       type: Boolean,
       default: false,
@@ -201,7 +158,7 @@ export default {
       isLoading: false,
       currentPage: this.initialPage,
       paginationCss: {
-        pagination: 'pagination transactions-table',
+        pagination: 'pagination internal-transactions-table',
         paginationInner: 'pagination-inner',
         moveFirstPage: 'pprev',
         movePreviousPage: 'prev',
@@ -218,11 +175,13 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'TX HASH', value: 'hash' },
+        { text: 'TX Hash', value: 'hash' },
+        { text: 'BLOCK #', value: 'blockno' },
         { text: 'TIME', value: 'ts' },
-        { text: 'FROMTO', value: 'fromto' },
+        { text: 'FROM', value: 'from' },
+        { text: '', value: 'Arrow' },
+        { text: 'TO', value: 'to' },
         { text: 'Tx Type', value: 'category' },
-        { text: 'METHOD', value: 'method' },
         { text: 'AMOUNT(AERGO)', value: 'amount_float' },
       ]
     },
@@ -244,8 +203,10 @@ export default {
     },
     dataTableCss() {
       return {
-        wrapper: 'tab-content transactions' + (this.active ? ' active' : ''),
-        table: 'transactions-table' + (this.isLoading ? ' is-loading' : ''),
+        wrapper:
+          'tab-content internal-transactions' + (this.active ? ' active' : ''),
+        table:
+          'internal-transactions-table' + (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
@@ -261,6 +222,7 @@ export default {
     },
     loadTransactionTableData: async function ({
       id,
+      hash,
       category,
       sortField,
       sort,
@@ -271,16 +233,24 @@ export default {
       const start = (currentPage - 1) * itemsPerPage
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/transactions`,
+          `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q: `category:${category} AND (from:${id} OR to:${id})`,
+                q: `original_category:${category} AND ${
+                  hash
+                    ? `(_id:${hash})`
+                    : `(original_from:${id} OR from:${id} OR to:${id})`
+                }`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(from:${id} OR to:${id})`,
+                q: `${
+                  hash
+                    ? `(_id:${hash})`
+                    : `(original_from:${id} OR from:${id} OR to:${id})`
+                }`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
@@ -300,7 +270,6 @@ export default {
               : new BigNumber(item.meta.balance + '00')
                   .div(new BigNumber(this.totalSupply))
                   .toFixed(),
-          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
@@ -315,6 +284,7 @@ export default {
       this.isLoading = true
       await this.loadTransactionTableData({
         id: address ? address : this.address,
+        hash: this.hash,
         category: this.selectedCategory,
         sortField: this.sortedField,
         sort: this.sortedDir,
@@ -349,7 +319,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table.transactions-table {
+table.internal-transactions-table {
   th {
     &:nth-child(3) {
       min-width: 90px;
@@ -380,6 +350,9 @@ table.transactions-table {
   }
 
   td {
+    &:nth-child(2) {
+      width: 10% !important;
+    }
     &:nth-child(4) {
       padding-left: 10px;
     }

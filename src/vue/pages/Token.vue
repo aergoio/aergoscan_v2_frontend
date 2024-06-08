@@ -325,7 +325,12 @@ export default {
       .identicon {
         display: inline-block;
         flex: 24px 0 0;
-        /* margin-left: 10px; */
+        &.default {
+          height: 24px;
+          opacity: 0.3;
+          border: 1px solid black;
+          border-radius: 50%;
+        }
 
         @media screen and (max-width: 480px) {
           /* margin-left: 54px; */
@@ -333,6 +338,7 @@ export default {
       }
 
       .sub-3 {
+        white-space: nowrap;
         margin-left: 8px;
         font-size: 18px;
         font-weight: bold;

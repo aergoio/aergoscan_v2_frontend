@@ -141,14 +141,30 @@
                   </div>
                 </td>
                 <td>
-                  <div>{{ row.category.toUpperCase() }}</div>
+                  <div>
+                    {{
+                      row.internal
+                        ? row.internal.original_category.toUpperCase()
+                        : row.category.toUpperCase()
+                    }}
+                  </div>
                 </td>
                 <td>
-                  <div>{{ row.method.toUpperCase() }}</div>
+                  <div>
+                    {{
+                      row.internal
+                        ? row.internal.method.toUpperCase()
+                        : row.method.toUpperCase()
+                    }}
+                  </div>
                 </td>
                 <td>
                   <div
-                    v-html="$options.filters.formatBigNumAmount(row.amount)"
+                    v-html="
+                      $options.filters.formatBigNumAmount(
+                        row.internal ? '0' : row.amount
+                      )
+                    "
                   ></div>
                 </td>
               </template>
@@ -176,6 +192,7 @@ import Identicon from '@/src/vue/components/Identicon'
 import cfg from '@/src/config'
 import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
 import moment from 'moment'
+import BigNumber from 'bignumber.js'
 
 export default {
   props: {
@@ -309,6 +326,7 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
+          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
