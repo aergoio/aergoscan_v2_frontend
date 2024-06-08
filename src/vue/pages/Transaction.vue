@@ -196,7 +196,7 @@
                           <div>
                             {{
                               txInternal
-                                ? txInternal.original_category
+                                ? txInternal.original_category.toUpperCase();
                                 : typeLabel
                             }}
                           </div>
@@ -303,7 +303,7 @@
                         }"
                         replace
                       >
-                        <span class="main">Internal Transactions</span
+                        <span class="main">Internal Transactions [Beta]</span
                         ><span class="sub">{{
                           internalTransactionsTotalItems
                         }}</span>
