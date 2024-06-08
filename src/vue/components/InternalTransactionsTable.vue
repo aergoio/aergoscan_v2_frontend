@@ -231,33 +231,26 @@ export default {
     }) {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
-      let q
-      if (category) {
-        if (id && !hash) {
-          q = `original_category:${category} AND (original_from:${id} OR original_to:${id})`
-        } else if (!id && hash) {
-          q = `original_category:${category} AND _id:${hash}`
-        }
-      } else {
-        if (id && !hash) {
-          q = `(original_from:${id} OR original_to:${id})`
-        } else if (!id && hash) {
-          q = `_id:${hash}`
-        }
-      }
-
       const response = await (
         await this.$fetch.get(
           `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q,
+                q: `original_category:${category} AND ${
+                  hash
+                    ? `_id=${hash}`
+                    : `(original_from:${id} OR original_to:${id})`
+                }`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q,
+                q: `${
+                  hash
+                    ? `_id=${hash}`
+                    : `(original_from:${id} OR original_to:${id})`
+                }`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
