@@ -116,7 +116,7 @@ export default {
   name: 'InternalTransactionsTable',
   props: {
     address: String,
-    hash: String,
+    hash: { type: String, default: '' },
     active: {
       type: Boolean,
       default: false,
@@ -176,13 +176,13 @@ export default {
     headers() {
       return [
         { text: 'TX Hash', value: 'hash' },
-        { text: 'Block #', value: 'blockno' },
-        { text: 'Time', value: 'ts' },
-        { text: 'From', value: 'from' },
+        { text: 'BLOCK #', value: 'blockno' },
+        { text: 'TIME', value: 'ts' },
+        { text: 'FROM', value: 'from' },
         { text: '', value: 'Arrow' },
-        { text: 'To', value: 'to' },
+        { text: 'TO', value: 'to' },
         { text: 'Tx Type', value: 'category' },
-        { text: 'Amount(AERGO)', value: 'amount_float' },
+        { text: 'AMOUNT(AERGO)', value: 'amount_float' },
       ]
     },
     categories() {
