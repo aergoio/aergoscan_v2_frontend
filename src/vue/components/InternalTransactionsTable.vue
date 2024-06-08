@@ -48,7 +48,7 @@
         </router-link>
       </td>
       <td class="txt-ellipsis">
-        <router-link class="block" :to="`/block/${row.no}/`">
+        <router-link class="block" :to="`/block/${row.blockno}/`">
           {{ row.blockno }}
         </router-link>
       </td>
