@@ -114,16 +114,28 @@
 
       <td>
         <div>
-          {{ row.category.toUpperCase() }}
+          {{
+            row.internal
+              ? row.internal.original_category.toUpperCase()
+              : row.category.toUpperCase()
+          }}
         </div>
       </td>
       <td>
         <div>
-          {{ row.method.toUpperCase() }}
+          {{
+            row.internal
+              ? row.internal.method.toUpperCase()
+              : row.method.toUpperCase()
+          }}
         </div>
       </td>
       <td>
-        <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
+        <div
+          v-html="
+            $options.filters.formatBigNumAmount(row.internal ? '0' : row.amount)
+          "
+        ></div>
       </td>
     </template>
     <pagination
@@ -288,6 +300,7 @@ export default {
               : new BigNumber(item.meta.balance + '00')
                   .div(new BigNumber(this.totalSupply))
                   .toFixed(),
+          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount

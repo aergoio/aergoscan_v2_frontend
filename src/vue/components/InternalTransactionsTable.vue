@@ -236,7 +236,7 @@ export default {
       if (id && !hash) {
         q += ` AND (original_from:${id} OR original_to:${id})`
       } else if (hash) {
-        q += ` AND _id:${hash}`
+        q = `original_category:${category} AND _id:${hash}`
       }
 
       const response = await (
