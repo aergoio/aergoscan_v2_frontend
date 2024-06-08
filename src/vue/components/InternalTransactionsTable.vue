@@ -239,7 +239,7 @@ export default {
                 q: `original_category:${category} AND ${
                   hash
                     ? `(_id=${hash})`
-                    : `(original_from:${id} OR original_to:${id})`
+                    : `(original_from:${id} OR from:${id} OR to:${id})`
                 }`,
                 size: itemsPerPage,
                 from: start,
@@ -249,7 +249,7 @@ export default {
                 q: `${
                   hash
                     ? `(_id=${hash})`
-                    : `(original_from:${id} OR original_to:${id})`
+                    : `(original_from:${id} OR from:${id} OR to:${id})`
                 }`,
                 size: itemsPerPage,
                 from: start,
