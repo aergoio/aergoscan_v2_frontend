@@ -160,7 +160,11 @@
                 </td>
                 <td>
                   <div
-                    v-html="$options.filters.formatBigNumAmount(row.amount)"
+                    v-html="
+                      $options.filters.formatBigNumAmount(
+                        row.internal ? 0 : row.amount
+                      )
+                    "
                   ></div>
                 </td>
               </template>
@@ -188,6 +192,7 @@ import Identicon from '@/src/vue/components/Identicon'
 import cfg from '@/src/config'
 import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
 import moment from 'moment'
+import BigNumber from 'bignumber.js'
 
 export default {
   props: {

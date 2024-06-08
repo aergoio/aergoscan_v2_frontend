@@ -231,12 +231,20 @@ export default {
     }) {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
+      let q = `original_category:${category}`
+
+      if (id && !hash) {
+        q += ` AND (original_from:${id} OR original_to:${id})`
+      } else if (hash) {
+        q += ` AND _id:${hash}`
+      }
+
       const response = await (
         await this.$fetch.get(
           `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q: `original_category:${category} AND (original_from:${id} OR original_to:${id}) OR _id=${hash}`,
+                q,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
