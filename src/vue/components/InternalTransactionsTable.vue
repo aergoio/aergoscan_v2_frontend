@@ -116,6 +116,7 @@ export default {
   name: 'InternalTransactionsTable',
   props: {
     address: String,
+    hash: String,
     active: {
       type: Boolean,
       default: false,
@@ -221,6 +222,7 @@ export default {
     },
     loadTransactionTableData: async function ({
       id,
+      hash,
       category,
       sortField,
       sort,
@@ -234,13 +236,13 @@ export default {
           `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q: `original_category:${category} AND (original_from:${id} OR original_to:${id})`,
+                q: `original_category:${category} AND (original_from:${id} OR original_to:${id}) AND _id=${hash}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(original_from:${id} OR original_to:${id})`,
+                q: `(original_from:${id} OR original_to:${id}) AND _id=${hash}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
