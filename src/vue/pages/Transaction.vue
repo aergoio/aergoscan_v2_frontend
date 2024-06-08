@@ -98,7 +98,7 @@
                           <div
                             v-html="
                               $options.filters.formatToken(
-                                txMeta.amount,
+                                txInternal ? '0' : txMeta.amount,
                                 'aergo'
                               )
                             "
@@ -193,7 +193,13 @@
                           <div>Type</div>
                         </th>
                         <td>
-                          <div>{{ typeLabel }}</div>
+                          <div>
+                            {{
+                              txInternal
+                                ? txInternal.original_category
+                                : typeLabel
+                            }}
+                          </div>
                         </td>
                       </tr>
                       <tr v-if="txMeta.payload">
@@ -519,6 +525,7 @@ export default {
       txDetail: null,
       txReceipt: null,
       txMeta: {},
+      txInternal: {},
       events: [],
       totalEvents: 0,
       error: null,
@@ -657,6 +664,7 @@ export default {
         const responseJson = await response.json()
         if (responseJson.hits.length) {
           this.txMeta = responseJson.hits[0].meta
+          this.txInternal = responseJson.hits[0].internal
         }
       })()
       ;(async () => {
