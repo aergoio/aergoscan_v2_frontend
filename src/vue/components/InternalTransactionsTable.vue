@@ -231,16 +231,16 @@ export default {
       const start = (currentPage - 1) * itemsPerPage
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/transactions`,
+          `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q: `category:${category} AND (from:${id} OR to:${id})`,
+                q: `original_category:${category} AND (original_from:${id} OR original_to:${id})`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(from:${id} OR to:${id})`,
+                q: `(original_from:${id} OR original_to:${id})`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
@@ -339,6 +339,9 @@ table.internal-transactions-table {
   }
 
   td {
+    &:nth-child(2) {
+      width: 10% !important;
+    }
     &:nth-child(4) {
       padding-left: 10px;
     }
