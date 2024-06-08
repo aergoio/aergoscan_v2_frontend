@@ -320,7 +320,7 @@
                   />
                   <internal-transactions-table
                     ref="internalTransactionsTable"
-                    :address="realAddress"
+                    :address="$route.params.hash"
                     :active="$route.query.tx === 'internalTransactions'"
                     @onUpdateTotalCount="updateInternalTransactionsTotalCount"
                   />

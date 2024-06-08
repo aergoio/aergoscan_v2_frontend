@@ -63,7 +63,7 @@
       </td>
       <td>
         <router-link
-          :to="`/account/${row.from}/`"
+          :to="`/account/${row.from}/?tx=internalTransactions`"
           class="address tooltipped tooltipped-s"
           :aria-label="row.from"
         >
@@ -77,7 +77,7 @@
       </td>
       <td>
         <router-link
-          :to="`/account/${row.to}/`"
+          :to="`/account/${row.to}/?tx=internalTransactions`"
           class="address tooltipped tooltipped-s"
           :aria-label="row.to"
         >
