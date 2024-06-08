@@ -231,11 +231,10 @@ export default {
     }) {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
-      let q = `original_category:${category}`
-
+      let q
       if (id && !hash) {
-        q += ` AND (original_from:${id} OR original_to:${id})`
-      } else if (hash) {
+        q = `original_category:${category} AND (original_from:${id} OR original_to:${id})`
+      } else if (!id && hash) {
         q = `original_category:${category} AND _id:${hash}`
       }
 
