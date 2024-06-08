@@ -40,7 +40,7 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <router-link
-          :to="`/transaction/${row.hash}/`"
+          :to="`/transaction/${row.hash}/?tx=internalTransactions`"
           class="address tooltipped tooltipped-s"
           :aria-label="row.hash"
         >
