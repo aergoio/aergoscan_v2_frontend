@@ -196,7 +196,7 @@
                           <div>
                             {{
                               txInternal
-                                ? txInternal.original_category.toUpperCase()
+                                ? txInternal.original_category.toUpperCase();
                                 : typeLabel
                             }}
                           </div>
