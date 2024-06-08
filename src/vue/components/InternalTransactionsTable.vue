@@ -276,6 +276,7 @@ export default {
       this.isLoading = true
       await this.loadTransactionTableData({
         id: address ? address : this.address,
+        hash: this.hash,
         category: this.selectedCategory,
         sortField: this.sortedField,
         sort: this.sortedDir,

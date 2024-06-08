@@ -14,7 +14,7 @@
       <tbody>
         <template v-if="isLoading">
           <tr class="hidden loading">
-            <td colspan="100%">loading...</td>
+            <td colspan="100%">Loading...</td>
           </tr>
         </template>
         <template v-if="transData.length">
