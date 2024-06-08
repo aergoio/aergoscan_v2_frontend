@@ -115,7 +115,7 @@ import BigNumber from 'bignumber.js'
 export default {
   name: 'InternalTransactionsTable',
   props: {
-    address: String,
+    address: { type: String, default: '' },
     hash: { type: String, default: '' },
     active: {
       type: Boolean,
