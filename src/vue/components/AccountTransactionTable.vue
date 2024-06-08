@@ -20,7 +20,6 @@
           TO
         </div>
       </th>
-
       <th class="menu-th" v-else-if="header.value === 'category'">
         <div>
           <div class="menu-th" @click="openTableHeaderMenu($event)">
@@ -111,31 +110,14 @@
         </div>
         <div v-else><span class="boxicon gray">self transfer</span></div>
       </td>
-
       <td>
-        <div>
-          {{
-            row.internal
-              ? row.internal.original_category.toUpperCase()
-              : row.category.toUpperCase()
-          }}
-        </div>
+        <div>{{ row.category.toUpperCase() }}</div>
       </td>
       <td>
-        <div>
-          {{
-            row.internal
-              ? row.internal.method.toUpperCase()
-              : row.method.toUpperCase()
-          }}
-        </div>
+        <div>{{ row.method.toUpperCase() }}</div>
       </td>
       <td>
-        <div
-          v-html="
-            $options.filters.formatBigNumAmount(row.internal ? '0' : row.amount)
-          "
-        ></div>
+        <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
       </td>
     </template>
     <pagination
@@ -300,7 +282,6 @@ export default {
               : new BigNumber(item.meta.balance + '00')
                   .div(new BigNumber(this.totalSupply))
                   .toFixed(),
-          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount

@@ -292,21 +292,6 @@
                         <span class="main">Name History</span
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
-                      <router-link
-                        class="title internal-transactions"
-                        :to="{
-                          query: {
-                            ...$route.query,
-                            tx: 'internalTransactions',
-                          },
-                        }"
-                        replace
-                      >
-                        <span class="main">Internal Transactions [Beta]</span
-                        ><span class="sub">{{
-                          internalTransactionsTotalItems
-                        }}</span>
-                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -359,12 +344,6 @@
                     :nameHistory="nameHistory"
                     v-if="nameHistory.length"
                   />
-                  <internal-transactions-table
-                    ref="internalTransactionsTable"
-                    :address="realAddress"
-                    :active="$route.query.tx === 'internalTransactions'"
-                    @onUpdateTotalCount="updateInternalTransactionsTotalCount"
-                  />
                 </div>
               </div>
             </div>
@@ -409,7 +388,6 @@ import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTa
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable'
 import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable'
 import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable'
-import InternalTransactionsTable from '@/src/vue/components/InternalTransactionsTable'
 
 export default {
   data() {
@@ -429,7 +407,6 @@ export default {
       nftTransferTotalItems: 0,
       tokenBalanceTotalItems: 0,
       nftInventoryTotalItems: 0,
-      internalTransactionsTotalItems: 0,
       tokens: [],
       nfts: [],
       contractTx: [],
@@ -863,9 +840,6 @@ export default {
       if (this.$refs.accountNftInventoryTable) {
         await this.$refs.accountNftInventoryTable.reload(address)
       }
-      if (this.$refs.internalTransactionsTable) {
-        await this.$refs.internalTransactionsTable.reload(address)
-      }
     },
     updateTransactionTotalCount(count) {
       this.transactionTotalItems = count
@@ -881,9 +855,6 @@ export default {
     },
     updateNftInventoryTotalCount(count) {
       this.nftInventoryTotalItems = count
-    },
-    updateInternalTransactionsTotalCount(count) {
-      this.internalTransactionsTotalItems = count
     },
     onShowQrcode() {
       this.isShowQRcode = true
@@ -906,7 +877,6 @@ export default {
     AccountNftInventoryTable,
     AccountNameHistoryTable,
     AccountRegisteredNamesTable,
-    InternalTransactionsTable,
   },
 }
 </script>
