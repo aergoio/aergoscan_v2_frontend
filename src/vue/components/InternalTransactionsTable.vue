@@ -236,13 +236,13 @@ export default {
           `${cfg.API_URL}/internals`,
           category !== 'all'
             ? {
-                q: `original_category:${category} AND (original_from:${id} OR original_to:${id}) AND _id=${hash}`,
+                q: `original_category:${category} AND (original_from:${id} OR original_to:${id}) OR _id=${hash}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `(original_from:${id} OR original_to:${id}) AND _id=${hash}`,
+                q: `(original_from:${id} OR original_to:${id})`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
