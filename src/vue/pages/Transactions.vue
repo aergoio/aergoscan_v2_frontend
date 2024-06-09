@@ -142,29 +142,17 @@
                 </td>
                 <td>
                   <div>
-                    {{
-                      row.internal
-                        ? row.internal.original_category.toUpperCase()
-                        : row.category.toUpperCase()
-                    }}
+                    {{ row.category.toUpperCase() }}
                   </div>
                 </td>
                 <td>
                   <div>
-                    {{
-                      row.internal
-                        ? row.internal.method.toUpperCase()
-                        : row.method.toUpperCase()
-                    }}
+                    {{ row.method.toUpperCase() }}
                   </div>
                 </td>
                 <td>
                   <div
-                    v-html="
-                      $options.filters.formatBigNumAmount(
-                        row.internal ? '0' : row.amount
-                      )
-                    "
+                    v-html="$options.filters.formatBigNumAmount(row.amount)"
                   ></div>
                 </td>
               </template>
