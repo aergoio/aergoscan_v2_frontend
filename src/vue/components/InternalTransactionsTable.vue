@@ -129,7 +129,7 @@ export default {
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'blockno',
+      default: 'amount_float',
     },
     sort: {
       type: String,
