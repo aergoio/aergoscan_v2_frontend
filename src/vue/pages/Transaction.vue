@@ -98,7 +98,7 @@
                           <div
                             v-html="
                               $options.filters.formatToken(
-                                txInternal ? '0' : txMeta.amount,
+                                txMeta.amount,
                                 'aergo'
                               )
                             "
@@ -193,13 +193,7 @@
                           <div>Type</div>
                         </th>
                         <td>
-                          <div>
-                            {{
-                              txInternal
-                                ? txInternal.original_category.toUpperCase()
-                                : typeLabel
-                            }}
-                          </div>
+                          <div>{{ typeLabel }}</div>
                         </td>
                       </tr>
                       <tr v-if="txMeta.payload">
@@ -293,21 +287,6 @@
                         <span class="main">NFT Transfers</span
                         ><span class="sub">{{ nftTxTotalItems }}</span>
                       </router-link>
-                      <router-link
-                        class="title internal-transactions"
-                        :to="{
-                          query: {
-                            ...$route.query,
-                            tx: 'internalTransactions',
-                          },
-                        }"
-                        replace
-                      >
-                        <span class="main">Internal Transactions [Beta]</span
-                        ><span class="sub">{{
-                          internalTransactionsTotalItems
-                        }}</span>
-                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -323,12 +302,6 @@
                     :hash="$route.params.hash"
                     :active="$route.query.tx === 'nft'"
                     @onUpdateTotalCount="updateNftTxTotalCount"
-                  />
-                  <internal-transactions-table
-                    ref="internalTransactionsTable"
-                    :hash="$route.params.hash"
-                    :active="$route.query.tx === 'internalTransactions'"
-                    @onUpdateTotalCount="updateInternalTransactionsTotalCount"
                   />
                 </div>
               </div>
@@ -497,7 +470,7 @@ import PayloadFormatter from '@/src/vue/components/PayloadFormatter'
 import EventsList from '@/src/vue/components/EventsList'
 import TransactionTokenTable from '@/src/vue/components/TransactionTokenTable'
 import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
-import InternalTransactionsTable from '@/src/vue/components/InternalTransactionsTable'
+
 import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
 
@@ -525,7 +498,6 @@ export default {
       txDetail: null,
       txReceipt: null,
       txMeta: {},
-      txInternal: {},
       events: [],
       totalEvents: 0,
       error: null,
@@ -533,7 +505,6 @@ export default {
       selectedReceiptTab: 0,
       tokenTxTotalItems: 0,
       nftTxTotalItems: 0,
-      internalTransactionsTotalItems: 0,
       tabTableCss: {
         table: 'result-events',
       },
@@ -664,7 +635,6 @@ export default {
         const responseJson = await response.json()
         if (responseJson.hits.length) {
           this.txMeta = responseJson.hits[0].meta
-          this.txInternal = responseJson.hits[0].internal
         }
       })()
       ;(async () => {
@@ -713,9 +683,6 @@ export default {
     updateNftTxTotalCount(count) {
       this.nftTxTotalItems = count
     },
-    updateInternalTransactionsTotalCount(count) {
-      this.internalTransactionsTotalItems = count
-    },
     moment,
     changePage: function (currentPage) {
       this.currentPage = currentPage
@@ -739,7 +706,6 @@ export default {
   components: {
     TransactionTokenTable,
     TransactionNftTable,
-    InternalTransactionsTable,
     PayloadFormatter,
     Search,
     EventsList,
