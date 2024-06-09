@@ -98,7 +98,7 @@
                           <div
                             v-html="
                               $options.filters.formatToken(
-                                txInternal ? '0' : txMeta.amount,
+                                txMeta.amount,
                                 'aergo'
                               )
                             "
@@ -194,11 +194,7 @@
                         </th>
                         <td>
                           <div>
-                            {{
-                              txInternal
-                                ? txInternal.original_category.toUpperCase()
-                                : typeLabel
-                            }}
+                            {{ typeLabel }}
                           </div>
                         </td>
                       </tr>
