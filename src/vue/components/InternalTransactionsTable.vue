@@ -39,7 +39,15 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td>
-        {{ row.hash.split('_internal_')[0] }}
+        <router-link
+          class="address txt-ellipsis"
+          :aria-label="row.hash.split('_internal_')[0]"
+          :to="`/transaction/${
+            row.hash.split('_internal_')[0]
+          }/?tx=internalTransactions`"
+        >
+          {{ row.hash.split('_internal_')[0] }}
+        </router-link>
       </td>
       <td>
         {{ `_internal_${row.hash.split('_internal_')[1]}` }}
