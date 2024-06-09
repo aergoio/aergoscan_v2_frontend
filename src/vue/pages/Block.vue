@@ -307,7 +307,6 @@ export default {
         const response = await (
           await this.$fetch.get(getBlockApiAddress)
         ).json()
-        console.log(response, 'response')
         this.blockDetail = response.hits[0]
       } catch (error) {
         this.error = '' + error
