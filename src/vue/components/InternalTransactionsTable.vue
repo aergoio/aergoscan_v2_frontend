@@ -39,7 +39,18 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td>
-        {{ row.hash.split('_internal_')[0] }}
+        <router-link
+          :to="`/transaction/${row.hash}/?tx=internalTransactions`"
+          class="address tooltipped tooltipped-s"
+          :aria-label="row.hash"
+        >
+          {{ row.hash }}
+        </router-link>
+      </td>
+      <td class="txt-ellipsis">
+        <router-link class="block" :to="`/block/${row.blockno}/`">
+          {{ row.blockno }}
+        </router-link>
       </td>
       <td>
         {{ `_internal_${row.hash.split('_internal_')[1]}` }}
@@ -121,7 +132,7 @@ export default {
     defaultSortDirection: String,
     sortField: {
       type: String,
-      default: 'blockno',
+      default: 'amount_float',
     },
     sort: {
       type: String,
