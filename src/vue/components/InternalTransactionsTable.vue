@@ -39,7 +39,10 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td>
-        {{ row.hash }}
+        {{ row.hash.split('_internal_')[0] }}
+      </td>
+      <td>
+        {{ `_internal_${row.hash.split('_internal_')[1]}` }}
       </td>
       <td>
         <router-link
@@ -155,7 +158,8 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'TX Hash', value: 'hash' },
+        { text: 'Parent TX Hash', value: 'hash' },
+        { text: 'Internal TX Hash', value: 'hash' },
         { text: 'FROM', value: 'from' },
         { text: '', value: 'Arrow' },
         { text: 'TO', value: 'to' },
