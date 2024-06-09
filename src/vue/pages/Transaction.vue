@@ -521,7 +521,6 @@ export default {
       txDetail: null,
       txReceipt: null,
       txMeta: {},
-      txInternal: {},
       events: [],
       totalEvents: 0,
       error: null,
@@ -660,7 +659,6 @@ export default {
         const responseJson = await response.json()
         if (responseJson.hits.length) {
           this.txMeta = responseJson.hits[0].meta
-          this.txInternal = responseJson.hits[0].internal
         }
       })()
       ;(async () => {

@@ -175,7 +175,6 @@ export default {
               }
         )
       ).json()
-      console.log(response, 'response nft')
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {

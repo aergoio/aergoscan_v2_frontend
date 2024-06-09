@@ -288,7 +288,6 @@ export default {
               : new BigNumber(item.meta.balance + '00')
                   .div(new BigNumber(this.totalSupply))
                   .toFixed(),
-          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount

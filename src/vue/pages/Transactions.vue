@@ -180,7 +180,6 @@ import Identicon from '@/src/vue/components/Identicon'
 import cfg from '@/src/config'
 import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
 import moment from 'moment'
-import BigNumber from 'bignumber.js'
 
 export default {
   props: {
@@ -314,7 +313,6 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          internal: item.internal,
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
