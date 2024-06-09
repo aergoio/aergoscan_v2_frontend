@@ -39,27 +39,7 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td>
-        <router-link
-          :to="`/transaction/${row.hash}/?tx=internalTransactions`"
-          class="address tooltipped tooltipped-s"
-          :aria-label="row.hash"
-        >
-          {{ row.hash }}
-        </router-link>
-      </td>
-      <td class="txt-ellipsis">
-        <router-link class="block" :to="`/block/${row.blockno}/`">
-          {{ row.blockno }}
-        </router-link>
-      </td>
-
-      <td>
-        <div
-          class="tooltipped tooltipped-se tooltipped-align-left-2"
-          :aria-label="moment(row.ts).format('dddd, MMMM Do YYYY, HH:mm:ss')"
-        >
-          {{ moment(row.ts).format('YYYY-MM-DD HH:mm:ss') }}
-        </div>
+        {{ row.hash }}
       </td>
       <td>
         <router-link
@@ -176,8 +156,6 @@ export default {
     headers() {
       return [
         { text: 'TX Hash', value: 'hash' },
-        { text: 'BLOCK #', value: 'blockno' },
-        { text: 'TIME', value: 'ts' },
         { text: 'FROM', value: 'from' },
         { text: '', value: 'Arrow' },
         { text: 'TO', value: 'to' },
@@ -231,26 +209,19 @@ export default {
     }) {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
+      const query = hash ? `(p_id:${hash})` : `(from:${id} OR to:${id})`
       const response = await (
         await this.$fetch.get(
-          `${cfg.API_URL}/internals`,
+          `${cfg.API_URL}/internaltransactions`,
           category !== 'all'
             ? {
-                q: `original_category:${category} AND ${
-                  hash
-                    ? `(_id:${hash})`
-                    : `(original_from:${id} OR from:${id} OR to:${id})`
-                }`,
+                q: `category:${category} AND ${query}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
               }
             : {
-                q: `${
-                  hash
-                    ? `(_id:${hash})`
-                    : `(original_from:${id} OR from:${id} OR to:${id})`
-                }`,
+                q: `${query}`,
                 size: itemsPerPage,
                 from: start,
                 sort: `${sortField}:${sort}`,
@@ -350,9 +321,9 @@ table.internal-transactions-table {
   }
 
   td {
-    &:nth-child(2) {
+    /* &:nth-child(2) {
       width: 10% !important;
-    }
+    } */
     &:nth-child(4) {
       padding-left: 10px;
     }
