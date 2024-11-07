@@ -566,16 +566,19 @@ export default {
       return []
     },
     getTokenPriceByUsd() {
-      return this.tokenPrice?.filter((item) => item.name === 'aergo')[0]?.price
-        ?.usd
+      let tokenBalance = this.tokenPrice?.filter(
+        (item) => item.name === 'aergo'
+      )[0]?.price?.usd
+      tokenBalance = isNaN(tokenBalance) ? 0 : parseFloat(tokenBalance)
+      return tokenBalance
     },
     getUsdPriceByAergo() {
       let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
-      balance = isNaN(balance) ? 0 : parseFloat(balance);
+      balance = isNaN(balance) ? 0 : parseFloat(balance)
       let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
         ?.price?.usd
-      usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice);
-      
+      usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
+
       return toFix(Number(usdPrice) * toFix(balance))
     },
   },
@@ -822,11 +825,11 @@ export default {
       try {
         if (this.accountDetail.codehash) {
           Promise.all([
-            this.$store
-              .dispatch('blockchain/getABI', { address })
-              .then((abi) => {
-                this.contractAbi = abi
-              }),
+            // this.$store
+            //   .dispatch('blockchain/getABI', { address })
+            //   .then((abi) => {
+            //     this.contractAbi = abi
+            //   }),
             loadTokenMetadata(),
           ]).then(async () => {
             // Get updated supply
