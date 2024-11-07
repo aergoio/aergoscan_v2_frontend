@@ -176,13 +176,13 @@ const actions = {
   async fetchNameInfo({}, { name }) {
     return await aergo.getNameInfo(name)
   },
-  getABI({ dispatch }, { address }) {
-    return dispatch('fetchABI', { address })
-  },
-  async fetchABI({ commit }, { address }) {
-    const abi = await aergo.getABI(address)
-    return abi
-  },
+  // getABI({ dispatch }, { address }) {
+  //   return dispatch('fetchABI', { address })
+  // },
+  // async fetchABI({ commit }, { address }) {
+  //   const abi = await aergo.getABI(address)
+  //   return abi
+  // },
   async fetchPeers() {
     const peers = await aergo.getPeers()
     return peers
