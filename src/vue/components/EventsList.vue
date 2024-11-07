@@ -64,7 +64,7 @@
         <td width="100%">
           <span class="event-args">
             <span class="args-payload" v-if="JSON.parse(row.event_args).length">
-              <pre><ArgFormatter v-for="arg of JSON.parse(row.event_args)" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
+              <pre><ArgFormatter v-for="(arg,index) of JSON.parse(row.event_args)" :key="`${index}`" :arg="arg" class="monospace"/></pre>
             </span>
           </span>
         </td>

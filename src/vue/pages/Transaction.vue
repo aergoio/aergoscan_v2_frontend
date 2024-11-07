@@ -335,13 +335,13 @@
                 <div class="title">Contract</div>
                 <div class="item">
                   <span class="item-inner">
-                    <router-link :to="`/account/${txMeta.contract}/`">
+                    <router-link :to="`/account/${contract.hash}/`">
                       <Identicon
-                        :text="txMeta.contract"
+                        :text="contract.hash"
                         size="20"
                         class="tiny-identicon"
                       />
-                      {{ txMeta.contract }}
+                      {{ contract.hash }}
                     </router-link>
                   </span>
                 </div>
@@ -357,19 +357,60 @@
                     :route="{ query: query({ payload: 'formatted' }) }"
                     :id="'formatted'"
                   >
-                    <div class="title" v-if="txMeta.payload.length">
+                    <div class="title" v-if="txMeta.payload?.length">
                       {{ formattedTitle }}
                     </div>
                     <div class="content">
                       <div class="h-scroll dark">
-                        <div class="empty-result" v-if="!txMeta.payload.length">
+                        <div
+                          class="empty-result"
+                          v-if="!txMeta.payload?.length"
+                        >
                           (No payload)
                         </div>
+                        <div
+                          v-if="
+                            txMeta.blockno > hardforkBlockV4 &&
+                            txMeta.type === 6
+                          "
+                          class="h-scroll dark"
+                        >
+                          <div
+                            class="empty-result"
+                            v-if="!contract.meta.source_code"
+                          >
+                            (No sourceCode)
+                          </div>
+                          <codemirror
+                            v-if="contract.meta.source_code"
+                            v-model="contract.meta.source_code"
+                            :options="cmOption2"
+                          />
+
+                          <div
+                            class="title"
+                            v-if="contract.meta.deploy_args.length"
+                          >
+                            Deploy Arguments
+                          </div>
+
+                          <div
+                            class="empty-result"
+                            v-if="!contract.meta.deploy_args"
+                          >
+                            (No deployArgs)
+                          </div>
+                          <codemirror
+                            v-if="contract.meta.deploy_args"
+                            v-model="contract.meta.deploy_args"
+                            :options="cmOption2"
+                          />
+                        </div>
                         <payload-formatter
+                          v-else
                           :payload="txMeta.payload"
                           :txType="txMeta.type"
                           :recipient="txMeta.to"
-                          v-if="txMeta.payload"
                         />
                       </div>
                     </div>
@@ -550,13 +591,24 @@ export default {
         theme: 'material-ocean',
         readOnly: true,
       },
+      cmOption2: {
+        tabSize: 4,
+        styleActiveLine: true,
+        readOnly: true,
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        theme: 'material-ocean',
+        mode: 'text/x-lua',
+      },
       payloadJson: '',
       isContract: false,
+      contract: {},
     }
   },
   created() {},
   beforeDestroy() {},
-
   watch: {
     $route(to, from) {
       this.load()
@@ -588,6 +640,7 @@ export default {
 
         if (responseJson.hits.length > 0) {
           this.isContract = true
+          this.contract = responseJson.hits[0]
         }
       })()
       if (this.selectedPayloadTab === 1) {
@@ -609,6 +662,9 @@ export default {
     this.changePage(this.currentPage)
   },
   computed: {
+    hardforkBlockV4() {
+      return cfg.HARDFORK_BLOCK_V4 || 0
+    },
     realToken() {
       return this.$route.params.hash
     },
@@ -625,8 +681,8 @@ export default {
       return status.charAt(0).toUpperCase() + status.slice(1)
     },
     payloadHex() {
-      if (!this.txMeta.payload) return
-      let payloadBuffer = Buffer.from(this.txMeta.payload)
+      if (!this.txMeta.payload) return 'No Payload calculate to Hex'
+      let payloadBuffer = Buffer.from(this.txMeta.payload, 'base64')
       return payloadBuffer.toString('hex')
     },
     receiptJson() {
@@ -719,16 +775,16 @@ export default {
       this.currentPage = currentPage
     },
     calculatePayloadJson() {
-      if (!this.txMeta.payload) return
+      if (!this.txMeta.payload) return 'No Payload calculate to JSON'
       try {
-        let payloadBuffer = Buffer.from(this.txMeta.payload)
-        let parsedData = JSON.parse(payloadBuffer.toString())
-
+        let payloadBuffer = Buffer.from(this.txMeta.payload, 'base64')
+        let parsedData = JSON.parse(payloadBuffer.toString('utf-8'))
         return JSON.stringify(parsedData, null, 2)
       } catch (e) {
         return 'Cannot parse payload as JSON'
       }
     },
+    //
   },
   components: {
     TransactionTokenTable,
