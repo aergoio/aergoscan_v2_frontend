@@ -1,6 +1,6 @@
 <template>
   <data-table
-    :trans-data="data || []"
+    :trans-data="data"
     :is-loading="isLoading"
     :css="dataTableCss"
     :style="{
@@ -39,13 +39,17 @@
     </template>
     <template slot="list" slot-scope="{ row }">
       <td>
+        {{ row.hash }}
+      </td>
+      <td>
         <router-link
-          :to="`/transaction/${row.hash}/?tx=internalTransactions`"
-          class="address tooltipped tooltipped-s"
-          :aria-label="row.hash"
+          :to="`/transaction/${row.tx_hash}?tx=internalTransactions`"
+          class="address tooltipped tooltipped-se tooltipped-align-left-2"
+          :aria-label="row.tx_hash"
         >
-          {{ row.hash }}
+          {{ $options.filters.formatEllipsisText(row.tx_hash, 30) }}
         </router-link>
+        <copy-link-button :message="row.tx_hash" />
       </td>
       <td class="txt-ellipsis">
         <router-link class="block" :to="`/block/${row.blockno}/`">
@@ -53,15 +57,17 @@
         </router-link>
       </td>
       <td>
-        {{ `_internal_${row.hash.split('_internal_')[1]}` }}
+        <div>
+          {{ moment(row.ts).fromNow() }}
+        </div>
       </td>
       <td>
         <router-link
-          :to="`/account/${row.from}/?tx=internalTransactions`"
+          :to="`/account/${row.caller}?tx=internalTransactions`"
           class="address tooltipped tooltipped-s"
-          :aria-label="row.from"
+          :aria-label="row.caller"
         >
-          {{ $options.filters.formatEllipsisText(row.from, 30) }}
+          {{ $options.filters.formatEllipsisText(row.caller, 30) }}
         </router-link>
       </td>
       <td>
@@ -71,19 +77,13 @@
       </td>
       <td>
         <router-link
-          :to="`/account/${row.to}/?tx=internalTransactions`"
+          :to="`/account/${row.contract}?tx=internalTransactions`"
           class="address tooltipped tooltipped-s"
-          :aria-label="row.to"
+          :aria-label="row.contract"
         >
-          {{ $options.filters.formatEllipsisText(row.to, 30) }}
+          {{ $options.filters.formatEllipsisText(row.contract, 30) }}
         </router-link>
       </td>
-      <td>
-        <div>
-          {{ row.category.toUpperCase() }}
-        </div>
-      </td>
-
       <td>
         <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
       </td>
@@ -166,16 +166,20 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+  updated() {
+    console.log(this.data, 'data')
+  },
   computed: {
     headers() {
       return [
-        { text: 'Parent TX Hash', value: 'hash' },
-        { text: 'Internal TX Hash', value: 'hash' },
-        { text: 'FROM', value: 'from' },
+        { text: 'Internal Address', value: 'hash' },
+        { text: 'Parent TX Hash', value: 'tx_hash' },
+        { text: 'BLOCK #', value: 'blockno' },
+        { text: 'TIME', value: 'ts' },
+        { text: 'FROM', value: 'caller' },
         { text: '', value: 'Arrow' },
-        { text: 'TO', value: 'to' },
-        { text: 'Tx Type', value: 'category' },
-        { text: 'AMOUNT(AERGO)', value: 'amount_float' },
+        { text: 'TO', value: 'contract' },
+        { text: 'AMOUNT(AERGO)', value: 'amount' },
       ]
     },
     categories() {
@@ -205,7 +209,6 @@ export default {
     isHidePage() {
       return this.itemsPerPage >= this.limitPageTotalCount
     },
-    
   },
   mounted() {
     this.changePage(this.currentPage)
@@ -216,34 +219,22 @@ export default {
       return addr === this.address
     },
     loadTransactionTableData: async function ({
-      id,
       hash,
-      category,
-      sortField,
-      sort,
       currentPage,
       itemsPerPage,
     }) {
       this.error = ''
       const start = (currentPage - 1) * itemsPerPage
-      const query = hash ? `(p_id:${hash})` : `(from:${id} OR to:${id})`
+      const query = this.address
+        ? `(caller:${this.address} OR contract:${this.address})`
+        : `tx_hash:${hash}`
       const response = await (
-        await this.$fetch.get(
-          `${cfg.API_URL}/internaltransactions`,
-          category !== 'all'
-            ? {
-                q: `category:${category} AND ${query}`,
-                size: itemsPerPage,
-                from: start,
-                sort: `${sortField}:${sort}`,
-              }
-            : {
-                q: `${query}`,
-                size: itemsPerPage,
-                from: start,
-                sort: `${sortField}:${sort}`,
-              }
-        )
+        await this.$fetch.get(`${cfg.API_URL}/contractCall`, {
+          q: `${query}`,
+          size: itemsPerPage,
+          from: start,
+          sort: '_id:desc',
+        })
       ).json()
       if (response.error) {
         this.error = response.error.msg
@@ -252,12 +243,6 @@ export default {
           ...item.meta,
           hash: item.hash,
           rank: response.from + (index + 1),
-          percentage:
-            this.totalSupply === '0'
-              ? 0
-              : new BigNumber(item.meta.balance + '00')
-                  .div(new BigNumber(this.totalSupply))
-                  .toFixed(),
         }))
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
@@ -268,14 +253,10 @@ export default {
       }
       this.$emit('onUpdateTotalCount', this.totalItems)
     },
-    reload: async function (address) {
+    reload: async function () {
       this.isLoading = true
       await this.loadTransactionTableData({
-        id: address ? address : this.address,
         hash: this.hash,
-        category: this.selectedCategory,
-        sortField: this.sortedField,
-        sort: this.sortedDir,
         currentPage: this.currentPage,
         itemsPerPage: this.itemsPerPage,
       })
@@ -338,9 +319,14 @@ table.internal-transactions-table {
   }
 
   td {
-    /* &:nth-child(2) {
-      width: 10% !important;
-    } */
+    &:nth-child(2) {
+      width: 20% !important;
+      display: flex;
+      align-items: center;
+    }
+    &:nth-child(3) {
+      width: 6% !important;
+    }
     &:nth-child(4) {
       padding-left: 10px;
     }

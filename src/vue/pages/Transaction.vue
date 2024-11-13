@@ -299,7 +299,7 @@
                         }"
                         replace
                       >
-                        <span class="main">Internal Transactions [Beta]</span
+                        <span class="main">Internal Transactions</span
                         ><span class="sub">{{
                           internalTransactionsTotalItems
                         }}</span>
