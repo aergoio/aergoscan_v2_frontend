@@ -784,7 +784,6 @@ export default {
       } else {
         this.internalData = []
       }
-      console.log(this.internalData, 'internalData')
     },
 
     async getReceipt() {
