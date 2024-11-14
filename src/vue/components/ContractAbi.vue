@@ -762,6 +762,9 @@ export default {
   .CodeMirror-gutters {
     background: #363344;
   }
+  .CodeMirror-line .cm-comment {
+    color: #a89cb3 !important;
+  }
   .CodeMirror-linenumber {
     color: #fff;
     width: 25px;
