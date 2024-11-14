@@ -3,9 +3,6 @@
     :trans-data="data"
     :is-loading="isLoading"
     :css="dataTableCss"
-    :style="{
-      minHeight: '400px',
-    }"
   >
     <template slot="error" v-if="error">
       <div class="error internal-transactions show">
@@ -85,9 +82,13 @@
         </router-link>
       </td>
       <td>
+        {{ row.function.toUpperCase() }}
+      </td>
+      <td>
         <div v-html="$options.filters.formatBigNumAmount(row.amount)"></div>
       </td>
     </template>
+
     <pagination
       slot="pagination"
       :css="paginationCss"
@@ -143,6 +144,9 @@ export default {
       default: 'all',
     },
   },
+  components: {
+    Identicon,
+  },
   data() {
     return {
       error: '',
@@ -166,9 +170,7 @@ export default {
   },
   created() {},
   beforeDestroy() {},
-  updated() {
-    console.log(this.data, 'data')
-  },
+  updated() {},
   computed: {
     headers() {
       return [
@@ -179,6 +181,7 @@ export default {
         { text: 'FROM', value: 'caller' },
         { text: '', value: 'Arrow' },
         { text: 'TO', value: 'contract' },
+        { text: 'METHOD', value: 'function' },
         { text: 'AMOUNT(AERGO)', value: 'amount' },
       ]
     },
@@ -253,6 +256,7 @@ export default {
       }
       this.$emit('onUpdateTotalCount', this.totalItems)
     },
+    
     reload: async function () {
       this.isLoading = true
       await this.loadTransactionTableData({
@@ -260,6 +264,7 @@ export default {
         currentPage: this.currentPage,
         itemsPerPage: this.itemsPerPage,
       })
+      
       this.isLoading = false
     },
     changePage: function (currentPage) {
@@ -281,14 +286,14 @@ export default {
     BigNumber,
     openTableHeaderMenu,
   },
-  components: {
-    Identicon,
-  },
 }
 </script>
 
 <style lang="scss" scoped>
 table.internal-transactions-table {
+  tr:hover {
+    background: #f8f9fa;
+  }
   th {
     &:nth-child(3) {
       min-width: 90px;

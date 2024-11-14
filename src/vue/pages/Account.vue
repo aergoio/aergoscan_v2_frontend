@@ -365,6 +365,33 @@
                     :active="$route.query.tx === 'internalTransactions'"
                     @onUpdateTotalCount="updateInternalTransactionsTotalCount"
                   />
+                  <span
+                    v-if="
+                      internalData.length > 0 &&
+                      $route.query.tx === 'internalTransactions'
+                    "
+                    :style="{
+                      color: '#3c3b3e',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                    }"
+                    >Internal Operations Tree View</span
+                  >
+
+                  <vue-json-pretty
+                    v-if="
+                      internalData.length > 0 &&
+                      $route.query.tx === 'internalTransactions'
+                    "
+                    :theme="`dark`"
+                    :data="internalData"
+                    showIcon
+                    showLine
+                    :showDoubleQuotes="false"
+                    showKeyValueSpace
+                    collapsedOnClickBrackets
+                    :deep="2"
+                  />
                 </div>
               </div>
             </div>
@@ -439,6 +466,7 @@ export default {
       nameHistory: [],
       tokenPrice: [],
       callContractHash: '',
+      internalData: [],
     }
   },
   created() {},
@@ -680,6 +708,28 @@ export default {
         }
       })()
 
+      // Internal Operations
+      ;(async () => {
+        try {
+          let address = this.$route.params.address
+          const response = await (
+            await this.$fetch.get(`${cfg.API_URL}/internalOperations`, {
+              q: `contract:${address}`,
+            })
+          ).json()
+          if (response.hits.length) {
+            this.internalData = response.hits.map((item) => ({
+              ...item.meta,
+              operations: JSON.parse(item.meta.operations),
+            }))
+          }
+        } catch (e) {
+          console.error(e)
+          this.internalData = []
+          this.isLoadingDetail = false
+        }
+      })()
+
       // VoteHistory
       ;(async () => {
         try {
@@ -853,6 +903,7 @@ export default {
         console.error(e)
       }
     },
+
     async reloadAllTable(address) {
       if (this.$refs.accountTransactionTable) {
         await this.$refs.accountTransactionTable.reload(address)

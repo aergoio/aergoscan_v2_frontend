@@ -326,6 +326,32 @@
                     :active="$route.query.tx === 'internalTransactions'"
                     @onUpdateTotalCount="updateInternalTransactionsTotalCount"
                   />
+                  <span
+                    v-if="
+                      internalData.length > 0 &&
+                      $route.query.tx === 'internalTransactions'
+                    "
+                    :style="{
+                      color: '#3c3b3e',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                    }"
+                    >Internal Operations Tree View</span
+                  >
+                  <vue-json-pretty
+                    v-if="
+                      internalData.length > 0 &&
+                      $route.query.tx === 'internalTransactions'
+                    "
+                    :theme="`dark`"
+                    :data="internalData"
+                    showIcon
+                    showLine
+                    :showDoubleQuotes="false"
+                    showKeyValueSpace
+                    collapsedOnClickBrackets
+                    :deep="2"
+                  />
                 </div>
               </div>
             </div>
@@ -605,6 +631,7 @@ export default {
       payloadJson: '',
       isContract: false,
       contract: {},
+      internalData: [],
     }
   },
   created() {},
@@ -737,8 +764,29 @@ export default {
         }
       })()
 
+      await this.loadInternalOperationsData()
+
       await this.$nextTick()
     },
+
+    loadInternalOperationsData: async function () {
+      let hash = this.$route.params.hash
+      const response = await (
+        await this.$fetch.get(`${cfg.API_URL}/internalOperations`, {
+          q: `tx_id:${hash}`,
+        })
+      ).json()
+      if (response.hits.length) {
+        this.internalData = response.hits.map((item, index) => ({
+          ...item.meta,
+          operations: JSON.parse(item.meta.operations),
+        }))
+      } else {
+        this.internalData = []
+      }
+      console.log(this.internalData, 'internalData')
+    },
+
     async getReceipt() {
       let hash = this.$route.params.hash
       this.txReceipt = await this.$store.dispatch(
@@ -800,6 +848,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.vjs-value-string {
+  color: #279ecc !important;
+}
+
 .category-inner {
   > .page-wrap {
     padding-bottom: 30px;
