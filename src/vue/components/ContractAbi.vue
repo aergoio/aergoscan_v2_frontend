@@ -228,7 +228,9 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
-      if (to === 0 || to === 3) {
+      if (to === 0 || to === 3) {  
+        // Discovered a bug where data from the JSON viewer is fetched but the screen doesn't re-render. 
+        // To force the re-rendering, implemented a logic that changes an internal key.
         this.interactiveKey += 1
       }
       if (to === 2) {
