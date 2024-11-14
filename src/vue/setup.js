@@ -15,7 +15,7 @@ import CopyLinkButton from '@/src/vue/components/CopyLinkButton'
 import QrcodeButton from '@/src/vue/components/QrcodeButton'
 import QRcodeModal from '@/src/vue/components/modal/QRcodeModal'
 import VueJsonPretty from 'vue-json-pretty'
-import 'vue-json-pretty/lib/styles.css'
+import '@/src/assets/style/styles.css'
 
 import store from '@/src/vue/store/index'
 import { shortAddress } from '@/src/vue/filters/address'
