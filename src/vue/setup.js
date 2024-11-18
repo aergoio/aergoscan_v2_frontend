@@ -14,8 +14,6 @@ import { Tabs, Tab } from '@/src/vue/components/tabs'
 import CopyLinkButton from '@/src/vue/components/CopyLinkButton'
 import QrcodeButton from '@/src/vue/components/QrcodeButton'
 import QRcodeModal from '@/src/vue/components/modal/QRcodeModal'
-import VueJsonPretty from 'vue-json-pretty'
-import '@/src/assets/style/styles.css'
 
 import store from '@/src/vue/store/index'
 import { shortAddress } from '@/src/vue/filters/address'
@@ -42,7 +40,6 @@ export default async function setup(opts) {
   Vue.component('CopyLinkButton', CopyLinkButton)
   Vue.component('QrcodeButton', QrcodeButton)
   Vue.component('QrcodeModal', QRcodeModal)
-  Vue.component('vue-json-pretty', VueJsonPretty)
 
   Vue.filter('shortAddress', shortAddress)
   Vue.filter('formatToken', formatToken)
