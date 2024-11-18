@@ -293,18 +293,18 @@
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
                       <router-link
-                        class="title internal-transactions"
+                        class="title internal-operations"
                         :to="{
                           query: {
                             ...$route.query,
-                            tx: 'internalTransactions',
+                            tx: 'internalOperations',
                           },
                         }"
                         replace
                       >
-                        <span class="main">Internal Transactions</span
+                        <span class="main">Internal Operations</span
                         ><span class="sub">{{
-                          internalTransactionsTotalItems
+                          internalOperationsTotalItems
                         }}</span>
                       </router-link>
                     </div>
@@ -359,39 +359,53 @@
                     :nameHistory="nameHistory"
                     v-if="nameHistory.length"
                   />
-                  <internal-transactions-table
-                    ref="internalTransactionsTable"
-                    :address="realAddress"
-                    :active="$route.query.tx === 'internalTransactions'"
-                    @onUpdateTotalCount="updateInternalTransactionsTotalCount"
-                  />
-                  <span
-                    v-if="
-                      internalData.length > 0 &&
-                      $route.query.tx === 'internalTransactions'
-                    "
-                    :style="{
-                      color: '#3c3b3e',
-                      fontSize: '12px',
-                      fontWeight: '600',
-                    }"
-                    >Internal Operations Tree View</span
-                  >
 
-                  <vue-json-pretty
-                    v-if="
-                      internalData.length > 0 &&
-                      $route.query.tx === 'internalTransactions'
-                    "
-                    :theme="`dark`"
-                    :data="internalData"
-                    showIcon
-                    showLine
-                    :showDoubleQuotes="false"
-                    showKeyValueSpace
-                    collapsedOnClickBrackets
-                    :deep="2"
-                  />
+                  <div
+                    :style="{
+                      display: 'grid',
+                      gridTemplateColumns: `${
+                        internalData.operations?.length > 0 ? '1fr 1fr' : `1fr`
+                      }`,
+                    }"
+                  >
+                    <div>
+                      <span
+                        v-if="$route.query.tx === 'internalOperations'"
+                        :style="{
+                          color: '#3c3b3e',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                        }"
+                        >Calls</span
+                      >
+                      <internal-operations-table
+                        ref="internalOperationsTable"
+                        :isContract="true"
+                        :address="realAddress"
+                        :active="$route.query.tx === 'internalOperations'"
+                        @onUpdateTotalCount="updateInternalOperationsTotalCount"
+                      />
+                    </div>
+                    <div
+                      v-if="
+                        internalData.operations?.length > 0 &&
+                        $route.query.tx === 'internalOperations'
+                      "
+                    >
+                      <span
+                        :style="{
+                          paddingLeft: '1rem',
+                          color: '#3c3b3e',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                        }"
+                        >Operations</span
+                      >
+                      <div class="tree-container">
+                        <TreeNode :data="internalData" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -436,7 +450,8 @@ import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTa
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable'
 import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable'
 import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable'
-import InternalTransactionsTable from '@/src/vue/components/InternalTransactionsTable'
+import InternalOperationsTable from '@/src/vue/components/InternalOperationsTable'
+import TreeNode from '@/src/vue/components/TreeNode.vue'
 
 export default {
   data() {
@@ -456,7 +471,7 @@ export default {
       nftTransferTotalItems: 0,
       tokenBalanceTotalItems: 0,
       nftInventoryTotalItems: 0,
-      internalTransactionsTotalItems: 0,
+      internalOperationsTotalItems: 0,
       tokens: [],
       nfts: [],
       contractTx: [],
@@ -470,6 +485,7 @@ export default {
     }
   },
   created() {},
+
   beforeDestroy() {},
   watch: {
     $route(to, from) {
@@ -601,13 +617,22 @@ export default {
       return tokenBalance
     },
     getUsdPriceByAergo() {
-      let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
-      balance = isNaN(balance) ? 0 : parseFloat(balance)
-      let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
-        ?.price?.usd
-      usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
+      try {
+        let balance = this.fullBalance
+          ?.toUnit('aergo')
+          ?.toString()
+          ?.split(' ')[0]
+        balance = isNaN(balance) ? 0 : parseFloat(balance)
+        let usdPrice = this.tokenPrice?.filter(
+          (item) => item.name === 'aergo'
+        )[0]?.price?.usd
+        usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
 
-      return toFix(Number(usdPrice) * toFix(balance))
+        return toFix(Number(usdPrice) * toFix(balance))
+      } catch (e) {
+        console.error('Error in getUsdPriceByAergo:', e)
+        return '0'
+      }
     },
   },
   methods: {
@@ -721,7 +746,9 @@ export default {
             this.internalData = response.hits.map((item) => ({
               ...item.meta,
               operations: JSON.parse(item.meta.operations),
-            }))
+            }))[0]
+          } else {
+            this.internalData = []
           }
         } catch (e) {
           console.error(e)
@@ -920,8 +947,8 @@ export default {
       if (this.$refs.accountNftInventoryTable) {
         await this.$refs.accountNftInventoryTable.reload(address)
       }
-      if (this.$refs.internalTransactionsTable) {
-        await this.$refs.internalTransactionsTable.reload(address)
+      if (this.$refs.internalOperationsTable) {
+        await this.$refs.internalOperationsTable.reload(address)
       }
     },
     updateTransactionTotalCount(count) {
@@ -939,8 +966,8 @@ export default {
     updateNftInventoryTotalCount(count) {
       this.nftInventoryTotalItems = count
     },
-    updateInternalTransactionsTotalCount(count) {
-      this.internalTransactionsTotalItems = count
+    updateInternalOperationsTotalCount(count) {
+      this.internalOperationsTotalItems = count
     },
     onShowQrcode() {
       this.isShowQRcode = true
@@ -956,6 +983,7 @@ export default {
     Identicon,
     Search,
     ContractAbi,
+    TreeNode,
     AccountTransactionTable,
     AccountTokenTransferTable,
     AccountNftTransferTable,
@@ -963,12 +991,21 @@ export default {
     AccountNftInventoryTable,
     AccountNameHistoryTable,
     AccountRegisteredNamesTable,
-    InternalTransactionsTable,
+    InternalOperationsTable,
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.tree-container {
+  padding: 0.5rem;
+}
+/* 최상위 .tree-node의 연결선을 제거 */
+.tree-container > .tree-node::before,
+.tree-container > .tree-node::after {
+  display: none;
+}
+
 .category-inner {
   > .page-wrap {
     padding-bottom: 30px;
@@ -992,7 +1029,7 @@ export default {
   &.account {
     .table-wrap {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       margin: 0;
 
       @media screen and (max-width: 1180px) {

@@ -290,18 +290,18 @@
                         ><span class="sub">{{ nftTxTotalItems }}</span>
                       </router-link>
                       <router-link
-                        class="title internal-transactions"
+                        class="title internal-operations"
                         :to="{
                           query: {
                             ...$route.query,
-                            tx: 'internalTransactions',
+                            tx: 'internalOperations',
                           },
                         }"
                         replace
                       >
                         <span class="main">Internal Transactions</span
                         ><span class="sub">{{
-                          internalTransactionsTotalItems
+                          internalOperationsTotalItems
                         }}</span>
                       </router-link>
                     </div>
@@ -320,38 +320,51 @@
                     :active="$route.query.tx === 'nft'"
                     @onUpdateTotalCount="updateNftTxTotalCount"
                   />
-                  <internal-transactions-table
-                    ref="internalTransactionsTable"
-                    :hash="$route.params.hash"
-                    :active="$route.query.tx === 'internalTransactions'"
-                    @onUpdateTotalCount="updateInternalTransactionsTotalCount"
-                  />
-                  <span
-                    v-if="
-                      internalData.length > 0 &&
-                      $route.query.tx === 'internalTransactions'
-                    "
+                  <div
                     :style="{
-                      color: '#3c3b3e',
-                      fontSize: '12px',
-                      fontWeight: '600',
+                      display: 'grid',
+                      gridTemplateColumns: `${
+                        internalData.operations?.length > 0 ? '1fr 1fr' : `1fr`
+                      }`,
                     }"
-                    >Internal Operations Tree View</span
                   >
-                  <vue-json-pretty
-                    v-if="
-                      internalData.length > 0 &&
-                      $route.query.tx === 'internalTransactions'
-                    "
-                    :theme="`dark`"
-                    :data="internalData"
-                    showIcon
-                    showLine
-                    :showDoubleQuotes="false"
-                    showKeyValueSpace
-                    collapsedOnClickBrackets
-                    :deep="2"
-                  />
+                    <div>
+                      <span
+                        v-if="$route.query.tx === 'internalOperations'"
+                        :style="{
+                          color: '#3c3b3e',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                        }"
+                        >Calls</span
+                      >
+                      <internal-operations-table
+                        ref="internalOperationsTable"
+                        :hash="$route.params.hash"
+                        :active="$route.query.tx === 'internalOperations'"
+                        @onUpdateTotalCount="updateInternalOperationsTotalCount"
+                      />
+                    </div>
+                    <div
+                      v-if="
+                        $route.query.tx === 'internalOperations' &&
+                        internalData.operations?.length > 0
+                      "
+                    >
+                      <span
+                        :style="{
+                          paddingLeft: '1rem',
+                          color: '#3c3b3e',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                        }"
+                        >Operations</span
+                      >
+                      <div class="tree-container">
+                        <TreeNode :data="internalData" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -409,6 +422,7 @@
                           </div>
                           <codemirror
                             v-if="contract.meta.source_code"
+                            :key="interactiveKey"
                             v-model="contract.meta.source_code"
                             :options="cmOption2"
                           />
@@ -560,9 +574,10 @@ import PayloadFormatter from '@/src/vue/components/PayloadFormatter'
 import EventsList from '@/src/vue/components/EventsList'
 import TransactionTokenTable from '@/src/vue/components/TransactionTokenTable'
 import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
-import InternalTransactionsTable from '@/src/vue/components/InternalTransactionsTable'
+import InternalOperationsTable from '@/src/vue/components/InternalOperationsTable'
 import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
+import TreeNode from '@/src/vue/components/TreeNode.vue'
 
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -595,7 +610,7 @@ export default {
       selectedReceiptTab: 0,
       tokenTxTotalItems: 0,
       nftTxTotalItems: 0,
-      internalTransactionsTotalItems: 0,
+      internalOperationsTotalItems: 0,
       tabTableCss: {
         table: 'result-events',
       },
@@ -632,6 +647,7 @@ export default {
       isContract: false,
       contract: {},
       internalData: [],
+      interactiveKey: 0,
     }
   },
   created() {},
@@ -648,6 +664,7 @@ export default {
     },
     selectedReceiptTab() {
       if (this.selectedReceiptTab === 1) {
+        this.interactiveKey += 1
         this.getReceipt()
       }
     },
@@ -770,19 +787,24 @@ export default {
     },
 
     loadInternalOperationsData: async function () {
-      let hash = this.$route.params.hash
-      const response = await (
-        await this.$fetch.get(`${cfg.API_URL}/internalOperations`, {
-          q: `tx_id:${hash}`,
-        })
-      ).json()
-      if (response.hits.length) {
-        this.internalData = response.hits.map((item, index) => ({
-          ...item.meta,
-          operations: JSON.parse(item.meta.operations),
-        }))
-      } else {
+      try {
+        let hash = this.$route.params.hash
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/internalOperations`, {
+            q: `tx_id:${hash}`,
+          })
+        ).json()
+        if (response.hits.length) {
+          this.internalData = response.hits.map((item, index) => ({
+            ...item.meta,
+            operations: JSON.parse(item.meta.operations),
+          }))[0]
+        } else {
+          this.internalData = []
+        }
+      } catch (e) {
         this.internalData = []
+        console.error(e)
       }
     },
 
@@ -810,8 +832,8 @@ export default {
     updateNftTxTotalCount(count) {
       this.nftTxTotalItems = count
     },
-    updateInternalTransactionsTotalCount(count) {
-      this.internalTransactionsTotalItems = count
+    updateInternalOperationsTotalCount(count) {
+      this.internalOperationsTotalItems = count
     },
     moment,
     changePage: function (currentPage) {
@@ -831,17 +853,20 @@ export default {
         return 'Cannot parse payload as JSON'
       }
     },
-    //
+    handleExpand() {
+      console.log('here')
+    },
   },
   components: {
     TransactionTokenTable,
     TransactionNftTable,
-    InternalTransactionsTable,
+    InternalOperationsTable,
     PayloadFormatter,
     Search,
     EventsList,
     Identicon,
     codemirror,
+    TreeNode,
   },
 }
 </script>
@@ -849,6 +874,15 @@ export default {
 <style lang="scss" scoped>
 .vjs-value-string {
   color: #279ecc !important;
+}
+
+.tree-container {
+  padding: 0.5rem;
+}
+/* 최상위 .tree-node의 연결선을 제거 */
+.tree-container > .tree-node::before,
+.tree-container > .tree-node::after {
+  display: none;
 }
 
 .category-inner {
@@ -874,7 +908,7 @@ export default {
   &.transaction {
     .table-wrap {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       gap: 0 16px;
       margin: 0;
 
@@ -910,7 +944,7 @@ export default {
 
     .tabs-wrap {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       padding: 10px 20px 50px;
 
       @media screen and (max-width: 1200px) {
