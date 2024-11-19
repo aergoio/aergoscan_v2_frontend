@@ -136,6 +136,7 @@ export default {
 }
 .contract-highlight {
   background-color: #eaf4ff;
+  color: #ffffff;
   border: 1px solid #b3d8ff;
   transition: background-color 0.2s ease;
 }

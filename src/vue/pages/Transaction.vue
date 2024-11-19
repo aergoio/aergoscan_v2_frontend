@@ -360,7 +360,7 @@
                         }"
                         >Operations</span
                       >
-                      <div class="tree-container" v-if="internalData">
+                      <div class="tree-container">
                         <TreeNode :data="internalData" />
                       </div>
                     </div>
@@ -796,47 +796,15 @@ export default {
           })
         ).json()
         if (response.hits.length) {
-          // this.internalData = response.hits.map((item) => {
-          //   const operations = JSON.parse(item.meta.operations).map(
-          //     (operation) => {
-          //       if (operation.args.length > 0) {
-          //         try {
-          //           operation.args = operation.args.map((arg, index) => {
-          //             if (index === 2) {
-          //               try {
-          //                 return JSON.parse(arg)
-          //               } catch (e) {
-          //                 console.error(
-          //                   'Failed to parse nested JSON in args:',
-          //                   e
-          //                 )
-          //                 return arg //
-          //               }
-          //             }
-          //             return arg
-          //           })
-          //         } catch (e) {
-          //           console.error('Failed to parse args:', e)
-          //           operation.args = operation.args
-          //         }
-          //       }
-          //       return operation
-          //     }
-          //   )
-          //   return {
-          //     ...item.meta,
-          //     operations: operations,
-          //   }
-          // })[0] // 첫 번째 결과만 가져옴
-          this.internalData = response.hits.map((item, index) => ({
+          this.internalData = response.hits.map((item) => ({
             ...item.meta,
             operations: JSON.parse(item.meta.operations),
           }))[0]
         } else {
-          this.internalData = null
+          this.internalData = []
         }
       } catch (e) {
-        this.internalData = null
+        this.internalData = []
         console.error(e)
       }
     },
