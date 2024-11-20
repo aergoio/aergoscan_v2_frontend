@@ -324,7 +324,9 @@
                     :style="{
                       display: 'grid',
                       gridTemplateColumns: `${
-                        internalData.operations?.length > 0 ? '1fr 1fr' : `1fr`
+                        internalData.operations?.operations?.length > 0
+                          ? '1fr 1fr'
+                          : `1fr`
                       }`,
                     }"
                   >
@@ -348,7 +350,7 @@
                     <div
                       v-if="
                         $route.query.tx === 'internalOperations' &&
-                        internalData.operations?.length > 0
+                        internalData.operations?.operations?.length > 0
                       "
                     >
                       <span
@@ -361,7 +363,7 @@
                         >Operations</span
                       >
                       <div class="tree-container">
-                        <TreeNode :data="internalData" />
+                        <TreeNode :data="internalData?.operations" />
                       </div>
                     </div>
                   </div>
@@ -653,6 +655,9 @@ export default {
   },
   created() {},
   beforeDestroy() {},
+  updated() {
+    console.log(this.internalData, 'internalDatainternalDatainternalData')
+  },
   watch: {
     $route(to, from) {
       this.load()

@@ -5,10 +5,6 @@
       @click="toggle"
       :class="{ 'contract-highlight': data.contract }"
     >
-      <!-- <span class="toggle-icon" v-if="hasChildren">
-        {{ expanded ? '▼' : '▶' }}
-      </span>
-      <span class="no-toggle-icon" v-else>•</span> -->
       <div class="node-info">
         <div class="node-layout">
           <div class="node-op" v-if="data.op">{{ data.op }}</div>
@@ -136,7 +132,6 @@ export default {
 }
 .contract-highlight {
   background-color: #eaf4ff;
-  color: #ffffff;
   border: 1px solid #b3d8ff;
   transition: background-color 0.2s ease;
 }
