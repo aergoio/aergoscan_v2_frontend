@@ -320,51 +320,39 @@
                     :active="$route.query.tx === 'nft'"
                     @onUpdateTotalCount="updateNftTxTotalCount"
                   />
-                  <div
-                    :style="{
-                      display: 'grid',
-                      gridTemplateColumns: `${
-                        internalData.operations?.operations?.length > 0
-                          ? '1fr 1fr'
-                          : `1fr`
-                      }`,
-                    }"
-                  >
-                    <div>
-                      <span
-                        v-if="$route.query.tx === 'internalOperations'"
-                        :style="{
-                          color: '#3c3b3e',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                        }"
-                        >Calls</span
-                      >
-                      <internal-operations-table
-                        ref="internalOperationsTable"
-                        :hash="$route.params.hash"
-                        :active="$route.query.tx === 'internalOperations'"
-                        @onUpdateTotalCount="updateInternalOperationsTotalCount"
-                      />
-                    </div>
-                    <div
-                      v-if="
-                        $route.query.tx === 'internalOperations' &&
-                        internalData.operations?.operations?.length > 0
-                      "
+                  <div>
+                    <span
+                      v-if="$route.query.tx === 'internalOperations'"
+                      :style="{
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Calls</span
                     >
-                      <span
-                        :style="{
-                          paddingLeft: '1rem',
-                          color: '#3c3b3e',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                        }"
-                        >Operations</span
-                      >
-                      <div class="tree-container">
-                        <TreeNode :data="internalData?.operations" />
-                      </div>
+                    <internal-operations-table
+                      ref="internalOperationsTable"
+                      :hash="$route.params.hash"
+                      :active="$route.query.tx === 'internalOperations'"
+                      @onUpdateTotalCount="updateInternalOperationsTotalCount"
+                    />
+                  </div>
+                  <div
+                    v-if="
+                      $route.query.tx === 'internalOperations' &&
+                      internalData.operations?.operations?.length > 0
+                    "
+                  >
+                    <span
+                      :style="{
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Operations</span
+                    >
+                    <div class="tree-container">
+                      <TreeNode :data="internalData?.operations" />
                     </div>
                   </div>
                 </div>
@@ -655,9 +643,6 @@ export default {
   },
   created() {},
   beforeDestroy() {},
-  updated() {
-    console.log(this.internalData, 'internalDatainternalDatainternalData')
-  },
   watch: {
     $route(to, from) {
       this.load()
