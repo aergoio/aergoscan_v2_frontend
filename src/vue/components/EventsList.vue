@@ -11,7 +11,9 @@
         <th v-if="columns.indexOf('blockno') >= 0">Block</th>
         <th v-if="columns.indexOf('tx') >= 0">Tx</th>
         <th>Event Name</th>
-        <th>Contract Address</th>
+        <th v-if="!(columns.includes('blockno') && columns.includes('tx'))">
+          Contract Address
+        </th>
         <th>Arguments</th>
       </tr>
     </thead>
@@ -39,7 +41,7 @@
         <td>
           {{ row.event_name }}
         </td>
-        <td>
+        <td v-if="!(columns.includes('blockno') && columns.includes('tx'))">
           <div v-if="`${row.contract}` !== `${address}`">
             <router-link
               :to="`/account/${row.contract}/`"
