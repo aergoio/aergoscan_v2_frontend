@@ -235,7 +235,11 @@
                         replace
                         v-else
                       >
-                        <span class="main">Transactions</span
+                        <span class="main">{{
+                          accountDetail && accountDetail.codehash
+                            ? `Calls`
+                            : `Transactions`
+                        }}</span
                         ><span class="sub">{{ transactionTotalItems }}</span>
                       </router-link>
                       <router-link
@@ -293,6 +297,7 @@
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
                       <router-link
+                        v-if="accountDetail && accountDetail.codehash"
                         class="title internal-operations"
                         :to="{
                           query: {
@@ -360,50 +365,41 @@
                     v-if="nameHistory.length"
                   />
 
-                  <div
-                    :style="{
-                      display: 'grid',
-                      gridTemplateColumns: `${
-                        internalData.operations?.length > 0 ? '1fr 1fr' : `1fr`
-                      }`,
-                    }"
-                  >
-                    <div>
-                      <span
-                        v-if="$route.query.tx === 'internalOperations'"
-                        :style="{
-                          color: '#3c3b3e',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                        }"
-                        >Calls</span
-                      >
-                      <internal-operations-table
-                        ref="internalOperationsTable"
-                        :isContract="true"
-                        :address="realAddress"
-                        :active="$route.query.tx === 'internalOperations'"
-                        @onUpdateTotalCount="updateInternalOperationsTotalCount"
-                      />
-                    </div>
-                    <div
-                      v-if="
-                        internalData.operations?.length > 0 &&
-                        $route.query.tx === 'internalOperations'
-                      "
+                  <div>
+                    <span
+                      v-if="$route.query.tx === 'internalOperations'"
+                      :style="{
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Calls</span
                     >
-                      <span
-                        :style="{
-                          paddingLeft: '1rem',
-                          color: '#3c3b3e',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                        }"
-                        >Operations</span
-                      >
-                      <div class="tree-container">
-                        <TreeNode :data="internalData" />
-                      </div>
+                    <internal-operations-table
+                      ref="internalOperationsTable"
+                      :isContract="true"
+                      :address="realAddress"
+                      :active="$route.query.tx === 'internalOperations'"
+                      @onUpdateTotalCount="updateInternalOperationsTotalCount"
+                    />
+                  </div>
+                  <div
+                    v-if="
+                      internalData.operations?.length > 0 &&
+                      $route.query.tx === 'internalOperations'
+                    "
+                  >
+                    <span
+                      :style="{
+                        paddingLeft: '1rem',
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Operations</span
+                    >
+                    <div class="tree-container">
+                      <TreeNode :data="internalData" />
                     </div>
                   </div>
                 </div>
