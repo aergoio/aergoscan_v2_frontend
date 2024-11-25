@@ -57,7 +57,9 @@
 
       <td>
         <router-link
-          :to="`/account/${row.caller}?tx=internalOperations`"
+          :to="`/account/${row.caller}/${
+            row.codeHash ? `?tx=internalOperations` : ``
+          }`"
           class="address tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="row.caller"
         >
@@ -176,8 +178,8 @@ export default {
             { text: 'AMOUNT(AERGO)', value: 'amount' },
           ]
         : [
-            { text: 'CALLER', value: 'caller' },
-            { text: 'CONTRACT', value: 'contract' },
+            { text: 'FROM', value: 'caller' },
+            { text: 'TO', value: 'contract' },
             { text: 'FUNCTION', value: 'function' },
             { text: 'AMOUNT(AERGO)', value: 'amount' },
           ]
@@ -239,11 +241,24 @@ export default {
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
-        this.data = response.hits.map((item, index) => ({
-          ...item.meta,
-          hash: item.hash,
-          rank: response.from + (index + 1),
-        }))
+        const accounts = await Promise.all(
+          response.hits.map(async (item) => {
+            const account = await this.$store.dispatch(
+              'blockchain/getAccount',
+              {
+                address: item.meta.caller,
+              }
+            )
+            return {
+              ...item.meta,
+              hash: item.hash,
+              rank: response.from + (response.hits.indexOf(item) + 1),
+              codeHash: account?.codehash || null,
+            }
+          })
+        )
+
+        this.data = accounts
         this.totalItems = response.total
         this.limitPageTotalCount = response.limitPageCount
       } else {
