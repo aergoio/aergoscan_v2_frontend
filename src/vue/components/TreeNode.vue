@@ -90,30 +90,34 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tree-node {
   position: relative;
   margin-left: 20px;
-}
 
-.tree-node::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -10px;
-  width: 1px;
-  height: 100%;
-  background-color: #e8e8e8;
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 1px;
+    height: 100%;
+    background-color: #e8e8e8;
+  }
 
-.tree-node::after {
-  content: '';
-  position: absolute;
-  top: 28px;
-  left: -10px;
-  width: 10px;
-  height: 1px;
-  background-color: #e8e8e8;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: -10px;
+    width: 10px;
+    height: 1px;
+    background-color: #e8e8e8;
+  }
+
+  &:last-child::before {
+    height: 28px;
+  }
 }
 
 .node-content {
@@ -126,23 +130,27 @@ export default {
   cursor: pointer;
   transition: background-color 0.2s;
   margin: 4px 0;
-}
-.node-content:hover {
-  background-color: #f5f5f5;
-}
-.contract-highlight {
-  background-color: #eaf4ff;
-  border: 1px solid #b3d8ff;
-  transition: background-color 0.2s ease;
-}
-.contract-highlight:hover {
-  background-color: #d9ebff;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.contract-highlight {
+    background-color: #eaf4ff;
+    border: 1px solid #b3d8ff;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #d9ebff;
+    }
+  }
 }
 
 .node-info {
   display: flex;
   flex-direction: column;
   margin-left: 8px;
+  overflow: hidden;
 }
 
 .node-layout {
@@ -162,18 +170,13 @@ export default {
   flex-wrap: wrap;
   font-size: 13px;
   color: #666;
-}
 
-.node-details > span {
-  margin-right: 10px;
+  > span {
+    margin-right: 10px;
+  }
 }
 
 .tree-children {
   margin-left: 20px;
-}
-
-.tree-node:last-child::before {
-  /* 마지막 노드의 연결선을 끊어줍니다 */
-  height: 28px;
 }
 </style>
