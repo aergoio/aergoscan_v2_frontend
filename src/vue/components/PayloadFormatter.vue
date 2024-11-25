@@ -1,9 +1,12 @@
 <template>
   <span class="formatted-payload">
-    <span class="tx-action" v-if="action">{{ action }}</span>
+    <span class="tx-action" v-if="action">{{ `${action}( )` }}</span>
     <span class="monospace" v-if="name">{{ name }}(</span>
     <span class="monospace" :class="{ block: rest.length > 100 }">{{
       rest
+    }}</span>
+    <span v-if="action && args.length === 0" class="empty-result">{{
+      `(No Arguments)`
     }}</span>
     <span v-if="address">
       <router-link :to="`/account/${address}/`">{{ address }}</router-link>
@@ -73,6 +76,7 @@ export default {
       bps: [],
     }
   },
+
   watch: {
     payload() {
       this.format()
@@ -82,6 +86,7 @@ export default {
   mounted() {
     this.format()
   },
+
   methods: {
     format() {
       if (!this.payload || !this.payload.length) {
@@ -117,6 +122,10 @@ export default {
         if (args) {
           payload = ''
           this.args = args
+        }
+        if (name && !args) {
+          this.action = name
+          payload = ''
         }
       } catch (e) {
         payload = payloadBuffer.toString()
