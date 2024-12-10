@@ -235,11 +235,7 @@
                         replace
                         v-else
                       >
-                        <span class="main">{{
-                          accountDetail && accountDetail.codehash
-                            ? `Calls`
-                            : `Transactions`
-                        }}</span
+                        <span class="main">{{ `Transactions` }}</span
                         ><span class="sub">{{ transactionTotalItems }}</span>
                       </router-link>
                       <router-link
@@ -296,7 +292,7 @@
                         <span class="main">Name History</span
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
-                      <router-link
+                      <!-- <router-link
                         v-if="accountDetail && accountDetail.codehash"
                         class="title internal-operations"
                         :to="{
@@ -311,7 +307,7 @@
                         ><span class="sub">{{
                           internalOperationsTotalItems
                         }}</span>
-                      </router-link>
+                      </router-link> -->
                     </div>
                   </div>
                 </div>
@@ -365,7 +361,7 @@
                     v-if="nameHistory.length"
                   />
 
-                  <div>
+                  <!-- <div>
                     <span
                       v-if="$route.query.tx === 'internalOperations'"
                       :style="{
@@ -382,8 +378,8 @@
                       :active="$route.query.tx === 'internalOperations'"
                       @onUpdateTotalCount="updateInternalOperationsTotalCount"
                     />
-                  </div>
-                  <div
+                  </div> -->
+                  <!-- <div
                     v-if="
                       internalData.operations?.length > 0 &&
                       $route.query.tx === 'internalOperations'
@@ -401,7 +397,7 @@
                     <div class="tree-container">
                       <TreeNode :data="internalData" />
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

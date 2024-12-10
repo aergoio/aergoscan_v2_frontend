@@ -57,9 +57,7 @@
 
       <td>
         <router-link
-          :to="`/account/${row.caller}/${
-            row.codeHash ? `?tx=internalOperations` : ``
-          }`"
+          :to="`/account/${row.caller}`"
           class="address tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="row.caller"
         >
@@ -68,7 +66,7 @@
       </td>
       <td v-if="!isContract">
         <router-link
-          :to="`/account/${row.contract}?tx=internalOperations`"
+          :to="`/account/${row.contract}`"
           class="address tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="row.contract"
         >
@@ -235,7 +233,7 @@ export default {
           q: `${query}`,
           size: itemsPerPage,
           from: start,
-          sort: '_id:asc',
+          sort: '_id:desc',
         })
       ).json()
       if (response.error) {

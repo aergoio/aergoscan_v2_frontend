@@ -13,6 +13,7 @@
               </div>
               <copy-link-button :message="$route.params.hash" />
             </div>
+
             <div class="detail-box transaction" v-if="txMeta">
               <!-- <div class="h-scroll"> -->
               <div class="table-wrap">
@@ -27,9 +28,9 @@
                     <tr class="hidden loading" v-if="!txMeta && !error">
                       <td colspan="100%">Loading...</td>
                     </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
+                    <!-- <tr class="hidden not-found" v-if="!txMeta">
+                      <td colspan="100%">No items found</td>
+                    </tr> -->
                     <template v-if="txMeta">
                       <tr>
                         <th>
@@ -176,9 +177,9 @@
                     <tr class="hidden loading" v-if="!txMeta && !error">
                       <td colspan="100%">Loading...</td>
                     </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
+                    <!-- <tr class="hidden not-found" >
+                      <td colspan="100%">No items found</td>
+                    </tr> -->
                     <template v-if="txMeta">
                       <tr>
                         <th>
@@ -258,6 +259,7 @@
               </div>
               <!-- </div> -->
             </div>
+
             <div class="table-wrap">
               <div class="table-tab">
                 <div class="table-tab-header">
@@ -696,6 +698,10 @@ export default {
     this.load()
     this.changePage(this.currentPage)
   },
+  // updated() {
+  //   console.log(this.txMeta, 'txMeta')
+  //   console.log(this.error, 'error')
+  // },
   computed: {
     hardforkBlockV4() {
       return cfg.HARDFORK_BLOCK_V4 || 0
@@ -736,9 +742,7 @@ export default {
       return { ...this.$route.query, ...newQuery }
     },
     reload: async function () {
-      this.isLoading = true
       await this.load()
-      this.isLoading = false
     },
     async load() {
       this.error = null
@@ -843,9 +847,6 @@ export default {
       } catch (e) {
         return 'Cannot parse payload as JSON'
       }
-    },
-    handleExpand() {
-      console.log('here')
     },
   },
   components: {
