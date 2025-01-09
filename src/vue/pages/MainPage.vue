@@ -132,13 +132,35 @@ export default {
       realTimeStats: [],
       blockInfoTimeout: null,
       consensusInfo: null,
+      ws: null,
+      blocks: [],
     }
   },
   created() {},
   mounted() {
-    this.$store.dispatch('blockchain/streamBlocks')
-    this.updateMainBlocks()
-    this.updateStats()
+    // this.$store.dispatch('blockchain/streamBlocks')
+    // this.updateMainBlocks()
+    // this.updateStats()
+
+    this.ws = new WebSocket('ws://localhost:3000/v3/streamBlock')
+
+    this.ws.onopen = () => {
+      console.log('[WebSocket] Connected to server')
+    }
+
+    this.ws.onmessage = (event) => {
+      const blockHeader = JSON.parse(event.data)
+      console.log('[WebSocket] Received block header:', blockHeader)
+      this.blocks.push(blockHeader)
+    }
+
+    this.ws.onerror = (error) => {
+      console.error('[WebSocket] Error:', error)
+    }
+
+    this.ws.onclose = () => {
+      console.log('[WebSocket] Disconnected')
+    }
   },
   beforeDestroy() {
     if (this.blockInfoTimeout) {
@@ -152,7 +174,7 @@ export default {
       }
     },
     ...mapState({
-      blocks: (state) => state.blockchain.recentBlocks,
+      // blocks: (state) => state.blockchain.recentBlocks,
       chainInfo: (state) => state.blockchain.chainInfo,
     }),
     reverseBlocks() {
