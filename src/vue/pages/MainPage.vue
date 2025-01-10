@@ -144,7 +144,6 @@ export default {
     if (this.blockInfoTimeout) {
       clearTimeout(this.blockInfoTimeout)
     }
-    this.$store.dispatch('blockchain/disconnectWebSocket')
   },
   computed: {
     mainCss() {
