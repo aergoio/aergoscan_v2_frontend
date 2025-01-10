@@ -75,7 +75,7 @@
                 </div>
               </td>
               <td>
-                <div>{{ `${block.voteReward} aergo` }}</div>
+                <div>{{ block.voteReward }}</div>
               </td>
             </tr>
           </tbody>
