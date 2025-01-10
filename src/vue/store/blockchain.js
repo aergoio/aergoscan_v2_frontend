@@ -228,11 +228,6 @@ const actions = {
     const peers = await aergo.getPeers()
     return peers
   },
-  // setProvider({ dispatch, commit }, { provider }) {
-  //   aergo.setProvider(provider)
-  //   dispatch('restartStreamBlocks') // Restart stream with new provider
-  //   commit('setProvider', { provider })
-  // },
   async queryContract({}, { abi, address, name, args }) {
     const contract = Contract.fromAbi(abi).setAddress(address)
     return await aergo.queryContract(contract[name](...args))
