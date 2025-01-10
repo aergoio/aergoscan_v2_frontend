@@ -75,7 +75,7 @@
                 </div>
               </td>
               <td>
-                <div>{{ block.voteReward.formatNumber() }}</div>
+                <div>{{ `${block.voteReward} aergo` }}</div>
               </td>
             </tr>
           </tbody>
@@ -103,9 +103,7 @@ export default {
     return {}
   },
   created() {},
-  mounted() {
-    this.$store.dispatch('blockchain/streamBlocks')
-  },
+  mounted() {},
   beforeDestroy() {},
   computed: {
     ...mapState({
