@@ -126,12 +126,7 @@ const actions = {
     const info = Object.freeze(await aergo.getChainInfo())
     commit('setChainInfo', info)
   },
-  async getBestBlock() {
-    return await aergo.blockchain()
-  },
-  async getConsensusInfo() {
-    return await aergo.getConsensusInfo()
-  },
+
   getBlock({ dispatch, state }, { blockNoOrHash }) {
     if (state.blocksByHash[blockNoOrHash]) {
       return new Promise((resolve) => {
@@ -315,41 +310,27 @@ const mutations = {
       return
     }
 
-    state.recentBlocks.push(block)
+    if (block.header.blockno <= previousBlockNumber) {
+      block.detectedReorg = true
+    }
 
-    // 블록 개수 제한
+    state.recentBlocks.push(block)
+    previousBlockNumber = block.header.blockno
+
+    // Add block txs
+    /*
+      if (block.body.txsList.length) {
+            block.body.txsList.forEach(tx => tx.block = block);
+            state.recentTransactions.push(...block.body.txsList);
+            while (state.recentTransactions.length > HISTORY_MAX_TRANSACTIONS) state.recentTransactions.shift();
+      }
+    */
+
+    // Limit memory usage
     while (state.recentBlocks.length > HISTORY_MAX_BLOCKS) {
       state.recentBlocks.shift()
     }
   },
-  // addBlock(state, block) {
-  //   // Ensure no duplicate keys
-  //   if (state.recentBlocks.filter((b) => block.hash === b.hash).length) {
-  //     console.log('Skip adding duplicate block', block.hash)
-  //     return
-  //   }
-
-  //   if (block.header.blockno <= previousBlockNumber) {
-  //     block.detectedReorg = true
-  //   }
-
-  //   // Add block
-  //   state.recentBlocks.push(block)
-  //   previousBlockNumber = block.header.blockno
-
-  //   // Add block txs
-  //   /*
-  //       if (block.body.txsList.length) {
-  //           block.body.txsList.forEach(tx => tx.block = block);
-  //           state.recentTransactions.push(...block.body.txsList);
-  //           while (state.recentTransactions.length > HISTORY_MAX_TRANSACTIONS) state.recentTransactions.shift();
-  //       }
-  //       */
-
-  //   // Limit memory usage
-  //   while (state.recentBlocks.length > HISTORY_MAX_BLOCKS)
-  //     state.recentBlocks.shift()
-  // },
   setBlockDetail(state, { block }) {
     state.blocksByHash[block.hash] = block
   },
@@ -359,15 +340,6 @@ const mutations = {
   setAccountDetail(state, { address, account }) {
     state.accountsByAddress[address] = account
   },
-  // setProvider(state, { provider }) {
-  //   state.provider = provider
-  // },
-  // setConnected(state, isConnected) {
-  //   state.streamConnected = isConnected
-  // },
-  // setStreamState(state, streamState) {
-  //   state.streamState = streamState
-  // },
   setChainInfo(state, chainInfo) {
     state.chainInfo = chainInfo
   },
