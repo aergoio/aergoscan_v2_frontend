@@ -1,6 +1,7 @@
 import aergo from '../../controller'
 import { Contract } from '@herajs/client'
 import { waitOrLoad } from 'timed-async'
+import cfg from '@/src/config.js'
 
 const TokenABI = {
   language: 'lua',
@@ -45,7 +46,7 @@ let blockHeaderStream = null
 let previousBlockNumber = 0
 
 const actions = {
-  streamBlocks({ commit, state }) {
+  streamBlocks({ commit, dispatch, state }) {
     if (state.ws) {
       console.log('[WebSocket] Closing existing connection')
       state.ws.close()
@@ -66,7 +67,10 @@ const actions = {
     }, 3500)
 
     // WebSocket 초기화
-    const ws = new WebSocket('ws://localhost:3000/v3/streamBlock')
+    const hostApi = cfg.HOST || 'http://localhost:3000'
+    const wsProtocol = hostApi.startsWith('https') ? 'wss' : 'ws'
+    const wsUrl = hostApi.replace(/^http/, wsProtocol) // 프로토콜 변환
+    const ws = new WebSocket(`${wsUrl}/v3/streamBlocks`)
 
     ws.onopen = () => {
       console.log('[WebSocket] Connected to server')
@@ -85,48 +89,83 @@ const actions = {
         console.error('[WebSocket] Error parsing message:', error)
       }
     }
-
+    let retryDelay = 5000
     ws.onerror = (error) => {
       console.error('[WebSocket] Error:', error)
       commit('setStreamState', 'error') // 에러 상태 설정
       commit('setConnected', false)
 
-      // 일정 시간 후 연결 재시작
       setTimeout(() => {
-        console.log('[WebSocket] Restarting streamBlocks due to error')
-        dispatch('streamBlocks')
-      }, 5000) // 5초 후 재시작
+        console.log(
+          `[WebSocket] Restarting streamBlocks in ${retryDelay / 1000} seconds`
+        )
+        dispatch('restartStreamBlocks')
+        retryDelay = Math.min(retryDelay * 2, 60000) // 최대 1분까지 증가
+      }, retryDelay)
     }
 
     ws.onclose = () => {
       console.log('[WebSocket] Disconnected')
       commit('setStreamState', 'ended') // 스트림 종료 상태 설정
       commit('setConnected', false)
-
-      // 일정 시간 후 연결 재시작
-      setTimeout(() => {
-        console.log('[WebSocket] Restarting streamBlocks due to disconnection')
-        dispatch('streamBlocks')
-      }, 5000) // 5초 후 재시작
     }
 
     // WebSocket 객체를 상태에 저장
     commit('setWebSocket', ws)
   },
   restartStreamBlocks({ dispatch, state }) {
-    if (state.ws) {
+    if (state.ws && state.ws.readyState === WebSocket.OPEN) {
       console.log('[WebSocket] Restarting streamBlocks...')
       state.ws.close() // 기존 연결 닫기
     }
+    commit('setStreamState', 'initial') // 상태 초기화
+    commit('setConnected', false)
 
     // 새로운 스트림 시작
     dispatch('streamBlocks')
   },
+
   async updateChainInfo({ commit }) {
-    const info = Object.freeze(await aergo.getChainInfo())
-    commit('setChainInfo', info)
+    try {
+      const response = await fetch(`${cfg.API_URL}/getChainInfo`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const chainInfo = Object.freeze(await response.json())
+
+      commit('setChainInfo', chainInfo)
+    } catch (error) {
+      console.error('[REST] Error fetching chain info:', error)
+    }
   },
 
+  async getBestBlock() {
+    try {
+      const response = await fetch(`${cfg.API_URL}/getBestBlock`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const bestBlock = Object.freeze(await response.json())
+
+      return bestBlock
+    } catch (error) {
+      console.error('[REST] Error fetching chain info:', error)
+    }
+  },
+
+  async getConsensusInfo() {
+    try {
+      const response = await fetch(`${cfg.API_URL}/getConsensusInfo`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const consensusInfo = Object.freeze(await response.json())
+
+      return consensusInfo
+    } catch (error) {
+      console.error('[REST] Error fetching chain info:', error)
+    }
+  },
   getBlock({ dispatch, state }, { blockNoOrHash }) {
     if (state.blocksByHash[blockNoOrHash]) {
       return new Promise((resolve) => {
