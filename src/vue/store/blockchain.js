@@ -25,6 +25,7 @@ const state = {
   streamState: 'initial',
   streamConnected: false,
   recentBlocks: [],
+  ws: null,
   recentTransactions: [],
   blocksByHash: {},
   accountsByAddress: {},
@@ -44,41 +45,81 @@ let blockHeaderStream = null
 let previousBlockNumber = 0
 
 const actions = {
-  streamBlocks({ commit, dispatch, state }) {
-    if (blockHeaderStream !== null) {
-      return
+  streamBlocks({ commit, state }) {
+    if (state.ws) {
+      console.log('[WebSocket] Closing existing connection')
+      state.ws.close()
+      commit('setWebSocket', null)
     }
-    console.log('Starting block stream')
+
+    console.log('[WebSocket] Starting new WebSocket connection')
+
+    // 스트림 상태를 'starting'으로 설정
     if (state.streamState !== 'starting-slow') {
       commit('setStreamState', 'starting')
     }
+
+    // 일정 시간 후 'starting-slow'로 변경
     const loadingFinished = waitOrLoad(() => {
       commit('setStreamState', 'starting-slow')
+      console.log('[WebSocket] Stream state updated to: starting-slow')
     }, 3500)
-    blockHeaderStream = aergo.getBlockMetadataStream()
-    blockHeaderStream
-      .on('data', (blockHeader) => {
-        commit('addBlock', blockHeader)
-        if (!state.streamConnected) {
-          commit('setConnected', true)
-          commit('setStreamState', 'started')
-          loadingFinished()
-        }
-      })
-      .on('end', () => {
-        console.log('Block stream ended, trying to reconnect in 5 seconds...')
-        if (state.streamConnected) {
-          commit('setConnected', false)
-          commit('setStreamState', 'ended')
-        }
-        setTimeout(() => {
-          dispatch('restartStreamBlocks')
-        }, 5000)
-      })
+
+    // WebSocket 초기화
+    const ws = new WebSocket('ws://localhost:3000/v3/streamBlock')
+
+    ws.onopen = () => {
+      console.log('[WebSocket] Connected to server')
+      commit('setStreamState', 'started')
+      commit('setConnected', true)
+
+      // 스트림이 시작되었으면 loadingFinished 실행 취소
+      loadingFinished()
+    }
+
+    ws.onmessage = (event) => {
+      try {
+        const blockHeader = JSON.parse(event.data)
+        commit('addBlock', blockHeader) // 새 블록 추가
+      } catch (error) {
+        console.error('[WebSocket] Error parsing message:', error)
+      }
+    }
+
+    ws.onerror = (error) => {
+      console.error('[WebSocket] Error:', error)
+      commit('setStreamState', 'error') // 에러 상태 설정
+      commit('setConnected', false)
+
+      // 일정 시간 후 연결 재시작
+      setTimeout(() => {
+        console.log('[WebSocket] Restarting streamBlocks due to error')
+        dispatch('streamBlocks')
+      }, 5000) // 5초 후 재시작
+    }
+
+    ws.onclose = () => {
+      console.log('[WebSocket] Disconnected')
+      commit('setStreamState', 'ended') // 스트림 종료 상태 설정
+      commit('setConnected', false)
+
+      // 일정 시간 후 연결 재시작
+      setTimeout(() => {
+        console.log('[WebSocket] Restarting streamBlocks due to disconnection')
+        dispatch('streamBlocks')
+      }, 5000) // 5초 후 재시작
+    }
+
+    // WebSocket 객체를 상태에 저장
+    commit('setWebSocket', ws)
   },
-  restartStreamBlocks({ dispatch }) {
-    blockHeaderStream.cancel()
-    blockHeaderStream = null
+  restartStreamBlocks({ dispatch, state }) {
+    if (state.ws) {
+      console.log('[WebSocket] Restarting streamBlocks...')
+      state.ws.close() // 기존 연결 닫기
+    }
+
+    // 새로운 스트림 시작
     dispatch('streamBlocks')
   },
   async updateChainInfo({ commit }) {
@@ -187,11 +228,11 @@ const actions = {
     const peers = await aergo.getPeers()
     return peers
   },
-  setProvider({ dispatch, commit }, { provider }) {
-    aergo.setProvider(provider)
-    dispatch('restartStreamBlocks') // Restart stream with new provider
-    commit('setProvider', { provider })
-  },
+  // setProvider({ dispatch, commit }, { provider }) {
+  //   aergo.setProvider(provider)
+  //   dispatch('restartStreamBlocks') // Restart stream with new provider
+  //   commit('setProvider', { provider })
+  // },
   async queryContract({}, { abi, address, name, args }) {
     const contract = Contract.fromAbi(abi).setAddress(address)
     return await aergo.queryContract(contract[name](...args))
@@ -252,37 +293,68 @@ const actions = {
   disconnectAccount({ commit }) {
     commit('setActiveAccount', null)
   },
+  disconnectStream({ commit, state }) {
+    if (state.ws) {
+      console.log('[WebSocket] Closing connection')
+      state.ws.close()
+      commit('setWebSocket', null)
+      commit('setStreamState', 'ended')
+      commit('setConnected', false)
+    }
+  },
 }
 
 const mutations = {
+  setWebSocket(state, ws) {
+    state.ws = ws // WebSocket 객체 저장
+  },
+  setStreamState(state, streamState) {
+    state.streamState = streamState // 스트림 상태 업데이트
+  },
+  setConnected(state, isConnected) {
+    state.streamConnected = isConnected // WebSocket 연결 상태 업데이트
+  },
   addBlock(state, block) {
-    // Ensure no duplicate keys
-    if (state.recentBlocks.filter((b) => block.hash === b.hash).length) {
-      console.log('Skip adding duplicate block', block.hash)
+    if (state.recentBlocks.some((b) => b.hash === block.hash)) {
+      console.log('Duplicate block skipped:', block.hash)
       return
     }
 
-    if (block.header.blockno <= previousBlockNumber) {
-      block.detectedReorg = true
-    }
-
-    // Add block
     state.recentBlocks.push(block)
-    previousBlockNumber = block.header.blockno
 
-    // Add block txs
-    /*
-        if (block.body.txsList.length) {
-            block.body.txsList.forEach(tx => tx.block = block);
-            state.recentTransactions.push(...block.body.txsList);
-            while (state.recentTransactions.length > HISTORY_MAX_TRANSACTIONS) state.recentTransactions.shift();
-        }
-        */
-
-    // Limit memory usage
-    while (state.recentBlocks.length > HISTORY_MAX_BLOCKS)
+    // 블록 개수 제한
+    while (state.recentBlocks.length > HISTORY_MAX_BLOCKS) {
       state.recentBlocks.shift()
+    }
   },
+  // addBlock(state, block) {
+  //   // Ensure no duplicate keys
+  //   if (state.recentBlocks.filter((b) => block.hash === b.hash).length) {
+  //     console.log('Skip adding duplicate block', block.hash)
+  //     return
+  //   }
+
+  //   if (block.header.blockno <= previousBlockNumber) {
+  //     block.detectedReorg = true
+  //   }
+
+  //   // Add block
+  //   state.recentBlocks.push(block)
+  //   previousBlockNumber = block.header.blockno
+
+  //   // Add block txs
+  //   /*
+  //       if (block.body.txsList.length) {
+  //           block.body.txsList.forEach(tx => tx.block = block);
+  //           state.recentTransactions.push(...block.body.txsList);
+  //           while (state.recentTransactions.length > HISTORY_MAX_TRANSACTIONS) state.recentTransactions.shift();
+  //       }
+  //       */
+
+  //   // Limit memory usage
+  //   while (state.recentBlocks.length > HISTORY_MAX_BLOCKS)
+  //     state.recentBlocks.shift()
+  // },
   setBlockDetail(state, { block }) {
     state.blocksByHash[block.hash] = block
   },
@@ -292,15 +364,15 @@ const mutations = {
   setAccountDetail(state, { address, account }) {
     state.accountsByAddress[address] = account
   },
-  setProvider(state, { provider }) {
-    state.provider = provider
-  },
-  setConnected(state, isConnected) {
-    state.streamConnected = isConnected
-  },
-  setStreamState(state, streamState) {
-    state.streamState = streamState
-  },
+  // setProvider(state, { provider }) {
+  //   state.provider = provider
+  // },
+  // setConnected(state, isConnected) {
+  //   state.streamConnected = isConnected
+  // },
+  // setStreamState(state, streamState) {
+  //   state.streamState = streamState
+  // },
   setChainInfo(state, chainInfo) {
     state.chainInfo = chainInfo
   },
