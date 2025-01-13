@@ -1,5 +1,5 @@
 import aergo from '../../controller'
-import { Contract } from '@herajs/client'
+import { Amount, Contract } from '@herajs/client'
 import { waitOrLoad } from 'timed-async'
 import cfg from '@/src/config.js'
 
@@ -127,7 +127,7 @@ const actions = {
 
   async updateChainInfo({ commit }) {
     try {
-      const response = await fetch(`${cfg.API_URL}/getChainInfo`)
+      const response = await fetch(`${cfg.API_URL}/chainInfo`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -141,7 +141,7 @@ const actions = {
 
   async getBestBlock() {
     try {
-      const response = await fetch(`${cfg.API_URL}/getBestBlock`)
+      const response = await fetch(`${cfg.API_URL}/bestBlock`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -155,7 +155,7 @@ const actions = {
 
   async getConsensusInfo() {
     try {
-      const response = await fetch(`${cfg.API_URL}/getConsensusInfo`)
+      const response = await fetch(`${cfg.API_URL}/consensusInfo`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -175,9 +175,20 @@ const actions = {
     return dispatch('fetchBlock', { blockNoOrHash })
   },
   async fetchBlock({ commit }, { blockNoOrHash }) {
-    const block = Object.freeze(await aergo.getBlock(blockNoOrHash))
-    commit('setBlockDetail', { block })
-    return block
+    try {
+      const response = await fetch(
+        `${cfg.API_URL}/block?blockNoOrHash=${blockNoOrHash}`
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const block = await response.json()
+      commit('setBlockDetail', { block })
+
+      return block
+    } catch (error) {
+      console.error('[REST] Error fetching block:', error)
+    }
   },
   async fetchBlockMetadata({}, { blockNoOrHash }) {
     return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
@@ -225,9 +236,23 @@ const actions = {
     return await dispatch('fetchAccount', { address })
   },
   async fetchAccount({ commit }, { address }) {
-    const account = await aergo.getState(address)
-    commit('setAccountDetail', { address, account })
-    return account
+    try {
+      const response = await fetch(
+        `${cfg.API_URL}/accountState?address=${address}`
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const json = await response.json()
+      const [value, unit] = json.balance.split(' ')
+      const balance = new Amount(value, unit)
+      const account = { ...json, balance }
+      commit('setAccountDetail', { address, account })
+
+      return account
+    } catch (error) {
+      console.error('[REST] Error fetching account state:', error)
+    }
   },
   async getTopVotes({}, { count }) {
     return await aergo.getTopVotes(count)
@@ -236,8 +261,20 @@ const actions = {
     return await dispatch('fetchStaking', { address })
   },
   async fetchStaking({}, { address }) {
-    const staking = await aergo.getStaking(address)
-    return staking
+    try {
+      const response = await fetch(`${cfg.API_URL}/staking?address=${address}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const json = await response.json()
+      const [value, unit] = json.amount.split(' ')
+      const amount = new Amount(value, unit)
+      const staking = { ...json, amount }
+
+      return staking
+    } catch (error) {
+      console.error('[REST] Error fetching account state:', error)
+    }
   },
   async getNodeState({}, component) {
     return aergo.getNodeState(component)
