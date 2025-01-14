@@ -69,7 +69,7 @@ const actions = {
     // WebSocket 초기화
     const hostApi = cfg.API_URL || 'http://localhost:3000'
     const wsProtocol = hostApi.startsWith('https') ? 'wss' : 'ws'
-    const wsUrl = hostApi.replace(/^http/, wsProtocol) // 프로토콜 변환
+    const wsUrl = hostApi.replace(/^https?/, wsProtocol)
     const ws = new WebSocket(`${wsUrl}/streamBlocks`)
 
     ws.onopen = () => {
