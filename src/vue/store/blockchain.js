@@ -190,8 +190,20 @@ const actions = {
       console.error('[REST] Error fetching block:', error)
     }
   },
-  async fetchBlockMetadata({}, { blockNoOrHash }) {
-    return Object.freeze(await aergo.getBlockMetadata(blockNoOrHash))
+  async fetchBlockMetadata({}, { blockNo }) {
+    try {
+      const response = await fetch(
+        `${cfg.API_URL}/blockMetadata?blockNo=${blockNo}`
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const blockMetaData = await response.json()
+
+      return blockMetaData
+    } catch (error) {
+      console.error('[REST] Error fetching block metadata:', error)
+    }
   },
   async fetchBlockTransactions({}, { hash, offset, size }) {
     return await aergo.getBlockBody(hash, offset, size)
@@ -214,9 +226,17 @@ const actions = {
   },
   async fetchTransactionReceipt({}, { hash }) {
     try {
-      return await aergo.getTransactionReceipt(hash)
-    } catch (e) {
-      return null
+      const response = await fetch(
+        `${cfg.API_URL}/transactionReceipt?hash=${hash}`
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const transactionReceipt = await response.json()
+
+      return transactionReceipt
+    } catch (error) {
+      console.error('[REST] Error fetching transaction receipt:', error)
     }
   },
   getAccountVotes({ dispatch }, { address }) {
@@ -224,9 +244,17 @@ const actions = {
   },
   async fetchGetAccountVotes({}, { address }) {
     try {
-      return await aergo.getAccountVotes(address)
-    } catch (e) {
-      return null
+      const response = await fetch(
+        `${cfg.API_URL}/accountVotes?address=${address}`
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const accountVotes = await response.json()
+
+      return accountVotes
+    } catch (error) {
+      console.error('[REST] Error fetching account votes:', error)
     }
   },
   async getAccount({ dispatch, state }, { address }) {
@@ -255,7 +283,24 @@ const actions = {
     }
   },
   async getTopVotes({}, { count }) {
-    return await aergo.getTopVotes(count)
+    try {
+      const response = await fetch(`${cfg.API_URL}/topVotes?count=${count}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const json = await response.json()
+      const topVotes = json.map((vote) => ({
+        ...vote,
+        amount: new Amount(
+          vote.amount.split(' ')[0],
+          vote.amount.split(' ')[1]
+        ),
+      }))
+
+      return topVotes
+    } catch (error) {
+      console.error('[REST] Error fetching top votes:', error)
+    }
   },
   async getStaking({ dispatch }, { address }) {
     return await dispatch('fetchStaking', { address })
@@ -273,48 +318,121 @@ const actions = {
 
       return staking
     } catch (error) {
-      console.error('[REST] Error fetching account state:', error)
+      console.error('[REST] Error fetching staking:', error)
     }
   },
   async getNodeState({}, component) {
     return aergo.getNodeState(component)
   },
   async getServerInfo() {
-    return aergo.getServerInfo()
+    try {
+      const response = await fetch(`${cfg.API_URL}/serverInfo`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+
+      const serverInfo = {
+        configMap: new Map(data.configMap),
+        statusMap: new Map(data.statusMap),
+      }
+
+      return serverInfo
+    } catch (error) {
+      console.error('[REST] Error fetching server info:', error)
+    }
   },
   getNameInfo({ dispatch }, { name }) {
     return dispatch('fetchNameInfo', { name })
   },
   async fetchNameInfo({}, { name }) {
-    return await aergo.getNameInfo(name)
+    try {
+      const response = await fetch(`${cfg.API_URL}/nameInfo?name=${name}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const nameInfo = await response.json()
+
+      return nameInfo
+    } catch (error) {
+      console.error('[REST] Error fetching abi:', error)
+    }
   },
   getABI({ dispatch }, { address }) {
     return dispatch('fetchABI', { address })
   },
   async fetchABI({ commit }, { address }) {
-    const abi = await aergo.getABI(address)
-    return abi
+    try {
+      const response = await fetch(`${cfg.API_URL}/abi?address=${address}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const abi = await response.json()
+
+      return abi
+    } catch (error) {
+      console.error('[REST] Error fetching abi:', error)
+    }
   },
   async fetchPeers() {
-    const peers = await aergo.getPeers()
-    return peers
+    try {
+      const response = await fetch(`${cfg.API_URL}/peers`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const peers = await response.json()
+
+      return peers
+    } catch (error) {
+      console.error('[REST] Error fetching peers:', error)
+    }
   },
   async queryContract({}, { abi, address, name, args }) {
-    const contract = Contract.fromAbi(abi).setAddress(address)
-    return await aergo.queryContract(contract[name](...args))
+    try {
+      const response = await fetch(`${cfg.API_URL}/queryContract`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ abi, address, name, args }),
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const queryContract = await response.json()
+
+      return queryContract
+    } catch (error) {
+      console.error('[REST] Error fetching query contract:', error)
+    }
   },
   async queryContractState({}, { abi, address, stateNames }) {
-    const contract = Contract.fromAbi(abi).setAddress(address)
-    return await aergo.queryContractState(contract.queryState(...stateNames))
+    try {
+      const response = await fetch(`${cfg.API_URL}/queryContractState`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ abi, address, stateNames }),
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const queryContractState = await response.json()
+
+      return queryContractState
+    } catch (error) {
+      console.error('[REST] Error fetching query contract state:', error)
+    }
   },
-  async getEvents({}, filter) {
-    return await aergo.getEvents(filter)
-  },
-  async getTokenBalance({}, { token, address }) {
-    const contract = Contract.fromAbi(TokenABI).setAddress(token)
-    const result = await aergo.queryContract(contract['balanceOf'](address))
-    return result._bignum
-  },
+  // async getEvents({}, filter) {
+  //   return await aergo.getEvents(filter)
+  // },
+  // async getTokenBalance({}, { token, address }) {
+  //   const contract = Contract.fromAbi(TokenABI).setAddress(token)
+  //   const result = await aergo.queryContract(contract['balanceOf'](address))
+  //   return result._bignum
+  // },
   getActiveAccount({ commit, state }) {
     if (state.activeAccount) {
       return new Promise((resolve) => {
