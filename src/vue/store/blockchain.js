@@ -127,7 +127,7 @@ const actions = {
 
   async updateChainInfo({ commit }) {
     try {
-      const response = await fetch(`${cfg.API_URL}/chainInfo`)
+      const response = await fetch(`${cfg.API_URL}/node/chainInfo`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -141,7 +141,7 @@ const actions = {
 
   async getBestBlock() {
     try {
-      const response = await fetch(`${cfg.API_URL}/bestBlock`)
+      const response = await fetch(`${cfg.API_URL}/node/bestBlock`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
