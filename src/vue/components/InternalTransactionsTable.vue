@@ -205,10 +205,12 @@ export default {
     isHidePage() {
       return this.itemsPerPage >= this.limitPageTotalCount
     },
+    
   },
   mounted() {
     this.changePage(this.currentPage)
   },
+
   methods: {
     addressMatches(addr) {
       return addr === this.address
