@@ -63,14 +63,14 @@
             class="monospace interactive-contract code-highlight"
             :key="interactiveKey"
           >
-            <QueryFunctionSkeleton v-if="!abi" />
-            <div v-if="abi && abi.functions.length == 0">
+            <QueryFunctionSkeleton v-if="!contract.abi" />
+            <div v-if="contract.abi && contract.abi.functions.length == 0">
               Contract has no public functions.
             </div>
             <QueryFunction
               v-for="(func, idx) in functions"
               :key="func.name"
-              :abi="abi"
+              :abi="contract.abi"
               :name="func.name"
               :number="idx"
               :address="address"
@@ -80,7 +80,7 @@
             <!-- <QueryStateVariable
               v-for="variable in stateVariables"
               :key="variable.name"
-              :abi="abi"
+              :abi="contract.abi"
               :name="variable.name"
               :address="address"
               :clickAll="clickAll"
@@ -117,8 +117,9 @@
       <Tab title="Code" :route="{ query: query({ tab: 'code' }) }" :id="'code'">
         <div class="content">
           <codemirror
-            v-if="code.code"
-            v-model="code.code"
+            :key="interactiveKey"
+            v-if="contract.source_code"
+            v-model="contract.source_code"
             :options="luaOptions"
           />
           <div v-else>No Verified Code</div>
@@ -191,7 +192,7 @@ export default {
       tabTableCss: {
         table: 'result-events',
       },
-      code: {},
+      contract: {},
       jsonOptions: {
         tabSize: 4,
         styleActiveLine: true,
@@ -227,18 +228,18 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
-      if (to === 0) {
+      if (to === 0 || to === 3) {  
+        // Discovered a bug where data from the JSON viewer is fetched but the screen doesn't re-render. 
+        // To force the re-rendering, implemented a logic that changes an internal key.
         this.interactiveKey += 1
       }
       if (to === 2) {
         this.loadEvents()
       }
-      if (to === 3) {
-        this.loadCode()
-      }
     },
   },
   mounted() {
+    this.loadContract()
     this.changePage(this.currentPage)
   },
 
@@ -255,29 +256,25 @@ export default {
 
   computed: {
     functions() {
-      if (!this.abi) return []
-      return this.abi.functions.filter((func) => func.name !== 'constructor')
+      if (!this.contract.abi) return []
+      return this.contract.abi.functions.filter(
+        (func) => func.name !== 'constructor'
+      )
     },
     // stateVariables() {
-    //   if (!this.abi) return []
-    //   return this.abi.state_variables
+    //   if (!this.contract.abi) return []
+    //   return this.contract.abi.state_variables
     // },
     formattedAbi() {
-      if (!this.$props.abi) return ''
-      return syntaxHighlight(this.$props.abi)
+      if (!this.contract.abi) return ''
+      return syntaxHighlight(this.contract.abi)
     },
-    formattedCode() {
-      if (!this.codehash) return ''
-      const buf = Buffer.from(this.codehash)
-      return Array.from(buf)
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join(' ')
-    },
+
     jsonCode() {
-      if (!this.$props.abi) {
+      if (!this.contract.abi) {
         return 'Loading...'
       } else {
-        return JSON.stringify(this.$props.abi, null, 2)
+        return JSON.stringify(this.contract.abi, null, 2)
       }
     },
   },
@@ -323,17 +320,18 @@ export default {
       })()
     },
 
-    async loadCode() {
+    async loadContract() {
       ;(async () => {
         try {
           const response = await this.$fetch.get(`${cfg.API_URL}/contractTx`, {
             q: `_id:${this.address}`,
           })
           const data = await response.json()
+
           if (data.hits.length > 0) {
-            this.code = {
-              code: data.hits[0].meta.code,
-              code_url: data.hits[0].meta.code_url,
+            this.contract = {
+              source_code: data.hits[0].meta.source_code,
+              abi: JSON.parse(data.hits[0].meta.abi),
             }
           }
         } catch (e) {
@@ -765,6 +763,9 @@ export default {
   .CodeMirror-linenumbers,
   .CodeMirror-gutters {
     background: #363344;
+  }
+  .CodeMirror-line .cm-comment {
+    color: #a89cb3 !important;
   }
   .CodeMirror-linenumber {
     color: #fff;
