@@ -29,6 +29,7 @@
 
 <script>
 import { Address } from '@herajs/client'
+
 const ArgFormatter = {
   name: 'ArgFormatter',
   props: ['arg'],
@@ -77,6 +78,7 @@ export default {
       this.format()
     },
   },
+
   mounted() {
     this.format()
   },
@@ -85,8 +87,8 @@ export default {
       if (!this.payload || !this.payload.length) {
         return
       }
-      let payloadBuffer = Buffer.from(this.payload)
-      let payload = payloadBuffer.toString()
+      let payloadBuffer = Buffer.from(this.payload, 'base64')
+      let payload = payloadBuffer.toString('utf-8')
       try {
         let parsedData = JSON.parse(payload)
         let args = parsedData.Args || parsedData.args
