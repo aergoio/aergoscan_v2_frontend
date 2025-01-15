@@ -71,7 +71,7 @@
                       v-if="raftLeaderID === row.address.peerid"
                       >LEADER</span
                     >
-                    <span class="peers text-box">{{
+                    <span class="peers text-box" v-if="row.acceptedroleLabel">{{
                       row.acceptedroleLabel
                     }}</span>
                     <span class="peers text-box" v-if="row.selfpeer">SELF</span>

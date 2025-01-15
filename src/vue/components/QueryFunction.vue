@@ -172,10 +172,12 @@ export default {
       const wait = loadAndWait()
       this.isLoading = true
       await wait()
-      this.receipt = await this.$store.dispatch(
-        'blockchain/fetchTransactionReceipt',
-        { hash }
-      )
+      const isBase58Hash = this.isBase58Hash(hash)
+      this.receipt = isBase58Hash
+        ? await this.$store.dispatch('blockchain/fetchTransactionReceipt', {
+            hash,
+          })
+        : null
       this.isLoading = false
     },
   },
@@ -330,6 +332,11 @@ export default {
       } else {
         return typeof parsedValue
       }
+    },
+    isBase58Hash(hash) {
+      const base58Regex =
+        /^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{44,64}$/
+      return base58Regex.test(hash)
     },
   },
 }

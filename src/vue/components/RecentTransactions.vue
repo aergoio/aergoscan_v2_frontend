@@ -130,7 +130,6 @@ export default {
     window.addEventListener('resize', this.handleResize)
   },
   async mounted() {
-    this.$store.dispatch('blockchain/streamBlocks')
     this.syncTxList()
     this.syncInterval = setInterval(() => {
       this.syncTxList()
