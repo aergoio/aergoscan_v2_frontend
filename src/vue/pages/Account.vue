@@ -886,11 +886,11 @@ export default {
       try {
         if (this.accountDetail.codehash) {
           Promise.all([
-            this.$store
-              .dispatch('blockchain/getABI', { address })
-              .then((abi) => {
-                this.contractAbi = abi
-              }),
+            // this.$store
+            //   .dispatch('blockchain/getABI', { address })
+            //   .then((abi) => {
+            //     this.contractAbi = abi
+            //   }),
             loadTokenMetadata(),
           ]).then(async () => {
             // Get updated supply
