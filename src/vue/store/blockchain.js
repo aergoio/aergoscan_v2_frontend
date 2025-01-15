@@ -358,22 +358,22 @@ const actions = {
       console.error('[REST] Error fetching abi:', error)
     }
   },
-  getABI({ dispatch }, { address }) {
-    return dispatch('fetchABI', { address })
-  },
-  async fetchABI({ commit }, { address }) {
-    try {
-      const response = await fetch(`${cfg.API_URL}/abi?address=${address}`)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const abi = await response.json()
+  // getABI({ dispatch }, { address }) {
+  //   return dispatch('fetchABI', { address })
+  // },
+  // async fetchABI({ commit }, { address }) {
+  //   try {
+  //     const response = await fetch(`${cfg.API_URL}/abi?address=${address}`)
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`)
+  //     }
+  //     const abi = await response.json()
 
-      return abi
-    } catch (error) {
-      console.error('[REST] Error fetching abi:', error)
-    }
-  },
+  //     return abi
+  //   } catch (error) {
+  //     console.error('[REST] Error fetching abi:', error)
+  //   }
+  // },
   async fetchPeers() {
     try {
       const response = await fetch(`${cfg.API_URL}/peers`)
