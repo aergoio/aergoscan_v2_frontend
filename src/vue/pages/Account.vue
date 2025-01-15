@@ -571,8 +571,11 @@ export default {
     },
     getUsdPriceByAergo() {
       let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
+      balance = isNaN(balance) ? 0 : parseFloat(balance);
       let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
         ?.price?.usd
+      usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice);
+      
       return toFix(Number(usdPrice) * toFix(balance))
     },
   },
@@ -619,6 +622,7 @@ export default {
             'blockchain/getNameInfo',
             { name: address.encoded }
           )
+          console.log('nameInfo:', nameInfo)
           this.ownerAddress = nameInfo.owner.toString()
           this.destinationAddress = nameInfo.destination.toString()
           address = this.destinationAddress

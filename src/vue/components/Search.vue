@@ -80,7 +80,7 @@ export default {
       try {
         this.blockDetail = await timedAsync(
           this.$store.dispatch('blockchain/fetchBlockMetadata', {
-            blockNoOrHash: blockNo,
+            blockNo,
           })
         )
       } catch (error) {

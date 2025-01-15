@@ -4,13 +4,13 @@
   "description": "Aergoscan frontend",
   "scripts": {
     "build": "webpack -p --config webpack.config.js",
-    "dev": "webpack-dev-server --inline --progress --port 8081 --config webpack.config.js"
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --inline --progress --port 8080 --config webpack.config.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@herajs/client": "^1.2.1",
-    "@herajs/common": "^1.2.1",
+    "@herajs/client": "^2.1.1",
+    "@herajs/common": "^2.1.1",
     "bignumber.js": "^9.0.2",
     "bs58check": "^2.1.2",
     "chart.js": "^2.7.3",
