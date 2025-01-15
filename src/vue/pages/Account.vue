@@ -609,22 +609,13 @@ export default {
       return tokenBalance
     },
     getUsdPriceByAergo() {
-      try {
-        let balance = this.fullBalance
-          ?.toUnit('aergo')
-          ?.toString()
-          ?.split(' ')[0]
-        balance = isNaN(balance) ? 0 : parseFloat(balance)
-        let usdPrice = this.tokenPrice?.filter(
-          (item) => item.name === 'aergo'
-        )[0]?.price?.usd
-        usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
+      let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
+      balance = isNaN(balance) ? 0 : parseFloat(balance)
+      let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
+        ?.price?.usd
+      usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
 
-        return toFix(Number(usdPrice) * toFix(balance))
-      } catch (e) {
-        console.error('Error in getUsdPriceByAergo:', e)
-        return '0'
-      }
+      return toFix(Number(usdPrice) * toFix(balance))
     },
   },
   methods: {
