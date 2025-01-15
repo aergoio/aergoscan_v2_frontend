@@ -32,7 +32,7 @@ if (process.env.AERGO_URL) {
 }
 
 // let HARDFORK_BLOCK_V4 = 140020000
-let HARDFORK_BLOCK_V4 = 22555555
+let HARDFORK_BLOCK_V4 = 0
 
 module.exports = {
   DEPLOYMENT: JSON.stringify('local'),

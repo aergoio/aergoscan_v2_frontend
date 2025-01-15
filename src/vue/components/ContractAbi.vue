@@ -228,8 +228,8 @@ export default {
   },
   watch: {
     selectedTab(to, from) {
-      if (to === 0 || to === 3) {  
-        // Discovered a bug where data from the JSON viewer is fetched but the screen doesn't re-render. 
+      if (to === 0 || to === 3) {
+        // Discovered a bug where data from the JSON viewer is fetched but the screen doesn't re-render.
         // To force the re-rendering, implemented a logic that changes an internal key.
         this.interactiveKey += 1
       }
@@ -336,6 +336,8 @@ export default {
           }
         } catch (e) {
           console.error(e)
+          // backend node에서 abi 직접 호출
+          this.contract = { abi: this.$props.abi }
           this.isLoadingDetail = false
         }
       })()
