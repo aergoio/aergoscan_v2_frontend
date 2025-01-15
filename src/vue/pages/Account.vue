@@ -670,6 +670,7 @@ export default {
             'blockchain/getNameInfo',
             { name: address.encoded }
           )
+          console.log('nameInfo:', nameInfo)
           this.ownerAddress = nameInfo.owner.toString()
           this.destinationAddress = nameInfo.destination.toString()
           address = this.destinationAddress
