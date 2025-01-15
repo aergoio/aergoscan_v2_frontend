@@ -13,6 +13,7 @@
               </div>
               <copy-link-button :message="$route.params.hash" />
             </div>
+
             <div class="detail-box transaction" v-if="txMeta">
               <!-- <div class="h-scroll"> -->
               <div class="table-wrap">
@@ -27,9 +28,9 @@
                     <tr class="hidden loading" v-if="!txMeta && !error">
                       <td colspan="100%">Loading...</td>
                     </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
+                    <!-- <tr class="hidden not-found" v-if="!txMeta">
+                      <td colspan="100%">No items found</td>
+                    </tr> -->
                     <template v-if="txMeta">
                       <tr>
                         <th>
@@ -176,9 +177,9 @@
                     <tr class="hidden loading" v-if="!txMeta && !error">
                       <td colspan="100%">Loading...</td>
                     </tr>
-                    <!--                  <tr class="hidden not-found">-->
-                    <!--                    <td colspan="100%">No items found</td>-->
-                    <!--                  </tr>-->
+                    <!-- <tr class="hidden not-found" >
+                      <td colspan="100%">No items found</td>
+                    </tr> -->
                     <template v-if="txMeta">
                       <tr>
                         <th>
@@ -258,6 +259,7 @@
               </div>
               <!-- </div> -->
             </div>
+
             <div class="table-wrap">
               <div class="table-tab">
                 <div class="table-tab-header">
@@ -290,18 +292,18 @@
                         ><span class="sub">{{ nftTxTotalItems }}</span>
                       </router-link>
                       <router-link
-                        class="title internal-transactions"
+                        class="title internal-operations"
                         :to="{
                           query: {
                             ...$route.query,
-                            tx: 'internalTransactions',
+                            tx: 'internalOperations',
                           },
                         }"
                         replace
                       >
-                        <span class="main">Internal Transactions [Beta]</span
+                        <span class="main">Internal Operations</span
                         ><span class="sub">{{
-                          internalTransactionsTotalItems
+                          internalOperationsTotalItems
                         }}</span>
                       </router-link>
                     </div>
@@ -320,12 +322,41 @@
                     :active="$route.query.tx === 'nft'"
                     @onUpdateTotalCount="updateNftTxTotalCount"
                   />
-                  <internal-transactions-table
-                    ref="internalTransactionsTable"
-                    :hash="$route.params.hash"
-                    :active="$route.query.tx === 'internalTransactions'"
-                    @onUpdateTotalCount="updateInternalTransactionsTotalCount"
-                  />
+                  <div>
+                    <span
+                      v-if="$route.query.tx === 'internalOperations'"
+                      :style="{
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Calls</span
+                    >
+                    <internal-operations-table
+                      ref="internalOperationsTable"
+                      :hash="$route.params.hash"
+                      :active="$route.query.tx === 'internalOperations'"
+                      @onUpdateTotalCount="updateInternalOperationsTotalCount"
+                    />
+                  </div>
+                  <div
+                    v-if="
+                      $route.query.tx === 'internalOperations' &&
+                      internalData.operations?.operations?.length > 0
+                    "
+                  >
+                    <span
+                      :style="{
+                        color: '#3c3b3e',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                      }"
+                      >Operations</span
+                    >
+                    <div class="tree-container">
+                      <TreeNode :data="internalData?.operations" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -335,13 +366,13 @@
                 <div class="title">Contract</div>
                 <div class="item">
                   <span class="item-inner">
-                    <router-link :to="`/account/${txMeta.contract}/`">
+                    <router-link :to="`/account/${contract.hash}/`">
                       <Identicon
-                        :text="txMeta.contract"
+                        :text="contract.hash"
                         size="20"
                         class="tiny-identicon"
                       />
-                      {{ txMeta.contract }}
+                      {{ contract.hash }}
                     </router-link>
                   </span>
                 </div>
@@ -357,19 +388,61 @@
                     :route="{ query: query({ payload: 'formatted' }) }"
                     :id="'formatted'"
                   >
-                    <div class="title" v-if="txMeta.payload.length">
+                    <div class="title" v-if="txMeta.payload?.length">
                       {{ formattedTitle }}
                     </div>
                     <div class="content">
                       <div class="h-scroll dark">
-                        <div class="empty-result" v-if="!txMeta.payload.length">
+                        <div
+                          class="empty-result"
+                          v-if="!txMeta.payload?.length"
+                        >
                           (No payload)
                         </div>
+                        <div
+                          v-if="
+                            txMeta.blockno > hardforkBlockV4 &&
+                            txMeta.type === 6
+                          "
+                          class="h-scroll dark"
+                        >
+                          <div
+                            class="empty-result"
+                            v-if="!contract.meta.source_code"
+                          >
+                            (No sourceCode)
+                          </div>
+                          <codemirror
+                            v-if="contract.meta.source_code"
+                            :key="interactiveKey"
+                            v-model="contract.meta.source_code"
+                            :options="cmOption2"
+                          />
+
+                          <div
+                            class="title"
+                            v-if="contract.meta.deploy_args.length"
+                          >
+                            Deploy Arguments
+                          </div>
+
+                          <div
+                            class="empty-result"
+                            v-if="!contract.meta.deploy_args"
+                          >
+                            (No deployArgs)
+                          </div>
+                          <codemirror
+                            v-if="contract.meta.deploy_args"
+                            v-model="contract.meta.deploy_args"
+                            :options="cmOption2"
+                          />
+                        </div>
                         <payload-formatter
+                          v-else
                           :payload="txMeta.payload"
                           :txType="txMeta.type"
                           :recipient="txMeta.to"
-                          v-if="txMeta.payload"
                         />
                       </div>
                     </div>
@@ -493,9 +566,10 @@ import PayloadFormatter from '@/src/vue/components/PayloadFormatter'
 import EventsList from '@/src/vue/components/EventsList'
 import TransactionTokenTable from '@/src/vue/components/TransactionTokenTable'
 import TransactionNftTable from '@/src/vue/components/TransactionNftTable'
-import InternalTransactionsTable from '@/src/vue/components/InternalTransactionsTable'
+import InternalOperationsTable from '@/src/vue/components/InternalOperationsTable'
 import { TxTypes } from '@herajs/common'
 import cfg from '@/src/config'
+import TreeNode from '@/src/vue/components/TreeNode.vue'
 
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -528,7 +602,7 @@ export default {
       selectedReceiptTab: 0,
       tokenTxTotalItems: 0,
       nftTxTotalItems: 0,
-      internalTransactionsTotalItems: 0,
+      internalOperationsTotalItems: 0,
       tabTableCss: {
         table: 'result-events',
       },
@@ -550,13 +624,27 @@ export default {
         theme: 'material-ocean',
         readOnly: true,
       },
+      cmOption2: {
+        tabSize: 4,
+        styleActiveLine: true,
+        readOnly: true,
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        theme: 'material-ocean',
+        mode: 'text/x-lua',
+      },
       payloadJson: '',
       isContract: false,
+      contract: {},
+      internalData: [],
+      internalAddress: '',
+      interactiveKey: 0,
     }
   },
   created() {},
   beforeDestroy() {},
-
   watch: {
     $route(to, from) {
       this.load()
@@ -569,6 +657,7 @@ export default {
     },
     selectedReceiptTab() {
       if (this.selectedReceiptTab === 1) {
+        this.interactiveKey += 1
         this.getReceipt()
       }
     },
@@ -588,6 +677,7 @@ export default {
 
         if (responseJson.hits.length > 0) {
           this.isContract = true
+          this.contract = responseJson.hits[0]
         }
       })()
       if (this.selectedPayloadTab === 1) {
@@ -608,7 +698,14 @@ export default {
     this.load()
     this.changePage(this.currentPage)
   },
+  // updated() {
+  //   console.log(this.txMeta, 'txMeta')
+  //   console.log(this.error, 'error')
+  // },
   computed: {
+    hardforkBlockV4() {
+      return cfg.HARDFORK_BLOCK_V4 || 0
+    },
     realToken() {
       return this.$route.params.hash
     },
@@ -625,8 +722,8 @@ export default {
       return status.charAt(0).toUpperCase() + status.slice(1)
     },
     payloadHex() {
-      if (!this.txMeta.payload) return
-      let payloadBuffer = Buffer.from(this.txMeta.payload)
+      if (!this.txMeta.payload) return 'No Payload calculate to Hex'
+      let payloadBuffer = Buffer.from(this.txMeta.payload, 'base64')
       return payloadBuffer.toString('hex')
     },
     receiptJson() {
@@ -645,9 +742,7 @@ export default {
       return { ...this.$route.query, ...newQuery }
     },
     reload: async function () {
-      this.isLoading = true
       await this.load()
-      this.isLoading = false
     },
     async load() {
       this.error = null
@@ -681,8 +776,33 @@ export default {
         }
       })()
 
+      await this.loadInternalOperationsData()
+
       await this.$nextTick()
     },
+
+    loadInternalOperationsData: async function () {
+      try {
+        let hash = this.$route.params.hash
+        const response = await (
+          await this.$fetch.get(`${cfg.API_URL}/internalOperations`, {
+            q: `tx_id:${hash}`,
+          })
+        ).json()
+        if (response.hits.length) {
+          this.internalData = response.hits.map((item) => ({
+            ...item.meta,
+            operations: JSON.parse(item.meta.operations),
+          }))[0]
+        } else {
+          this.internalData = []
+        }
+      } catch (e) {
+        this.internalData = []
+        console.error(e)
+      }
+    },
+
     async getReceipt() {
       let hash = this.$route.params.hash
       this.txReceipt = await this.$store.dispatch(
@@ -707,8 +827,8 @@ export default {
     updateNftTxTotalCount(count) {
       this.nftTxTotalItems = count
     },
-    updateInternalTransactionsTotalCount(count) {
-      this.internalTransactionsTotalItems = count
+    updateInternalOperationsTotalCount(count) {
+      this.internalOperationsTotalItems = count
     },
     moment,
     changePage: function (currentPage) {
@@ -719,11 +839,10 @@ export default {
       this.currentPage = currentPage
     },
     calculatePayloadJson() {
-      if (!this.txMeta.payload) return
+      if (!this.txMeta.payload) return 'No Payload calculate to JSON'
       try {
-        let payloadBuffer = Buffer.from(this.txMeta.payload)
-        let parsedData = JSON.parse(payloadBuffer.toString())
-
+        let payloadBuffer = Buffer.from(this.txMeta.payload, 'base64')
+        let parsedData = JSON.parse(payloadBuffer.toString('utf-8'))
         return JSON.stringify(parsedData, null, 2)
       } catch (e) {
         return 'Cannot parse payload as JSON'
@@ -733,17 +852,31 @@ export default {
   components: {
     TransactionTokenTable,
     TransactionNftTable,
-    InternalTransactionsTable,
+    InternalOperationsTable,
     PayloadFormatter,
     Search,
     EventsList,
     Identicon,
     codemirror,
+    TreeNode,
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.vjs-value-string {
+  color: #279ecc !important;
+}
+
+.tree-container {
+  padding: 0.5rem;
+}
+/* 최상위 .tree-node의 연결선을 제거 */
+.tree-container > .tree-node::before,
+.tree-container > .tree-node::after {
+  display: none;
+}
+
 .category-inner {
   > .page-wrap {
     padding-bottom: 30px;
@@ -767,7 +900,7 @@ export default {
   &.transaction {
     .table-wrap {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       gap: 0 16px;
       margin: 0;
 
@@ -803,7 +936,7 @@ export default {
 
     .tabs-wrap {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       padding: 10px 20px 50px;
 
       @media screen and (max-width: 1200px) {

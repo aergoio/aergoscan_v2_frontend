@@ -11,7 +11,9 @@
         <th v-if="columns.indexOf('blockno') >= 0">Block</th>
         <th v-if="columns.indexOf('tx') >= 0">Tx</th>
         <th>Event Name</th>
-        <th>Contract Address</th>
+        <th v-if="!(columns.includes('blockno') && columns.includes('tx'))">
+          Contract Address
+        </th>
         <th>Arguments</th>
       </tr>
     </thead>
@@ -39,7 +41,7 @@
         <td>
           {{ row.event_name }}
         </td>
-        <td>
+        <td v-if="!(columns.includes('blockno') && columns.includes('tx'))">
           <div v-if="`${row.contract}` !== `${address}`">
             <router-link
               :to="`/account/${row.contract}/`"
@@ -64,7 +66,7 @@
         <td width="100%">
           <span class="event-args">
             <span class="args-payload" v-if="JSON.parse(row.event_args).length">
-              <pre><ArgFormatter v-for="arg of JSON.parse(row.event_args)" :key="`${arg}`" :arg="arg" class="monospace"/></pre>
+              <pre><ArgFormatter v-for="(arg,index) of JSON.parse(row.event_args)" :key="`${index}`" :arg="arg" class="monospace"/></pre>
             </span>
           </span>
         </td>

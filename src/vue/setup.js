@@ -40,6 +40,7 @@ export default async function setup(opts) {
   Vue.component('CopyLinkButton', CopyLinkButton)
   Vue.component('QrcodeButton', QrcodeButton)
   Vue.component('QrcodeModal', QRcodeModal)
+
   Vue.filter('shortAddress', shortAddress)
   Vue.filter('formatToken', formatToken)
   Vue.filter('formatGenericToken', formatGenericToken)
