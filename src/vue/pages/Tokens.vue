@@ -161,7 +161,7 @@ export default {
       totalItems: 0,
       limitPageTotalCount: 0,
       isLoading: false,
-      currentPage: this.initialPage,
+      currentPage: parseInt(this.$route.query.page) || this.initialPage,
       paginationCss: {
         pagination: 'pagination tokens-table',
         paginationInner: 'pagination-inner',
@@ -179,6 +179,12 @@ export default {
       sortedDir: this.sort,
       searchedField: this.searchField,
     }
+  },
+  watch: {
+    '$route.query.page'(newPage) {
+      this.currentPage = parseInt(newPage) || this.initialPage
+      this.reload()
+    },
   },
   created() {},
   beforeDestroy() {},
@@ -288,10 +294,12 @@ export default {
     },
     changePage: function (currentPage) {
       this.currentPage = currentPage
+      this.$router.push({ query: { page: currentPage } })
       this.reload()
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+      this.$router.push({ query: { page: currentPage } })
     },
     deleteKeyword: function () {
       this.searchedField = ''
