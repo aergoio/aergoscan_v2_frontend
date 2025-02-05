@@ -129,7 +129,7 @@ export default {
       totalItems: 0,
       limitPageTotalCount: 0,
       isLoading: false,
-      currentPage: this.initialPage,
+      currentPage: parseInt(this.$route.query.page) || this.initialPage,
       accountLinkCss: {
         wrapper: '',
         address: 'address txt-ellipsis',
@@ -146,6 +146,12 @@ export default {
       sortedField: this.sortField,
       sortedDir: this.sort,
     }
+  },
+  watch: {
+    '$route.query.page'(newPage) {
+      this.currentPage = parseInt(newPage) || this.initialPage
+      this.reload()
+    },
   },
   created() {},
   beforeDestroy() {},
@@ -217,10 +223,12 @@ export default {
     },
     changePage: function (currentPage) {
       this.currentPage = currentPage
+      this.$router.push({ query: { page: currentPage } })
       this.reload()
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+      this.$router.push({ query: { page: currentPage } })
     },
     moment,
   },
