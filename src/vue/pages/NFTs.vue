@@ -268,12 +268,12 @@ export default {
     },
     changePage: function (currentPage) {
       this.currentPage = currentPage
-      this.$router.push({ query: { page: currentPage } })
+      this.$router.push({ query: { page: currentPage } }).catch((err) => {})
       this.reload()
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
-      this.$router.push({ query: { page: currentPage } })
+      this.$router.push({ query: { page: currentPage } }).catch((err) => {})
     },
     deleteKeyword: function () {
       this.searchedField = ''
