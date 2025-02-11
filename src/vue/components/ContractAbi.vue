@@ -333,6 +333,8 @@ export default {
               source_code: data.hits[0].meta.source_code,
               abi: JSON.parse(data.hits[0].meta.abi),
             }
+          } else {
+            this.contract = { abi: this.$props.abi }
           }
         } catch (e) {
           console.error(e)
