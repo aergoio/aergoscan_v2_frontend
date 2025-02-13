@@ -372,7 +372,7 @@
                         size="20"
                         class="tiny-identicon"
                       />
-                      {{ contract.hash }}
+                      {{ contract?.hash }}
                     </router-link>
                   </span>
                 </div>
@@ -408,12 +408,12 @@
                         >
                           <div
                             class="empty-result"
-                            v-if="!contract.meta.source_code"
+                            v-if="!contract?.meta?.source_code"
                           >
                             (No sourceCode)
                           </div>
                           <codemirror
-                            v-if="contract.meta.source_code"
+                            v-if="contract?.meta?.source_code"
                             :key="interactiveKey"
                             v-model="contract.meta.source_code"
                             :options="cmOption2"
@@ -421,19 +421,19 @@
 
                           <div
                             class="title"
-                            v-if="contract.meta.deploy_args.length"
+                            v-if="contract?.meta?.deploy_args.length"
                           >
                             Deploy Arguments
                           </div>
 
                           <div
                             class="empty-result"
-                            v-if="!contract.meta.deploy_args"
+                            v-if="!contract?.meta?.deploy_args"
                           >
                             (No deployArgs)
                           </div>
                           <codemirror
-                            v-if="contract.meta.deploy_args"
+                            v-if="contract?.meta?.deploy_args"
                             v-model="contract.meta.deploy_args"
                             :options="cmOption2"
                           />

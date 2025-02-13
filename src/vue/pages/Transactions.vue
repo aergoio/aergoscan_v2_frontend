@@ -346,7 +346,7 @@ export default {
     changePage: function (currentPage) {
       this.currentPage = currentPage
       this.$router
-        .push({ query: { page: currentPage, category: this.selectedCategory } })
+        .push({ query: { category: this.selectedCategory, page: currentPage } })
         .catch(() => {})
       this.reload()
     },
@@ -370,7 +370,7 @@ export default {
 
       this.$router
         .push({
-          query: { page: this.currentPage, category: this.selectedCategory },
+          query: { category: this.selectedCategory, page: this.currentPage },
         })
         .catch(() => {})
 

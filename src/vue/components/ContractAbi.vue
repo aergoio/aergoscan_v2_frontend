@@ -118,7 +118,7 @@
         <div class="content">
           <codemirror
             :key="interactiveKey"
-            v-if="contract.source_code"
+            v-if="contract?.source_code"
             v-model="contract.source_code"
             :options="luaOptions"
           />
