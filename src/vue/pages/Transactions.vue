@@ -227,7 +227,7 @@ export default {
         address: 'address txt-ellipsis',
         icon: 'mini-identicon',
       },
-      selectedCategory: this.category,
+      selectedCategory: this.$route.query.category || this.category,
       sortedField: this.sortField,
       sortedDir: this.sort,
     }
@@ -235,6 +235,10 @@ export default {
   watch: {
     '$route.query.page'(newPage) {
       this.currentPage = parseInt(newPage) || this.initialPage
+      this.reload()
+    },
+    '$route.query.category'(newCategory) {
+      this.selectedCategory = newCategory || 'all'
       this.reload()
     },
   },
@@ -341,7 +345,9 @@ export default {
     },
     changePage: function (currentPage) {
       this.currentPage = currentPage
-      this.$router.push({ query: { page: currentPage } }).catch((err) => {})
+      this.$router
+        .push({ query: { page: currentPage, category: this.selectedCategory } })
+        .catch(() => {})
       this.reload()
     },
     updateCurrentPage: function (currentPage) {
@@ -361,6 +367,12 @@ export default {
       event.target.closest('th.menu-th').classList.remove('show')
       this.currentPage = this.initialPage
       this.selectedCategory = category
+
+      this.$router
+        .push({
+          query: { page: this.currentPage, category: this.selectedCategory },
+        })
+        .catch(() => {})
 
       this.reload()
     },
