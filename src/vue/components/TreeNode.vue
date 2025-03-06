@@ -10,7 +10,7 @@
           <div class="node-op" v-if="data.op">{{ data.op }}</div>
           <div class="node-details">
             <span v-if="data.contract">{{ data.contract }} </span>
-            <span v-if="data.amount">{{ data.amount }} AERGO</span>
+            <span v-if="data.amount">{{ data.amount }}</span>
             <span v-if="data.function">{{ data.function }}</span>
             <span v-if="filteredArgs.length > 0">{{ filteredArgs }}</span>
             <span v-if="data.result">{{ data.result }}</span>
