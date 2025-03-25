@@ -512,10 +512,7 @@ export default {
   computed: {
     totalVotingPower() {
       try {
-        return this.voteHistory
-          .getVotingList()
-          .map((vote) => new Amount(vote.getAmount(), 'aer'))
-          .reduce((a, b) => a.add(b), new Amount(0))
+        return this.voteHistory.totalVotingPower
       } catch (e) {
         return new Amount(0)
       }
