@@ -174,7 +174,7 @@
               <span>Status:</span>
               <img
                 v-if="receipt?.status === 'ERROR'"
-                src="~@assets/img/ic_fail.png"
+                src="~@assets/img/ic-fail.png"
               />
               <img v-else src="~@assets/img/ic-success.png" />
               <span class="receipt_text">{{ receipt?.status }}</span>
