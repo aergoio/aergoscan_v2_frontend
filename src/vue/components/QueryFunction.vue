@@ -34,9 +34,16 @@
           :key="arg.name"
           style="margin-bottom: 10px"
         >
-          <span class="key">{{
-            arg.name === '...' ? 'Variadic argument' : arg.name
-          }}</span>
+          <div class="argument-header" v-if="arg.name === '...'">
+            <span class="key"> Variadic argument </span>
+            <span class="helper-text">
+              Please enter each value inside double quotes (e.g., "value")
+            </span>
+          </div>
+
+          <span v-else class="key">
+            {{ arg.name }}
+          </span>
 
           <!-- Variadic argument input -->
           <div
@@ -104,24 +111,20 @@
             />
             <span
               v-if="args[arg.name]"
-              style="display: flex; align-items: center"
+              style="display: flex; align-items: center; margin-left: 6px"
             >
+              <span
+                v-if="jsonValidate(args[arg.name])"
+                style="white-space: nowrap; text-transform: capitalize"
+              >
+                {{ jsonTypeof(args[arg.name]) }}
+              </span>
               <img
                 v-if="jsonValidate(args[arg.name])"
                 class="validate"
                 src="~@assets/img/ic-success@3x.png"
               />
               <img v-else class="validate" src="~@assets/img/ic_fail@3x.png" />
-              <span
-                v-if="jsonValidate(args[arg.name])"
-                style="
-                  white-space: nowrap;
-                  margin-left: 10px;
-                  text-transform: capitalize;
-                "
-              >
-                {{ jsonTypeof(args[arg.name]) }}
-              </span>
             </span>
           </div>
         </div>
@@ -423,5 +426,40 @@ export default {
 .upbutton {
   transform: rotate(0deg);
   transition: transform 0.3s ease-in-out;
+}
+.arg-btn {
+  background-color: #1c1f2a; // 깊은 네이비 그레이
+  color: #e0e0e0; // 부드러운 흰색 계열 텍스트
+  border: 1px solid #2c2f3c; // 미묘한 외곽선
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #262a38; // 더 밝은 블루그레이
+    border-color: #3c4050;
+  }
+
+  &:active {
+    background-color: #13161f; // 클릭 시 더 짙어짐
+    border-color: #2a2d3a;
+  }
+}
+.argument-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.helper-text {
+  font-size: 12px;
+  color: #c0c0c0;
+  font-style: italic;
+  white-space: nowrap;
 }
 </style>
