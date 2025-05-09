@@ -292,13 +292,11 @@ export default {
     async callToConnect() {
       const wait = loadAndWait()
       if (this.getActiveAccount.address) {
-        const argValues = this.func.arguments.map((arg) =>
+        const argValues = this.func.arguments.flatMap((arg) =>
           arg.name === '...'
             ? this.args['...'].map((v) => JSON.parse(v))
             : JSON.parse(this.args[arg.name])
-        )[0]
-        console.log(argValues, 'argValues')
-
+        )
         if (argValues.some((item) => typeof item === 'undefined')) {
           this.result = { error: 'You did not provide all arguments' }
           return
