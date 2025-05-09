@@ -559,7 +559,7 @@ export default {
     }
   }
   .result_content {
-    margin-top: 10px;
+    margin-top: 4px;
     margin-bottom: 4px;
     &.empty {
       opacity: 0.5;
