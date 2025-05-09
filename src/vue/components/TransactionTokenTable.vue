@@ -209,16 +209,18 @@ export default {
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
-        this.data = response.hits.map((item) => ({
+        const filteredAergo = response.hits.filter((item) => item.token) // filtering 'AERGO'
+        this.data = filteredAergo.map((item) => ({
           ...item.meta,
           hash: item.hash,
+          symbolHash: item.token.hash,
           name: item.token.meta.name,
           image_url: item.token.meta.image_url,
           symbol: item.token.meta.symbol,
           decimals: item.token.meta.decimals,
         }))
-        this.totalItems = response.total
-        this.limitPageTotalCount = response.limitPageCount
+        this.totalItems = filteredAergo.total || 0
+        this.limitPageTotalCount = filteredAergo.limitPageCount || 0
       } else {
         this.data = []
         this.totalItems = 0
