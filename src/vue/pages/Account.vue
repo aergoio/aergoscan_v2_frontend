@@ -292,6 +292,14 @@
                         <span class="main">Name History</span
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
+                      <router-link
+                        class="title calls"
+                        :to="{ query: { ...$route.query, tx: 'calls' } }"
+                        replace
+                      >
+                        <span class="main">Calls</span
+                        ><span class="sub">{{ callsTotalItems }}</span>
+                      </router-link>
                       <!-- <router-link
                         v-if="accountDetail && accountDetail.codehash"
                         class="title internal-operations"
@@ -360,6 +368,21 @@
                     :nameHistory="nameHistory"
                     v-if="nameHistory.length"
                   />
+                  <account-calls-table
+                    v-if="$route.query.tx === 'calls'"
+                    ref="accountCallsTable"
+                    :address="realAddress"
+                    :filteredTokens="filteredTokens"
+                    :active="$route.query.tx === 'calls'"
+                    @onUpdateTotalCount="updateCallsTotalCount"
+                  />
+                  <!-- <account-calls-table
+                    ref="accountCallsTable"
+                    :address="realAddress"
+                    :filteredTokens="filteredTokens"
+                    :active="$route.query.tx === 'calls'"
+                    @onUpdateTotalCount="updateCallsTotalCount"
+                  /> -->
 
                   <!-- <div>
                     <span
@@ -442,6 +465,7 @@ import AccountTokenBalanceTable from '@/src/vue/components/AccountTokenBalanceTa
 import AccountNftInventoryTable from '@/src/vue/components/AccountNftInventoryTable'
 import AccountRegisteredNamesTable from '@/src/vue/components/AccountRegisteredNamesTable'
 import AccountNameHistoryTable from '@/src/vue/components/AccountNameHistoryTable'
+import AccountCallsTable from '@/src/vue/components/AccountCallsTable'
 import InternalOperationsTable from '@/src/vue/components/InternalOperationsTable'
 import TreeNode from '@/src/vue/components/TreeNode.vue'
 
@@ -464,6 +488,7 @@ export default {
       tokenBalanceTotalItems: 0,
       nftInventoryTotalItems: 0,
       internalOperationsTotalItems: 0,
+      callsTotalItems: 0,
       tokens: [],
       nfts: [],
       contractTx: [],
@@ -931,6 +956,9 @@ export default {
       if (this.$refs.internalOperationsTable) {
         await this.$refs.internalOperationsTable.reload(address)
       }
+      if (this.$refs.callsTable) {
+        await this.$refs.callsTable.reload(address)
+      }
     },
     updateTransactionTotalCount(count) {
       this.transactionTotalItems = count
@@ -949,6 +977,9 @@ export default {
     },
     updateInternalOperationsTotalCount(count) {
       this.internalOperationsTotalItems = count
+    },
+    updateCallsTotalCount(count) {
+      this.callsTotalItems = count
     },
     onShowQrcode() {
       this.isShowQRcode = true
@@ -972,6 +1003,7 @@ export default {
     AccountNftInventoryTable,
     AccountNameHistoryTable,
     AccountRegisteredNamesTable,
+    AccountCallsTable,
     InternalOperationsTable,
   },
 }
