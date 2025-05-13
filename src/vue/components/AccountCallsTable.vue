@@ -19,7 +19,14 @@
         <div
           class="tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="row.tx_id"
+          style="display: flex; align-items: center"
         >
+          <img
+            v-if="!row.success"
+            src="~@assets/img/ic-alert-circle-fill.svg"
+            alt="fail"
+            class="identicon"
+          />
           <router-link
             :to="`/transaction/${row.tx_id}/`"
             class="address txt-ellipsis"
@@ -48,20 +55,28 @@
           </router-link>
         </div>
       </td>
-      <td>{{ row.function?.toUpperCase() || '-' }}</td>
       <td>
-        <span v-if="row.args">{{ row.args }}</span>
-        <span v-else>-</span>
+        <div
+          :class="
+            row.args
+              ? [
+                  'tooltipped',
+                  'tooltipped-se',
+                  'tooltipped-align-left-2',
+                  row.args?.length > 30 ? 'tooltipped-multiline' : '',
+                ]
+              : ''
+          "
+          :aria-label="row.args"
+          style="cursor: default"
+        >
+          {{ row.function?.toUpperCase() }}
+        </div>
       </td>
       <td>
         <div
           v-html="$options.filters.formatBigNumAmount(row.amount || '0')"
         ></div>
-      </td>
-      <td>
-        <span :class="row.success ? 'status success' : 'status fail'">
-          {{ row.success ? 'Success' : 'Failed' }}
-        </span>
       </td>
     </template>
 
@@ -117,9 +132,7 @@ export default {
         { text: 'TIME', value: 'ts' },
         { text: 'CALLER', value: 'caller' },
         { text: 'FUNCTION', value: 'function' },
-        { text: 'ARGS', value: 'args' },
         { text: 'AMOUNT', value: 'amount' },
-        { text: 'STATUS', value: 'status' },
       ]
     },
     dataTableCss() {
@@ -150,7 +163,6 @@ export default {
           sort: `${sortField}:${sort}`,
         })
       ).json()
-      console.log(response)
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
@@ -202,19 +214,6 @@ export default {
 </script>
 
 <style scoped>
-.status {
-  font-size: 12px;
-  border-radius: 12px;
-  font-weight: 600;
-  display: inline-block;
-}
-.status.success {
-  color: #2e7d32;
-}
-.status.fail {
-  color: #c62828;
-}
-
 .caller-cell {
   display: flex;
   align-items: center;
