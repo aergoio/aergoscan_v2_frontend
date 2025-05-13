@@ -56,22 +56,28 @@
       </td>
 
       <td>
-        <router-link
-          :to="`/account/${row.caller}`"
-          class="address tooltipped tooltipped-se tooltipped-align-left-2"
-          :aria-label="row.caller"
-        >
-          {{ $options.filters.formatEllipsisText(row.caller, 30) }}
-        </router-link>
+        <div>
+          <Identicon :text="row.caller" size="18" class="mini-identicon" />
+          <router-link
+            :to="`/account/${row.caller}`"
+            class="address tooltipped tooltipped-se tooltipped-align-left-2"
+            :aria-label="row.caller"
+          >
+            {{ $options.filters.formatEllipsisText(row.caller, 30) }}
+          </router-link>
+        </div>
       </td>
       <td v-if="!isContract">
-        <router-link
-          :to="`/account/${row.contract}`"
-          class="address tooltipped tooltipped-se tooltipped-align-left-2"
-          :aria-label="row.contract"
-        >
-          {{ $options.filters.formatEllipsisText(row.contract, 30) }}
-        </router-link>
+        <div>
+          <Identicon :text="row.contract" size="18" class="mini-identicon" />
+          <router-link
+            :to="`/account/${row.contract}`"
+            class="address tooltipped tooltipped-se tooltipped-align-left-2"
+            :aria-label="row.contract"
+          >
+            {{ $options.filters.formatEllipsisText(row.contract, 30) }}
+          </router-link>
+        </div>
       </td>
 
       <td>
@@ -176,8 +182,8 @@ export default {
             { text: 'AMOUNT(AERGO)', value: 'amount' },
           ]
         : [
-            { text: 'FROM', value: 'caller' },
-            { text: 'TO', value: 'contract' },
+            { text: 'CALLER', value: 'caller' },
+            { text: 'CONTRACT', value: 'contract' },
             { text: 'FUNCTION', value: 'function' },
             { text: 'AMOUNT(AERGO)', value: 'amount' },
           ]
@@ -335,6 +341,15 @@ table.internal-operations-table {
 
   td {
     white-space: nowrap;
+
+    &:nth-child(1),
+    &:nth-child(2) {
+      > div {
+        display: flex;
+        align-items: center;
+      }
+    }
+
     &:nth-child(1) {
       width: 120px;
     }
