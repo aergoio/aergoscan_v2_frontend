@@ -37,7 +37,7 @@
         <account-link
           :css="accountLinkCss"
           :to-link="`/account/${row.from}/`"
-          :address="row.from.toString()"
+          :address="$options.filters.formatEllipsisText(row.from, 25)"
           v-if="
             ![
               '1111111111111111111111111111111111111111111111111111',
@@ -58,7 +58,7 @@
         <account-link
           :css="accountLinkCss"
           :to-link="`/account/${row.to}/`"
-          :address="row.to.toString()"
+          :address="$options.filters.formatEllipsisText(row.to, 25)"
           v-if="
             ![
               '1111111111111111111111111111111111111111111111111111',
@@ -78,13 +78,37 @@
             class="identicon icon-circle"
           />
           <span class="identicon" v-else><img :src="row.image_url" /></span>
-          <router-link :to="`/token/${row.address}`" class="address">
-            {{ `${row.name} (${row.symbol})` }}
-          </router-link>
+          <span class="address txt-ellipsis">
+            <router-link
+              v-if="row.symbolHash !== 'AERGO'"
+              :to="`/token/${row.symbolHash}/`"
+            >
+              {{ row.name }} ({{ row.symbol }})
+            </router-link>
+            <span v-else>
+              {{ row.name }}
+            </span>
+          </span>
         </div>
       </td>
       <td>
         <div
+          :class="[
+            shouldShowTooltip(row.amount, row.decimals)
+              ? 'tooltipped tooltipped-s tooltipped-multiline'
+              : '',
+          ]"
+          :aria-label="
+            shouldShowTooltip(row.amount, row.decimals)
+              ? $options.filters
+                  .formatBigNumAmount(row.amount, false, 18, row.decimals)
+                  .replace(/<[^>]*>?/gm, '')
+                  .replace(/(\.\d*?[1-9])0+$/, '$1')
+                  .replace(/\.0+$/, '') +
+                ' ' +
+                row.symbol
+              : null
+          "
           v-html="
             $options.filters.formatBigNumAmount(
               row.amount,
@@ -182,7 +206,8 @@ export default {
       return {
         wrapper: 'tab-content token-transfers' + (this.active ? ' active' : ''),
         table:
-          'transactions-table token' + (this.isLoading ? ' is-loading' : ''),
+          'transactions-token-table token' +
+          (this.isLoading ? ' is-loading' : ''),
       }
     },
     isHidePage() {
@@ -249,6 +274,17 @@ export default {
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
     },
+    shouldShowTooltip(amount, decimals) {
+      if (!amount || !decimals) return false
+      const pointPos = decimals
+      const padded =
+        amount.length <= pointPos ? amount.padStart(pointPos + 1, '0') : amount
+      const strInt = padded.slice(0, padded.length - pointPos)
+      const strDecimal = padded.slice(-pointPos)
+      const strValue = strInt + '.' + strDecimal
+      const float = parseFloat(strValue)
+      return float > 0 && float <= 1 && strDecimal.replace(/0+$/, '').length > 6
+    },
     moment,
   },
   components: {
@@ -258,7 +294,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table.transactions-table {
+table.transactions-token-table {
   th {
     &:nth-child(4) {
       width: 25px;
@@ -274,6 +310,10 @@ table.transactions-table {
       > div {
         justify-content: center;
       }
+    }
+
+    &:last-child {
+      padding-right: 30px;
     }
 
     @media screen and (max-width: 480px) {
@@ -303,6 +343,9 @@ table.transactions-table {
       > div {
         justify-content: center;
       }
+    }
+    &:last-child {
+      padding-right: 30px;
     }
 
     @media screen and (max-width: 480px) {

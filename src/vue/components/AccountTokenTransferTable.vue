@@ -139,6 +139,22 @@
       </td>
       <td>
         <div
+          :class="[
+            shouldShowTooltip(row.amount, row.decimals)
+              ? 'tooltipped tooltipped-s tooltipped-multiline'
+              : '',
+          ]"
+          :aria-label="
+            shouldShowTooltip(row.amount, row.decimals)
+              ? $options.filters
+                  .formatBigNumAmount(row.amount, false, 18, row.decimals)
+                  .replace(/<[^>]*>?/gm, '')
+                  .replace(/(\.\d*?[1-9])0+$/, '$1')
+                  .replace(/\.0+$/, '') +
+                ' ' +
+                row.symbol
+              : null
+          "
           v-html="
             $options.filters.formatBigNumAmount(
               row.amount,
@@ -276,6 +292,7 @@ export default {
           sort: `${sortField}:${sort}`,
         })
       ).json()
+      console.log(response)
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
@@ -324,6 +341,17 @@ export default {
 
       this.reload()
     },
+    shouldShowTooltip(amount, decimals) {
+      if (!amount || !decimals) return false
+      const pointPos = decimals
+      const padded =
+        amount.length <= pointPos ? amount.padStart(pointPos + 1, '0') : amount
+      const strInt = padded.slice(0, padded.length - pointPos)
+      const strDecimal = padded.slice(-pointPos)
+      const strValue = strInt + '.' + strDecimal
+      const float = parseFloat(strValue)
+      return float > 0 && float <= 1 && strDecimal.replace(/0+$/, '').length > 6
+    },
     moment,
     openTableHeaderMenu,
   },
@@ -363,6 +391,7 @@ table.token-transfers-table {
 
       > div {
         justify-content: end;
+        padding-right: 60px;
       }
     }
   }
@@ -382,9 +411,9 @@ table.token-transfers-table {
 
     &:last-child {
       text-align: right;
-
       > div {
         justify-content: end;
+        padding-right: 60px;
       }
     }
 
