@@ -221,6 +221,16 @@
                   <div class="h-scroll">
                     <div class="tab-header">
                       <router-link
+                        v-if="getIsContractAccount"
+                        class="title calls"
+                        :to="{ query: { ...$route.query, tx: 'calls' } }"
+                        replace
+                      >
+                        <span class="main">Calls</span
+                        ><span class="sub">{{ callsTotalItems }}</span>
+                      </router-link>
+
+                      <router-link
                         class="title transactions router-link-exact-active"
                         :to="{ query: { ...$route.query, tx: 'transactions' } }"
                         replace
@@ -292,14 +302,7 @@
                         <span class="main">Name History</span
                         ><span class="sub">{{ nameHistory.length }}</span>
                       </router-link>
-                      <router-link
-                        class="title calls"
-                        :to="{ query: { ...$route.query, tx: 'calls' } }"
-                        replace
-                      >
-                        <span class="main">Calls</span
-                        ><span class="sub">{{ callsTotalItems }}</span>
-                      </router-link>
+
                       <!-- <router-link
                         v-if="accountDetail && accountDetail.codehash"
                         class="title internal-operations"
@@ -320,6 +323,14 @@
                   </div>
                 </div>
                 <div class="table-tab-content" v-if="realAddress">
+                  <account-calls-table
+                    v-if="$route.query.tx === 'calls' || getIsContractAccount"
+                    ref="accountCallsTable"
+                    :address="realAddress"
+                    :filteredTokens="filteredTokens"
+                    :active="$route.query.tx === 'calls'"
+                    @onUpdateTotalCount="updateCallsTotalCount"
+                  />
                   <account-transaction-table
                     ref="accountTransactionTable"
                     :address="realAddress"
@@ -368,21 +379,6 @@
                     :nameHistory="nameHistory"
                     v-if="nameHistory.length"
                   />
-                  <account-calls-table
-                    v-if="$route.query.tx === 'calls'"
-                    ref="accountCallsTable"
-                    :address="realAddress"
-                    :filteredTokens="filteredTokens"
-                    :active="$route.query.tx === 'calls'"
-                    @onUpdateTotalCount="updateCallsTotalCount"
-                  />
-                  <!-- <account-calls-table
-                    ref="accountCallsTable"
-                    :address="realAddress"
-                    :filteredTokens="filteredTokens"
-                    :active="$route.query.tx === 'calls'"
-                    @onUpdateTotalCount="updateCallsTotalCount"
-                  /> -->
 
                   <!-- <div>
                     <span
@@ -499,6 +495,7 @@ export default {
       tokenPrice: [],
       callContractHash: '',
       internalData: [],
+      isContract: false,
     }
   },
   created() {},
@@ -624,6 +621,8 @@ export default {
       return []
     },
     getTokenPriceByUsd() {
+      if (!Array.isArray(this.tokenPrice)) return 0
+
       let tokenBalance = this.tokenPrice?.filter(
         (item) => item.name === 'aergo'
       )[0]?.price?.usd
@@ -633,6 +632,7 @@ export default {
     getUsdPriceByAergo() {
       let balance = this.fullBalance?.toUnit('aergo')?.toString()?.split(' ')[0]
       balance = isNaN(balance) ? 0 : parseFloat(balance)
+      if (!Array.isArray(this.tokenPrice)) return 0
       let usdPrice = this.tokenPrice?.filter((item) => item.name === 'aergo')[0]
         ?.price?.usd
       usdPrice = isNaN(usdPrice) ? 0 : parseFloat(usdPrice)
@@ -708,6 +708,12 @@ export default {
         this.accountDetail = Object.freeze(
           await this.$store.dispatch('blockchain/getAccount', { address })
         )
+
+        if (this.accountDetail.codehash && !this.$route.query.tx) {
+          this.$router.replace({
+            query: { ...this.$route.query, tx: 'calls' },
+          })
+        }
       } catch (e) {
         this.error = 'Account not found'
         console.error(e)
@@ -1159,7 +1165,7 @@ export default {
     } */
 
     th {
-      width: 136px;
+      width: 140px;
       height: auto;
       font-size: 14px;
       color: #a391aa;
@@ -1167,7 +1173,7 @@ export default {
       vertical-align: top;
 
       @media screen and (max-width: 480px) {
-        width: 120px;
+        /* width: 120px; */
         font-size: 15px;
       }
     }
