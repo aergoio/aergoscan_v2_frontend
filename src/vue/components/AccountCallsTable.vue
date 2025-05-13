@@ -19,14 +19,10 @@
         <div
           class="tooltipped tooltipped-se tooltipped-align-left-2"
           :aria-label="row.tx_id"
-          style="display: flex; align-items: center"
         >
-          <img
-            v-if="!row.success"
-            src="~@assets/img/ic-alert-circle-fill.svg"
-            alt="fail"
-            class="identicon"
-          />
+          <span class="identicon" v-if="!row.success">
+            <img src="~@assets/img/ic-alert-circle-fill.svg" alt="fail" />
+          </span>
           <router-link
             :to="`/transaction/${row.tx_id}/`"
             class="address txt-ellipsis"
@@ -213,7 +209,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .caller-cell {
   display: flex;
   align-items: center;
@@ -223,5 +219,19 @@ export default {
 .caller-cell .mini-identicon {
   margin-right: 6px;
   flex-shrink: 0;
+}
+
+table.calls-table {
+  td {
+    .identicon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
+      flex: 18px 0 0;
+      margin-right: 4px;
+    }
+  }
 }
 </style>
