@@ -72,7 +72,11 @@
       </td>
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
+          <img
+            v-if="row.address === 'AERGO'"
+            src="~@assets/img/aergo.svg"
+            class="identicon icon-circle"
+          />
           <span class="identicon" v-else><img :src="row.image_url" /></span>
           <router-link :to="`/token/${row.address}`" class="address">
             {{ `${row.name} (${row.symbol})` }}
@@ -209,18 +213,17 @@ export default {
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
-        const filteredAergo = response.hits.filter((item) => item.token) // filtering 'AERGO'
-        this.data = filteredAergo.map((item) => ({
+        this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          symbolHash: item.token.hash,
-          name: item.token.meta.name,
-          image_url: item.token.meta.image_url,
-          symbol: item.token.meta.symbol,
-          decimals: item.token.meta.decimals,
+          symbolHash: item.token?.hash,
+          name: item.token?.meta.name,
+          image_url: item.token?.meta.image_url,
+          symbol: item.token?.meta.symbol,
+          decimals: item.token?.meta.decimals,
         }))
-        this.totalItems = filteredAergo.total || 0
-        this.limitPageTotalCount = filteredAergo.limitPageCount || 0
+        this.totalItems = response.total || 0
+        this.limitPageTotalCount = response.limitPageCount || 0
       } else {
         this.data = []
         this.totalItems = 0
