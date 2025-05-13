@@ -117,12 +117,24 @@
             class="identicon icon-circle"
           />
           <span class="identicon" v-else><img :src="row.image_url" /></span>
-          <router-link
+
+          <span class="address txt-ellipsis">
+            <router-link
+              v-if="row.symbolHash !== 'AERGO'"
+              :to="`/token/${row.symbolHash}/`"
+            >
+              {{ row.name }} ({{ row.symbol }})
+            </router-link>
+            <span v-else>
+              {{ row.name }}
+            </span>
+          </span>
+          <!-- <router-link
             :to="`/token/${row.symbolHash}/`"
             class="address txt-ellipsis"
           >
             {{ row.name }} ({{ row.symbol }})</router-link
-          >
+          > -->
         </div>
       </td>
       <td>
