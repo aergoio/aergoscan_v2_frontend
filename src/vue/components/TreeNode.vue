@@ -7,14 +7,53 @@
     >
       <div class="node-info">
         <div class="node-layout">
-          <div class="node-op" v-if="data.op">{{ data.op }}</div>
-          <div class="node-details">
-            <span v-if="data.contract">{{ data.contract }} </span>
-            <span v-if="data.amount">{{ data.amount }}</span>
-            <span v-if="data.function">{{ data.function }}</span>
-            <span v-if="filteredArgs.length > 0">{{ filteredArgs }}</span>
-            <span v-if="data.result">{{ data.result }}</span>
+          <div class="field-block" v-if="data.op">
+            <div class="field-title">Operation</div>
+            <div class="field-value node-op" :class="data.op">
+              {{ data.op }}
+            </div>
           </div>
+          <div class="field-block" v-if="data.contract">
+            <div class="field-title">Contract</div>
+            <div class="field-value centered" :title="data.contract">
+              {{ $options.filters.formatEllipsisText(data.contract, 30) }}
+            </div>
+          </div>
+          <div class="field-block" v-if="data.amount">
+            <div class="field-title">Amount</div>
+            <div class="field-value centered">
+              {{
+                data.amount.toLowerCase().includes('aergo')
+                  ? data.amount
+                  : `${data.amount} aer`
+              }}
+            </div>
+          </div>
+          <div class="field-block" v-if="data.function">
+            <div class="field-title">Function</div>
+            <div class="field-value centered">
+              {{ data.function.toUpperCase() }}
+            </div>
+          </div>
+          <div class="field-block args-inline" v-if="filteredArgs.length">
+            <div class="field-title">Args</div>
+            <div class="field-value args-list">
+              <div
+                class="arg-item"
+                v-for="(arg, index) in filteredArgs"
+                :key="index"
+              >
+                <div class="arg-line">
+                  <span class="arg-index">{{ index + 1 }}.</span>
+                  <span class="arg-value">{{ arg }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="node-result">
+          <span class="error" v-if="isErrorResult"> ⚠️ {{ parsedError }} </span>
+          <span class="result" v-else-if="data.result">{{ data.result }}</span>
         </div>
       </div>
     </div>
@@ -61,23 +100,25 @@ export default {
       if (!this.data.args || !Array.isArray(this.data.args)) {
         return []
       }
-
-      return this.data.args
-        .map((arg, idx) => {
-          if (idx === 1 || idx === 2) {
-            try {
-              const parsed = JSON.parse(arg)
-              if (parsed.length === 0 || parsed.every((item) => item === '')) {
-                return null
-              }
-              return parsed
-            } catch (e) {
-              return arg
-            }
-          }
+      return this.data.args.map((arg) => {
+        try {
+          const parsed = JSON.parse(arg)
+          return Array.isArray(parsed) ? JSON.stringify(parsed) : parsed
+        } catch (e) {
           return arg
-        })
-        .filter((arg) => arg !== null)
+        }
+      })
+    },
+    isErrorResult() {
+      return (
+        typeof this.data.result === 'string' &&
+        this.data.result.toLowerCase().includes('error')
+      )
+    },
+    parsedError() {
+      if (!this.data.result) return ''
+      const match = this.data.result.match(/error[:]?(.+)/i)
+      return match ? match[1].trim() : this.data.result
     },
   },
   methods: {
@@ -122,7 +163,7 @@ export default {
 
 .node-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 8px 12px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -132,16 +173,16 @@ export default {
   margin: 4px 0;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: #f0f0f0;
   }
 
   &.contract-highlight {
-    background-color: #eaf4ff;
-    border: 1px solid #b3d8ff;
+    background-color: #f0f8ff;
+    border: 1px solid #b0d4ff;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: #d9ebff;
+      background-color: #e0f0ff;
     }
   }
 }
@@ -151,29 +192,101 @@ export default {
   flex-direction: column;
   margin-left: 8px;
   overflow: hidden;
+  width: 100%;
 }
 
 .node-layout {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+  flex-direction: row;
+}
+
+.field-block {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 160px;
+  min-width: 120px;
+}
+
+.field-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ff008b;
+  margin-bottom: 2px;
+}
+
+.field-value {
+  font-size: 13px;
+  color: #3c3b3e;
+  word-break: break-word;
+  white-space: nowrap;
 }
 
 .node-op {
   font-weight: 600;
-  font-size: 14px;
-  color: #333;
+  text-transform: capitalize;
 }
 
-.node-details {
-  margin-left: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 13px;
-  color: #666;
+.args-inline {
+  flex: 2 1 300px;
+  min-width: 200px;
+  width: auto;
+}
 
-  > span {
-    margin-right: 10px;
-  }
+.args-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #333;
+  background-color: #eeeeee;
+  border-radius: 6px;
+  padding: 8px 10px;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.arg-item {
+  display: flex;
+}
+
+.arg-line {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.arg-index {
+  color: #555;
+  font-weight: 600;
+  min-width: 20px;
+}
+
+.arg-value {
+  flex: 1;
+  word-break: break-word;
+}
+
+.result {
+  color: #333;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.error {
+  color: #d32f2f;
+  font-weight: 500;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
 }
 
 .tree-children {
