@@ -3,60 +3,64 @@
     <div
       class="node-content"
       @click="toggle"
-      :class="{ 'contract-highlight': data.contract }"
+      :class="{
+        'contract-highlight': data.contract,
+        clickable: hasChildren,
+      }"
     >
       <div class="node-info">
-        <div class="node-layout">
-          <div class="field-block" v-if="data.op">
-            <div class="field-title">Operation</div>
-            <div class="field-value node-op" :class="data.op">
-              {{ data.op }}
-            </div>
+        <div class="node-grid">
+          <div class="field" v-if="data.op">
+            <label>Operation</label>
+            <span class="node-op">{{ data.op }}</span>
           </div>
-          <div class="field-block" v-if="data.contract">
-            <div class="field-title">Contract</div>
-            <div class="field-value centered" :title="data.contract">
-              {{ $options.filters.formatEllipsisText(data.contract, 30) }}
-            </div>
+          <div class="field" v-if="data.contract">
+            <label>Contract</label>
+            <span :title="data.contract">
+              {{ $options.filters.formatEllipsisText(data.contract, 20) }}
+            </span>
           </div>
-          <div class="field-block" v-if="data.amount">
-            <div class="field-title">Amount</div>
-            <div class="field-value centered">
-              {{
-                data.amount.toLowerCase().includes('aergo')
-                  ? data.amount
-                  : `${data.amount} aer`
-              }}
-            </div>
+          <div class="field" v-if="data.amount">
+            <label>Amount</label>
+            <span>{{ formatAmount(data.amount) }}</span>
           </div>
-          <div class="field-block" v-if="data.function">
-            <div class="field-title">Function</div>
-            <div class="field-value centered">
-              {{ data.function.toUpperCase() }}
-            </div>
+          <div class="field" v-if="data.function">
+            <label>Function</label>
+            <span>{{ data.function }}</span>
           </div>
-          <div class="field-block args-inline" v-if="filteredArgs.length">
-            <div class="field-title">Args</div>
-            <div class="field-value args-list">
-              <div
-                class="arg-item"
-                v-for="(arg, index) in filteredArgs"
-                :key="index"
-              >
-                <div class="arg-line">
-                  <span class="arg-index">{{ index + 1 }}.</span>
-                  <span class="arg-value">{{ arg }}</span>
-                </div>
-              </div>
-            </div>
+
+          <!-- Args with toggle -->
+          <div class="field full-width" v-if="filteredArgs.length">
+            <label>Arguments</label>
+            <details
+              class="args-toggle"
+              @click.stop
+              :open="argsOpen"
+              @toggle="onArgsToggle"
+            >
+              <summary>
+                <span class="icon" :class="{ open: argsOpen }">▶</span>
+                {{ filteredArgs.length }} args
+              </summary>
+              <ul class="args-list">
+                <li v-for="(arg, i) in filteredArgs" :key="i">
+                  <strong>{{ i + 1 }}.</strong> {{ arg }}
+                </li>
+              </ul>
+            </details>
           </div>
-        </div>
-        <div class="node-result">
-          <span class="error" v-if="isErrorResult"> ⚠️ {{ parsedError }} </span>
-          <span class="result" v-else-if="data.result">{{ data.result }}</span>
+
+          <!-- Result -->
+          <div class="field full-width" v-if="data.result">
+            <label>Result</label>
+            <span :class="{ error: isErrorResult }">
+              {{ isErrorResult ? parsedError : data.result }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
+
     <div
       v-if="expanded && (data.call || data.operations)"
       class="tree-children"
@@ -86,6 +90,7 @@ export default {
   data() {
     return {
       expanded: true,
+      argsOpen: false,
     }
   },
   computed: {
@@ -97,14 +102,12 @@ export default {
       )
     },
     filteredArgs() {
-      if (!this.data.args || !Array.isArray(this.data.args)) {
-        return []
-      }
+      if (!Array.isArray(this.data.args)) return []
       return this.data.args.map((arg) => {
         try {
           const parsed = JSON.parse(arg)
           return Array.isArray(parsed) ? JSON.stringify(parsed) : parsed
-        } catch (e) {
+        } catch {
           return arg
         }
       })
@@ -123,15 +126,19 @@ export default {
   },
   methods: {
     toggle() {
-      if (this.hasChildren) {
-        this.expanded = !this.expanded
-      }
+      if (this.hasChildren) this.expanded = !this.expanded
+    },
+    onArgsToggle(event) {
+      this.argsOpen = event.target.open
+    },
+    formatAmount(amount) {
+      return amount.toLowerCase().includes('aergo') ? amount : `${amount} aer`
     },
   },
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .tree-node {
   position: relative;
   margin-left: 20px;
@@ -162,131 +169,102 @@ export default {
 }
 
 .node-content {
-  display: flex;
-  align-items: flex-start;
-  padding: 8px 12px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  cursor: pointer;
+  background: #fff;
   transition: background-color 0.2s;
-  margin: 4px 0;
+  margin: 6px 0;
+
+  // 기본 커서는 default
+  cursor: default;
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: #f8f8f8;
+  }
+
+  &.clickable {
+    cursor: pointer;
   }
 
   &.contract-highlight {
     background-color: #f0f8ff;
-    border: 1px solid #b0d4ff;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #e0f0ff;
-    }
+    border-color: #b0d4ff;
   }
 }
 
 .node-info {
-  display: flex;
-  flex-direction: column;
-  margin-left: 8px;
-  overflow: hidden;
   width: 100%;
 }
 
-.node-layout {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  width: 100%;
-  margin-bottom: 8px;
-  flex-direction: row;
+.node-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
 }
 
-.field-block {
+.field {
   display: flex;
   flex-direction: column;
-  flex: 1 1 160px;
-  min-width: 120px;
+
+  label {
+    cursor: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 2px;
+  }
+
+  span {
+    font-size: 13px;
+    color: #333;
+    word-break: break-word;
+  }
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
 }
 
-.field-title {
-  font-size: 13px;
-  font-weight: bold;
-  color: #ff008b;
-  margin-bottom: 2px;
-}
+.args-toggle {
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
-.field-value {
-  font-size: 13px;
-  color: #3c3b3e;
-  word-break: break-word;
-  white-space: nowrap;
-}
+    &::-webkit-details-marker {
+      display: none;
+    }
 
-.node-op {
-  font-weight: 600;
-  text-transform: capitalize;
-}
+    .icon {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
 
-.args-inline {
-  flex: 2 1 300px;
-  min-width: 200px;
-  width: auto;
+    .icon.open {
+      transform: rotate(90deg);
+    }
+  }
 }
 
 .args-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-family: monospace;
-  font-size: 12px;
-  color: #333;
-  background-color: #eeeeee;
-  border-radius: 6px;
-  padding: 8px 10px;
-  word-break: break-word;
-  white-space: normal;
-}
+  list-style: none;
+  padding-left: 0;
+  margin-top: 6px;
 
-.arg-item {
-  display: flex;
-}
-
-.arg-line {
-  display: flex;
-  gap: 2px;
-  align-items: center;
-}
-
-.arg-index {
-  color: #555;
-  font-weight: 600;
-  min-width: 20px;
-}
-
-.arg-value {
-  flex: 1;
-  word-break: break-word;
-}
-
-.result {
-  color: #333;
-  font-size: 13px;
-  margin-top: 4px;
+  li {
+    font-family: monospace;
+    font-size: 12px;
+    color: #444;
+    margin-bottom: 4px;
+  }
 }
 
 .error {
   color: #d32f2f;
   font-weight: 500;
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.centered {
-  display: flex;
-  align-items: center;
 }
 
 .tree-children {
