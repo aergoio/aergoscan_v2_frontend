@@ -844,4 +844,10 @@ export default {
   margin: 0;
   margin-bottom: 16px;
 }
+
+.expandCheckbox {
+  position: relative;
+  top: 1px;
+  accent-color: #279ecc;
+}
 </style>
