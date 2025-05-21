@@ -39,7 +39,10 @@
         </span>
       </div>
 
-      <span class="btn-call" v-if="!isLoading" @click="queryContractState"
+      <span
+        class="btn-call"
+        v-if="!isLoading && showQueryButton"
+        @click="queryContractState"
         >Query</span
       >
       <div v-if="isLoading" class="loadingProgress" />
@@ -71,6 +74,9 @@ export default {
     type() {
       return this.variable ? this.variable.type : ''
     },
+    showQueryButton() {
+      return !(this.type !== 'map' && typeof this.result !== 'undefined')
+    },
   },
   watch: {
     clickAll() {
@@ -79,6 +85,15 @@ export default {
   },
   mounted() {
     this.isClick = !this.clickAll
+
+    if (
+      !this.clickAll &&
+      this.isClick &&
+      this.type !== 'map' &&
+      typeof this.result === 'undefined'
+    ) {
+      this.queryContractState()
+    }
   },
 
   data() {
