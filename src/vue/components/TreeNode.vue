@@ -6,6 +6,7 @@
       :class="{
         'contract-highlight': data.contract,
         clickable: hasChildren,
+        'args-open-highlight': argsOpen,
       }"
     >
       <div class="node-info">
@@ -17,7 +18,7 @@
           <div class="field" v-if="data.contract">
             <label>Contract</label>
             <span :title="data.contract">
-              {{ $options.filters.formatEllipsisText(data.contract, 20) }}
+              {{ data.contract }}
             </span>
           </div>
           <div class="field" v-if="data.amount">
@@ -29,18 +30,25 @@
             <span>{{ data.function }}</span>
           </div>
 
-          <!-- Args with toggle -->
+          <!-- Arguments -->
           <div class="field full-width" v-if="filteredArgs.length">
-            <label>Arguments</label>
             <details
               class="args-toggle"
-              @click.stop
               :open="argsOpen"
+              @click.stop
               @toggle="onArgsToggle"
             >
-              <summary>
-                <span class="icon" :class="{ open: argsOpen }">▶</span>
-                {{ filteredArgs.length }} args
+              <summary class="args-summary">
+                <label>
+                  Arguments
+                  <span class="arg-count">{{ filteredArgs.length }}</span>
+                </label>
+                <img
+                  src="~@assets/img/ic_arrow_down_white.svg"
+                  class="arrow-icon"
+                  :class="{ open: argsOpen }"
+                  alt="Toggle"
+                />
               </summary>
               <ul class="args-list">
                 <li v-for="(arg, i) in filteredArgs" :key="i">
@@ -146,17 +154,17 @@ export default {
   &::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: -6px;
     left: -10px;
     width: 1px;
-    height: 100%;
+    height: 103%;
     background-color: #e8e8e8;
   }
 
   &::after {
     content: '';
     position: absolute;
-    top: 16px;
+    top: 60px;
     left: -10px;
     width: 10px;
     height: 1px;
@@ -164,8 +172,12 @@ export default {
   }
 
   &:last-child::before {
-    height: 28px;
+    height: 67px;
   }
+}
+
+.tree-children {
+  margin-left: 20px;
 }
 
 .node-content {
@@ -175,21 +187,26 @@ export default {
   background: #fff;
   transition: background-color 0.2s;
   margin: 6px 0;
-
-  // 기본 커서는 default
   cursor: default;
-
-  &:hover {
-    background-color: #f8f8f8;
-  }
 
   &.clickable {
     cursor: pointer;
+    &:hover {
+      background-color: #f8f8f8;
+    }
+    &.args-open-highlight:hover {
+      background-color: #f2f8ff; // 유지되는 배경색
+    }
   }
 
   &.contract-highlight {
-    background-color: #f0f8ff;
-    border-color: #b0d4ff;
+    background-color: #f6f6f6;
+    border-color: #ddd;
+  }
+
+  &.args-open-highlight {
+    background-color: #f2f8ff;
+    border-color: #b8d3fc;
   }
 }
 
@@ -199,7 +216,7 @@ export default {
 
 .node-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 12px;
 }
 
@@ -209,15 +226,22 @@ export default {
 
   label {
     cursor: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    color: #888;
+    color: #1a1823;
+    font-family: Lato;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px; /* 150% */
     margin-bottom: 2px;
   }
 
   span {
+    color: #666;
+    font-family: Lato;
     font-size: 13px;
-    color: #333;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
     word-break: break-word;
   }
 
@@ -232,10 +256,19 @@ export default {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
 
     &::-webkit-details-marker {
       display: none;
+    }
+
+    .arg-count {
+      margin-left: 4px;
+      color: #bebbc1;
+      font-family: Lato;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 24px; /* 150% */
     }
 
     .icon {
@@ -255,7 +288,7 @@ export default {
   margin-top: 6px;
 
   li {
-    font-family: monospace;
+    font-family: 'Lato' monospace;
     font-size: 12px;
     color: #444;
     margin-bottom: 4px;
@@ -265,9 +298,5 @@ export default {
 .error {
   color: #d32f2f;
   font-weight: 500;
-}
-
-.tree-children {
-  margin-left: 20px;
 }
 </style>
