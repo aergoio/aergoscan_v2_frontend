@@ -323,15 +323,6 @@
                     @onUpdateTotalCount="updateNftTxTotalCount"
                   />
                   <div>
-                    <span
-                      v-if="$route.query.tx === 'internalOperations'"
-                      :style="{
-                        color: '#3c3b3e',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                      }"
-                      >Calls</span
-                    >
                     <internal-operations-table
                       ref="internalOperationsTable"
                       :hash="$route.params.hash"

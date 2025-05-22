@@ -292,7 +292,6 @@ export default {
           sort: `${sortField}:${sort}`,
         })
       ).json()
-      console.log(response)
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
