@@ -17,9 +17,7 @@
           </div>
           <div class="field" v-if="data.contract">
             <label>Contract</label>
-            <span :title="data.contract">
-              {{ data.contract }}
-            </span>
+            <span :title="data.contract">{{ data.contract }}</span>
           </div>
           <div class="field" v-if="data.amount">
             <label>Amount</label>
@@ -46,7 +44,6 @@
                 <img
                   src="~@assets/img/ic_arrow_down_white.svg"
                   class="arrow-icon"
-                  :class="{ open: argsOpen }"
                   alt="Toggle"
                 />
               </summary>
@@ -84,6 +81,8 @@
 </template>
 
 <script>
+let firstNodeInitialized = false
+
 export default {
   name: 'TreeNode',
   components: {
@@ -98,7 +97,7 @@ export default {
   data() {
     return {
       expanded: true,
-      argsOpen: false,
+      argsOpen: !firstNodeInitialized && (firstNodeInitialized = true),
     }
   },
   computed: {
@@ -185,17 +184,19 @@ export default {
   border: 1px solid #ddd;
   border-radius: 8px;
   background: #fff;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s;
   margin: 6px 0;
   cursor: default;
 
   &.clickable {
     cursor: pointer;
+
     &:hover {
       background-color: #f8f8f8;
     }
+
     &.args-open-highlight:hover {
-      background-color: #f2f8ff; // 유지되는 배경색
+      background-color: #f2f8ff;
     }
   }
 
@@ -216,7 +217,7 @@ export default {
 
 .node-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   gap: 12px;
 }
 
@@ -229,9 +230,8 @@ export default {
     color: #1a1823;
     font-family: Lato;
     font-size: 13px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 24px; /* 150% */
+    line-height: 24px;
     margin-bottom: 2px;
   }
 
@@ -239,9 +239,8 @@ export default {
     color: #666;
     font-family: Lato;
     font-size: 13px;
-    font-style: normal;
     font-weight: 500;
-    line-height: 24px; /* 150% */
+    line-height: 24px;
     word-break: break-word;
   }
 
@@ -266,18 +265,13 @@ export default {
       color: #bebbc1;
       font-family: Lato;
       font-size: 13px;
-      font-style: normal;
       font-weight: 700;
-      line-height: 24px; /* 150% */
+      line-height: 24px;
     }
 
     .icon {
       display: inline-block;
       transition: transform 0.2s ease;
-    }
-
-    .icon.open {
-      transform: rotate(90deg);
     }
   }
 }
