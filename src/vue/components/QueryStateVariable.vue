@@ -116,26 +116,15 @@ export default {
       let stateNames = []
       const arrayLength = 10
 
-      if (this.type == 'array') {
+      if (this.type === 'array') {
         stateNames = [...Array(arrayLength).keys()].map(
-          (idx) => `_sv_${this.name}-${idx + 1}`
+          (idx) => `${this.name}[${idx + 1}]`
         )
-      } else if (this.type == 'map') {
-        stateNames = [`_sv_${this.name}-${this.mapKey}`]
+      } else if (this.type === 'map') {
+        stateNames = [`${this.name}[${this.mapKey}]`]
       } else {
-        stateNames = [`_sv_${this.name}`]
+        stateNames = [this.name]
       }
-
-      // // Herajs PR-179: https://github.com/aergoio/herajs/pull/179
-      // if (this.type === 'array') {
-      //   stateNames = [...Array(arrayLength).keys()].map(
-      //     (idx) => `${this.name}[${idx}]`
-      //   )
-      // } else if (this.type === 'map') {
-      //   stateNames = [`${this.name}["${this.mapKey}"]`]
-      // } else {
-      //   stateNames = [this.name]
-      // }
 
       let result
       try {
