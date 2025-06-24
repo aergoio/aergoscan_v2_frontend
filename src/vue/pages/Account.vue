@@ -99,7 +99,10 @@
                               $options.filters.formatToken(fullBalance, 'aergo')
                             "
                           ></div>
-                          <span>{{ ` (${getUsdPriceByAergo} $)` }}</span>
+
+                          <span v-if="currentChanId === 'aergo.io'">{{
+                            ` (${getUsdPriceByAergo} $)`
+                          }}</span>
                         </div>
                       </td>
                     </tr>
