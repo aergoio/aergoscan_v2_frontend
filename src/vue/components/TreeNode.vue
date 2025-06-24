@@ -6,7 +6,7 @@
       :class="{
         'contract-highlight': data.contract,
         clickable: hasChildren,
-        'args-open-highlight': argsOpen,
+        'args-open-highlight': isFirst,
       }"
     >
       <div class="node-info">
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       expanded: true,
-      argsOpen: !firstNodeInitialized && (firstNodeInitialized = true),
+      isFirst: !firstNodeInitialized && (firstNodeInitialized = true),
     }
   },
   computed: {
