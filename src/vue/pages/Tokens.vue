@@ -54,10 +54,6 @@
                   @click="() => handleMouseEnter(row.hash)"
                 >
                   <div class="txt-ellipsis">
-                    <!-- <span
-                      class="identicon default"
-                      v-if="!row.image_url"
-                    ></span> -->
                     <span class="identicon"
                       ><img :src="row.image_url" @error="onImageError"
                     /></span>

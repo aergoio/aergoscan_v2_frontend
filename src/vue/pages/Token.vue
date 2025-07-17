@@ -11,7 +11,6 @@
               <span class="sub-2">ARC-1</span>
 
               <div class="token_wrapper">
-                <!-- <span class="identicon default" v-if="!txMeta.image_url"></span> -->
                 <span class="identicon"
                   ><img :src="txMeta.image_url" @error="onImageError"
                 /></span>
