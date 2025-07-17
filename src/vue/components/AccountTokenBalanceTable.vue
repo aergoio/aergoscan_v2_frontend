@@ -17,8 +17,10 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <!-- <span class="identicon default" v-if="!row.image_url"></span> -->
+          <span class="identicon"
+            ><img :src="row.image_url" @error="onImageError"
+          /></span>
           <router-link
             :to="`/token/${row.symbolHash}/`"
             class="address txt-ellipsis"
@@ -71,6 +73,7 @@
 <script>
 import cfg from '@/src/config'
 import moment from 'moment'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   name: 'AccountTokenBalanceTable',
@@ -210,6 +213,9 @@ export default {
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
     moment,
   },

@@ -54,12 +54,12 @@
                   @click="() => handleMouseEnter(row.hash)"
                 >
                   <div class="txt-ellipsis">
-                    <span
+                    <!-- <span
                       class="identicon default"
                       v-if="!row.image_url"
-                    ></span>
-                    <span class="identicon" v-else
-                      ><img :src="row.image_url"
+                    ></span> -->
+                    <span class="identicon"
+                      ><img :src="row.image_url" @error="onImageError"
                     /></span>
                     <router-link
                       class="block tokenName"
@@ -128,6 +128,7 @@ import AccountLink from '@/src/vue/components/AccountLink'
 import TokenTransferTable from '@/src/vue/components/TokenTransferTable'
 import TokenHolderTable from '@/src/vue/components/TokenHolderTable'
 import { mapState } from 'vuex'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   props: {
@@ -315,6 +316,9 @@ export default {
     },
     handleMouseEnter(hash) {
       this.$router.push(`/token/${hash}/`)
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
   },
   components: {

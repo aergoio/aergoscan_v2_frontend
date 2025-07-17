@@ -94,8 +94,10 @@
       </td>
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <!-- <span class="identicon default" v-if="!row.image_url"></span> -->
+          <span class="identicon"
+            ><img :src="row.image_url" @error="onImageError"
+          /></span>
           <router-link
             :to="`/nft/${row.symbolHash}/`"
             class="address txt-ellipsis"
@@ -131,6 +133,7 @@ import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
 import Identicon from '@/src/vue/components/Identicon'
 import cfg from '@/src/config'
 import moment from 'moment'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   name: 'AccountNftTransferTable',
@@ -293,6 +296,9 @@ export default {
       this.currentPage = this.initialPage
 
       this.reload()
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
     moment,
     openTableHeaderMenu,

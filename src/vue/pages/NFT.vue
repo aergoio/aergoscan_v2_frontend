@@ -11,9 +11,9 @@
               <span class="sub-2">ARC-2</span>
               <!-- <span class="identicon"></span> -->
               <div class="token_wrapper">
-                <span class="identicon default" v-if="!txMeta.image_url"></span>
-                <span class="identicon" v-else
-                  ><img :src="txMeta.image_url"
+                <!-- <span class="identicon default" v-if="!txMeta.image_url"></span> -->
+                <span class="identicon"
+                  ><img :src="txMeta.image_url" @error="onImageError"
                 /></span>
                 <span class="sub-3" v-if="txMeta.name">{{ txMeta.name }}</span>
                 <span class="sub-4" v-if="txMeta.symbol">{{
@@ -267,6 +267,7 @@ import Search from '@/src/vue/components/Search'
 import NftTransferTable from '@/src/vue/components/NftTransferTable'
 import NftHolderTable from '@/src/vue/components/NftHolderTable'
 import NftInventoryTable from '@/src/vue/components/NftInventoryTable'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   data() {
@@ -316,6 +317,9 @@ export default {
     },
     routeToVerifiedDetail() {
       console.log('routeToVerifiedDetail')
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
   },
   components: {

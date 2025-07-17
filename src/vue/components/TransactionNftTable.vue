@@ -74,8 +74,10 @@
       </td>
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <!-- <span class="identicon default" v-if="!row.image_url"></span> -->
+          <span class="identicon"
+            ><img :src="row.image_url" @error="onImageError"
+          /></span>
           <router-link :to="`/nft/${row.address}`" class="address">
             {{ `${row.name} (${row.symbol})` }}
           </router-link>
@@ -107,6 +109,7 @@
 import cfg from '@/src/config'
 import moment from 'moment'
 import AccountLink from '@/src/vue/components/AccountLink'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   name: 'TransactionNftTable',
@@ -241,6 +244,9 @@ export default {
     },
     updateCurrentPage: function (currentPage) {
       this.currentPage = currentPage
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
     moment,
   },
