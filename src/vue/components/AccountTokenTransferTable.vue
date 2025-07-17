@@ -116,7 +116,9 @@
             src="~@assets/img/aergo.svg"
             class="identicon icon-circle"
           />
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <span class="identicon" v-else
+            ><img :src="row.image_url" @error="onImageError"
+          /></span>
 
           <span class="address txt-ellipsis">
             <router-link
@@ -182,6 +184,7 @@ import { openTableHeaderMenu } from '@/src/vue/utils/filter-table-header'
 import Identicon from '@/src/vue/components/Identicon'
 import cfg from '@/src/config'
 import moment from 'moment'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   name: 'AccountTokenTransferTable',
@@ -350,6 +353,9 @@ export default {
       const strValue = strInt + '.' + strDecimal
       const float = parseFloat(strValue)
       return float > 0 && float <= 1 && strDecimal.replace(/0+$/, '').length > 6
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
     moment,
     openTableHeaderMenu,

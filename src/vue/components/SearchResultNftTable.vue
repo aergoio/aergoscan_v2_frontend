@@ -22,8 +22,9 @@
     <template slot="list" slot-scope="{ row }">
       <td>
         <div>
-          <span class="identicon default" v-if="!row.image_url"></span>
-          <span class="identicon" v-else><img :src="row.image_url" /></span>
+          <span class="identicon"
+            ><img :src="row.image_url" @error="onImageError"
+          /></span>
           <router-link
             class="block"
             v-html="row.selectedName"
@@ -76,6 +77,7 @@ import cfg from '@/src/config'
 import moment from 'moment'
 import AccountLink from '@/src/vue/components/AccountLink'
 import Identicon from '@/src/vue/components/Identicon'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   name: 'SearchResultNftTable',
@@ -221,6 +223,9 @@ export default {
       keyword && keyword.length > 0
         ? this.$router.push({ path: '/nfts', query: { keyword: keyword } })
         : this.$router.push('/nfts')
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
     moment,
   },

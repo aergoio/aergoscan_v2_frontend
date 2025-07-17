@@ -55,12 +55,12 @@
                   @click="() => handleMouseEnter(row.hash)"
                 >
                   <div class="txt-ellipsis">
-                    <span
+                    <!-- <span
                       class="identicon default"
                       v-if="!row.image_url"
-                    ></span>
-                    <span class="identicon" v-else
-                      ><img :src="row.image_url"
+                    ></span> -->
+                    <span class="identicon"
+                      ><img :src="row.image_url" @error="onImageError"
                     /></span>
                     <router-link
                       class="block tokenName"
@@ -112,6 +112,7 @@
 import cfg from '@/src/config.js'
 import Search from '@/src/vue/components/Search'
 import AccountLink from '@/src/vue/components/AccountLink'
+import defaultTokenImage from '@/src/assets/img/btn-aergo@3x.png'
 
 export default {
   props: {
@@ -290,6 +291,9 @@ export default {
 
     handleMouseEnter(hash) {
       this.$router.push(`/nft/${hash}/`)
+    },
+    onImageError(event) {
+      event.target.src = defaultTokenImage
     },
   },
   components: {
