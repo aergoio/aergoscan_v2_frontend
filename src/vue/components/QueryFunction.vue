@@ -130,7 +130,15 @@
         </div>
       </div>
 
-      <span class="btn-call" @click="queryContract">Query</span>
+      <span
+        class="btn-call"
+        @click="queryContract"
+        v-if="
+          func.view &&
+          !(func.arguments.length === 0 && typeof result !== 'undefined')
+        "
+        >Query</span
+      >
       <span
         class="btn-call"
         v-if="!func.view"
@@ -222,6 +230,16 @@ export default {
   watch: {
     clickAll() {
       this.isClick = !this.clickAll
+
+      if (
+        !this.clickAll && // Expand All 상태일 때
+        this.isClick && // 실제로 열렸을 때
+        this.func.view && // 읽기 함수일 때
+        this.func.arguments.length === 0 && // 인자 없음
+        typeof this.result === 'undefined' // 결과 아직 없음
+      ) {
+        this.queryContract()
+      }
     },
     async result() {
       const wait = loadAndWait()
