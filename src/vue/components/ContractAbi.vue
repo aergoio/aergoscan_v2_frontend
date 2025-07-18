@@ -42,18 +42,10 @@
               :style="{
                 display: 'flex',
                 justifyContent: 'space-between',
-                width: '280px',
+                width: '140px',
+                minWidth: '140px',
               }"
             >
-              <div class="expand-toggle">
-                <input
-                  type="checkbox"
-                  id="toggleStateVars"
-                  v-model="showStateVariables"
-                  class="expandCheckbox"
-                />
-                <label for="toggleStateVars">State Variables</label>
-              </div>
               <button
                 class="expandButton"
                 @click="() => handleClickAll(!clickAll)"
@@ -75,7 +67,6 @@
             <div v-if="contract.abi && contract.abi.functions.length == 0">
               Contract has no public functions.
             </div>
-            <h3 class="section-header">Functions</h3>
             <QueryFunction
               v-for="(func, idx) in functions"
               :key="func.name"
@@ -86,18 +77,14 @@
               :clickAll="clickAll"
               @onUpdateResultHash="onUpdateResultHash"
             />
-            <div v-if="showStateVariables">
-              <h3 class="section-header">State Variables</h3>
-              <QueryStateVariable
-                v-for="(variable, idx) in stateVariables"
-                :key="variable.name"
-                :abi="contract.abi"
-                :name="variable.name"
-                :address="address"
-                :clickAll="clickAll"
-                :number="idx"
-              />
-            </div>
+            <!-- <QueryStateVariable
+              v-for="variable in stateVariables"
+              :key="variable.name"
+              :abi="contract.abi"
+              :name="variable.name"
+              :address="address"
+              :clickAll="clickAll"
+            /> -->
           </div>
         </div>
       </Tab>
@@ -231,7 +218,6 @@ export default {
       alert: false,
       clickAll: true,
       interactiveKey: 0,
-      showStateVariables: false,
     }
   },
 
@@ -275,10 +261,10 @@ export default {
         (func) => func.name !== 'constructor'
       )
     },
-    stateVariables() {
-      if (!this.contract.abi) return []
-      return this.contract.abi.state_variables
-    },
+    // stateVariables() {
+    //   if (!this.contract.abi) return []
+    //   return this.contract.abi.state_variables
+    // },
     formattedAbi() {
       if (!this.contract.abi) return ''
       return syntaxHighlight(this.contract.abi)
@@ -836,18 +822,5 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
   color: #f07178;
-}
-
-.section-header {
-  font-size: 15px;
-  font-weight: bold;
-  margin: 0;
-  margin-bottom: 16px;
-}
-
-.expandCheckbox {
-  position: relative;
-  top: 1px;
-  accent-color: #279ecc;
 }
 </style>
