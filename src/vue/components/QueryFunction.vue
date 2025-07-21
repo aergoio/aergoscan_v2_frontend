@@ -296,7 +296,6 @@ export default {
         this.result = await this.$store.dispatch('blockchain/queryContract', {
           name: this.name,
           args: argValues,
-          abi: this.abi,
           address: this.address,
         })
       } catch (e) {

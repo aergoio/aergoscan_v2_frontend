@@ -128,7 +128,6 @@ export default {
       try {
         result = await this.$store.dispatch('blockchain/queryContractState', {
           stateNames,
-          abi: this.abi,
           address: this.address,
         })
         result = JSON.stringify(result, undefined, 2).replace(
