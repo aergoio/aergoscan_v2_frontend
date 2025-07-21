@@ -117,12 +117,12 @@ export default {
       const arrayLength = 10
       if (this.type == 'array') {
         stateNames = [...Array(arrayLength).keys()].map(
-          (idx) => `_sv_${this.name}-${idx + 1}`
+          (idx) => `${this.name}[${idx + 1}]`
         )
       } else if (this.type == 'map') {
-        stateNames = [`_sv_${this.name}-${this.mapKey}`]
+        stateNames = [`${this.name}[${this.mapKey}]`]
       } else {
-        stateNames = [`_sv_${this.name}`]
+        stateNames = [this.name]
       }
       let result
       try {
