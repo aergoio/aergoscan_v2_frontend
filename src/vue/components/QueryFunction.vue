@@ -299,6 +299,7 @@ export default {
           address: this.address,
         })
       } catch (e) {
+        console.log(e, 'e')
         this.result = { error: e?.metadata?.headersMap?.['grpc-message'] || e }
       }
 

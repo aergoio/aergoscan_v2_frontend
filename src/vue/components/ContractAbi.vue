@@ -51,6 +51,7 @@
                   id="toggleStateVars"
                   v-model="showStateVariables"
                   class="expandCheckbox"
+                  :disabled="stateVariables.length === 0"
                 />
                 <label for="toggleStateVars">State Variables</label>
               </div>
@@ -348,12 +349,10 @@ export default {
               abi: JSON.parse(data.hits[0].meta.abi),
             }
           } else {
-            this.contract = { abi: this.$props.abi }
+            this.contract = { abi: this.abi }
           }
         } catch (e) {
           console.error(e)
-          // backend node에서 abi 직접 호출
-          this.contract = { abi: this.$props.abi }
           this.isLoadingDetail = false
         }
       })()
