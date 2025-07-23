@@ -396,9 +396,7 @@ const actions = {
         },
         body: JSON.stringify({ address, name, args }),
       })
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+
       const queryContract = await response.json()
 
       return queryContract
@@ -415,9 +413,7 @@ const actions = {
         },
         body: JSON.stringify({ address, stateNames }),
       })
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+
       const queryContractState = await response.json()
 
       return queryContractState

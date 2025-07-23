@@ -298,8 +298,9 @@ export default {
           args: argValues,
           address: this.address,
         })
+        console.log(this.result, 'this.result')
       } catch (e) {
-        console.log(e, 'e')
+        console.error(e, 'e')
         this.result = { error: e?.metadata?.headersMap?.['grpc-message'] || e }
       }
 

@@ -353,6 +353,7 @@ export default {
           }
         } catch (e) {
           console.error(e)
+          this.contract = { abi: this.abi }
           this.isLoadingDetail = false
         }
       })()

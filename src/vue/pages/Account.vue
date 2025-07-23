@@ -496,7 +496,7 @@ export default {
       names: [],
       nameHistory: [],
       tokenPrice: [],
-      callContractHash: '',
+      // callContractHash: '',
       internalData: [],
       isContract: false,
     }
@@ -997,6 +997,7 @@ export default {
       this.isShowQRcode = false
     },
     onUpdateResultHash(callContractHash) {
+      console.log(callContractHash, 'callContractHash')
       this.callContractHash = callContractHash
     },
   },

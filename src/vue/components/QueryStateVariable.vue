@@ -130,12 +130,13 @@ export default {
           stateNames,
           address: this.address,
         })
+
         result = JSON.stringify(result, undefined, 2).replace(
           ']',
           '  ... array may have more items ...\n]'
         )
       } catch (e) {
-        result = { error: '' + e }
+        result = { error: e.error }
       }
       await wait()
       this.result = result
