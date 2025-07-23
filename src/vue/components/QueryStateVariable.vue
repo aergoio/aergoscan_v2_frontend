@@ -34,7 +34,7 @@
             v-model="mapKey"
             class="arg-field"
             placeholder="Key to query"
-            style="margin-top: 5px"
+            :style="{ marginTop: '5px' }"
           />
         </span>
       </div>
@@ -48,7 +48,7 @@
       <div v-if="isLoading" class="loadingProgress" />
 
       <div v-if="typeof result !== 'undefined'" class="code-highlight-pre">
-        <div style="display: flex; flex-direction: column">
+        <div :style="{ display: 'flex', flexDirection: 'column' }">
           <span class="result_title">Result</span>
           <span class="result_content" v-html="syntaxHighlight(result)"></span>
         </div>
@@ -107,45 +107,41 @@ export default {
 
   methods: {
     syntaxHighlight,
-
     async queryContractState() {
       const wait = loadAndWait()
+
       this.isLoading = true
       this.result = void 0
 
       let stateNames = []
       const arrayLength = 10
-
       if (this.type == 'array') {
         stateNames = [...Array(arrayLength).keys()].map(
-          (idx) => `_sv_${this.name}-${idx + 1}`
+          (idx) => `${this.name}[${idx + 1}]`
         )
-      } else if (this.type === 'map') {
-        stateNames = [`_sv_${this.name}-${this.mapKey}`]
+      } else if (this.type == 'map') {
+        stateNames = [`${this.name}[${this.mapKey}]`]
       } else {
-        stateNames = [`_sv_${this.name}`]
+        stateNames = [this.name]
       }
-
       let result
       try {
         result = await this.$store.dispatch('blockchain/queryContractState', {
           stateNames,
-          abi: this.abi,
           address: this.address,
         })
+
         result = JSON.stringify(result, undefined, 2).replace(
           ']',
           '  ... array may have more items ...\n]'
         )
       } catch (e) {
-        result = { error: '' + e }
+        result = { error: e.error }
       }
-
       await wait()
       this.result = result
       this.isLoading = false
     },
-
     handleClick() {
       if (
         !this.isClick &&

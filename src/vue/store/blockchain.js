@@ -387,18 +387,16 @@ const actions = {
       console.error('[REST] Error fetching peers:', error)
     }
   },
-  async queryContract({}, { abi, address, name, args }) {
+  async queryContract({}, { address, name, args }) {
     try {
       const response = await fetch(`${cfg.API_URL}/queryContract`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ abi, address, name, args }),
+        body: JSON.stringify({ address, name, args }),
       })
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+
       const queryContract = await response.json()
 
       return queryContract
@@ -406,18 +404,16 @@ const actions = {
       console.error('[REST] Error fetching query contract:', error)
     }
   },
-  async queryContractState({}, { abi, address, stateNames }) {
+  async queryContractState({}, { address, stateNames }) {
     try {
       const response = await fetch(`${cfg.API_URL}/queryContractState`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ abi, address, stateNames }),
+        body: JSON.stringify({ address, stateNames }),
       })
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+
       const queryContractState = await response.json()
 
       return queryContractState

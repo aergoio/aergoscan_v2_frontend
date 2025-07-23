@@ -296,10 +296,11 @@ export default {
         this.result = await this.$store.dispatch('blockchain/queryContract', {
           name: this.name,
           args: argValues,
-          abi: this.abi,
           address: this.address,
         })
+        console.log(this.result, 'this.result')
       } catch (e) {
+        console.error(e, 'e')
         this.result = { error: e?.metadata?.headersMap?.['grpc-message'] || e }
       }
 
