@@ -42,9 +42,11 @@
               :style="{
                 display: 'flex',
                 justifyContent: 'space-between',
-                width: '280px',
+                // width: '280px',
+                width: '140px',
               }"
             >
+              <!-- 
               <div class="expand-toggle">
                 <input
                   type="checkbox"
@@ -55,6 +57,7 @@
                 />
                 <label for="toggleStateVars">State Variables</label>
               </div>
+              -->
               <button
                 class="expandButton"
                 @click="() => handleClickAll(!clickAll)"
