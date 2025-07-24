@@ -288,8 +288,8 @@ export default {
         await this.$fetch.get(`${cfg.API_URL}/tokenTransfers`, {
           q:
             filteredToken === 'all'
-              ? `(from:${address} OR to:${address}) AND token_id:<0`
-              : `(from:${address} OR to:${address}) AND address:${filteredToken} AND token_id:<0`,
+              ? `(from:${address} OR to:${address}) AND (token_id:<0 OR token_id:0)`
+              : `(from:${address} OR to:${address}) AND address:${filteredToken} AND (token_id:<0 OR token_id:0)`,
           size: itemsPerPage,
           from: start,
           sort: `${sortField}:${sort}`,

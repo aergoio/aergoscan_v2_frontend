@@ -205,7 +205,7 @@ export default {
       const start = (currentPage - 1) * itemsPerPage
       const response = await (
         await this.$fetch.get(`${cfg.API_URL}/tokenTransfers`, {
-          q: `address:${id} AND token_id:<0`,
+          q: `address:${id} AND (token_id:<0 OR token_id:0)`,
           size: itemsPerPage,
           from: start,
           sort: `${sortField}:${sort}`,
