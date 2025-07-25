@@ -241,15 +241,20 @@ export default {
       if (response.error) {
         this.error = response.error.msg
       } else if (response.hits.length) {
-        this.data = response.hits.map((item) => ({
-          ...item.meta,
-          hash: item.hash,
-          symbolHash: item.token?.hash,
-          name: item.token?.meta.name,
-          image_url: item.token?.meta.image_url,
-          symbol: item.token?.meta.symbol,
-          decimals: item.token?.meta.decimals,
-        }))
+        this.data = response.hits.map((item) => {
+          const isAergo =
+            item.meta.token_id === 'AERGO' || item.meta.address === 'AERGO'
+
+          return {
+            ...item.meta,
+            hash: item.hash,
+            symbolHash: isAergo ? 'AERGO' : item.token?.hash,
+            name: isAergo ? 'AERGO' : item.token?.meta.name,
+            image_url: item.token?.meta.image_url,
+            symbol: isAergo ? 'AERGO' : item.token?.meta.symbol,
+            decimals: item.token?.meta.decimals,
+          }
+        })
         this.totalItems = response.total || 0
         this.limitPageTotalCount = response.limitPageCount || 0
       } else {
