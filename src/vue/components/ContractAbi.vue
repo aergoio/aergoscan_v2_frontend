@@ -75,15 +75,15 @@
             class="monospace interactive-contract code-highlight"
             :key="interactiveKey"
           >
-            <QueryFunctionSkeleton v-if="!contract.abi" />
-            <div v-if="contract.abi && contract.abi.functions.length == 0">
+            <QueryFunctionSkeleton v-if="!abi" />
+            <div v-if="abi && abi.functions.length == 0">
               Contract has no public functions.
             </div>
             <h3 class="section-header">Functions</h3>
             <QueryFunction
               v-for="(func, idx) in functions"
               :key="func.name"
-              :abi="contract.abi"
+              :abi="abi"
               :name="func.name"
               :number="idx"
               :address="address"
@@ -274,25 +274,23 @@ export default {
 
   computed: {
     functions() {
-      if (!this.contract.abi) return []
-      return this.contract.abi.functions.filter(
-        (func) => func.name !== 'constructor'
-      )
+      if (!this.abi) return []
+      return this.abi.functions.filter((func) => func.name !== 'constructor')
     },
     stateVariables() {
-      if (!this.contract.abi) return []
-      return this.contract.abi.state_variables
+      if (!this.abi) return []
+      return this.abi.state_variables
     },
     formattedAbi() {
-      if (!this.contract.abi) return ''
-      return syntaxHighlight(this.contract.abi)
+      if (!this.abi) return ''
+      return syntaxHighlight(this.abi)
     },
 
     jsonCode() {
-      if (!this.contract.abi) {
+      if (!this.abi) {
         return 'Loading...'
       } else {
-        return JSON.stringify(this.contract.abi, null, 2)
+        return JSON.stringify(this.abi, null, 2)
       }
     },
   },
@@ -346,17 +344,14 @@ export default {
           })
           const data = await response.json()
 
-          if (data.hits.length > 0) {
+          if (data?.hits?.length > 0) {
             this.contract = {
               source_code: data.hits[0].meta.source_code,
-              abi: JSON.parse(data.hits[0].meta.abi),
             }
-          } else {
-            this.contract = { abi: this.abi }
           }
         } catch (e) {
           console.error(e)
-          this.contract = { abi: this.abi }
+        } finally {
           this.isLoadingDetail = false
         }
       })()
