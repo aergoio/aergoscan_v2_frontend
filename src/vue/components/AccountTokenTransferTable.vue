@@ -112,7 +112,7 @@
       <td class="txt-ellipsis">
         <div>
           <img
-            v-if="row.address === 'AERGO'"
+            v-if="row.address === 'AERGO' || row.token_id === 'AERGO'"
             src="~@assets/img/aergo.svg"
             class="identicon icon-circle"
           />

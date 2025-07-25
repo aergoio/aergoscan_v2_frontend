@@ -73,7 +73,7 @@
       <td>
         <div>
           <img
-            v-if="row.address === 'AERGO'"
+            v-if="row.address === 'AERGO' || row.token_id === 'AERGO'"
             src="~@assets/img/aergo.svg"
             class="identicon icon-circle"
           />
@@ -244,7 +244,7 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          symbolHash: item.token?.hash,
+          symbolHash: item.token?.hash || item.token.meta.,
           name: item.token?.meta.name,
           image_url: item.token?.meta.image_url,
           symbol: item.token?.meta.symbol,
