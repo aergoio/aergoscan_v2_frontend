@@ -244,7 +244,7 @@ export default {
         this.data = response.hits.map((item) => ({
           ...item.meta,
           hash: item.hash,
-          symbolHash: item.token?.hash || item.token.meta.,
+          symbolHash: item.token?.hash,
           name: item.token?.meta.name,
           image_url: item.token?.meta.image_url,
           symbol: item.token?.meta.symbol,
